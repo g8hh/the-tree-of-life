@@ -22676,18 +22676,7 @@ addLayer("cells", {
                         title: "Pluripotent",
                         cost(){
                                 let amt = getBuyableAmount("cells", 13)
-                                let base = new Decimal(1e30)
-                                if (hasUpgrade("t", 85))        base = new Decimal(1e28)
-                                if (hasUpgrade("t", 91))        base = new Decimal(1e27)
-                                if (hasUpgrade("t", 102))       base = new Decimal(1e25)
-                                if (hasMilestone("t", 16))      base = new Decimal(5e22)
-                                if (hasUpgrade("t", 103))       base = new Decimal(2e21)
-                                if (hasUpgrade("t", 104))       base = new Decimal(2e20)
-                                if (hasUpgrade("t", 105))       base = new Decimal(1e20)
-                                if (player.extremeMode && hasUpgrade("cells", 23)) {
-                                                                base = new Decimal(1e19)
-                                }
-                                if (hasMilestone("nu", 4))      base = new Decimal(1e19)
+                                let base = tmp.cells.buyables[13].costBase
 
                                 let exp2 = 1.1
 
@@ -22703,15 +22692,7 @@ addLayer("cells", {
                                 if (hasMilestone("t", 8)) init = decimalOne
                                 return init.times(base.pow(exp))
                         },
-                        unlocked(){
-                                return hasUpgrade("t", 72) || player.or.unlocked
-                        },
-                        canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[13].cost),
-                        maxAfford(){
-                                let init = new Decimal(1e100)
-                                if (hasMilestone("t", 8)) init = decimalOne
-                                let pts = player.cells.stem_cells.points
-                                if (pts.lt(init)) return decimalZero
+                        costBase(){
                                 let base = new Decimal(1e30)
                                 if (hasUpgrade("t", 85))        base = new Decimal(1e28)
                                 if (hasUpgrade("t", 91))        base = new Decimal(1e27)
@@ -22724,6 +22705,20 @@ addLayer("cells", {
                                                                 base = new Decimal(1e19)
                                 }
                                 if (hasMilestone("nu", 4))      base = new Decimal(1e19)
+                                if (hasMilestone("e", 17))      base = base.div(Decimal.pow(10, Math.floor(player.e.challenges[21] / 5)))
+
+                                return base
+                        },
+                        unlocked(){
+                                return hasUpgrade("t", 72) || player.or.unlocked
+                        },
+                        canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[13].cost),
+                        maxAfford(){
+                                let init = new Decimal(1e100)
+                                if (hasMilestone("t", 8)) init = decimalOne
+                                let pts = player.cells.stem_cells.points
+                                if (pts.lt(init)) return decimalZero
+                                let base = tmp.cells.buyables[13].costBase
 
                                 let exp = 1.1 
                                 if (hasMilestone("ch", 18))     exp = 1.09
@@ -22784,19 +22779,11 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "1e100*1e30^(x<sup>1.1</sup>)" 
+                                let cost2 = "1e100*CB^(x<sup>1.1</sup>)" 
                                 if (hasMilestone("t", 8))       cost2 = cost2.slice(6,)
-                                if (hasUpgrade("t", 85))        cost2 = cost2.replace("30", "28")
-                                if (hasUpgrade("t", 91))        cost2 = cost2.replace("28", "27")
-                                if (hasUpgrade("t", 102))       cost2 = cost2.replace("27", "25")
-                                if (hasMilestone("t", 16))      cost2 = cost2.replace("1e25", "5e22")
-                                if (hasUpgrade("t", 103))       cost2 = cost2.replace("5e22", "2e21")
-                                if (hasUpgrade("t", 104))       cost2 = cost2.replace("2e21", "2e20")
-                                if (hasUpgrade("t", 105))       cost2 = cost2.replace("2e20", "1e20")
-                                if (player.extremeMode && hasUpgrade("cells", 23)) {
-                                                                cost2 = cost2.replace("1e20", "1e19")
-                                }
-                                if (hasMilestone("nu", 4))      cost2 = cost2.replace("1e20", "1e19")
+                                
+                                if (hasUpgrade("t", 85))        cost2 = cost2.replace("CB", format(tmp.cells.buyables[13].costBase, 0))
+                                
                                 if (hasMilestone("ch", 18))     cost2 = cost2.replace("1.1", "1.09")
                                 if (hasMilestone("sp", 4))      cost2 = cost2.replace("1.09", "1.08")
                                 if (hasMilestone("sp", 18))     cost2 = cost2.replace("1.08", "1.07")
@@ -38453,6 +38440,7 @@ addLayer("e", {
                                 let c = player.e.challenges[21]
                                 let ret = new Decimal(366).plus(c * 2)
                                 if (ret.gte(407)) ret = ret.times(1.5).sub(203)
+                                if (ret.gte(439)) ret = ret.sub(439).times(4/3).plus(440)
                                 return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[21].goal),
@@ -38706,6 +38694,20 @@ addLayer("e", {
                                 return "Reward: You can bulk buy Nucleuses."
                         },
                 }, // hasMilestone("e", 16)
+                17: {
+                        requirementDescription(){
+                                return "24 Energyless?"
+                        },
+                        done(){
+                                return player.e.challenges[21] >= 24
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Each 5th Energyless? divides Pluripotent cost base by 10 and unlock Biomass [not yet] [new layer!]."
+                        },
+                }, // hasMilestone("e", 17)
         },
         tabFormat: {
                 "Upgrades": {

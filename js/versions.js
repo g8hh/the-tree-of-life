@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.304.1",
+	num: "1.305",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,7 +12,7 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.nu.points.gte(832)
+	return player.nu.points.gte(867)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -24,6 +24,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.305</h3><br>
+		- Balanced until 867 Nucleuses.<br>
+		- Added an Ecosystem milestone.<br>
+		- Fixed a bunch of bugs with changing subtabs.<br>
 	<br><h3 style='color: #CC0000'>v1.304.2</h3><br>
 		- Fixed a bug with extreme mode that made it unplayable.<br>
 	<br><h3 style='color: #CC0000'>v1.304.1</h3><br>
