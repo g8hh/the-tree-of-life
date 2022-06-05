@@ -35040,7 +35040,7 @@ addLayer("nu", {
         },
         getResetGain(){
                 if (hasMilestone("e", 16) && tmp.nu.costExponent.gte(1.7)) {
-                        return player.ch.points.root(tmp.nu.costExponent).floor().plus(1).sub(player.nu.points)
+                        return player.ch.points.root(tmp.nu.costExponent).floor().plus(1).sub(player.nu.points).max(0)
                 }
                 return tmp.nu.baseAmount.gte(tmp.nu.getNextAt) ? decimalOne : decimalZero
         },
