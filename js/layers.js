@@ -11940,6 +11940,7 @@ addLayer("l", {
                 passiveTime: 0,
                 activeChallengeID: 101,
                 challengesDisplayState: 0,
+                timesSinceClick: 0,
         }},
         color: "#BE0E00",
         branches: [],
@@ -12101,39 +12102,9 @@ addLayer("l", {
                         if (tmp.mu.buyables[32].canAfford) layers.mu.buyables[32].buy()
                 }
 
-                let universalAllowed = !inChallenge("l", 11) || layers.l.grid.getGemEffect(407)
+                layers.l.updateUniverse(diff)
 
-                if (hasMilestone("l", 21) && universalAllowed && data.time > 1 && !hasUpgrade("t", 151)) {
-                        let str = "ee40"
-                        if (hasUpgrade("l", 23))        str = "ee41"
-                        if (hasMilestone("l", 22))      str = player.extremeMode ? "e2e41" : "ee43"
-                        if (hasUpgrade("mu", 42) && player.extremeMode) {
-                                                        str = "e7e41"
-                        }
-                        if (hasUpgrade("mu", 44) && player.extremeMode) {
-                                                        str = "e2e42"
-                        }
-                        if (hasUpgrade("mu", 45) && player.extremeMode) {
-                                                        str = "e3e42"
-                        }
-                        if (hasUpgrade("mu", 51) && player.extremeMode) {
-                                                        str = "e2e44"
-                        }
-                        if (hasUpgrade("mu", 53) && player.extremeMode) {
-                                                        str = "ee45"
-                        } 
-                        if (hasUpgrade("p", 41))        str = player.extremeMode ? "e4e45" : "ee45"
-                        if (hasUpgrade("p", 54))        str = "ee46"
-                        if (hasUpgrade("p", 55))        str = "ee47"
-                        if (hasMilestone("l", 35))      str = "ee50"
-                        if (hasMilestone("l", 36))      str = "ee51"
-
-                        if (hasMilestone("l", 42) && player.p.best_over_amino.gt(str)) {
-                                                        str = player.p.best_over_amino
-                        }
-
-                        player.p.points = player.p.points.max(str)
-                }
+                data.timesSinceClick += diff
 
                 if (hasMilestone("a", 3) || hasMilestone("d", 1)) {
                         let a = 2 // the value of jumps
@@ -12178,6 +12149,41 @@ addLayer("l", {
                         let gainId = player.l.activeChallengeID
                         let gemGain = gemPercentGainps.times(tmp.l.challenges[12].reward).times(diff)
                         player.l.grid[gainId].gems = player.l.grid[gainId].gems.plus(gemGain)
+                }
+        },
+        updateUniverse(){
+                let universalAllowed = !inChallenge("l", 11) || layers.l.grid.getGemEffect(407)
+
+                if (hasMilestone("l", 21) && universalAllowed && player.l.time > 1 && !hasUpgrade("t", 151)) {
+                        let str = "ee40"
+                        if (hasUpgrade("l", 23))        str = "ee41"
+                        if (hasMilestone("l", 22))      str = player.extremeMode ? "e2e41" : "ee43"
+                        if (hasUpgrade("mu", 42) && player.extremeMode) {
+                                                        str = "e7e41"
+                        }
+                        if (hasUpgrade("mu", 44) && player.extremeMode) {
+                                                        str = "e2e42"
+                        }
+                        if (hasUpgrade("mu", 45) && player.extremeMode) {
+                                                        str = "e3e42"
+                        }
+                        if (hasUpgrade("mu", 51) && player.extremeMode) {
+                                                        str = "e2e44"
+                        }
+                        if (hasUpgrade("mu", 53) && player.extremeMode) {
+                                                        str = "ee45"
+                        } 
+                        if (hasUpgrade("p", 41))        str = player.extremeMode ? "e4e45" : "ee45"
+                        if (hasUpgrade("p", 54))        str = "ee46"
+                        if (hasUpgrade("p", 55))        str = "ee47"
+                        if (hasMilestone("l", 35))      str = "ee50"
+                        if (hasMilestone("l", 36))      str = "ee51"
+
+                        if (hasMilestone("l", 42) && player.p.best_over_amino.gt(str)) {
+                                                        str = player.p.best_over_amino
+                        }
+
+                        player.p.points = player.p.points.max(str)
                 }
         },
         updateUpgradeAutobuyers(){
@@ -15170,7 +15176,10 @@ addLayer("l", {
                 onClick(data, id) {
                         if (inChallenge("l", 12) && id != player.l.activeChallengeID) {
                                 Vue.set(player.l, "activeChallenge", null)
+                        } else if (id == player.l.activeChallengeID && !player.l.activeChallenge && player.l.timesSinceClick < 1) {
+                                startChallenge("l", 12)
                         }
+                        player.l.timesSinceClick = 0
                         if (player.l.activeChallengeID == undefined) {
                                 player.l.activeChallengeID = id
                                 data.active = true
@@ -22553,8 +22562,8 @@ addLayer("cells", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = format(tmp.cells.buyables[11].baseConstant, 3) + "+log10(log10(Cells)^x<br>" 
-                                if (hasMilestone("ch", 18)) eformula = eformula.replace("+log10(log10(Cells)", "")
+                                let eformula = format(tmp.cells.buyables[11].baseConstant, 3) + "+log10(log10(Cells))^x<br>" 
+                                if (hasMilestone("ch", 18)) eformula = eformula.replace("+log10(log10(Cells))", "")
                                 if (hasMilestone("an", 35)) eformula = "Up Quark effect^x<br>"
                                 eformula += format(tmp.cells.buyables[11].base, 3) + "^x"
 
@@ -27096,7 +27105,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart III"
                         },
                         description(){
-                                return "Per Token II after 73 double " + makePurple("OB") + " gain and Token II effect amounts are based on best levels"
+                                return "Per Token II after 73 double " + makePurple("OB") + " gain and Token II amounts (the x in the formula) are based on best"
                         },
                         ob_effect(){
                                 return Decimal.pow(2, player.tokens.tokens2.total.sub(hasUpgrade("or", 212) ? 0 : 73)).max(1)
@@ -27117,6 +27126,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart IV"
                         },
                         description(){
+                                if (!hasUpgrade("or", 104)) return "Autobuy Oligopotent and Organ upgrades count towards Tissues IX<br>Note: This should not take more than a minute" 
                                 return "Autobuy Oligopotent and Organ upgrades count towards Tissues IX" 
                         },
                         cost(){
@@ -51769,7 +51779,15 @@ addLayer("tokens", {
                                 content: [
                                         ["buyables", [10,11,12,19]],
                                         ["clickables", [1]],
-                                        ["display-text", "<br>Buying a Token II buyable buffs all the other buyables in its column (denoted by C),<br> and nerfs the buyables in its row (denoted by R)<br><br><br>"],
+                                        ["display-text", "<br>Buying a Token II buyable buffs all the other buyables in its column (denoted by C),<br> and nerfs the buyables in its row (denoted by R).<br><br><br>"],
+                                        ["display-text", function(){
+                                                let d1 = player.tokens.best_buyables
+                                                let d2 = player.tokens.buyables
+                                                if (d1[101].gt(1e5)) return ""
+                                                let a = "First column amount: " + format(d1[101].plus(d1[111]).plus(d1[121])) + " out of a best " + format(tmp.tokens.buyables.getCol1Total)
+                                                let b = "Second column amount: " + format(d1[102].plus(d1[112]).plus(d1[122])) + " out of a best " + format(tmp.tokens.buyables.getCol2Total)
+                                                return a + br + b
+                                        }],       
                                 ]
                         },
                         "Upgrades": {
