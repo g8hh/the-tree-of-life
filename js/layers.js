@@ -1885,6 +1885,8 @@ addLayer("sci", {
                 layers.sci.updateUpgradeAutobuyers()
         },
         updateUpgradeAutobuyers(){
+                let data = player.sci
+                
                 if (data.autobuyhsciupg && hasMilestone("n", 3)) {
                         let boughtYet = false
                         let hSciKeys = ["11", "12", "13", "14", "15", 
