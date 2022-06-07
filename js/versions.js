@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.305.1",
+	num: "1.306",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,18 +12,25 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.nu.points.gte(867)
+	return player.pl.biomass.points.gte(2e16)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.304.1)<br><br>
+		Reaching the endgame screen (updated at least as of v1.306)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.306</h3><br>
+		- Balanced until 2e16 Biomass.<br>
+		- Added a new layer, Plants!<br>
+		- Added two Plants milestones.<br>
+		- Added a Plants upgrade.<br>
+		- Added a new component for biomass display.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.305.1</h3><br>
 		- Added a display for Taxonomy Limit.<br>
 		- Improved the display for the column amount of Token II.<br>

@@ -31439,6 +31439,7 @@ addLayer("an", {
                                                 ret = ret.plus(tmp.nu.effectSecondary)
                 if (hasMilestone("sp", 15))     ret = ret.plus(layerChallengeCompletions("sp"))
                 if (hasUpgrade("sp", 101))      ret = ret.plus(tmp.sp.challenges[12].reward)
+                if (hasUpgrade("pl", 11))       ret = ret.plus(player.pl.points)
 
                 return ret
         },
@@ -36120,6 +36121,7 @@ addLayer("sp", {
                 if (hasUpgrade("tokens", 104))  ret = ret.plus(player.tokens.upgrades.length)
                 if (hasUpgrade("tokens", 113))  ret = ret.plus(player.tokens.mastery_tokens.total.min(1000))
                 if (hasMilestone("e", 1))       ret = ret.plus(player.e.milestones.length)
+                if (hasUpgrade("pl", 11))       ret = ret.plus(player.pl.points)
 
                 return ret
         },
@@ -38109,7 +38111,8 @@ addLayer("e", {
         getGainExp(){
                 let ret = new Decimal(1/3)
 
-                if (hasMilestone("e", 12)) ret = new Decimal(.04).times(player.e.challenges[11]).plus(.2)
+                if (hasMilestone("e", 12))      ret = new Decimal(.04).times(player.e.challenges[11]).plus(.2)
+                if (hasUpgrade("pl", 11))       ret = ret.plus(player.pl.points.div(10))
 
                 return ret
         },
@@ -38131,6 +38134,7 @@ addLayer("e", {
 
                 if (hasUpgrade("e", 13))        ret = ret.times(Decimal.pow(1.02, player.tokens.mastery_tokens.total))
                                                 ret = ret.times(tmp.e.challenges[12].ecoMult)
+                if (hasMilestone("pl", 2))      ret = ret.times(player.ch.points.max(10).log10().pow(player.pl.milestones.length))
 
                 return ret
         },
@@ -38453,6 +38457,7 @@ addLayer("e", {
                                 let ret = new Decimal(366).plus(c * 2)
                                 if (ret.gte(407)) ret = ret.times(1.5).sub(203)
                                 if (ret.gte(439)) ret = ret.sub(439).times(4/3).plus(440)
+                                if (ret.gte(492)) ret = new Decimal(c).plus(38.5).times(6)
                                 return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[21].goal),
@@ -39070,6 +39075,214 @@ addLayer("e", {
                 }
 
                 resetPreOrganCurrencies()
+        },
+})
+
+addLayer("pl", {
+        name: "Plants", 
+        symbol: "P", 
+        position: 5, 
+        startData(){ return {
+                unlocked: false,
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
+                abtime: 0,
+                time: 0,
+                biomass: {
+                        points: decimalZero,
+                        best: decimalZero,
+                        total: decimalZero,
+                },
+        }},
+        color: "#B5A225",
+        branches: [],
+        requires:() => new Decimal("0"), 
+        resource: "Plants", 
+        baseResource: "Biomass", 
+        baseAmount(){return player.pl.biomass.points},
+        type: "custom",
+        getNextAt(){ // 1000*[BASE]^(x^2) base starts around 10?
+                let ret = tmp.pl.getResetBase.pow(player.pl.points.pow(2)).times(1000)
+
+                return ret
+        },
+        getResetBase(){
+                return new Decimal(10)
+        },
+        getResetGain(){
+                if (false) {
+                        return player.pl.biomass.points.div(1000).log(tmp.pl.getResetBase).sqrt().floor().plus(1)
+                } else {
+                        if (player.pl.biomass.points.gt(tmp.pl.getNextAt)) return decimalOne
+                        return decimalZero
+                }
+        },
+        canReset(){
+                return tmp.pl.getResetGain.gt(0) && hasMilestone("e", 17)
+        },
+        effect(){
+                // (.2 + x/100) / (1 + x/100) 
+                // 1 / 1-eff = (1+x/100)/.8
+                let p = player.pl.points.div(100)
+
+                return p.plus(.2).div(p.plus(1))
+        },
+        effectDescription(){
+                let start = " multiplying Biomass gain by Biomass<sup>" + format(tmp.pl.effect, 4)
+                return start + "</sup>."
+        },
+        update(diff){
+                let data = player.pl
+                
+                if (player.pl.biomass.points.gt(0)) data.unlocked = true
+                data.best = data.best.max(data.points)
+
+                data.time += diff
+
+                layers.pl.biomass.update(diff)
+        },
+        row: 0,
+        prestigeButtonText(){
+                let a = "Reset for <b>" + formatWhole(tmp.pl.getResetGain) + "</b> Plants" 
+                //if (player.mu.points.gt(1e10)) return a
+                let b = ""
+                if (player.pl.points.lt(30)) {
+                        let d = tmp.pl.canBuyMax
+                        b = tmp.pl.baseAmount.gte(tmp.pl.getNextAt) && (d !== undefined) && d ? "Next: " : "Req: "
+                }
+                let c = formatWhole(tmp.pl.baseAmount) + "/" + format(tmp.pl.getNextAt) + " " + tmp.pl.baseResource
+
+                return a + br2 + b + c
+        },
+        layerShown(){
+                if (tmp.pl.deactivated) return false
+                return player.pl.unlocked || hasMilestone("e", 17)
+        },
+        biomass: {
+                getBaseGain(){
+                        if (!hasMilestone("e", 17)) return decimalZero
+                        
+                        let ret = player.e.points.max(10).log10().sub(100).max(0)
+
+                        if (hasMilestone("pl", 1))      ret = ret.times(Decimal.pow(3, player.e.challenges[21] - 33).max(1))
+                        if (hasMilestone("pl", 2))      ret = ret.times(player.ch.points.max(10).log10().pow(player.pl.milestones.length))
+
+                        return ret
+                },
+                getResetGain(){ // biomassgain biogain biomass gain bio gain bgain biomgain b gain bmgain
+                        let ret = tmp.pl.biomass.getBaseGain
+
+                        if (player.pl.points.lt(1e3)) return ret.times(player.pl.biomass.points.plus(1).pow(tmp.pl.effect))
+                        if (player.pl.points.lt(1e5)) return ret.pow(decimalOne.sub(tmp.pl.effect).pow(-1))
+                        return ret.pow(.8).pow(player.pl.points.div(100).plus(1))
+                },
+                update(diff){
+                        let gainThisTick = tmp.pl.biomass.getResetGain.times(diff)
+                        let data = player.pl.biomass
+                        data.points = data.points.plus(gainThisTick)
+                        data.total = data.total.plus(gainThisTick)
+                },
+        },
+        upgrades: {
+                rows: 10,
+                cols: 5,
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems I"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>Mastery V's double exponent is 1.25 and each Plant adds 1 to the Species and Animal gain exponents and .1 to the Ecosystem gain exponent</bdi>"
+                        },
+                        cost:() => new Decimal(1),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("pl", 11)
+                },
+        },
+        milestones: {
+                1: {
+                        requirementDescription(){
+                                return "2000 Biomass"
+                        },
+                        done(){
+                                return player.pl.biomass.points.gte(2000)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Each Energyless after 33 triples Biomass gain and Up Quark's coefficient is C<sup>.8</sup>."
+                        },
+                }, // hasMilestone("pl", 1)
+                2: {
+                        requirementDescription(){
+                                return "200,000 Biomass"
+                        },
+                        done(){
+                                return player.pl.biomass.points.gte(2e5)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Per milestone log10(Chromosomes) multiplies Biomass and Ecosystem gain."
+                        },
+                }, // hasMilestone("pl", 2)
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: [
+                                "main-display",
+                                "secondary-display-biomass",
+                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                "blank",
+                                ["upgrades", [1,2,3,4,5]]
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Milestones": {
+                        content: [
+                                "main-display",
+                                "milestones",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Info": {
+                        content: [
+                                "main-display",
+                                ["display-text", function(){
+                                        let a = "Pants forces an Ecosystem reset."
+                                        let b = "Effect formula: (.2+x/100)/(1+x/100)"
+                                        let c = "Initial Biomass gain: log10(Ecosystems)-100"
+
+                                        return a + br2 + b + br2 + c
+                                }],
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+        },
+        onPrestige(){
+                return // not for this layer
+                let timesAdd = 1
+                if (player.easyMode) timesAdd *= 2
+                player.e.times += timesAdd
+        },
+        doReset(layer){
+                if (layer != "pl") return
+                player.pl.time = 0
+
+                doReset("e", true) // force the reset
+
+                player.pl.biomass.points = decimalZero
+                player.pl.biomass.total = decimalZero
+                player.pl.biomass.best = decimalZero
         },
 })
 
@@ -48781,6 +48994,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasMilestone("pl", 1))      return c.pow(.8)
                                 if (hasUpgrade("e", 23))        return c.pow(.7)
                                 if (hasUpgrade("e", 12))        return c.pow(.6)
                                 if (hasUpgrade("tokens", 133))  return c.plus(1).sqrt()
@@ -48837,6 +49051,7 @@ addLayer("tokens", {
                                 let exp = ".5"
                                 if (hasUpgrade("e", 12))        exp = ".6"
                                 if (hasUpgrade("e", 23))        exp = ".7"
+                                if (hasMilestone("pl", 1))      exp = ".8"
                                 if (exp == ".5") eformula = eformula.replace("EXP", ".5")
                                 else eformula = eformula.replace("(1+C)<sup>EXP</sup>", "C<sup>" + exp + "</sup>")
                                 
@@ -49698,7 +49913,8 @@ addLayer("tokens", {
                         costExp(){
                                 let exp = new Decimal(1.3)
 
-                                if (hasUpgrade("e", 25)) exp = new Decimal(1.26)
+                                if (hasUpgrade("e", 25))        exp = new Decimal(1.26)
+                                if (hasUpgrade("pl", 11))       exp = new Decimal(1.25)
 
                                 return exp
                         },

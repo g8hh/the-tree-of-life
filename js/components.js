@@ -263,6 +263,13 @@ function loadVue() {
 		`
 	})
 
+	Vue.component('secondary-display-biomass', {
+		props: ['layer'],
+		template: `
+		<div><span v-if="player.pl.biomass.points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp.pl.color, 'text-shadow': '0px 0px 10px ' + tmp.pl.color}">{{formatCurrency(player.pl.biomass.points)}}</h2> Biomass (+{{formatCurrency(tmp.pl.biomass.getResetGain)}}/s)<br></div>
+		`
+	})
+
 	Vue.component('secondary-display3', {
 		props: ['layer', 'data'],
 		template: `
