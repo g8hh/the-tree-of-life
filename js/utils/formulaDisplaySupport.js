@@ -849,6 +849,49 @@ function contaminantFormulaDisplay(){
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
 
+function taxonomyCapFormulaDisplay(){
+        let a = "Contaminant gain is AX"
+        let b = "AX is initially 400 and the following factors add to it"
+        let c = ""
+
+        if (hasMilestone("ch", 32))             c = "Chromosome Milestone 32 makes AX Nucleuses + 1200" + br
+        else if (hasMilestone("ch", 29))        c = "Chromosome Milestone 29 makes AX Nucleuses + 1500" + br
+        else {
+                if (hasUpgrade("ch", 23)) {
+                        let add = player.ch.points.times(3).min(700)
+                        c += "Chromosomes VIII adds " + formatWhole(add) + " to AX" + br
+                } else if (hasUpgrade("ch", 13)) {
+                        let add = player.ch.points.sub(37).max(0).times(4)
+                        c += "Chromosomes III adds " + formatWhole(add.min(450)) + " to AX" + br
+                }
+                if (hasMilestone("ch", 14)) {
+                        let add = player.ch.points.sub(234).times(2).max(0)
+                        c += "Chromosome Milestone 14 adds " + formatWhole(add.min(110)) + " to AX" + br
+                }
+                if (hasUpgrade("an", 55)) {
+                        let add = player.ch.points.sub(291).max(0)
+                        c += "Animals XXV adds " + formatWhole(add.min(297)) + " to AX" + br
+                }
+                if (hasMilestone("nu", 16)) {
+                        c += "Nucleus Milestone 16 adds " + formatWhole(tmp.nu.effectPrimary) + " to AX" + br
+                } else {
+                        if (hasMilestone("nu", 11))     c += "Nucleus Milestone 11 add " + formatWhole(player.nu.points.div(2)) + " to AX" + br
+                        if (hasUpgrade("ch", 44))       c += "Chromosomes XIX add " + formatWhole(player.nu.points.div(2)) + " to AX" + br
+                }
+        }
+        
+
+        if (hasChallenge("sp", 31))     c += "Truly Chromosomeless adds " + formatWhole(tmp.sp.challenges[31].reward) + " to AX" + br
+        if (hasUpgrade("sp", 121))      c += "Boosted Effect VI adds 30 to AX" + br
+        if (hasUpgrade("sp", 144))      c += "Boosted Effect XIX adds 20 to AX" + br
+        if (hasMilestone("e", 1))       c += "Ecosystem Milestone 1 adds " + formatWhole(Math.min(10, player.e.milestones.length) * 5) + " to AX" + br
+        if (hasUpgrade("e", 14))        c += "Ecosystems IV adds " + formatWhole(4 * player.e.challenges[11]) + " to AX" + br
+
+        return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+}
+
+
+
 
 
 

@@ -24,7 +24,8 @@ var doNotCallTheseFunctionsEveryTick = [
 	"getGemEffect",
 	"updateCoins",
 	"updateUpgradeAutobuyers",
-	"updateMinigames",]
+	"updateMinigames",
+	"updateUniverse",]
 
 function getStartPoints(){
     	return new Decimal(modInfo.initialStartPoints)
