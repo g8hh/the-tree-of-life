@@ -33259,7 +33259,7 @@ addLayer("an", {
                         if (hasUpgrade("e", 14))        ret = ret.plus(4 * player.e.challenges[11])
 
                         return ret.floor()
-                }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit
+                }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit taxonomy cap
                 getUnlocked(id) {
                         if (!hasUpgrade("or", 352)) return false
                         if (id % 100 < Math.floor(id/100)) return false
@@ -51773,6 +51773,12 @@ addLayer("tokens", {
                                         return hasUpgrade("or", 352) || player.ch.unlocked
                                 },
                         },
+                        "Taxonomy Limit": {
+                                content: [["display-text", taxonomyCapFormulaDisplay]],
+                                unlocked(){
+                                        return player.ch.best.gte(38) || player.nu.unlocked
+                                },
+                        },
                 },
                 token_ii_displays: {
                         "Main": {
@@ -51784,8 +51790,13 @@ addLayer("tokens", {
                                                 let d1 = player.tokens.best_buyables
                                                 let d2 = player.tokens.buyables
                                                 if (d1[101].gt(1e5)) return ""
-                                                let a = "First column amount: " + format(d1[101].plus(d1[111]).plus(d1[121])) + " out of a best " + format(tmp.tokens.buyables.getCol1Total)
-                                                let b = "Second column amount: " + format(d1[102].plus(d1[112]).plus(d1[122])) + " out of a best " + format(tmp.tokens.buyables.getCol2Total)
+                                                let f = function(a,b){
+                                                        let x = formatWhole(a[100 + b]) + "+" + formatWhole(a[110 + b])
+                                                        if (a[120 + b].gt(0)) x += "+" + formatWhole(a[120 + b])
+                                                        return x
+                                                }
+                                                let a = "Left column amount: " + f(hasUpgrade("or", 113) ? d1 : d2, 1) + " = " + format(tmp.tokens.buyables.getCol1Total)
+                                                let b = "Right column amount: " + f(hasUpgrade("or", 111) ? d1 : d2, 2) + " = " + format(tmp.tokens.buyables.getCol2Total)
                                                 return a + br + b
                                         }],       
                                 ]

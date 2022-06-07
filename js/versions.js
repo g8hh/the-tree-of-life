@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.305",
+	num: "1.305.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -24,6 +24,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.305.1</h3><br>
+		- Added a display for Taxonomy Limit.<br>
+		- Improved the display for the column amount of Token II.<br>
 	<br><h3 style='color: #CC0000'>v1.305</h3><br>
 		- Balanced until 867 Nucleuses.<br>
 		- Added an Ecosystem milestone.<br>
