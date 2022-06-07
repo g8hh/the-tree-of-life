@@ -360,6 +360,17 @@ function gameLoop(diff) {
 		if (layers[layer].milestones) updateMilestones(layer);
 		if (layers[layer].achievements) updateAchievements(layer)
 	}
+
+	let t = player.tab
+	if (player.subtabs[t] && !['changelog-tab'].includes(t)) { // make sure its a layer or similar
+		let tf = tmp[t].tabFormat
+		let unl = tf[player.subtabs[t].mainTabs].unlocked // if the current subtab is unlocked
+		if (!unl) {
+			for (i in tf) {
+				if (tf[i].unlocked) player.subtabs[t].mainTabs = i
+			}
+		}
+	}
 }
 
 function setUpPGSettings(){
