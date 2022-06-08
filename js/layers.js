@@ -39179,6 +39179,8 @@ addLayer("pl", {
                         
                         let ret = player.e.points.max(10).log10().sub(100).max(0)
 
+                        if (hasUpgrade("pl", 13))       ret = ret.pow(player.pl.points.max(1))
+
                         if (hasMilestone("pl", 1))      ret = ret.times(Decimal.pow(3, player.e.challenges[21] - 33).max(1))
                         if (hasMilestone("pl", 2))      ret = ret.times(player.ch.points.max(10).log10().pow(player.pl.milestones.length))
                         if (hasUpgrade("pl", 12)) {
@@ -39230,6 +39232,18 @@ addLayer("pl", {
                         unlocked(){
                                 return player.pl.biomass.best.gte(2e16) || player.pl.best.gte(4) || hasUpgrade("pl", 12)
                         }, // hasUpgrade("pl", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Plants III"
+                        },
+                        description(){
+                                return "Plants (minimum 1) exponentiate base Biomass gain and Mastery II's base is 7"
+                        },
+                        cost:() => new Decimal(6),
+                        unlocked(){
+                                return hasUpgrade("pl", 12)
+                        }, // hasUpgrade("pl", 13)
                 },
         },
         milestones: {
@@ -49821,7 +49835,9 @@ addLayer("tokens", {
                 202: {
                         title: "Mastery II",
                         cost(){
-                                if (player.tokens.buyables[202].gte(50)) return Decimal.pow(9, player.tokens.buyables[202].pow(2))
+                                let dBase = 9
+                                if (hasUpgrade("pl", 13)) dBase = 7
+                                if (player.tokens.buyables[202].gte(50)) return Decimal.pow(dBase, player.tokens.buyables[202].pow(2))
                                 let add = 11
                                 return player.tokens.buyables[202].plus(add).pow10().pow(39)
                         },
@@ -49830,7 +49846,8 @@ addLayer("tokens", {
                                 let add = 11
                                 let x = player.sp.points.root(39).max(1).log10().sub(add).ceil().max(0)
                                 if (x.lte(49)) return x 
-                                return player.sp.points.log(9).sqrt().ceil()
+                                if (hasUpgrade("pl", 13))       return player.sp.points.max(1).log(7).sqrt().ceil()
+                                return player.sp.points.max(1).log(9).sqrt().ceil()
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -49846,6 +49863,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 202)) + " Species</b><br>"
                                 let eformula = "10<sup>39(x+11)</sup>"
                                 if (player.tokens.buyables[202].gte(50)) eformula = "9<sup>x<sup>2</sup></sup>"
+                                if (hasUpgrade("pl", 13))               eformula = "7<sup>x<sup>2</sup></sup>"
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
