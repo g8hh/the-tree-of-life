@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.306",
+	num: "1.307",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,7 +12,7 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.pl.biomass.points.gte(2e16)
+	return player.pl.biomass.points.gte(1e28)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -24,6 +24,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.307</h3><br>
+		- Balanced until 1e28 Biomass.<br>
+		- Added a Plant upgrade.<br>
+		- Added an Ecosystem upgrade.<br>
 	<br><h3 style='color: #CC0000'>v1.306</h3><br>
 		- Balanced until 2e16 Biomass.<br>
 		- Added a new layer, Plants!<br>

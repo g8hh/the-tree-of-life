@@ -22860,6 +22860,7 @@ addLayer("cells", {
                         },
                         base(){
                                 if (player.cells.challenges[21] >= 3 && inChallenge("cells", 21)) return decimalOne
+                                if (hasUpgrade("e", 31))        return player.tokens.tokens2.total.max(1).pow(player.nu.points.max(10).log10())
                                 return player.tokens.tokens2.total.max(1)
                         },
                         effect(){
@@ -22877,6 +22878,7 @@ addLayer("cells", {
                                 }
 
                                 let eformula = "Tokens II^x<br>" + format(tmp.cells.buyables[21].base) + "^x"
+                                if (hasUpgrade("e", 31)) eformula = eformula.replace("^", "<sup>log10(Nucleus)</sup>^")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -38385,6 +38387,18 @@ addLayer("e", {
                                 return player.e.challenges[21] >= 2
                         }, // hasUpgrade("e", 25)
                 },
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems XI"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>This row upgrades counts towards Plants II and log10(Nucleus) exponentiates Multipotent base and multiplies Biomass gain per upgrade</bdi>"
+                        },
+                        cost:() => new Decimal(3e120),
+                        unlocked(){
+                                return player.e.challenges[21] >= 50
+                        }, // hasUpgrade("e", 31)
+                },
         },
         challenges: {
                 11: {
@@ -39167,6 +39181,12 @@ addLayer("pl", {
 
                         if (hasMilestone("pl", 1))      ret = ret.times(Decimal.pow(3, player.e.challenges[21] - 33).max(1))
                         if (hasMilestone("pl", 2))      ret = ret.times(player.ch.points.max(10).log10().pow(player.pl.milestones.length))
+                        if (hasUpgrade("pl", 12)) {
+                                let b1 = Decimal.pow(1.01, player.tokens.mastery_tokens.total.sub(500).max(0))
+                                let exp = player.pl.upgrades.length + (hasUpgrade("e", 31) ? player.e.upgrades.filter(x => x > 30 & x < 40).length : 0)
+                                ret = ret.times(b1.pow(exp))
+                        }
+                        if (hasUpgrade("e", 31))        ret = ret.times(player.nu.points.max(10).log10().pow(player.e.upgrades.length))
 
                         return ret
                 },
@@ -39189,7 +39209,7 @@ addLayer("pl", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Plants I"
                         },
                         description(){
                                 return "<bdi style='font-size: 80%'>Mastery V's double exponent is 1.25 and each Plant adds 1 to the Species and Animal gain exponents and .1 to the Ecosystem gain exponent</bdi>"
@@ -39198,6 +39218,18 @@ addLayer("pl", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("pl", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Plants II"
+                        },
+                        description(){
+                                return "Per upgrade per Mastery Token past 500 gain 1% more Biomass"
+                        },
+                        cost:() => new Decimal(4),
+                        unlocked(){
+                                return player.pl.biomass.best.gte(2e16) || player.pl.best.gte(4) || hasUpgrade("pl", 12)
+                        }, // hasUpgrade("pl", 12)
                 },
         },
         milestones: {
