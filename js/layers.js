@@ -31373,6 +31373,8 @@ addLayer("an", {
                 let ret = tmp.an.getBaseGain.times(tmp.an.getGainMult)
                 
                 if (player.extremeMode) ret = ret.pow(.75)
+
+                if (inChallenge("e", 22)) ret = ret.sqrt()
                 
                 return ret.floor()
         },
@@ -31714,6 +31716,7 @@ addLayer("an", {
                         if (player.ch.points.eq(1475))  ret = ret.times(1.3e19)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
+                        if (inChallenge("e", 22))       ret = ret.sqrt()
 
                         return ret
                 },
@@ -38421,7 +38424,7 @@ addLayer("e", {
                         },
                         chromosomelessBase(){
                                 if (player.e.challenges[11] <= 0) return new Decimal(1250)
-                                return Decimal.pow(1e4, player.e.challenges[11] ** .25)
+                                return Decimal.pow(1e4, (player.e.challenges[11] + player.e.challenges[22]) ** .25)
                         },
                         onEnter(){
                                 player.nu.points = hasMilestone("e", 12) ? tmp.e.challenges[11].goal.sub(10) : decimalZero
@@ -38447,13 +38450,16 @@ addLayer("e", {
                         fullDisplay(){
                                 let a = "Add .1 to the Nucleus cost exponent" + br 
                                 a += "Goal: " + formatWhole(tmp.e.challenges[12].goal) + " Nucleuses" + br2
-                                a += "Reward: Multiply Ecosystem gain by " + format(player.e.challenges[12] * .05 + 1) 
+                                a += "Reward: Multiply Ecosystem gain by " + format(tmp.e.challenges[12].ecoMultBase) 
                                 a += " per challenge for a total of " + format(tmp.e.challenges[12].ecoMult) 
                                 //a += " from the Species base gain divider, "
                                 return a + br2 + "Completions: " + player.e.challenges[12] + "/50"
                         },
+                        ecoMultBase(){
+                                return new Decimal(player.e.challenges[12] + player.e.challenges[22]).times(.05).plus(1)
+                        },
                         ecoMult(){
-                                return new Decimal(player.e.challenges[12]).times(.05).plus(1).pow(layerChallengeCompletions("e"))
+                                return tmp.e.challenges[12].ecoMultBase.pow(layerChallengeCompletions("e"))
                         },
                         onEnter(){
                                 player.nu.points = hasMilestone("e", 14) ? tmp.e.challenges[12].goal.sub(10) : decimalZero
@@ -38492,6 +38498,32 @@ addLayer("e", {
                         countsAs: [],
                         completionLimit: 50,
                 }, // inChallenge("e", 21)
+                22: {
+                        name: "Animaless?",
+                        goal(){
+                                let c = player.e.challenges[22]
+                                let ret = new Decimal(581).plus(c * 4)
+                                if (c >= 1) ret = ret.sub(1)
+                                return ret
+                        },
+                        canComplete: () => player.nu.points.gte(tmp.e.challenges[22].goal),
+                        fullDisplay(){
+                                let a = "Square root Animal and Gene gain" + br 
+                                a += "Goal: " + formatWhole(tmp.e.challenges[22].goal) + " Nucleuses" + br2
+                                a += "Reward: log10(Biomass)<sup>" + formatWhole(player.e.challenges[22]) + "</sup> multiplies Biomass"
+                                a += " and Ecosystems gain. This challenge counts towards Chromosomeless? and Nucleusless? completions for their primary effects."
+                                //a += " from the Species base gain divider, "
+                                return a + br2 + "Completions: " + player.e.challenges[22] + "/50"
+                        },
+                        unlocked(){
+                                return hasMilestone("pl", 3)
+                        },
+                        onEnter(){
+                                player.nu.points = decimalZero
+                        },
+                        countsAs: [],
+                        completionLimit: 50,
+                }, // inChallenge("e", 22)
         },
         milestones: {
                 1: {
@@ -39109,7 +39141,7 @@ addLayer("pl", {
                         total: decimalZero,
                 },
         }},
-        color: "#B5A225",
+        color: "#25F225",
         branches: [],
         requires:() => new Decimal("0"), 
         resource: "Plants", 
@@ -39184,11 +39216,12 @@ addLayer("pl", {
                         if (hasMilestone("pl", 1))      ret = ret.times(Decimal.pow(3, player.e.challenges[21] - 33).max(1))
                         if (hasMilestone("pl", 2))      ret = ret.times(player.ch.points.max(10).log10().pow(player.pl.milestones.length))
                         if (hasUpgrade("pl", 12)) {
-                                let b1 = Decimal.pow(1.01, player.tokens.mastery_tokens.total.sub(500).max(0))
+                                let b1 = Decimal.pow(1.01, player.tokens.mastery_tokens.total.sub(hasMilestone("pl", 3) ? 0 : 500).max(0))
                                 let exp = player.pl.upgrades.length + (hasUpgrade("e", 31) ? player.e.upgrades.filter(x => x > 30 & x < 40).length : 0)
                                 ret = ret.times(b1.pow(exp))
                         }
                         if (hasUpgrade("e", 31))        ret = ret.times(player.nu.points.max(10).log10().pow(player.e.upgrades.length))
+                                                        ret = ret.times(player.pl.biomass.points.max(10).log10().pow(player.e.challenges[22]))
 
                         return ret
                 },
@@ -39275,6 +39308,20 @@ addLayer("pl", {
                                 return "Reward: Per milestone log10(Chromosomes) multiplies Biomass and Ecosystem gain."
                         },
                 }, // hasMilestone("pl", 2)
+                3: {
+                        requirementDescription(){
+                                return "1e41 Biomass"
+                        },
+                        done(){
+                                return player.pl.biomass.points.gte(1e41)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Unlock a Ecosystem challenge and each of the first fifty plants subtracts 1 from the Mastery I base and Plants II counts every Token II."
+                        },
+                }, // hasMilestone("pl", 3)
         },
         tabFormat: {
                 "Upgrades": {
@@ -39302,7 +39349,7 @@ addLayer("pl", {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
-                                        let a = "Pants forces an Ecosystem reset."
+                                        let a = "Plants forces an Ecosystem reset."
                                         let b = "Effect formula: (.2+x/100)/(1+x/100)"
                                         let c = "Initial Biomass gain: log10(Ecosystems)-100"
 
@@ -49796,6 +49843,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("sp", 135))      mult = 1095
                                 if (hasUpgrade("e", 14))        mult = 1000
                                                                 mult -= 18 * player.e.challenges[21]
+                                if (hasMilestone("pl", 3))      mult -= player.pl.points.min(50).max(0).toNumber()
                                 
                                 return [add, mult]
                         },
