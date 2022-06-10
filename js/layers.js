@@ -38402,6 +38402,18 @@ addLayer("e", {
                                 return player.e.challenges[21] >= 50
                         }, // hasUpgrade("e", 31)
                 },
+                32: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems XII"
+                        },
+                        description(){
+                                return "Token II buyables' exponent is 1.17"
+                        },
+                        cost:() => new Decimal(1e133),
+                        unlocked(){
+                                return player.e.challenges[22] >= 6
+                        }, // hasUpgrade("e", 32)
+                },
         },
         challenges: {
                 11: {
@@ -38504,6 +38516,7 @@ addLayer("e", {
                                 let c = player.e.challenges[22]
                                 let ret = new Decimal(581).plus(c * 4)
                                 if (c >= 1) ret = ret.sub(1)
+                                if (ret.gt(600)) ret = ret.times(1.5).sub(290)
                                 return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[22].goal),
@@ -47812,6 +47825,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("e", 32))        return x.pow(1.17).ceil()
                         if (hasUpgrade("e", 21))        return x.pow(1.18).ceil()
                         if (hasUpgrade("tokens", 134))  return x.pow(1.19).ceil()
                         if (hasUpgrade("tokens", 125))  return x.pow(1.2).ceil()
@@ -47872,6 +47886,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("e", 32))        return "ceil(x<sup>1.17</sup>)"
                         if (hasUpgrade("e", 21))        return "ceil(x<sup>1.18</sup>)"
                         if (hasUpgrade("tokens", 134))  return "ceil(x<sup>1.19</sup>)"
                         if (hasUpgrade("tokens", 125))  return "ceil(x<sup>1.2</sup>)"
@@ -47926,6 +47941,7 @@ addLayer("tokens", {
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
                         
+                        if (hasUpgrade("e", 32))        return 37
                         if (hasUpgrade("e", 21))        return 36
                         if (hasUpgrade("tokens", 134))  return 35
                         if (hasUpgrade("tokens", 125))  return 34
