@@ -28802,6 +28802,7 @@ addLayer("or", {
                         },
                         base(){
                                 if (hasUpgrade("tokens", 242))  {
+                                        if (hasMilestone("pl", 4))      return player.or.buyables[202].max(1).pow(.64)
                                         if (hasUpgrade("tokens", 251))  return player.or.buyables[202].max(1).pow(.63)
                                                                         return player.or.buyables[202].max(1).pow(.62)
                                 }
@@ -28837,6 +28838,7 @@ addLayer("or", {
                                 if (hasUpgrade("tokens", 242)) {
                                                                         exp = ".62"
                                         if (hasUpgrade("tokens", 251))  exp = ".63"
+                                        if (hasMilestone("pl", 4))      exp = ".64"
                                 }
 
                                 eformula = eformula.replace("EXP", exp)
@@ -38526,7 +38528,7 @@ addLayer("e", {
                                 a += "Reward: log10(Biomass)<sup>" + formatWhole(player.e.challenges[22]) + "</sup> multiplies Biomass"
                                 a += " and Ecosystems gain. This challenge counts towards Chromosomeless? and Nucleusless? completions for their primary effects."
                                 //a += " from the Species base gain divider, "
-                                return a + br2 + "Completions: " + player.e.challenges[22] + "/50"
+                                return a + br2 + "Completions: " + player.e.challenges[22] + "/100"
                         },
                         unlocked(){
                                 return hasMilestone("pl", 3)
@@ -38535,7 +38537,7 @@ addLayer("e", {
                                 player.nu.points = decimalZero
                         },
                         countsAs: [],
-                        completionLimit: 50,
+                        completionLimit: 100,
                 }, // inChallenge("e", 22)
         },
         milestones: {
@@ -38781,7 +38783,7 @@ addLayer("e", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Each 5th Energyless? divides Pluripotent cost base by 10 and unlock Biomass [not yet] [new layer!]."
+                                return "Reward: Each 5th Energyless? divides Pluripotent cost base by 10 and unlock Biomass."
                         },
                 }, // hasMilestone("e", 17)
         },
@@ -39222,7 +39224,7 @@ addLayer("pl", {
                 getBaseGain(){
                         if (!hasMilestone("e", 17)) return decimalZero
                         
-                        let ret = player.e.points.max(10).log10().sub(100).max(0)
+                        let ret = player.e.points.max(10).log10().sub(hasMilestone("pl", 4) ? 0 : 100).max(0)
 
                         if (hasUpgrade("pl", 13))       ret = ret.pow(player.pl.points.max(1))
 
@@ -39291,6 +39293,18 @@ addLayer("pl", {
                                 return hasUpgrade("pl", 12)
                         }, // hasUpgrade("pl", 13)
                 },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Plants IV"
+                        },
+                        description(){
+                                return "Taxonomy amounts gains are raised ^1.01 [not yet]"
+                        },
+                        cost:() => new Decimal(6),
+                        unlocked(){
+                                return player.e.challenges[22] >= 15
+                        }, // hasUpgrade("pl", 14)
+                },
         },
         milestones: {
                 1: {
@@ -39335,6 +39349,20 @@ addLayer("pl", {
                                 return "Reward: Unlock a Ecosystem challenge and each of the first fifty plants subtracts 1 from the Mastery I base and Plants II counts every Token II."
                         },
                 }, // hasMilestone("pl", 3)
+                4: {
+                        requirementDescription(){
+                                return "1e112 Biomass"
+                        },
+                        done(){
+                                return player.pl.biomass.points.gte(1e112)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Remove the -100 from Biomass base gain and make exponent is .64."
+                        },
+                }, // hasMilestone("pl", 4)
         },
         tabFormat: {
                 "Upgrades": {
