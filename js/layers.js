@@ -31386,6 +31386,7 @@ addLayer("an", {
                 let exp = tmp.an.getGainExp
 
                 let exp2 = hasUpgrade("tokens", 221) ? .15 : .11
+                if (hasMilestone("pl", 5))      exp2 = .16
 
                 if (hasUpgrade("tokens", 102) && pts.log10().pow(exp2).pow10().gte(pts.log10())) {
                                                 return pts.log10().pow(exp2).pow10().times(tmp.sp.effect).pow(exp)
@@ -33623,6 +33624,7 @@ addLayer("an", {
                                         if (hasUpgrade("ch", 14))       a2 = "Current Animal gain: log10(Organs)<sup>EXP</sup>"
                                         if (hasUpgrade("tokens", 102))  a2 = "Current Animal gain: 10<sup>log10(Organs)<sup>.11</sup>*EXP</sup>"
                                         if (hasUpgrade("tokens", 221))  a2 = a2.replace(".11", ".15")
+                                        if (hasMilestone("pl", 5))      a2 = a2.replace(".15", ".16")
                                         
                                         a2 = a2.replace("EXP", format(tmp.an.getGainExp))
 
@@ -38416,6 +38418,18 @@ addLayer("e", {
                                 return player.e.challenges[22] >= 6
                         }, // hasUpgrade("e", 32)
                 },
+                33: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems XIII"
+                        },
+                        description(){
+                                return "Token II buyables' exponent is 1.165 and remove the *1000 from the Plant formula"
+                        },
+                        cost:() => new Decimal(1e158),
+                        unlocked(){
+                                return player.e.challenges[22] >= 19
+                        }, // hasUpgrade("e", 33)
+                },
         },
         challenges: {
                 11: {
@@ -38526,7 +38540,7 @@ addLayer("e", {
                                 let a = "Square root Animal and Gene gain" + br 
                                 a += "Goal: " + formatWhole(tmp.e.challenges[22].goal) + " Nucleuses" + br2
                                 a += "Reward: log10(Biomass)<sup>" + formatWhole(player.e.challenges[22]) + "</sup> multiplies Biomass"
-                                a += " and Ecosystems gain. This challenge counts towards Chromosomeless? and Nucleusless? completions for their primary effects."
+                                a += " gain. This challenge counts towards Chromosomeless? and Nucleusless? completions for their primary effects."
                                 //a += " from the Species base gain divider, "
                                 return a + br2 + "Completions: " + player.e.challenges[22] + "/100"
                         },
@@ -39164,7 +39178,7 @@ addLayer("pl", {
         baseAmount(){return player.pl.biomass.points},
         type: "custom",
         getNextAt(){ // 1000*[BASE]^(x^2) base starts around 10?
-                let ret = tmp.pl.getResetBase.pow(player.pl.points.pow(2)).times(1000)
+                let ret = tmp.pl.getResetBase.pow(player.pl.points.pow(2)).times(hasUpgrade("e", 33) ? 1 : 1000)
 
                 return ret
         },
@@ -39173,7 +39187,7 @@ addLayer("pl", {
         },
         getResetGain(){
                 if (false) {
-                        return player.pl.biomass.points.div(1000).log(tmp.pl.getResetBase).sqrt().floor().plus(1)
+                        return player.pl.biomass.points.div(hasUpgrade("e", 33) ? 1 : 1000).log(tmp.pl.getResetBase).sqrt().floor().plus(1)
                 } else {
                         if (player.pl.biomass.points.gt(tmp.pl.getNextAt)) return decimalOne
                         return decimalZero
@@ -39298,9 +39312,9 @@ addLayer("pl", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Plants IV"
                         },
                         description(){
-                                return "Taxonomy amounts gains are raised ^1.01 [not yet]"
+                                return "Taxonomy amounts gains are raised ^1.001 and each Animaless? adds 225 to the Token II via Cell divider"
                         },
-                        cost:() => new Decimal(6),
+                        cost:() => new Decimal(12),
                         unlocked(){
                                 return player.e.challenges[22] >= 15
                         }, // hasUpgrade("pl", 14)
@@ -39363,6 +39377,20 @@ addLayer("pl", {
                                 return "Reward: Remove the -100 from Biomass base gain and make exponent is .64."
                         },
                 }, // hasMilestone("pl", 4)
+                5: {
+                        requirementDescription(){
+                                return "1e146 Biomass"
+                        },
+                        done(){
+                                return player.pl.biomass.points.gte(1e146)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Animal gain double exponent is .16 ."
+                        },
+                }, // hasMilestone("pl", 5)
         },
         tabFormat: {
                 "Upgrades": {
@@ -47853,6 +47881,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("e", 33))        return x.pow(1.165).ceil()
                         if (hasUpgrade("e", 32))        return x.pow(1.17).ceil()
                         if (hasUpgrade("e", 21))        return x.pow(1.18).ceil()
                         if (hasUpgrade("tokens", 134))  return x.pow(1.19).ceil()
@@ -47914,6 +47943,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("e", 33))        return "ceil(x<sup>1.165</sup>)"
                         if (hasUpgrade("e", 32))        return "ceil(x<sup>1.17</sup>)"
                         if (hasUpgrade("e", 21))        return "ceil(x<sup>1.18</sup>)"
                         if (hasUpgrade("tokens", 134))  return "ceil(x<sup>1.19</sup>)"
@@ -47969,6 +47999,7 @@ addLayer("tokens", {
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
                         
+                        if (hasUpgrade("e", 33))        return 38
                         if (hasUpgrade("e", 32))        return 37
                         if (hasUpgrade("e", 21))        return 36
                         if (hasUpgrade("tokens", 134))  return 35
@@ -49839,8 +49870,9 @@ addLayer("tokens", {
                                 if (hasUpgrade("tokens", 135) && lvls.gte(48000)) {
                                         add = 20
                                         div = 40000
-                                        if (hasMilestone("e", 11)) div = 42000
-                                        if (hasMilestone("sp", 28)) div = Math.max(div, player.e.challenges[11] * 500 + 4e4)
+                                        if (hasMilestone("e", 11))      div = 42000
+                                        if (hasMilestone("sp", 28))     div = Math.max(div, player.e.challenges[11] * 500 + 4e4)
+                                        if (hasUpgrade("pl", 14))       div += player.e.challenges[22] * 225   
                                 }
                                 if (hasUpgrade("tokens", 284) && add >= 19)     add = 19 
                                 if (hasMilestone("e", 15) && add >= 18)         add = 18

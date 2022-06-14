@@ -194,6 +194,11 @@ function updateTaxonomyAmounts(diff) {
         if (hasUpgrade("sp", 32)) spExp[3] = player.ch.points.max(1).log(2).div(hasUpgrade("sp", 132) ? 1 : hasUpgrade("sp", 82) ? 2 : 25)
         if (hasUpgrade("sp", 33)) spExp[2] = player.tokens.tokens2.total.max(1).log10().div(hasUpgrade("sp", 133) ? 1 : hasUpgrade("sp", 83) ? 4 : 25)
         
+        let layerEff = [decimalOne, decimalOne, decimalOne, decimalOne, decimalOne, decimalOne, decimalOne, decimalOne, decimalOne] // 9 0's
+        for (let i = 1; i <= 8; i ++) {
+                layerEff[i] = tmp.sp.effect.pow(spExp[i]).times(tmp.e.effect)
+        }
+
         for (i in TAXONOMY_KEYS) {
                 let id = TAXONOMY_KEYS[i]
 
@@ -203,8 +208,9 @@ function updateTaxonomyAmounts(diff) {
                         let exp = (data.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22) ? 1.25 : 1
                         gain = gain.times(getLevels(id).pow(exp).plus(2).log(2))
                 }
-                gain = gain.times(tmp.sp.effect.pow(spExp[Math.floor(id/100)]))
-                gain = gain.times(tmp.e.effect)
+                gain = gain.times(layerEff[Math.floor(id/100)])
+
+                if (hasUpgrade("pl", 14))       gain = gain.pow(1.001)
 
                 if (hasAchievement("an", 33)) {
                         data.grid[id].extras = gain
