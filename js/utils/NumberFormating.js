@@ -43,8 +43,8 @@ function format(decimal, precision = 2, small) {
                 player.hasNaN = true;
                 console.log("Sign:" + decimal.sign + "Mag:" + decimal.mag + "Layer:" + decimal.layer) 
                 console.log("Sorry that a bug has appeared. Please export this save by running exportSave(). Please give the dev a screenshot of the console and a paste of the save.")
-                Decimal(0)
-                return "NaN"
+                throw "NaN was attempted to be formatted" 
+                //return "NaN"
         }
         if (decimal.sign < 0) return "-" + format(decimal.neg(), precision)
         if (decimal.mag == Number.POSITIVE_INFINITY) return "Infinity"
