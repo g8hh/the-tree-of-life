@@ -38433,6 +38433,18 @@ addLayer("e", {
                                 return player.e.challenges[22] >= 19
                         }, // hasUpgrade("e", 33)
                 },
+                34: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems XIV"
+                        },
+                        description(){
+                                return "Token II amount multiplies Biomass gain per Plants - 15 and unlock Biomass buyables"
+                        },
+                        cost:() => new Decimal(2e180),
+                        unlocked(){
+                                return player.e.challenges[22] >= 30
+                        }, // hasUpgrade("e", 34)
+                },
         },
         challenges: {
                 11: {
@@ -39264,6 +39276,9 @@ addLayer("pl", {
                         }
                         if (hasUpgrade("e", 31))        ret = ret.times(player.nu.points.max(10).log10().pow(player.e.upgrades.length))
                                                         ret = ret.times(player.pl.biomass.points.max(10).log10().pow(player.e.challenges[22]))
+                        if (hasUpgrade("e", 34))        ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.pl.points.sub(15).max(0)))
+
+                                                        ret = ret.times(tmp.pl.buyables[11].effect)
 
                         return ret
                 },
@@ -39280,6 +39295,76 @@ addLayer("pl", {
                         data.points = data.points.plus(gainThisTick)
                         data.best = data.best.max(data.points)
                         data.total = data.total.plus(gainThisTick)
+                },
+        },
+        buyables: {
+                rows: 3,
+                cols: 3,
+                11: {
+                        title: "Sprout",
+                        cost(){
+                                let init = new Decimal(1e280)
+                                let base = new Decimal(60)
+                                let exp = new Decimal(1.4)
+
+                                return base.pow(player.pl.buyables[11].pow(exp)).times(init)
+                        },
+                        getMaxAfford(){
+                                let init = new Decimal(1e280)
+                                let base = new Decimal(60)
+                                let exp = new Decimal(1.4)
+
+                                let pts = player.pl.biomass.points.div(init)
+                                if (pts.lt(1)) return decimalZero
+
+                                return pts.log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return hasUpgrade("e", 34)
+                        },
+                        canAfford:() => player.pl.biomass.points.gte(tmp.pl.buyables[11].cost),
+                        buy(){
+                                if (!this.canAfford()) return
+                                let data = player.pl
+                                let id = 11
+                                let ma = tmp.pl.buyables[id].getMaxAfford
+                                let maxBulk = 1
+                                let up 
+                                if (false) up = ma.sub(data.buyables[id]).max(0)
+                                else up = false ? ma.sub(data.buyables[id]).min(maxBulk) : 1
+                                data.buyables[id] = data.buyables[id].plus(up)
+                                if (!false) {
+                                        data.biomass.points = data.biomass.points.sub(tmp.pl.buyables[id].cost)
+                                }
+                        },
+                        base(){
+                                let ret = player.cells.points.max(10).log10().max(10).log10()
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.pl.buyables[11].base.pow(player.pl.buyables[11])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.pl.buyables[11]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.pl.buyables[11].effect) + " to Biomass gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("pl", 11)) + " Biomass</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = "log10(log10(Cells))^x<br>" + format(tmp.pl.buyables[11].base) + "^x"
+                                
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e280*60^(x<sup>1.4</sup>)" 
+                                let cost3 = "</b><br>"
+
+                                return br + allEff + cost1 + cost2 + cost3
+                        },
                 },
         },
         upgrades: {
@@ -39452,6 +39537,16 @@ addLayer("pl", {
                         ],
                         unlocked(){
                                 return true
+                        },
+                },
+                "Buyables": {
+                        content: [
+                                "main-display",
+                                "secondary-display-biomass",
+                                "buyables",
+                        ],
+                        unlocked(){
+                                return hasUpgrade("e", 34)
                         },
                 },
                 "Info": {
@@ -41291,6 +41386,9 @@ addLayer("ach", {
                         content: [
                                 ["infobox", "introBox"],
                         ],
+                        unlocked(){
+                                return true
+                        },
                 },
         },
         doReset(layer){},
