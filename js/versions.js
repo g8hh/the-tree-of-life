@@ -12,7 +12,7 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.pl.biomass.points.gte(1e436)
+	return player.pl.biomass.points.gte("1e436")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
