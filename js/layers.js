@@ -12555,7 +12555,7 @@ addLayer("l", {
                         unlocked(){
                                 return true
                         },
-                        effect(){
+                        cap(){
                                 let cap = 50
 
                                 if (hasMilestone("l", 11))      cap += 5 * player.l.milestones.length
@@ -12565,13 +12565,18 @@ addLayer("l", {
                                                                 cap += tmp.l.getNonZeroGemCount
                                 }
                                 if (hasUpgrade("sci", 443))     cap += tmp.sci.upgrades.proteinUpgradesLength
+
+                                return cap
+                        },
+                        effect(){
+                                let cap = tmp.l.milestones[1].cap
                                 
                                 let exp = Math.min(cap, player.l.times)
                                 if (hasUpgrade("d", 11)) exp = cap
                                 return Decimal.pow(1.01, exp)
                         },
                         effectDescription(){
-                                let a = "Reward: Per reset (up to 50) exponentiate prior currencies ^1.01 (same as Life effect), gain 10x D and E Points, and gain 3x Phosphorus and Nitrogen resets.<br>"
+                                let a = "Reward: Per reset (up to " + formatWhole(tmp.l.milestones[1].cap) + ") exponentiate prior currencies ^1.01 (same as Life effect), gain 10x D and E Points, and gain 3x Phosphorus and Nitrogen resets.<br>"
                                 return a + "Currently: " + format(tmp.l.milestones[1].effect, 4)
                         },
                 }, // hasMilestone("l", 1)
@@ -13919,7 +13924,7 @@ addLayer("l", {
                                 let init = new Decimal(player.extremeMode ? 2e80 : 7e84)
                                 let base = new Decimal(player.extremeMode ? 987 : 158)
                                 if (hasMilestone("cells", 34)) base = new Decimal(2)
-                                if (hasMilestone("l", 38)) init = decimalOne
+                                if (hasMilestone("l", 38) && player.extremeMode) init = decimalOne
                                 let id = 31
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -13936,7 +13941,7 @@ addLayer("l", {
                                 let init = player.extremeMode ? 2e80 : 7e84
                                 let base = player.extremeMode ? 987 : 158
                                 if (hasMilestone("cells", 34)) base = 2
-                                if (hasMilestone("l", 38)) init = 1
+                                if (hasMilestone("l", 38) && player.extremeMode) init = 1
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[31].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[31].expDiv).plus(1).floor()
@@ -13999,7 +14004,9 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "7e84*158^(x<sup>1+x/" + formatWhole(tmp.l.buyables[31].expDiv) + "</sup>)"
                                 if (player.extremeMode)         cost2 = cost2.replace("7e84*158", "2e80*987")
-                                if (hasMilestone("l", 38))      cost2 = cost2.slice(5,)
+                                if (hasMilestone("l", 38) && player.extremeMode) {
+                                                                cost2 = cost2.slice(5,)
+                                }
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500") 
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -39379,7 +39386,7 @@ addLayer("pl", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Unlock a Ecosystem challenge and each of the first fifty plants subtracts 1 from the Mastery I base and Plants II counts every Token II."
+                                return "Reward: Unlock a Ecosystem challenge and each of the first fifty plants subtracts 1 from the Mastery I base and Plants II counts every Mastery Token."
                         },
                 }, // hasMilestone("pl", 3)
                 4: {
@@ -41528,8 +41535,8 @@ addLayer("mini", {
                                 let autobuyEList = []
                                 if (allABContent || hasUpgrade("n", 52)) {
                                         autobuyEList = [201, 202, 203, 211, 212, 
-                                                 213, 221, 222, 223, 231, 
-                                                 232, 233, 241]
+                                                        213, 221, 222, 223, 231, 
+                                                        232, 233, 241]
                                 }
 
                                 let bulkE = decimalOne
@@ -41557,7 +41564,8 @@ addLayer("mini", {
                                 for (i = 0; i < autobuyEList.length; i++){
                                         let id = autobuyEList[i]
                                         if (id == 201 && !(allABContent || hasMilestone("p", 8))) continue
-                                        let canBuyFirst = hasMilestone("l", 2) || allABContent || (hasMilestone("p", 8) && id < 240)
+                                        let canBuyFirst = (allABContent || hasMilestone("p", 8)) && id < 240
+                                        if (hasMilestone("l", 2)) canBuyFirst = true
                                         if (!tmp.mini.buyables[id].unlocked) continue
                                         if (!canBuyFirst && getBuyableAmount("mini", id).eq(0)) continue
                                         if (tmp.mini.buyables[id].canAfford) {
