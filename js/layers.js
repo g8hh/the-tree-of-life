@@ -38133,12 +38133,13 @@ addLayer("e", {
                 
                 return ret.floor()
         },
-        getGainMult(){//e gain egain ecosystemsgain ecosystems gain ecogain eco gain 
+        getGainMult(){//e gain egain ecosystemsgain ecosystems gain ecogain eco gain ecosystemgain
                 let ret = decimalOne
 
                 if (hasUpgrade("e", 13))        ret = ret.times(Decimal.pow(1.02, player.tokens.mastery_tokens.total))
                                                 ret = ret.times(tmp.e.challenges[12].ecoMult)
                 if (hasMilestone("pl", 2))      ret = ret.times(player.ch.points.max(10).log10().pow(player.pl.milestones.length))
+                if (hasMilestone("pl", 6))      ret = ret.times(player.nu.points.sub(1200).max(1))
 
                 return ret
         },
@@ -39173,16 +39174,22 @@ addLayer("pl", {
         baseAmount(){return player.pl.biomass.points},
         type: "custom",
         getNextAt(){ // 1000*[BASE]^(x^2) base starts around 10?
-                let ret = tmp.pl.getResetBase.pow(player.pl.points.pow(2)).times(hasUpgrade("e", 33) ? 1 : 1000)
+                let ret = tmp.pl.getResetBase.pow(player.pl.points.pow(tmp.pl.getCostExp)).times(hasUpgrade("e", 33) ? 1 : 1000)
 
                 return ret
         },
         getResetBase(){
                 return new Decimal(10)
         },
+        getCostExp(){
+                let ret = new Decimal(2)
+                //if (hasMilestone("pl", 6))      ret = new Decimal(1.97)
+
+                return ret
+        },
         getResetGain(){
                 if (false) {
-                        return player.pl.biomass.points.div(hasUpgrade("e", 33) ? 1 : 1000).log(tmp.pl.getResetBase).sqrt().floor().plus(1)
+                        return player.pl.biomass.points.div(hasUpgrade("e", 33) ? 1 : 1000).log(tmp.pl.getResetBase).root(tmp.pl.getCostExp).floor().plus(1)
                 } else {
                         if (player.pl.biomass.points.gt(tmp.pl.getNextAt)) return decimalOne
                         return decimalZero
@@ -39240,9 +39247,13 @@ addLayer("pl", {
                         if (hasMilestone("pl", 1))      ret = ret.times(Decimal.pow(3, player.e.challenges[21] - 33).max(1))
                         if (hasMilestone("pl", 2))      ret = ret.times(player.ch.points.max(10).log10().pow(player.pl.milestones.length))
                         if (hasUpgrade("pl", 12)) {
-                                let b1 = Decimal.pow(1.01, player.tokens.mastery_tokens.total.sub(hasMilestone("pl", 3) ? 0 : 500).max(0))
-                                let exp = player.pl.upgrades.length + (hasUpgrade("e", 31) ? player.e.upgrades.filter(x => x > 30 & x < 40).length : 0)
-                                ret = ret.times(b1.pow(exp))
+                                let exp = player.tokens.mastery_tokens.total.sub(hasMilestone("pl", 3) ? 0 : 500).max(0)
+                                if (hasMilestone("pl", 6))      exp = exp.plus(player.nu.points.sub(1200).max(0))
+                                
+                                let b1 = Decimal.pow(1.01, exp)
+
+                                let upgs = player.pl.upgrades.length + (hasUpgrade("e", 31) ? player.e.upgrades.filter(x => x > 30 & x < 40).length : 0)
+                                ret = ret.times(b1.pow(upgs))
                         }
                         if (hasUpgrade("e", 31))        ret = ret.times(player.nu.points.max(10).log10().pow(player.e.upgrades.length))
                                                         ret = ret.times(player.pl.biomass.points.max(10).log10().pow(player.e.challenges[22]))
@@ -39399,6 +39410,20 @@ addLayer("pl", {
                                 return "Reward: Animal gain double exponent is .16 ."
                         },
                 }, // hasMilestone("pl", 5)
+                6: {
+                        requirementDescription(){
+                                return "1e217 Biomass"
+                        },
+                        done(){
+                                return player.pl.biomass.points.gte(1e217)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Nucleuses past 1200 count towards Plants II and multiply Ecosystem gain."
+                        },
+                }, // hasMilestone("pl", 6)
         },
         tabFormat: {
                 "Upgrades": {
