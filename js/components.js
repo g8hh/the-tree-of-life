@@ -9,6 +9,13 @@ function loadVue() {
 		`
 	})
 
+	Vue.component('d-t', { // same as display-text
+		props: ['layer', 'data'],
+		template: `
+			<span class="instant" v-html="data"></span>
+		`
+	})
+
 	// data = a function returning the content (actually HTML)
 	Vue.component('raw-html', {
 			props: ['layer', 'data'],

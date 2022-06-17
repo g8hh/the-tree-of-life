@@ -52551,52 +52551,52 @@ addLayer("tokens", {
                                 ]
                         },
                         "Points": {
-                                content: [["display-text", pointFormulaDisplay]],
+                                content: [["d-t", pointFormulaDisplay]],
                         },
                         "DNA": {
-                                content: [["display-text", dnaFormulaDisplay]],
+                                content: [["d-t", dnaFormulaDisplay], "h-line", ["d-t", dnaExpDisplay]],
                         },
                         "Cells": {
-                                content: [["display-text", cellFormulaDisplay]]
+                                content: [["d-t", cellFormulaDisplay]]
                         },
                         "Stem Cells": {
-                                content: [["display-text", stemCellFormulaDisplay]],
+                                content: [["d-t", stemCellFormulaDisplay]],
                         },
                         "Tissues": {
-                                content: [["display-text", tissueFormulaDisplay]],
+                                content: [["d-t", tissueFormulaDisplay]],
                         },
                         "Organs": {
-                                content: [["display-text", organFormulaDisplay]],
+                                content: [["d-t", organFormulaDisplay]],
                         },
                         "Contaminants": {
-                                content: [["display-text", contaminantFormulaDisplay]],
+                                content: [["d-t", contaminantFormulaDisplay]],
                         },
                         "Air": {
-                                content: [["display-text", airFormulaDisplay]],
+                                content: [["d-t", airFormulaDisplay]],
                                 unlocked(){
                                         return player.or.air.points.gt(0) || player.an.unlocked
                                 },
                         },
                         "Energy": {
-                                content: [["display-text", energyFormulaDisplay]],
+                                content: [["d-t", energyFormulaDisplay]],
                                 unlocked(){
                                         return player.or.energy.points.gt(0) || player.an.unlocked
                                 },
                         },
                         "Animals": {
-                                content: [["display-text", animalFormulaDisplay]],
+                                content: [["d-t", animalFormulaDisplay]],
                                 unlocked(){
                                         return player.an.unlocked
                                 },
                         },
                         "Genes": {
-                                content: [["display-text", geneFormulaDisplay]],
+                                content: [["d-t", geneFormulaDisplay]],
                                 unlocked(){
                                         return hasUpgrade("or", 352) || player.ch.unlocked
                                 },
                         },
                         "Taxonomy Limit": {
-                                content: [["display-text", taxonomyCapFormulaDisplay]],
+                                content: [["d-t", taxonomyCapFormulaDisplay]],
                                 unlocked(){
                                         return player.ch.best.gte(38) || player.nu.unlocked
                                 },
