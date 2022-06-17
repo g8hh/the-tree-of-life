@@ -669,15 +669,17 @@ function animalFormulaDisplay(){
         let c = ""
 
         if (player.easyMode)            c += "Easy Mode multiplies AX by 2" + br
-        if (hasMilestone("an", 13))     c += "Animal Milestone 13 multiplies AX by " + format(player.an.milestones.length) + br
-        if (hasMilestone("an", 18))     c += "Animal Milestone 18 multiplies AX by " + format(player.an.genes.points.max(10).log10()) + br
-        else if (hasUpgrade("or", 351)) {
-                let a = 1
-                if (hasUpgrade("or", 352)) a ++
-                if (hasUpgrade("or", 353)) a ++
-                if (hasUpgrade("or", 354)) a ++
-                if (hasUpgrade("or", 355)) a ++
-                                        c += "Lung XXVI multiplies AX by " + format(Decimal.pow(2, a)) + br
+        if (!hasMilestone("pl", 12)) {
+                if (hasMilestone("an", 13))     c += "Animal Milestone 13 multiplies AX by " + format(player.an.milestones.length) + br
+                if (hasMilestone("an", 18))     c += "Animal Milestone 18 multiplies AX by " + format(player.an.genes.points.max(10).log10()) + br
+                else if (hasUpgrade("or", 351)) {
+                        let a = 1
+                        if (hasUpgrade("or", 352)) a ++
+                        if (hasUpgrade("or", 353)) a ++
+                        if (hasUpgrade("or", 354)) a ++
+                        if (hasUpgrade("or", 355)) a ++
+                                                c += "Lung XXVI multiplies AX by " + format(Decimal.pow(2, a)) + br
+                }
         }
         if (hasUpgrade("an", 35))       c += "Animals XV multiplies AX by " + format(Decimal.pow(1.01, player.ch.points)) + br
         if (hasAchievement("an", 23) && player.an.achActive[23]) {
