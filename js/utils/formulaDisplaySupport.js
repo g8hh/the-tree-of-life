@@ -881,7 +881,7 @@ function contaminantFormulaDisplay(){
 }
 
 function taxonomyCapFormulaDisplay(){
-        let a = "Contaminant gain is AX"
+        let a = "Taxonomy cap is AX"
         let b = "AX is initially 400 and the following factors add to it"
         let c = ""
 
