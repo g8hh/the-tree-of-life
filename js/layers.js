@@ -26424,6 +26424,9 @@ addLayer("or", {
                                                         ret = ret.times(tmp.or.buyables[221].effect)
                                                         ret = ret.times(tmp.or.buyables[222].effect)
                                                         ret = ret.times(tmp.or.buyables[223].effect)
+
+                        if (hasMilestone("pl", 13))     return ret 
+
                         if (!hasMilestone("sp", 25))    ret = ret.times(tmp.or.challenges[11].reward)
                         if (hasUpgrade("or", 142))      ret = ret.times(player.or.points.max(1))
                         if (hasUpgrade("or", 143) && !hasMilestone("sp", 18)) {
@@ -28778,6 +28781,8 @@ addLayer("or", {
                         },
                         base(){
                                 if (hasUpgrade("tokens", 242))  {
+                                        if (hasUpgrade("tokens", 291))  return player.or.buyables[202].max(1).pow(.67)
+                                        if (hasUpgrade("pl", 25))       return player.or.buyables[202].max(1).pow(.66)
                                         if (hasUpgrade("pl", 22))       return player.or.buyables[202].max(1).pow(.65)
                                         if (hasMilestone("pl", 4))      return player.or.buyables[202].max(1).pow(.64)
                                         if (hasUpgrade("tokens", 251))  return player.or.buyables[202].max(1).pow(.63)
@@ -28817,6 +28822,8 @@ addLayer("or", {
                                         if (hasUpgrade("tokens", 251))  exp = ".63"
                                         if (hasMilestone("pl", 4))      exp = ".64"
                                         if (hasUpgrade("pl", 22))       exp = ".65"
+                                        if (hasUpgrade("pl", 25))       exp = ".66"
+                                        if (hasUpgrade("tokens", 291))  exp = ".67"
                                 }
 
                                 eformula = eformula.replace("EXP", exp)
@@ -38128,6 +38135,7 @@ addLayer("e", {
                                                 ret = ret.times(tmp.e.challenges[12].ecoMult)
                 if (hasMilestone("pl", 2))      ret = ret.times(player.ch.points.max(10).log10().pow(player.pl.milestones.length))
                 if (hasMilestone("pl", 6))      ret = ret.times(player.nu.points.sub(1200).max(1))
+                if (hasUpgrade("pl", 24))       ret = ret.times(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt()))
 
                 return ret
         },
@@ -38441,6 +38449,18 @@ addLayer("e", {
                                 return player.e.challenges[22] >= 64
                         }, // hasUpgrade("e", 35)
                 },
+                41: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems XVI"
+                        },
+                        description(){
+                                return "Token II buyables' cost exponent is 1.16 but Bottom Quark base no longer depends on the column amount"
+                        },
+                        cost:() => new Decimal("5e322"),
+                        unlocked(){
+                                return player.e.challenges[22] >= 99
+                        }, // hasUpgrade("e", 41)
+                },
         },
         challenges: {
                 11: {
@@ -38544,6 +38564,7 @@ addLayer("e", {
                                 let ret = new Decimal(581).plus(c * 4)
                                 if (c >= 1) ret = ret.sub(1)
                                 if (ret.gt(600)) ret = ret.times(1.5).sub(290)
+                                if (ret.gte(1000)) ret = ret.plus(14)
                                 return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[22].goal),
@@ -38811,6 +38832,20 @@ addLayer("e", {
                                 return "Reward: Each 5th Energyless? divides Pluripotent cost base by 10 and unlock Biomass."
                         },
                 }, // hasMilestone("e", 17)
+                18: {
+                        requirementDescription(){
+                                return "70 Animaless?"
+                        },
+                        done(){
+                                return player.e.challenges[22] >= 70
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Stem cost base is 28 and each Leaf divides Sprout base cost by 10 and each Stem divides Leaf base cost by 10 (minimum 1)."
+                        },
+                }, // hasMilestone("e", 18)
         },
         tabFormat: {
                 "Upgrades": {
@@ -39203,8 +39238,9 @@ addLayer("pl", {
                 return ret
         },
         getResetGain(){
-                if (false) {
-                        return player.pl.biomass.points.div(hasUpgrade("e", 33) ? 1 : 1000).log(tmp.pl.getResetBase).root(tmp.pl.getCostExp).floor().plus(1)
+                if (hasUpgrade("pl", 25)) {
+                        let gain = player.pl.biomass.points.div(hasUpgrade("e", 33) ? 1 : 1000).max(1).log(tmp.pl.getResetBase).root(tmp.pl.getCostExp).floor().plus(1)
+                        return gain.sub(player.pl.points).max(0)
                 } else {
                         if (player.pl.biomass.points.gt(tmp.pl.getNextAt)) return decimalOne
                         return decimalZero
@@ -39240,7 +39276,7 @@ addLayer("pl", {
                 //if (player.mu.points.gt(1e10)) return a
                 let b = ""
                 if (player.pl.points.lt(30)) {
-                        let d = tmp.pl.canBuyMax
+                        let d = hasUpgrade("pl", 25)
                         b = tmp.pl.baseAmount.gte(tmp.pl.getNextAt) && (d !== undefined) && d ? "Next: " : "Req: "
                 }
                 let c = formatWhole(tmp.pl.baseAmount) + "/" + format(tmp.pl.getNextAt) + " " + tmp.pl.baseResource
@@ -39273,6 +39309,7 @@ addLayer("pl", {
                         if (hasUpgrade("e", 31))        ret = ret.times(player.nu.points.max(10).log10().pow(player.e.upgrades.length))
                                                         ret = ret.times(player.pl.biomass.points.max(10).log10().pow(player.e.challenges[22]))
                         if (hasUpgrade("e", 34))        ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.pl.points.sub(15).max(0)))
+                        if (hasUpgrade("pl", 24))       ret = ret.times(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt()))
 
                                                         ret = ret.times(tmp.pl.buyables[11].effect)
                                                         ret = ret.times(tmp.pl.buyables[12].effect)
@@ -39300,15 +39337,20 @@ addLayer("pl", {
                 cols: 3,
                 11: {
                         title: "Sprout",
+                        getInit(){
+                                let ret = new Decimal(1e280)
+                                if (hasMilestone("e", 18)) ret = ret.div(player.pl.buyables[12].min(280).pow10())
+                                return ret
+                        },
                         cost(){
-                                let init = new Decimal(1e280)
+                                let init = tmp.pl.buyables[11].getInit
                                 let base = new Decimal(60)
                                 let exp = new Decimal(1.4)
 
                                 return base.pow(player.pl.buyables[11].pow(exp)).times(init)
                         },
                         getMaxAfford(){
-                                let init = new Decimal(1e280)
+                                let init = tmp.pl.buyables[11].getInit
                                 let base = new Decimal(60)
                                 let exp = new Decimal(1.4)
 
@@ -39358,7 +39400,8 @@ addLayer("pl", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "1e280*60^(x<sup>1.4</sup>)" 
+                                let cost2 = "INIT*60^(x<sup>1.4</sup>)" 
+                                cost2 = cost2.replace("INIT", format(tmp.pl.buyables[11].getInit, 0))
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -39366,15 +39409,20 @@ addLayer("pl", {
                 },
                 12: {
                         title: "Leaf",
+                        getInit(){
+                                let ret = new Decimal("1e481")
+                                if (hasMilestone("e", 18)) ret = ret.div(player.pl.buyables[13].min(481).pow10())
+                                return ret
+                        },
                         cost(){
-                                let init = new Decimal("1e481")
+                                let init = tmp.pl.buyables[12].getInit
                                 let base = new Decimal(3e11)
                                 let exp = new Decimal(1.4)
 
                                 return base.pow(player.pl.buyables[12].pow(exp)).times(init)
                         },
                         getMaxAfford(){
-                                let init = new Decimal("1e481")
+                                let init = tmp.pl.buyables[12].getInit
                                 let base = new Decimal(3e11)
                                 let exp = new Decimal(1.4)
 
@@ -39424,7 +39472,8 @@ addLayer("pl", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "1e481*3e11^(x<sup>1.4</sup>)" 
+                                let cost2 = "INIT*3e11^(x<sup>1.4</sup>)" 
+                                cost2 = cost2.replace("INIT", format(tmp.pl.buyables[12].getInit, 0))
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -39432,16 +39481,22 @@ addLayer("pl", {
                 },
                 13: {
                         title: "Stem",
+                        getInit(){
+                                let ret = new Decimal("1e727")
+                                if (hasMilestone("pl", 14)) ret = ret.div(player.pl.buyables[12].pow10())
+                                if (hasMilestone("pl", 14)) ret = ret.div(player.pl.buyables[11].pow10())
+                                return ret.max(1)
+                        },
                         cost(){
-                                let init = new Decimal("1e727")
-                                let base = new Decimal(30)
+                                let init = tmp.pl.buyables[13].getInit
+                                let base = new Decimal(hasMilestone("e", 18) ? 28 : 30)
                                 let exp = new Decimal(1.7)
 
                                 return base.pow(player.pl.buyables[13].pow(exp)).times(init)
                         },
                         getMaxAfford(){
-                                let init = new Decimal("1e727")
-                                let base = new Decimal(30)
+                                let init = tmp.pl.buyables[13].getInit
+                                let base = new Decimal(hasMilestone("e", 18) ? 28 : 30)
                                 let exp = new Decimal(1.7)
 
                                 let pts = player.pl.biomass.points.div(init)
@@ -39490,7 +39545,9 @@ addLayer("pl", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "1e727*30^(x<sup>1.7</sup>)" 
+                                let cost2 = "INIT*30^(x<sup>1.7</sup>)" 
+                                if (hasMilestone("e", 18)) cost2 = cost2.replace("30", "28")
+                                cost2 = cost2.replace("INIT", format(tmp.pl.buyables[13].getInit, 0))
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -39583,6 +39640,42 @@ addLayer("pl", {
                         unlocked(){
                                 return player.pl.biomass.best.gte("1e1148") || hasUpgrade("pl", 22)
                         }, // hasUpgrade("pl", 22)
+                },
+                23: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Plants VIII"
+                        },
+                        description(){
+                                return "Up Quark effect is now<br>x<sup>cbrt(Plant upgrades)</sup>"
+                        },
+                        cost:() => new Decimal(41),
+                        unlocked(){
+                                return player.pl.biomass.best.gte("1e1665") || hasUpgrade("pl", 23)
+                        }, // hasUpgrade("pl", 23)
+                },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Plants IX"
+                        },
+                        description(){
+                                return "Plants<sup>sqrt(Plants-44)</sup> multiplies Ecosytem and Biomass gain"
+                        },
+                        cost:() => new Decimal(44),
+                        unlocked(){
+                                return player.pl.biomass.best.gte("5e1916") || hasUpgrade("pl", 24)
+                        }, // hasUpgrade("pl", 24)
+                },
+                25: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Plants X"
+                        },
+                        description(){
+                                return "make exponent is .66 and you can bulk buy plants"
+                        },
+                        cost:() => new Decimal(51),
+                        unlocked(){
+                                return player.pl.biomass.best.gte("1e2583") || hasUpgrade("pl", 25)
+                        }, // hasUpgrade("pl", 25)
                 },
         },
         milestones: {
@@ -39754,6 +39847,34 @@ addLayer("pl", {
                                 return "Reward: Animal Milestones 13 and 18 no longer multiply Animal gain."
                         },
                 }, // hasMilestone("pl", 12)
+                13: {
+                        requirementDescription(){
+                                return "2e2206 Biomass"
+                        },
+                        done(){
+                                return player.pl.biomass.points.gte("2e2206")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Contaminant gain is only affected by its buyables."
+                        },
+                }, // hasMilestone("pl", 13)
+                14: {
+                        requirementDescription(){
+                                return "1e2787 Biomass"
+                        },
+                        done(){
+                                return player.pl.biomass.points.gte("1e2787")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Sprout and Leaf levels divide Stem base by 10 (minimum 1)."
+                        },
+                }, // hasMilestone("pl", 14)
         },
         tabFormat: {
                 "Upgrades": {
@@ -49222,6 +49343,7 @@ addLayer("tokens", {
                                 data.buyables[101] = data.buyables[101].plus(maxNewLevels)
                         },
                         base(){
+                                if (hasUpgrade("pl", 23))       return decimalZero // not used
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
@@ -49246,6 +49368,7 @@ addLayer("tokens", {
                                 return c.plus(1).sqrt().div(r.plus(40))
                         },
                         effect(){
+                                if (hasUpgrade("pl", 23))       return player.tokens.buyables[101].pow(Math.cbrt(player.pl.upgrades.length))
                                 if (hasUpgrade("or", 103)) return tmp.tokens.buyables[101].base.times(player.tokens.best_buyables[101])
                                 return tmp.tokens.buyables[101].base.times(player.tokens.buyables[101])
                         },
@@ -49263,10 +49386,12 @@ addLayer("tokens", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "(1+C)<sup>EXP</sup>/DIV*x<br>" + format(tmp.tokens.buyables[101].base, 4) + "*x" 
-                                let div = "(40+R)"
-                                if (hasMilestone("or", 12))     div = "40"
-                                if (hasMilestone("nu", 7))      div = "25"
+                                let eformula = "(1+C)<sup>EXP</sup>/DIV*x<br>"
+                                if (hasUpgrade("pl", 23)) eformula = "x<sup>cbrt(Plant Upgrades)</sup><br>" + format(tmp.tokens.buyables[101].effect, 4)
+                                else {
+                                        let div = "(40+R)"
+                                        if (hasMilestone("or", 12))     div = "40"
+                                        if (hasMilestone("nu", 7))      div = "25"
                                         if (hasUpgrade("nu", 12))       div = "14"
                                         if (hasMilestone("an", 38))     div = "12"
                                         if (hasMilestone("sp", 16))     div = "11"
@@ -49284,9 +49409,12 @@ addLayer("tokens", {
                                         if (hasUpgrade("e", 12))        exp = ".6"
                                         if (hasUpgrade("e", 23))        exp = ".7"
                                         if (hasMilestone("pl", 1))      exp = ".8"
-                                if (hasMilestone("pl", 7))      exp = ".9"
-                                if (exp == ".5") eformula = eformula.replace("EXP", ".5")
-                                else eformula = eformula.replace("(1+C)<sup>EXP</sup>", "C<sup>" + exp + "</sup>")
+                                        if (hasMilestone("pl", 7))      exp = ".9"
+                                        if (exp == ".5") eformula = eformula.replace("EXP", ".5")
+                                        else eformula = eformula.replace("(1+C)<sup>EXP</sup>", "C<sup>" + exp + "</sup>")
+
+                                        eformula += format(tmp.tokens.buyables[101].base, 4) + "*x"
+                                }
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -49660,6 +49788,8 @@ addLayer("tokens", {
                                 let add = decimalZero
                                 if (hasUpgrade("sp", 35)) add = add.plus(player.an.grid[202].extras.pow(.06))
 
+                                if (hasUpgrade("e", 41))        return add.plus(1)
+
                                 if (hasUpgrade("sp", 135)) {
                                         return c.max(1).pow(player.sp.upgrades.length ** .5).times(add.max(1))
                                 }
@@ -49717,6 +49847,7 @@ addLayer("tokens", {
                                 }
                                 if (hasUpgrade("sp", 85)) eformula = "(C<sup>4</sup>*Anamalia I<sup>.06</sup>)<sup>x</sup>"
                                 if (hasUpgrade("sp", 135)) eformula = eformula.replace("4", "Species upgrades<sup>.5</sup>")
+                                if (hasUpgrade("e", 41)) eformula = "(Anamalia I<sup>.06</sup>)<sup>x</sup>"
                                 eformula += br + format(tmp.tokens.buyables[122].base, 4) + "<sup>x</sup>" 
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -50079,17 +50210,19 @@ addLayer("tokens", {
                                 let ret = 1.02
 
                                 if (hasUpgrade("tokens", 262)) ret = 1.01
+
+                                if (hasUpgrade("tokens", 291)) ret = 1.16
                                 
                                 return ret
                         },
                         cost(){
                                 let base = tmp.tokens.buyables[203].baseCost
-                                return Decimal.pow(tmp.tokens.buyables[203].expBase, player.tokens.buyables[203]).times(base).ceil()
+                                return Decimal.pow(tmp.tokens.buyables[203].expBase, player.tokens.buyables[203].pow(hasUpgrade("tokens", 291) ? .5 : 1)).times(base).ceil()
                         },
                         canAfford:() => player.nu.points.gte(tmp.tokens.buyables[203].cost),
                         maxAfford(){
                                 let base = tmp.tokens.buyables[203].baseCost
-                                return player.nu.points.div(base).max(1).log(tmp.tokens.buyables[203].expBase).floor().plus(1)
+                                return player.nu.points.div(base).max(1).log(tmp.tokens.buyables[203].expBase).root(hasUpgrade("tokens", 291) ? .5 : 1).floor().plus(1)
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -50104,6 +50237,7 @@ addLayer("tokens", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[203]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 203)) + " Nucleuses</b><br>"
                                 let eformula = formatWhole(tmp.tokens.buyables[203].baseCost) + "*" + format(tmp.tokens.buyables[203].expBase) + "<sup>x</sup>"
+                                if (hasUpgrade("tokens", 291)) eformula = eformula.replace("x", "sqrt(x)")
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
@@ -52178,6 +52312,26 @@ addLayer("tokens", {
                                 return player.tokens.mastery_tokens.total.gte(462)
                         }, // hasUpgrade("tokens", 284)
                 },
+                291: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 101"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 284)) return "Purchase M 94 to unlock me!"
+                                return "Mastery III scaling becomes 1.16<sup>sqrt(x)</sup> and make exponent is .67"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 284)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(880),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        unlocked(){
+                                return player.tokens.mastery_tokens.total.gte(1340)
+                        }, // hasUpgrade("tokens", 291)
+                },
         },
         microtabs: {
                 currency_displays: {
@@ -52280,7 +52434,7 @@ addLayer("tokens", {
                         "Upgrade Tree": {
                                 content: [
                                         ["display-text", function(){return "    You have a total of " + formatWhole(player.tokens.mastery_tokens.total) + " Mastery Tokens.    "}],
-                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274], [281, 282, 283, 284]]],
+                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274], [281, 282, 283, 284], [291]]],
                                         ["clickables", [2]]
                                 ],
                         },
