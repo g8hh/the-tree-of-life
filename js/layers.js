@@ -25979,7 +25979,7 @@ addLayer("or", {
                 if (hasUpgrade("or", 124)) pts = player.or.best
 
                 let exp = pts.cbrt().div(5).min(99).plus(1)
-                if (hasUpgrade("an", 12)) exp = exp.plus(player.tokens.tokens2.total)
+                if (hasUpgrade("an", 12))       exp = exp.plus(player.tokens.tokens2.total)
                 
                 if (hasMilestone("an", 27))     exp = exp.times(player.ch.points.max(6).log(6))
                 if (hasMilestone("nu", 8))      exp = exp.times(player.nu.points.plus(1))
@@ -36132,9 +36132,13 @@ addLayer("sp", {
 
                 return ret
         },
+        getBaseGain(){
+                if (player.an.points.lt("1e900")) return decimalZero
+                return player.an.points.max(1).log10().div(tmp.sp.getResetDiv).pow(tmp.sp.getGainExp)
+        },
         getResetGain(){
                 if (player.an.points.lt("1e900")) return decimalZero
-                let ret = player.an.points.max(1).log10().div(tmp.sp.getResetDiv).pow(tmp.sp.getGainExp)
+                let ret = tmp.sp.getBaseGain
 
                 ret = ret.times(tmp.sp.getGainMult)
 
@@ -38122,11 +38126,13 @@ addLayer("e", {
         },
         getResetGain(){
                 if (player.sp.points.lt("1e1882")) return decimalZero
-                let ret = player.sp.points.max(1).log10().sub(tmp.e.getResetSub).pow(tmp.e.getGainExp).sub(player.e.challenges[11] ? 0 : 11).max(0)
-
-                ret = ret.times(tmp.e.getGainMult)
+                let ret = tmp.e.getBaseGain.times(tmp.e.getGainMult)
                 
                 return ret.floor()
+        },
+        getBaseGain(){
+                if (player.sp.points.lt("1e1882")) return decimalZero
+                return player.sp.points.max(1).log10().sub(tmp.e.getResetSub).pow(tmp.e.getGainExp).sub(player.e.challenges[11] ? 0 : 11).max(0)
         },
         getGainMult(){//e gain egain ecosystemsgain ecosystems gain ecogain eco gain ecosystemgain
                 let ret = decimalOne
@@ -39677,6 +39683,18 @@ addLayer("pl", {
                                 return player.pl.biomass.best.gte("1e2583") || hasUpgrade("pl", 25)
                         }, // hasUpgrade("pl", 25)
                 },
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Plants XI"
+                        },
+                        description(){
+                                return "Up Quark exponent's cbrt is sqrt"
+                        },
+                        cost:() => new Decimal(54),
+                        unlocked(){
+                                return player.pl.biomass.best.gte("1e2898") || hasUpgrade("pl", 31)
+                        }, // hasUpgrade("pl", 31)
+                },
         },
         milestones: {
                 1: {
@@ -39875,6 +39893,20 @@ addLayer("pl", {
                                 return "Reward: Sprout and Leaf levels divide Stem base by 10 (minimum 1)."
                         },
                 }, // hasMilestone("pl", 14)
+                15: {
+                        requirementDescription(){
+                                return "1e2999 Biomass"
+                        },
+                        done(){
+                                return player.pl.biomass.points.gte("1e2999")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Plant Milestone 3 limit is 80 and Token II via Cell becomes 40 + x/400,000."
+                        },
+                }, // hasMilestone("pl", 15)
         },
         tabFormat: {
                 "Upgrades": {
@@ -49368,6 +49400,7 @@ addLayer("tokens", {
                                 return c.plus(1).sqrt().div(r.plus(40))
                         },
                         effect(){
+                                if (hasUpgrade("pl", 31))       return player.tokens.buyables[101].pow(Math.sqrt(player.pl.upgrades.length))
                                 if (hasUpgrade("pl", 23))       return player.tokens.buyables[101].pow(Math.cbrt(player.pl.upgrades.length))
                                 if (hasUpgrade("or", 103)) return tmp.tokens.buyables[101].base.times(player.tokens.best_buyables[101])
                                 return tmp.tokens.buyables[101].base.times(player.tokens.buyables[101])
@@ -49415,6 +49448,7 @@ addLayer("tokens", {
 
                                         eformula += format(tmp.tokens.buyables[101].base, 4) + "*x"
                                 }
+                                if (hasUpgrade("pl", 31)) eformula = eformula.replace("cbrt", "sqrt")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -50072,6 +50106,10 @@ addLayer("tokens", {
                                 }
                                 if (hasUpgrade("tokens", 284) && add >= 19)     add = 19 
                                 if (hasMilestone("e", 15) && add >= 18)         add = 18
+                                if (hasMilestone("pl", 15) && lvls.gte(2933333)) {
+                                        add = 40
+                                        div = 4e5
+                                }
                                 return [add, div]
                         },
                         maxAfford(){
@@ -50115,7 +50153,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("sp", 135))      mult = 1095
                                 if (hasUpgrade("e", 14))        mult = 1000
                                                                 mult -= 18 * player.e.challenges[21]
-                                if (hasMilestone("pl", 3))      mult -= player.pl.points.min(50).max(0).toNumber()
+                                if (hasMilestone("pl", 3))      mult -= player.pl.points.min(hasMilestone("pl", 15) ? 80 : 50).max(0).toNumber()
                                 
                                 return [add, mult]
                         },
@@ -52359,7 +52397,7 @@ addLayer("tokens", {
                                 content: [["d-t", tissueFormulaDisplay]],
                         },
                         "Organs": {
-                                content: [["d-t", organFormulaDisplay]],
+                                content: [["d-t", organFormulaDisplay], "h-line", ["d-t", organExpDisplay]],
                         },
                         "Contaminants": {
                                 content: [["d-t", contaminantFormulaDisplay]],
@@ -52367,6 +52405,7 @@ addLayer("tokens", {
                         "Air": {
                                 content: [["d-t", airFormulaDisplay]],
                                 unlocked(){
+                                        if (player.pl.unlocked) return false
                                         return player.or.air.points.gt(0) || player.an.unlocked
                                 },
                         },
@@ -52392,6 +52431,18 @@ addLayer("tokens", {
                                 content: [["d-t", taxonomyCapFormulaDisplay]],
                                 unlocked(){
                                         return player.ch.best.gte(38) || player.nu.unlocked
+                                },
+                        },
+                        "Species": {
+                                content: [["d-t", speciesFormulaDisplay]],
+                                unlocked(){
+                                        return player.sp.best.gte(1e10) || player.e.unlocked
+                                },
+                        },
+                        "Ecosystems": {
+                                content: [["d-t", ecosystemFormulaDisplay]],
+                                unlocked(){
+                                        return player.e.best.gte(1e10) || player.pl.unlocked
                                 },
                         },
                 },

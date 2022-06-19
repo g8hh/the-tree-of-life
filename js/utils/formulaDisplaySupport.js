@@ -591,6 +591,23 @@ function organFormulaDisplay(){
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
 
+function organExpDisplay(){
+        let a = "The Organ effect exponent is BX"
+        let b = "BX initally " + format(player.or.points.cbrt().div(5).min(99).plus(1)) + " and is affected by the following factors"
+        let c = ""
+
+        if (hasUpgrade("an", 12))       c += "Animals II adds " + format(player.tokens.tokens2.total) + " to BX" + br2
+        
+        if (hasMilestone("an", 27))     c += "Animal Milestone 27 multiplies BX by " + format(player.ch.points.max(6).log(6)) + br
+        if (hasMilestone("nu", 8))      c += "Nucleus Milestone 8 multiplies BX by " + formatWhole(player.nu.points.plus(1)) + br
+        if (hasMilestone("sp", 13))     c += "Species Milestone 13 multiplies BX by " + format(player.sp.milestones.length ** (hasUpgrade("sp", 141) ? 1 : .5)) + br
+        if (hasUpgrade("tokens", 121))  c += "Token<sup>2</sup> XI multiplies BX by 50" + br
+        if (hasUpgrade("tokens", 142))  c += "Token<sup>2</sup> XXII multiplies BX by " + format(player.tokens.mastery_tokens.total.max(10).log10()) + br
+        if (hasMilestone("pl", 10))     c += "Plant Milestone 10 multiplies BX by " + format(player.tokens.tokens2.total.max(1)) + br
+
+        return (br + a + br + b + br2 + c).replaceAll("BX", makeRed("B"))
+}
+
 function airFormulaDisplay(){
         let a = "Air gain is AX<sup>BX</sup>"
         let b = "AX and BX are initially 1 and are multiplied by the following factors"
@@ -924,8 +941,44 @@ function taxonomyCapFormulaDisplay(){
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
 
+function speciesFormulaDisplay(){ // c += " multiplies AX by " + format
+        let a = "Species gain is " + format(tmp.sp.getBaseGain, 3) + "*AX"
+        let b = "AX is initially 1 and is multiplied by the following factors"
+        let c = ""
 
+        if (hasMilestone("nu", 20))     c += "Nucleuse Milestone 20 multiplies AX by " + format(player.tokens.total.plus(10).log10()) + br
+        if (hasChallenge("sp", 11))     c += "Chromosomeless multiplies AX by " + format(tmp.sp.challenges[11].reward) + br
+        if (hasMilestone("sp", 8))      c += "Species Milestone 8 multiplies AX by " + format(new Decimal(player.sp.milestones.length).div(50).plus(.87).pow(player.nu.points)) + br
+        if (hasMilestone("sp", 12))     c += "Species Milestone 12 multiplies AX by " + format(Decimal.pow(player.sp.milestones.length/10, player.nu.points.sub(80).max(0)).max(1)) + br
+        if (hasUpgrade("nu", 34)) {
+                let base = new Decimal(1.01)
+                let lvls = function(x){return player.an.grid[100 + x].buyables}
+                let exp = lvls(1).plus(lvls(2)).plus(lvls(3)).plus(lvls(4)).plus(lvls(5))
+                exp = exp.plus(lvls(6)).plus(lvls(7)).plus(lvls(8))
+                                        c += "Nucleuses XIV multiplies AX by " + format(base.pow(exp)) + br
+        }
+        if (hasUpgrade("tokens", 114))  c += "Token<sup>2</sup> IX multiplies AX by " + format(player.or.energy.points.max(10).log10()) + br
+        if (hasUpgrade("tokens", 124))  c += "Token<sup>2</sup> XIV multiplies AX by " + format(Decimal.pow(player.sp.upgrades.length, player.tokens.mastery_tokens.total.div(3))) + br
+        if (hasUpgrade("tokens", 251))  c += "M 61 multiplies AX by 10" + br
+        if (hasUpgrade("sp", 145))      c += "Boosted Effect XX multiplies AX by " + format(player.an.grid[106].extras.plus(1).pow(.02)) + br
+        if (tmp.e.effect.gt(1))         c += "Ecosystem effect multiplies AX by " + format(tmp.e.effect) + br
 
+        return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+}
+
+function ecosystemFormulaDisplay(){
+        let a = "Ecosystem gain is " + format(tmp.e.getBaseGain, 3) + "*AX"
+        let b = "AX is initially 1 and is multiplied by the following factors"
+        let c = ""
+
+        if (hasUpgrade("e", 13))        c += "Ecosystems III multiplies AX by " + format(Decimal.pow(1.02, player.tokens.mastery_tokens.total)) + br
+        if (hasChallenge("e", 12))      c += "Nucleusless? multiplies AX by " + format(tmp.e.challenges[12].ecoMult) + br
+        if (hasMilestone("pl", 2))      c += "Plant Milestone 2 multiplies AX by " + format(player.ch.points.max(10).log10().pow(player.pl.milestones.length)) + br
+        if (hasMilestone("pl", 6))      c += "Plant Milestone 6 multiplies AX by " + format(player.nu.points.sub(1200).max(1)) + br
+        if (hasUpgrade("pl", 24))       c += "Plants IX multiplies AX by " + format(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt())) + br
+
+        return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+}
 
 
 
