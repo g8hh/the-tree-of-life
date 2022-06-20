@@ -936,7 +936,8 @@ function taxonomyCapFormulaDisplay(){
         if (hasUpgrade("sp", 121))      c += "Boosted Effect VI adds 30 to AX" + br
         if (hasUpgrade("sp", 144))      c += "Boosted Effect XIX adds 20 to AX" + br
         if (hasMilestone("e", 1))       c += "Ecosystem Milestone 1 adds " + formatWhole(Math.min(10, player.e.milestones.length) * 5) + " to AX" + br
-        if (hasUpgrade("e", 14))        c += "Ecosystems IV adds " + formatWhole(4 * player.e.challenges[11]) + " to AX" + br
+        if (hasUpgrade("e", 14))        c += "Ecosystems IV adds " + formatWhole(4 * player.e.challenges[11]) + " to AX" + br                        
+        if (hasUpgrade("tokens", 292))  c += "M 102 adds " + formatWhole(player.pl.points.min(300)) + " to AX" + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
