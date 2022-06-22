@@ -250,7 +250,9 @@ function dnaExpDisplay(){
         if (hasUpgrade("an", 41))       c += "Animals XVI multiplies BX by " + format(player.ch.points.max(6).log(6)) + br
         if (hasMilestone("ch", 23))     c += "Chromosome Milestone 23 multiplies BX by " + format(player.nu.points.max(2).log(2)) + br
         if (hasMilestone("ch", 25))     c += "Chromosome Milestone 25 multiplies BX by " + format(player.nu.points.max(1).sqrt()) + br
-        if (hasMilestone("ch", 26))     c += "Chromosome Milestone 26 multiplies BX by " + format(1.31) + br
+        if (hasMilestone("ch", 26) && !hasMilestone("pl", 19)) {
+                                        c += "Chromosome Milestone 26 multiplies BX by 1.31" + br
+        }
         if (hasMilestone("nu", 17))     c += "Nucleus Milestone 17 multiplies BX by " + format(Decimal.pow(1.01, player.nu.points)) + br
         if (hasUpgrade("sp", 84))       c += "Upgraded Effect XIV multiplies BX by " + format(Decimal.pow(1.01, player.sp.upgrades.length ** (hasUpgrade("sp", 134) ? 1.1 : 1))) + br
         if (hasChallenge("sp", 32))     c += "Truly Energyless multiplies BX by " + format(tmp.sp.challenges[32].reward) + br
