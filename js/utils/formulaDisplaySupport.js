@@ -257,6 +257,7 @@ function dnaExpDisplay(){
         if (hasUpgrade("sp", 84))       c += "Upgraded Effect XIV multiplies BX by " + format(Decimal.pow(1.01, player.sp.upgrades.length ** (hasUpgrade("sp", 134) ? 1.1 : 1))) + br
         if (hasChallenge("sp", 32))     c += "Truly Energyless multiplies BX by " + format(tmp.sp.challenges[32].reward) + br
         if (hasUpgrade("e", 24))        c += "Ecosystems IX multiplies BX by " + format(player.tokens.mastery_tokens.total.max(1).sqrt()) + br
+        if (hasUpgrade("pl", 43))       c += "Plants XVIII multiplies BX by " + format(Decimal.pow(1.01, player.pl.points.sub(100))) + br
 
                                         c += br + "Netting a result of " + format(tmp.d.getGainExp) + br2
 
@@ -683,7 +684,7 @@ function energyFormulaDisplay(){
         if (hasUpgrade("or", 323) && !hasUpgrade("tokens", 144)) {
                                         c += "Lung XIII multiplies AX by " + format(tmp.or.upgrades[323].effect) + br
         }
-        if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
+        if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect.min("ee12")) + br
         if (hasUpgrade("an", 15))       c += "Animals V multiplies AX by " + format(player.an.grid[607].extras.plus(1)) + br
         if (hasMilestone("an", 23)) {
                 let base = player.an.grid[404].extras.plus(1)
