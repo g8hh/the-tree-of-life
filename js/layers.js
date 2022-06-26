@@ -40002,6 +40002,18 @@ addLayer("pl", {
                                 return player.pl.best.gte(190)
                         }, // hasUpgrade("pl", 44)
                 },
+                45: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Plants XX"
+                        },
+                        description(){
+                                return "Unlock humans"
+                        },
+                        cost:() => new Decimal(206),
+                        unlocked(){
+                                return player.pl.best.gte(200)
+                        }, // hasUpgrade("pl", 45)
+                },
         },
         milestones: {
                 1: {
