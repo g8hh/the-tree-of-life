@@ -229,7 +229,36 @@ function dnaFormulaDisplay(){
         if (hasUpgrade("t", 112))       c += "Tissues LII multiplies AX by " + format(tmp.t.effect.pow(player.t.upgrades.length), 3) + br
         if (hasUpgrade("sp", 45))       c += "Effect XX multiplies AX by " + format(player.an.grid[208].extras.plus(1).pow(player.nu.points.pow(9))) + br
 
-        return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+        return (a + br + b + br2 + c + br).replaceAll("AX", makeRed("A"))
+}
+
+function dnaExpDisplay(){
+        let a = "The DNA gain exponent is BX"
+        let b = "BX initally 2 and is affected by the following factors"
+        let c = ""
+
+        if (hasChallenge("l", 32))      c += "Anti-Oxygen adds " + format(tmp.l.challenges[32].reward) + " to BX" + br
+        if (hasUpgrade("d", 33))        c += "DNA XIII adds " + format(player.d.upgrades.length) + " to BX" + br
+        if (hasMilestone("cells", 18))  c += "Cell Milestone 18 adds " + format(getBuyableAmount("cells", 11).sqrt()) + " to BX" + br
+        if (player.extremeMode)         c += "C57 adds " + format(layers.l.grid.getGemEffect(507)) + " to BX" + br
+
+        if (c != "")                    c += br
+        
+        if (hasUpgrade("t", 74))        c += "Tissues XXXIV multiplies BX by " + format(player.t.upgrades.length) + br
+        if (hasUpgrade("or", 145))      c += "Heart XXV multiplies BX by " + format(2) + br
+        if (hasUpgrade("or", 213))      c += "Kidney III multiplies BX by " + format(2) + br
+        if (hasUpgrade("an", 41))       c += "Animals XVI multiplies BX by " + format(player.ch.points.max(6).log(6)) + br
+        if (hasMilestone("ch", 23))     c += "Chromosome Milestone 23 multiplies BX by " + format(player.nu.points.max(2).log(2)) + br
+        if (hasMilestone("ch", 25))     c += "Chromosome Milestone 25 multiplies BX by " + format(player.nu.points.max(1).sqrt()) + br
+        if (hasMilestone("ch", 26))     c += "Chromosome Milestone 26 multiplies BX by " + format(1.31) + br
+        if (hasMilestone("nu", 17))     c += "Nucleus Milestone 17 multiplies BX by " + format(Decimal.pow(1.01, player.nu.points)) + br
+        if (hasUpgrade("sp", 84))       c += "Upgraded Effect XIV multiplies BX by " + format(Decimal.pow(1.01, player.sp.upgrades.length ** (hasUpgrade("sp", 134) ? 1.1 : 1))) + br
+        if (hasChallenge("sp", 32))     c += "Truly Energyless multiplies BX by " + format(tmp.sp.challenges[32].reward) + br
+        if (hasUpgrade("e", 24))        c += "Ecosystems IX multiplies BX by " + format(player.tokens.mastery_tokens.total.max(1).sqrt()) + br
+
+                                        c += br + "Netting a result of " + format(tmp.d.getGainExp) + br2
+
+        return (br + a + br + b + br2 + c).replaceAll("BX", makeRed("B"))
 }
 
 function cellFormulaDisplay(){
@@ -669,15 +698,17 @@ function animalFormulaDisplay(){
         let c = ""
 
         if (player.easyMode)            c += "Easy Mode multiplies AX by 2" + br
-        if (hasMilestone("an", 13))     c += "Animal Milestone 13 multiplies AX by " + format(player.an.milestones.length) + br
-        if (hasMilestone("an", 18))     c += "Animal Milestone 18 multiplies AX by " + format(player.an.genes.points.max(10).log10()) + br
-        else if (hasUpgrade("or", 351)) {
-                let a = 1
-                if (hasUpgrade("or", 352)) a ++
-                if (hasUpgrade("or", 353)) a ++
-                if (hasUpgrade("or", 354)) a ++
-                if (hasUpgrade("or", 355)) a ++
-                                        c += "Lung XXVI multiplies AX by " + format(Decimal.pow(2, a)) + br
+        if (!hasMilestone("pl", 12)) {
+                if (hasMilestone("an", 13))     c += "Animal Milestone 13 multiplies AX by " + format(player.an.milestones.length) + br
+                if (hasMilestone("an", 18))     c += "Animal Milestone 18 multiplies AX by " + format(player.an.genes.points.max(10).log10()) + br
+                else if (hasUpgrade("or", 351)) {
+                        let a = 1
+                        if (hasUpgrade("or", 352)) a ++
+                        if (hasUpgrade("or", 353)) a ++
+                        if (hasUpgrade("or", 354)) a ++
+                        if (hasUpgrade("or", 355)) a ++
+                                                c += "Lung XXVI multiplies AX by " + format(Decimal.pow(2, a)) + br
+                }
         }
         if (hasUpgrade("an", 35))       c += "Animals XV multiplies AX by " + format(Decimal.pow(1.01, player.ch.points)) + br
         if (hasAchievement("an", 23) && player.an.achActive[23]) {
@@ -850,7 +881,7 @@ function contaminantFormulaDisplay(){
 }
 
 function taxonomyCapFormulaDisplay(){
-        let a = "Contaminant gain is AX"
+        let a = "Taxonomy cap is AX"
         let b = "AX is initially 400 and the following factors add to it"
         let c = ""
 

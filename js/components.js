@@ -9,6 +9,13 @@ function loadVue() {
 		`
 	})
 
+	Vue.component('d-t', { // same as display-text
+		props: ['layer', 'data'],
+		template: `
+			<span class="instant" v-html="data"></span>
+		`
+	})
+
 	// data = a function returning the content (actually HTML)
 	Vue.component('raw-html', {
 			props: ['layer', 'data'],
@@ -260,6 +267,13 @@ function loadVue() {
 		props: ['layer'],
 		template: `
 		<div><span v-if="player.or.deoxygenated_blood.points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp.or.color, 'text-shadow': '0px 0px 10px ' + tmp.or.color}">{{formatCurrency(player.or.oxygenated_blood.points)}}</h2> <bdi style='color:#66297D'>{{"OB"}}</bdi> and </span><h2 v-bind:style="{'color': tmp.or.color, 'text-shadow': '0px 0px 10px ' + tmp.or.color}">{{formatCurrency(player.or.deoxygenated_blood.points)}}</h2> <bdi style='color:#3379E3'>{{"DB"}}</bdi><br></div>
+		`
+	})
+
+	Vue.component('secondary-display-biomass', {
+		props: ['layer'],
+		template: `
+		<div><span v-if="player.pl.biomass.points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp.pl.color, 'text-shadow': '0px 0px 10px ' + tmp.pl.color}">{{formatCurrency(player.pl.biomass.points)}}</h2> Biomass (+{{formatCurrency(tmp.pl.biomass.getResetGain)}}/s)<br></div>
 		`
 	})
 
