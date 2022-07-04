@@ -25,7 +25,10 @@ var doNotCallTheseFunctionsEveryTick = [
 	"updateCoins",
 	"updateUpgradeAutobuyers",
 	"updateMinigames",
-	"updateUniverse",]
+	"updateUniverse",
+	"autobuyRadioWaves",
+	"updateBestBuyables",
+	]
 
 function getStartPoints(){
     	return new Decimal(modInfo.initialStartPoints)
