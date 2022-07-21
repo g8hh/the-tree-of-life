@@ -39339,7 +39339,6 @@ addLayer("pl", {
         },
         getCostExp(){
                 let ret = new Decimal(2)
-                //if (hasMilestone("pl", 6))      ret = new Decimal(1.97)
 
                 return ret
         },
@@ -39381,8 +39380,8 @@ addLayer("pl", {
         },
         row: 0,
         prestigeButtonText(){
+                if (player.shiftAlias) return "Formula: " + (hasUpgrade("e", 33) ? "" : "1000*") + "10^x<sup>2</sup>"
                 let a = "Reset for <b>" + formatWhole(tmp.pl.getResetGain) + "</b> Plants" 
-                //if (player.mu.points.gt(1e10)) return a
                 let b = ""
                 if (player.pl.points.lt(30)) {
                         let d = hasUpgrade("pl", 25)
@@ -39391,6 +39390,9 @@ addLayer("pl", {
                 let c = formatWhole(tmp.pl.baseAmount) + "/" + format(tmp.pl.getNextAt) + " " + tmp.pl.baseResource
 
                 return a + br2 + b + c
+        },
+        tooltip(){
+                return formatWhole(player.pl.points) + " Plants and " + format(player.pl.biomass.points) + " Biomass"
         },
         layerShown(){
                 if (tmp.pl.deactivated) return false
