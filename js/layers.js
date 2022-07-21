@@ -9005,6 +9005,7 @@ addLayer("n", {
                                 data2.buyables[list4[i]] = decimalZero
                                 data2.best_buyables[list4[i]] = decimalZero
                         } //4a
+                        player.tokens.lastRespecDisplayFormulaID = tokenCFID1()
                         
                         data2.coins.points = decimalZero
                         data2.coins.best = decimalZero
@@ -9070,8 +9071,6 @@ addLayer("n", {
                         player.h.deuterium.points = decimalZero
                         player.h.deuterium.best = decimalZero
                 }
-
-                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
         },
         deactivated(){
                 if (hasUpgrade("or", 135)) return true
@@ -10174,6 +10173,7 @@ addLayer("p", {
                                 data2.buyables[list4[i]] = decimalZero
                                 data2.best_buyables[list4[i]] = decimalZero
                         } //4a
+                        player.tokens.lastRespecDisplayFormulaID = tokenCFID1()
 
                         //4b
                         if (player.extremeMode) {
@@ -10274,8 +10274,6 @@ addLayer("p", {
                 }
 
                 if (player.extremeMode) layers.sci.doReset("p")
-
-                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
         },
 })
 
@@ -15641,6 +15639,7 @@ addLayer("l", {
                                 data7.buyables[x] = decimalZero
                                 data7.best_buyables[x] = decimalZero
                         }
+                        player.tokens.lastRespecDisplayFormulaID = tokenCFID1()
 
                         if (!hasMilestone("l", 3)) { // 7a
                                 let coinUpgRem = [11, 21, 22, 31, 32, 
@@ -15683,8 +15682,6 @@ addLayer("l", {
                 }
 
                 if (player.extremeMode) layers.sci.doReset("l")
-
-                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
         },
 })
 
@@ -31137,6 +31134,7 @@ addLayer("or", {
                                 d.buyables[id] = decimalZero
                                 if (resetbbids.includes(id)) d.best_buyables[id] = decimalZero
                         }
+                        player.tokens.lastRespecDisplayFormulaID = tokenCFID1()
 
                         player.subtabs.tokens.mainTabs = "Milestones"
 
@@ -31347,8 +31345,6 @@ addLayer("or", {
                 player.mu.buyables[33] = decimalZero
 
                 player.p.best_over_amino = decimalZero
-
-                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
                 resetPreLifeCurrencies()
         },
 })
@@ -33872,6 +33868,7 @@ addLayer("an", {
                                 data3.buyables[id] = decimalZero
                                 if (resetbbids.includes(id)) data3.best_buyables[id] = decimalZero
                         }
+                        player.tokens.lastRespecDisplayFormulaID = tokenCFID1()
 
                         player.subtabs.tokens.mainTabs = "Milestones"
 
@@ -34003,8 +34000,6 @@ addLayer("an", {
                 player.mu.buyables[33] = decimalZero
 
                 player.p.best_over_amino = decimalZero
-
-                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
                 resetPreLifeCurrencies()
         },
 })
@@ -36100,6 +36095,7 @@ addLayer("nu", {
                                 data4.buyables[id] = decimalZero
                                 if (resetbbids.includes(id)) data4.best_buyables[id] = decimalZero
                         }
+                        player.tokens.lastRespecDisplayFormulaID = tokenCFID1()
 
                         data4.bestStrange = decimalZero
                         data4.bestTop = decimalZero
@@ -36108,8 +36104,6 @@ addLayer("nu", {
 
                         data4.lastRespecDisplayFormula2ID = layers.tokens.buyables.costFormulaText2ID()
                 }
-
-                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
                 resetPreOrganCurrencies()
         },
 })
@@ -38106,6 +38100,7 @@ addLayer("sp", {
                                 data4.buyables[id] = decimalZero
                                 if (resetbbids.includes(id)) data4.best_buyables[id] = decimalZero
                         }
+                        player.tokens.lastRespecDisplayFormulaID = tokenCFID1()
 
                         data4.bestStrange = decimalZero
                         data4.bestTop = decimalZero
@@ -38114,8 +38109,6 @@ addLayer("sp", {
 
                         data4.lastRespecDisplayFormula2ID = layers.tokens.buyables.costFormulaText2ID()
                 }
-
-                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
                 resetPreOrganCurrencies()
         },
 })
@@ -39102,7 +39095,7 @@ addLayer("e", {
 
                                 191, 192, 193,
                                 201, 202, 203,
-                                211]
+                                211, 212]
                                 
                         let resetbbids = [
                                 11, 12, 13,
@@ -48816,7 +48809,7 @@ addLayer("tokens", {
                 let start = formatWhole(data.points, true) + "/" + formatWhole(data.total) + " tokens"
                 let lrdf = player.tokens.lastRespecDisplayFormulaID
 
-                let end = lrdf < tmp.tokens.buyables.costFormula1ID ? br + "Need Respec" : ""
+                let end = lrdf < tokenCFID1() ? br + "Need Respec" : ""
 
                 if (!player.a.unlocked) return start + end
                 let mid = "<b>" + formatWhole(player.tokens.best_buyables[11]) + "</b>"
@@ -48850,9 +48843,6 @@ addLayer("tokens", {
                                 b --
                         }
                         return a + 1 // its asking how many you can pay for
-                },
-                costFormula1ID(){
-                        return tokenCFID1()
                 },
                 costFormulaText(){
                         return tokenCFT1()
@@ -49769,7 +49759,7 @@ addLayer("tokens", {
                                         id = x[i]
                                         player.tokens.buyables[id] = decimalZero
                                 }
-                                player.tokens.lastRespecDisplayFormulaID = tmp.tokens.buyables.costFormula1ID
+                                player.tokens.lastRespecDisplayFormulaID = tokenCFID1()
                         },
                         style(){
                                 return {
