@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.321",
+	num: "1.321.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -17,7 +17,7 @@ function isEndgameRaw(){
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.320)<br><br>
+		Reaching the endgame screen (updated at least as of v1.321.1)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>

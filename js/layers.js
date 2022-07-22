@@ -52957,6 +52957,12 @@ addLayer("tokens", {
                                         return player.e.best.gte(1e10) || player.pl.unlocked
                                 },
                         },
+                        "Biomass": {
+                                content: [["d-t", biomassFormulaDisplay]],
+                                unlocked(){
+                                        return player.pl.best.gt(0)
+                                },
+                        },
                 },
                 token_ii_displays: {
                         "Main": {
