@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.315.2",
+	num: "1.319",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,18 +12,43 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.pl.biomass.points.gte("1e1664")
+	return player.pl.biomass.points.gte("1e10320")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.315.2)<br><br>
+		Reaching the endgame screen (updated at least as of v1.319)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.319</h3><br>
+		- Balanced until 1e10320 Biomass.<br>
+		- Added a Ecosystem milestone.<br>
+		- Added two Plant upgrades.<br>
+		- Added three Plant milestones.<br>
+	<br><h3 style='color: #CC0000'>v1.318</h3><br>
+		- Balanced until 1e6713 Biomass.<br>
+		- Added a Plant buyable.<br>
+		- Added two Plant upgrades.<br>
+		- Added two Plant milestones.<br>
+		- Added a Mastery Token upgrade.<br>
+		- Added a Ecosystem upgrade.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.317</h3><br>
+		- Balanced until 1e3097 Biomass.<br>
+		- Added a Plant milestone.<br>
+		- Added a Plant upgrade.<br>
+		- Added a Ecosystem and Species formula display.<br>
+	<br><h3 style='color: #CC0000'>v1.316</h3><br>
+		- Balanced until 1e2898 Biomass.<br>
+		- Added an Ecosystem upgrade.<br>
+		- Added an Ecosystem milestone.<br>
+		- Added three Plant upgrades.<br>
+		- Added two Plant milestones.<br>
+		- Added a Mastery Token upgrade.<br>
 	<br><h3 style='color: #CC0000'>v1.315.2</h3><br>
 		- A bunch of code cleanup.<br>
 		- Added a new file, tokenSupport.js !<br>
