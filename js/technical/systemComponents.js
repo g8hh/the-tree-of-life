@@ -178,7 +178,8 @@ var systemComponents = {
 		Gain 2x resets at once and pre-Phosphorus resource gain ^1.001<br><br>
 
 		<h2 style='color: #FF0066'>Extreme mode</h2>:<br>
-		Gain of all currencies is raised ^.75 (after everything except dilation)<br>
+		Gain of all currencies is raised ^.75 (after everything except dilation).<br>
+		In exchange, unlock a new layer, Science!<br>
 		For protein, boosts from things other than mRNA and tRNA are ^.75<br><br>
 		
 		</span>
