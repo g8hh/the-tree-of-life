@@ -19947,98 +19947,11 @@ addLayer("cells", {
                 },
         },
         stem_cells: {
-                getResetGain(){ //stem gain stemgain stemcellgain stem cellgain stem cell gain
-                        if (!hasUpgrade("cells", 13) && !player.t.unlocked) return decimalZero
-                        let ret = decimalOne
+                getExtremeMult(){
+                        if (!player.extremeMode) return decimalOne
                         
-                                                        ret = ret.times(tmp.cells.buyables[11].effect)
-                                                        ret = ret.times(tmp.cells.buyables[12].effect)
-                                                        ret = ret.times(tmp.cells.buyables[13].effect)
-                                                        ret = ret.times(tmp.cells.buyables[21].effect)
-                                                        ret = ret.times(tmp.cells.buyables[22].effect)
-                                                        //ret = ret.times(tmp.cells.buyables[23].effect)
-                        if (player.hardMode)            ret = ret.div(4)
-                        if (player.easyMode)            ret = ret.times(4)
-                        if (!hasUpgrade("an", 45)) {
-                                if (hasUpgrade("cells", 114))   ret = ret.times(getBuyableAmount("cells", 112))
-                                if (hasUpgrade("cells", 214))   ret = ret.times(tmp.cells.upgrades[214].effect)
-                                if (hasUpgrade("cells", 414))   ret = ret.times(getBuyableAmount("cells", 411).max(10).log10().pow(1 + player.extremeMode))
-                                if (hasUpgrade("cells", 314))   ret = ret.times(tmp.cells.upgrades[314].effect)
-                        }
-                        if (hasChallenge("cells", 11))  ret = ret.times(tmp.cells.challenges[11].rewardEffect)
-                        if (!hasMilestone("ch", 13)) {
-                                if (hasMilestone("cells", 12)) {
-                                        let exp = player.extremeMode ? 2.5 : 1
-                                                                ret = ret.times(player.cells.milestones.length ** exp)
-                                }
-                                if (hasMilestone("cells", 16))  ret = ret.times(tmp.cells.milestones[16].effect)
-                                if (hasMilestone("cells", 17))  {
-                                        let exp = player.cells.activeChallenge ? 2 : 1
-                                        if (!player.extremeMode) exp = .5
-                                                                ret = ret.times(Math.max(1, player.cells.upgrades.length) ** exp)
-                                }
-                                if (hasMilestone("cells", 22))  ret = ret.times(getBuyableAmount("cells", 11).plus(1))
-                                if (hasMilestone("cells", 23))  ret = ret.times(player.cells.mu.best.max(10).log10())
-                                if (hasMilestone("cells", 24))  ret = ret.times(tmp.tokens.buyables[21].effect)
-                                if (hasMilestone("cells", 26))  ret = ret.times(player.tokens.total.max(1))
-                                if (hasMilestone("cells", 32))  ret = ret.times(player.cells.lambda.points.max(10).log10())
-                                if (hasMilestone("cells", 38))  ret = ret.times(player.d.points.max(10).log10())
-                                if (hasMilestone("cells", 39))  ret = ret.times(player.mu.points.max(10).log10())
-                                if (hasMilestone("cells", 40))  ret = ret.times(player.cells.best.max(1).root(player.extremeMode ? 100 : hasUpgrade("tokens", 222) ? 25 : 50))
-                                if (hasMilestone("cells", 41))  ret = ret.times(player.tokens.buyables[11].max(1))
-                                if (hasMilestone("cells", 53))  ret = ret.times(tmp.cells.milestones[53].effect)
-                                if (hasMilestone("cells", 59) && !player.extremeMode) {
-                                                                ret = ret.times(layerChallengeCompletions("cells") ** 2)
-                                }
-                        }
-                        if (hasChallenge("l", 111) && player.cells.challenges[12] >= 15 && !player.extremeMode) {
-                                                        ret = ret.times(tmp.l.challenges[31].reward.max(1))
-                        }
-                        if (!hasMilestone("ch", 14)) {
-                                if (hasUpgrade("t", 31))        ret = ret.times(3)
-                                if (hasUpgrade("t", 32) && player.cells.activeChallenge != undefined) {
-                                                                ret = ret.times(10)
-                                }        
-                                if (hasUpgrade("t", 34))        ret = ret.times(tmp.t.upgrades[34].effect)
-                                if (hasUpgrade("t", 92))        ret = ret.times(player.tokens.total.max(1).pow(Math.PI))
-                                if (hasUpgrade("t", 111))       ret = ret.times(5)
-                                if (hasUpgrade("t", 113))       ret = ret.times(player.tokens.tokens2.total.div(69).plus(1).pow(player.tokens.total))
-                                if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
-                                if (hasUpgrade("t", 144))       ret = ret.times(Decimal.pow(2, player.t.upgrades.length))
-                        }
-                                                        ret = ret.times(tmp.t.effect)
-                        if (!hasMilestone("an", 30)) {
-                                if (hasMilestone("t", 10)) {
-                                        let base = getBuyableAmount("cells", 13).max(1)
-                                        let exp  = player.t.upgrades.length ** .5
-                                                                ret = ret.times(base.pow(exp))
-                                }
-                                if (hasMilestone("t", 11)) {
-                                        let base = getBuyableAmount("cells", 13).max(1)
-                                        let exp  = player.t.milestones.length
-                                                                ret = ret.times(base.pow(exp))
-                                }
-                                if (hasMilestone("t", 17))      ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length))
-                                if (hasMilestone("t", 18))      ret = ret.times(player.tokens.total.pow10().root(player.extremeMode ? 29.918840221005354 : 47.19363281906435)) // log1.05(10)
-                        }
-                        if (!hasMilestone("ch", 15)) {
-                                if (hasUpgrade("cells", 15))    ret = ret.times(tmp.cells.upgrades[15].effect)
-                                if (hasUpgrade("cells", 21))  {
-                                        let exp = player.extremeMode ? player.cells.upgrades.length + 3 : 2
-                                                                ret = ret.times(Decimal.pow(player.cells.upgrades.length, exp))
-                                }
-                                if (hasUpgrade("cells", 23) && !player.extremeMode) {
-                                                                ret = ret.times(player.cells.upgrades.length)
-                                }
-                                if (hasUpgrade("cells", 24)) {
-                                        if (player.extremeMode) ret = ret.times(player.cells.points.max(1).pow(.01))
-                                        else                    ret = ret.times(player.cells.upgrades.length)
-                                }
-                                if (hasUpgrade("cells", 52))    ret = ret.times(player.cells.points.max(10).log10().pow(player.tokens.tokens2.total))
-                                if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
-                        }
-                        if (!hasUpgrade("an", 34))      ret = ret.times(tmp.tokens.buyables[102].effect)
-                                                        ret = ret.times(tmp.or.effect)
+                        let ret = decimalOne
+
                         if (hasUpgrade("sci", 532))     ret = ret.times(tmp.sci.upgrades[532].effect)
                                                         ret = ret.times(tmp.sci.buyables[522].stem_cell_effect)
                         if (!inChallenge("cells", 12) || player.cells.challenges[12] < 10) {
@@ -20058,26 +19971,94 @@ addLayer("cells", {
                         if (hasUpgrade("sci", 535))     ret = ret.times(Decimal.pow(1.01, tmp.sci.buyables.dnaBuyablesTotal))
                         if (hasUpgrade("sci", 542))     ret = ret.times(tmp.sci.upgrades[542].effect)
                         if (hasUpgrade("sci", 543))     ret = ret.times(tmp.sci.upgrades.dnaUpgradesLength)
-                        if (hasUpgrade("or", 102) && !hasMilestone("sp", 18)) {
-                                                        ret = ret.times(tmp.or.upgrades[102].stem_cell_effect)
-                        }
                         if (hasUpgrade("sci", 552))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[552].lvls))
-                        if (hasUpgrade("t", 72) && player.extremeMode) {
-                                                        ret = ret.times(player.cells.points.max(10).log10())
-                        }
                         if (hasUpgrade("sci", 553))     ret = ret.times(player.tokens.total.max(1))
                         if (hasUpgrade("sci", 561))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.dnaUpgradesLength))
                         if (hasUpgrade("sci", 562))     ret = ret.times(tmp.sci.buyables[521].effect.max(1).pow(tmp.sci.upgrades[551].lvls))
                         if (hasUpgrade("sci", 563))     ret = ret.times(tmp.sci.buyables[512].effect.max(1).pow(tmp.sci.upgrades[551].lvls))
                         if (hasUpgrade("sci", 564))     ret = ret.times(tmp.sci.buyables[522].effect.max(1).pow(tmp.sci.upgrades[551].lvls))
+
+
+                        if (hasUpgrade("t", 72))        ret = ret.times(player.cells.points.max(10).log10())
                         if (hasUpgrade("t", 91))        ret = ret.times(tmp.t.upgrades[91].effect)
-                        if (!hasMilestone("sp", 25))    ret = ret.times(tmp.or.challenges[12].reward)
-                        if (hasUpgrade("or", 332))      ret = ret.times(player.or.contaminants.points.max(1).pow(.01 * player.or.upgrades.length))
-                                                        ret = ret.times(tmp.an.effect)
 
-                        if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
+                        return ret                        
+                },
+                getMinigameMult(){
+                        if (hasUpgrade("an", 45)) return decimalOne
+                        
+                        let ret = decimalOne
 
-                        // AFTER SECONDARY BUFFS
+                        if (hasUpgrade("cells", 114))   ret = ret.times(getBuyableAmount("cells", 112))
+                        if (hasUpgrade("cells", 214))   ret = ret.times(tmp.cells.upgrades[214].effect)
+                        if (hasUpgrade("cells", 414))   ret = ret.times(getBuyableAmount("cells", 411).max(10).log10().pow(1 + player.extremeMode))
+                        if (hasUpgrade("cells", 314))   ret = ret.times(tmp.cells.upgrades[314].effect)
+                        
+                        return ret
+                },
+                getCellMilestoneMult(){
+                        if (hasMilestone("ch", 13)) return decimalOne
+                        
+                        let ret = decimalOne
+                        
+                        if (hasMilestone("cells", 12)) {
+                                let exp = player.extremeMode ? 2.5 : 1
+                                                        ret = ret.times(player.cells.milestones.length ** exp)
+                        }
+                        if (hasMilestone("cells", 16))  ret = ret.times(tmp.cells.milestones[16].effect)
+                        if (hasMilestone("cells", 17))  {
+                                let exp = player.extremeMode ? (player.cells.activeChallenge ? 2 : 1) : .5
+                                                        ret = ret.times(Math.max(1, player.cells.upgrades.length) ** exp)
+                        }
+                        if (hasMilestone("cells", 22))  ret = ret.times(getBuyableAmount("cells", 11).plus(1))
+                        if (hasMilestone("cells", 23))  ret = ret.times(player.cells.mu.best.max(10).log10())
+                        if (hasMilestone("cells", 24))  ret = ret.times(tmp.tokens.buyables[21].effect)
+                        if (hasMilestone("cells", 26))  ret = ret.times(player.tokens.total.max(1))
+                        if (hasMilestone("cells", 32))  ret = ret.times(player.cells.lambda.points.max(10).log10())
+                        if (hasMilestone("cells", 38))  ret = ret.times(player.d.points.max(10).log10())
+                        if (hasMilestone("cells", 39))  ret = ret.times(player.mu.points.max(10).log10())
+                        if (hasMilestone("cells", 40))  ret = ret.times(player.cells.best.max(1).root(player.extremeMode ? 100 : hasUpgrade("tokens", 222) ? 25 : 50))
+                        if (hasMilestone("cells", 41))  ret = ret.times(player.tokens.buyables[11].max(1))
+                        if (hasMilestone("cells", 53))  ret = ret.times(tmp.cells.milestones[53].effect)
+                        if (hasMilestone("cells", 59) && !player.extremeMode) {
+                                                        ret = ret.times(layerChallengeCompletions("cells") ** 2)
+                        }
+                        
+                        return ret
+                },
+                getTissueUpgradeMult(){
+                        if (hasMilestone("ch", 14)) return decimalOne
+
+                        let ret = decimalOne
+
+                        if (hasUpgrade("t", 31))        ret = ret.times(3)
+                        if (hasUpgrade("t", 32) && player.cells.activeChallenge != undefined) {
+                                                        ret = ret.times(10)
+                        }        
+                        if (hasUpgrade("t", 34))        ret = ret.times(tmp.t.upgrades[34].effect)
+                        if (hasUpgrade("t", 92))        ret = ret.times(player.tokens.total.max(1).pow(Math.PI))
+                        if (hasUpgrade("t", 111))       ret = ret.times(5)
+                        if (hasUpgrade("t", 113))       ret = ret.times(player.tokens.tokens2.total.div(69).plus(1).pow(player.tokens.total))
+                        if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
+                        if (hasUpgrade("t", 144))       ret = ret.times(Decimal.pow(2, player.t.upgrades.length))
+                        
+                        return ret
+                },
+                getTissueMilestoneMult(){
+                        if (hasMilestone("an", 30)) return decimalOne
+
+                        let ret = decimalOne
+
+                        if (hasMilestone("t", 10))      ret = ret.times(getBuyableAmount("cells", 13).max(1).pow(player.t.upgrades.length ** .5))
+                        if (hasMilestone("t", 11))      ret = ret.times(getBuyableAmount("cells", 13).max(1).pow(player.t.milestones.length))
+                        if (hasMilestone("t", 17))      ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length))
+                        if (hasMilestone("t", 18))      ret = ret.times(player.tokens.total.pow10().root(player.extremeMode ? 29.918840221005354 : 47.19363281906435)) // log1.05(10)
+                        
+                        return ret
+                },
+                getPostSecondaryMult(){
+                        let ret = decimalOne
+
                         if (!hasMilestone("ch", 14)) {
                                 if (hasUpgrade("t", 63))        ret = ret.times(tmp.t.effect)
                                 if (hasUpgrade("t", 124))       ret = ret.times(Math.max(1, player.cells.challenges[11]) ** 2.5)
@@ -20086,25 +20067,98 @@ addLayer("cells", {
                                                         ret = ret.times(Decimal.pow(1.5, player.tokens.tokens2.total))
                         }
 
-                        if (hasUpgrade("t", 35) && !hasUpgrade("e", 21)) {
-                                                        ret = ret.pow(1.001)
+                        return ret
+                },
+                getCellUpgradeMult(){
+                        if (hasMilestone("ch", 15)) return decimalOne
+
+                        let ret = decimalOne
+
+                        if (hasUpgrade("cells", 15))    ret = ret.times(tmp.cells.upgrades[15].effect)
+                        if (hasUpgrade("cells", 21))  {
+                                let exp = player.extremeMode ? player.cells.upgrades.length + 3 : 2
+                                                        ret = ret.times(Decimal.pow(player.cells.upgrades.length, exp))
                         }
-                        if (hasUpgrade("sci", 513))     ret = ret.pow(tmp.sci.upgrades[513].effect)
-                        if (hasUpgrade("sci", 525))     ret = ret.pow(1.01)
-                        if (player.extremeMode)         ret = ret.pow(.75)
+                        if (hasUpgrade("cells", 23) && !player.extremeMode) {
+                                                        ret = ret.times(player.cells.upgrades.length)
+                        }
+                        if (hasUpgrade("cells", 24)) {
+                                if (player.extremeMode) ret = ret.times(player.cells.points.max(1).pow(.01))
+                                else                    ret = ret.times(player.cells.upgrades.length)
+                        }
+                        if (hasUpgrade("cells", 52))    ret = ret.times(player.cells.points.max(10).log10().pow(player.tokens.tokens2.total))
+                        if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
+
+                        return ret
+                },
+                getPreBuyableGain(){
+                        let ret = decimalOne
+                        
+                        if (player.hardMode)            ret = ret.div(4)
+                        if (player.easyMode)            ret = ret.times(4)
+                        if (hasChallenge("cells", 11))  ret = ret.times(tmp.cells.challenges[11].rewardEffect)
+                        if (hasChallenge("l", 111) && player.cells.challenges[12] >= 15 && !player.extremeMode) {
+                                                        ret = ret.times(tmp.l.challenges[31].reward.max(1))
+                        }
+                        if (!hasUpgrade("an", 34))      ret = ret.times(tmp.tokens.buyables[102].effect)
+                        if (hasUpgrade("or", 102) && !hasMilestone("sp", 18)) {
+                                                        ret = ret.times(tmp.or.upgrades[102].stem_cell_effect)
+                        }
+                        if (!hasMilestone("sp", 25))    ret = ret.times(tmp.or.challenges[12].reward)
+                        if (hasUpgrade("or", 332))      ret = ret.times(player.or.contaminants.points.max(1).pow(.01 * player.or.upgrades.length))
+                                                        
+                                                        ret = ret.times(tmp.cells.stem_cells.getExtremeMult)
+                                                        ret = ret.times(tmp.cells.stem_cells.getMinigameMult)
+                                                        ret = ret.times(tmp.cells.stem_cells.getCellMilestoneMult)
+                                                        ret = ret.times(tmp.cells.stem_cells.getTissueUpgradeMult)
+                                                        ret = ret.times(tmp.cells.stem_cells.getTissueMilestoneMult)
+                                                        ret = ret.times(tmp.cells.stem_cells.getCellUpgradeMult)
+                                                        
+                                                        ret = ret.times(tmp.t.effect)
+                                                        ret = ret.times(tmp.or.effect)
+                                                        ret = ret.times(tmp.an.effect)
+                },
+                getResetGain(){ //stem gain stemgain stemcellgain stem cellgain stem cell gain
+                        if (!hasUpgrade("cells", 13) && !player.t.unlocked) return decimalZero
+                        
+                        let ret = tmp.cells.stem_cells.buyables.getPreBuyableGain
+
+                                                        ret = ret.times(tmp.cells.buyables[11].effect)
+                        /* BUYABLES */                  ret = ret.times(tmp.cells.buyables[12].effect)
+                                                        ret = ret.times(tmp.cells.buyables[13].effect)
+                                                        ret = ret.times(tmp.cells.buyables[21].effect)
+                                                        ret = ret.times(tmp.cells.buyables[22].effect)
+
+                        if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
+
+                                                        ret = ret.times(tmp.cells.stem_cells.getPostSecondaryMult)
+
+                        /* EXPONENTIAL */               ret = ret.pow(tmp.cells.stem_cells.getGainExp)
+
+                        return ret
+                },
+                getGainExp(){
+                        let exp = decimalOne
+
+                        if (hasUpgrade("t", 35) && !hasUpgrade("e", 21)) {
+                                                        exp = exp.times(1.001)
+                        }
+                        if (hasUpgrade("sci", 513))     exp = exp.times(tmp.sci.upgrades[513].effect)
+                        if (hasUpgrade("sci", 525))     exp = exp.times(1.01)
+                        if (player.extremeMode)         exp = exp.times(.75)
                         if (!hasUpgrade("e", 22)) {
                                 if (hasUpgrade("or", 205) && player.or.filterLeftKidney) {
-                                                        ret = ret.pow(1.001)
+                                                        exp = exp.times(1.001)
                                 }
                                 if (hasUpgrade("or", 214) && !player.or.filterLeftKidney) {
-                                                        ret = ret.pow(1.001)
+                                                        exp = exp.times(1.001)
                                 }
                         }
                         if (hasUpgrade("sp", 54) && !hasUpgrade("e", 21)) {
-                                                        ret = ret.pow(hasUpgrade("sp", 154) ? 1.04 : hasUpgrade("sp", 104) ? 1.01 : 1.001)
+                                                        exp = exp.times(hasUpgrade("sp", 154) ? 1.04 : hasUpgrade("sp", 104) ? 1.01 : 1.001)
                         }
 
-                        return ret
+                        return exp
                 },
                 update(diff){
                         let data = player.cells
@@ -28854,6 +28908,10 @@ addLayer("or", {
                         },
                         baseExp(){
                                 if (hasUpgrade("tokens", 242))  {
+                                        if (hasMilestone("hu", 3)) {
+                                                if (hasUpgrade("pl", 45)) return .76
+                                                if (hasUpgrade("pl", 44)) return .75
+                                        }
                                         if (hasMilestone("pl", 26))     return .74
                                         if (hasMilestone("pl", 23))     return .73
                                         if (hasMilestone("pl", 20))     return .72
@@ -36229,7 +36287,7 @@ addLayer("sp", {
                                                 ret = ret.times(base.pow(exp))
                 }
                 if (hasUpgrade("tokens", 114))  ret = ret.times(player.or.energy.points.max(10).log10())
-                if (hasUpgrade("tokens", 124))  ret = ret.times(Decimal.pow(player.sp.upgrades.length, player.tokens.mastery_tokens.total.div(3)))
+                if (hasUpgrade("tokens", 124))  ret = ret.times(Decimal.pow(player.sp.upgrades.length, player.tokens.mastery_tokens.total.div(3)).max(1))
                 if (hasUpgrade("tokens", 251))  ret = ret.times(10)
                 if (hasUpgrade("sp", 145))      ret = ret.times(player.an.grid[106].extras.plus(1).pow(.02))
                                                 ret = ret.times(tmp.e.effect)
@@ -38587,7 +38645,7 @@ addLayer("e", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems XIX"
                         },
                         description(){
-                                return "Gain 1e10<sup>floor(cbrt(Plants))-3.9</sup>x biomass"
+                                return "Gain 1e10<sup>floor(cbrt(Plants))</sup><br>/1e39 biomass"
                         },
                         cost:() => new Decimal("3e477"),
                         unlocked(){
@@ -39500,7 +39558,7 @@ addLayer("pl", {
                         data.best = data.best.max(data.points)
                         data.total = data.total.plus(gainThisTick)
 
-                        if (hasUpgrade("e", 45)) {
+                        if (hasUpgrade("e", 45) || hasMilestone("hu", 2)) {
                                 layers.pl.buyables[11].buy()
                                 layers.pl.buyables[12].buy()
                                 layers.pl.buyables[13].buy()
@@ -39901,7 +39959,7 @@ addLayer("pl", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Plants VII"
                         },
                         description(){
-                                return "make exponent is .65"
+                                return "make exponent is .65 and you can bulk 5x Token II"
                         },
                         cost:() => new Decimal(34),
                         unlocked(){
@@ -39973,7 +40031,7 @@ addLayer("pl", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Plants XIII"
                         },
                         description(){
-                                return "make exponent is .70"
+                                return "make exponent is .70 and you can bulk 5x Token II"
                         },
                         cost:() => new Decimal(80),
                         unlocked(){
@@ -40045,6 +40103,7 @@ addLayer("pl", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Plants XIX"
                         },
                         description(){
+                                if (hasMilestone("hu", 3)) return "Plants reset nothing " + makeRed(" and make's exponent is .75")
                                 return "Plants reset nothing"
                         },
                         cost:() => new Decimal(200),
@@ -40057,6 +40116,7 @@ addLayer("pl", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Plants XX"
                         },
                         description(){
+                                if (hasMilestone("hu", 3)) return "Unlock humans " + makeRed(" and make's exponent is .76")
                                 return "Unlock humans"
                         },
                         cost:() => new Decimal(206),
@@ -40494,6 +40554,8 @@ addLayer("pl", {
                 player.pl.biomass.points = decimalZero
                 player.pl.biomass.total = decimalZero
                 player.pl.biomass.best = decimalZero
+
+                tmp.pl.getResetGain = decimalZero
         },
 })
 
@@ -40647,7 +40709,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Permanently reduce Nucleus upgrade costs and keep an Ecosystem milestone and subtract 1 from the Mastery III base (max 75) per reset."
+                                return "Reward: Permanently reduce Nucleus upgrade costs, autobuy Plant buyables, and keep an Ecosystem milestone and subtract 1 from the Mastery III base (max 75) per reset."
                         },
                 }, // hasMilestone("hu", 2)
                 3: {
@@ -40661,7 +40723,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per reset per milestone keep a Ecosystem reset and challenge and Stem Cell gain is automaxed [not yet] (<sup>*</sup>)."
+                                return "Reward: Per reset per milestone keep a Ecosystem reset and challenge, upgrade Plants XIX and XX, and Stem Cell gain is automaxed [not yet] (<sup>*</sup>)."
                         },
                 }, // hasMilestone("hu", 3)
         },
@@ -40681,6 +40743,9 @@ addLayer("hu", {
                 "Milestones": {
                         content: [
                                 "main-display",
+                                ["display-text", function(){
+                                        return "You have done " + formatWhole(player.hu.times) + " Human resets"
+                                }],
                                 "milestones",
                         ],
                         unlocked(){
@@ -50726,6 +50791,8 @@ addLayer("tokens", {
                         if (hasUpgrade("tokens", 101))  ret *= 4
                         if (player.e.unlocked)          ret *= 5
                         if (hasMilestone("e", 7))       ret *= 4
+                        if (hasUpgrade("pl", 22))       ret *= 5
+                        if (hasUpgrade("pl", 33))       ret *= 5
                         return ret
                 },
                 191: {
@@ -51215,7 +51282,7 @@ addLayer("tokens", {
                                 return "You have a total of " + format(player.tokens.tokens2.total) + " Token II's"
                         },
                         unlocked(){
-                                return true
+                                return player.tokens.tokens2.total.lt(1e5)
                         },
                         canClick(){
                                 return true
@@ -53322,14 +53389,14 @@ addLayer("tokens", {
                                         ["display-text", function(){
                                                 let d1 = player.tokens.best_buyables
                                                 let d2 = player.tokens.buyables
-                                                if (d1[101].gt(1e5)) return ""
+                                                if (d1[101].gt(1000)) return ""
                                                 let f = function(a,b){
                                                         let x = formatWhole(a[100 + b]) + "+" + formatWhole(a[110 + b])
                                                         if (a[120 + b].gt(0)) x += "+" + formatWhole(a[120 + b])
                                                         return x
                                                 }
-                                                let a = "Left column amount: " + f(hasUpgrade("or", 113) ? d1 : d2, 1) + " = " + format(tmp.tokens.buyables.getCol1Total)
-                                                let b = "Right column amount: " + f(hasUpgrade("or", 111) ? d1 : d2, 2) + " = " + format(tmp.tokens.buyables.getCol2Total)
+                                                let a = "Left column amount: " + f(hasUpgrade("or", 113) ? d1 : d2, 1) + " = " + formatWhole(tmp.tokens.buyables.getCol1Total)
+                                                let b = "Right column amount: " + f(hasUpgrade("or", 111) ? d1 : d2, 2) + " = " + formatWhole(tmp.tokens.buyables.getCol2Total)
                                                 return a + br + b
                                         }],       
                                 ]
@@ -53411,6 +53478,19 @@ addLayer("tokens", {
                                 if (data[191].canAfford && !hasMilestone("or", 6)) return true
                                 if (data[192].canAfford && !hasMilestone("or", 7)) return true
                                 if (data[193].canAfford && !hasMilestone("or", 8) && data[193].unlocked) return true
+                                let ids = [
+                                        101, 102, 103, 104, 105,
+                                        111, 112, 113, 114, 115,
+                                        121, 122, 123, 124, 125,
+                                        131, 132, 133, 134, 135,
+                                        141, 142, 143, 144, 145,
+                                ]
+                                for (i in ids) {
+                                        let id = ids[i]
+                                        if (hasUpgrade("tokens", id)) continue 
+                                        if (!tmp.tokens.upgrades[id].unlocked) continue
+                                        if (tmp.tokens.upgrades[id].canAfford) return true
+                                }
                         },
                 },
                 "Mastery": {
@@ -53422,6 +53502,23 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasUpgrade("tokens", 105)
                         },
+                        shouldNotify(){
+                                let ids = [
+                                        '201', '211', '212', '221', '222', 
+                                        '231', '241', '242', '251', '261', 
+                                        '262', '271', '272', '273', '274', 
+                                        '281', '282', '283', '284', '291', 
+                                        '292',
+                                ]
+                                for (i in ids) {
+                                        let id = ids[i]
+                                        if (hasUpgrade("tokens", id)) continue 
+                                        if (!tmp.tokens.upgrades[id].unlocked) continue
+                                        if (!tmp.tokens.upgrades[id].canAfford) continue 
+                                        console.log(id)
+                                        if (tmp.tokens.upgrades[id].cost.lte(player.tokens.mastery_tokens.points)) return true
+                                }
+                        }
                 },
                 "Flat": {
                         content: [
