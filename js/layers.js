@@ -12028,7 +12028,7 @@ addLayer("l", {
         },
         effectDescription(){
                 if (inChallenge("l", 51) || hasChallenge("l", 51)) return ""
-                return " multiplying all prior currencies by "  + format(tmp.l.effect) + "."
+                return " multiplying most prior currencies by "  + format(tmp.l.effect) + "."
         },
         update(diff){
                 let data = player.l
@@ -39017,9 +39017,11 @@ addLayer("e", {
                 }, // hasMilestone("e", 15)
                 16: {
                         requirementDescription(){
+                                if (player.hu.unlocked) return "799 Nucleuses " + makeRed(" or 80,000 Chromosomes")
                                 return "799 Nucleuses"
                         },
                         done(){
+                                if (player.hu.unlocked && player.ch.points.gte(8e4)) return true
                                 return player.nu.points.gte(799)
                         },
                         unlocked(){
@@ -40616,7 +40618,7 @@ addLayer("hu", {
                 return tmp.hu.getResetGain.gt(0) && hasUpgrade("pl", 45)
         },
         effect(){
-                return player.hu.thoughts.points.sqrt().pow10()
+                return player.hu.thoughts.points.sqrt().min(1000).pow10()
         },
         effectDescription(){
                 let start = " multiplying Biomass (max 1e100), Ecosystem (max 1e500), Species, and Oligopotent base by "
@@ -40749,6 +40751,20 @@ addLayer("hu", {
                                 return "Reward: Animaless? cap is 150, per reset keep an Ecosystem upgrade, and Pluripotent double exponent is 1.03 but disable Heart XXV."
                         },
                 }, // hasMilestone("hu", 4)
+                5: {
+                        requirementDescription(){
+                                return "12 Human resets"
+                        },
+                        done(){
+                                return player.hu.times >= 12
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Keep a Plant upgrade per reset."
+                        },
+                }, // hasMilestone("hu", 5)
         },
         tabFormat: {
                 "Upgrades": {
@@ -40823,7 +40839,7 @@ addLayer("hu", {
 
                         if (!false) { // upgrades
                                 let plKeptUpgrades = 0
-                                if (false) plKeptUpgrades += player.hu.times
+                                if (hasMilestone("hu", 5)) plKeptUpgrades += player.hu.times
                                 data.upgrades = data.upgrades.slice(0, plKeptUpgrades)
                         }
 
