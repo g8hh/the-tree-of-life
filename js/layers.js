@@ -18517,7 +18517,7 @@ addLayer("d", {
                 if (player.extremeMode)         ret = ret.plus(layers.l.grid.getGemEffect(507))
                 
                 if (hasUpgrade("t", 74))        ret = ret.times(player.t.upgrades.length)
-                if (hasUpgrade("or", 145))      ret = ret.times(2)
+                if (hasUpgrade("or", 145) && !hasMilestone("hu", 4)) ret = ret.times(2)
                 if (hasUpgrade("or", 213))      ret = ret.times(2)
                 if (hasUpgrade("an", 41))       ret = ret.times(player.ch.points.max(6).log(6))
                 if (hasMilestone("ch", 23))     ret = ret.times(player.nu.points.max(2).log(2))
@@ -18530,7 +18530,7 @@ addLayer("d", {
                                                 ret = ret.times(Decimal.pow(1.01, exp))
                 }
                 if (hasUpgrade("sp", 84))       ret = ret.times(Decimal.pow(1.01, player.sp.upgrades.length ** (hasUpgrade("sp", 134) ? 1.1 : 1)))
-                if (hasUpgrade("pl", 43))       ret = ret.times(Decimal.pow(1.01, player.pl.points.sub(100)))
+                if (hasUpgrade("pl", 43))       ret = ret.times(Decimal.pow(1.01, player.pl.points.min(250).sub(100)))
                 if (hasChallenge("sp", 32))     ret = ret.times(tmp.sp.challenges[32].reward)
                 if (hasUpgrade("e", 24))        ret = ret.times(player.tokens.mastery_tokens.total.max(1).sqrt())
 
@@ -20182,16 +20182,29 @@ addLayer("cells", {
                                 layers.cells.buyables[11].buy()
                         }
                         if (hasMilestone("t", 2) || hasMilestone("or", 1)) layers.cells.buyables[12].buy()
+
+                        layers.cells.stem_cells.doImprovedPassiveGain()
                 },
                 doImprovedPassiveGain(){
                         if (!hasMilestone("hu", 3)) return 
                         if (player.cells.stem_cells.points.lt("ee10")) return 
                         
                         let attempt = player.cells.stem_cells.points.max(10).log10().log(2).ceil().pow10().pow(Math.log10(2)).pow10()
+                        let gExp = tmp.cells.stem_cells.getGainExp
 
                         let gain = tmp.cells.stem_cells.getPreBuyableGain.times(tmp.cells.stem_cells.getPostSecondaryMult)
 
-                        // got to do the buyables
+                        let ids = [11, 12, 13, 21, 22]
+                        for (i in ids) {
+                                let id = ids[i]
+                                let data = tmp.cells.buyables[id]
+                                let amt = attempt.log(data.costBase).root(data.costExp)
+                                gain = gain.times(data.base.pow(amt))
+                        }
+
+                        if (gain.pow(gExp).gte(attempt)) {
+                                player.cells.stem_cells.points = player.cells.stem_cells.points.plus(attempt)
+                        }
                 },
         },
         exitMinigame(){
@@ -22767,6 +22780,7 @@ addLayer("cells", {
                                 if (hasUpgrade("tokens", 142))  exp = 1.06
                                 if (hasUpgrade("e", 22))        exp = 1.05
                                 if (hasUpgrade("e", 43))        exp = 1.04
+                                if (hasMilestone("hu", 4))      exp = 1.03
 
                                 return exp
                         },
@@ -34678,7 +34692,7 @@ addLayer("ch", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Chromosome cost base is 9.9e9 but disable Cell Milestones 12, 16, 17, 22, 23, 24, 26, 32, 38, 39, 41, 49, 53, 56, and 59 (Lambda and Iota stay active)."
+                                return "Reward: Chromosome cost base is 9.9e9 but disable Cell Milestones 12, 16, 17, 22, 23, 24, 26, 32, 38, 39, 40, 41, 49, 53, 56, and 59 (Lambda and Iota stay active, milestone 40 still affects Cells)."
                         },
                 }, // hasMilestone("ch", 13)
                 14: {
@@ -38267,7 +38281,7 @@ addLayer("e", {
                         a = a.plus(getBuyableAmount("pl", 21))
                                                 ret = ret.times(Decimal.pow(1.2, a.min(2222).sub(440).max(0)))
                 }
-                                                ret = ret.times(tmp.hu.effect)
+                                                ret = ret.times(tmp.hu.effect.min("1e500"))
 
                 return ret
         },
@@ -38387,7 +38401,7 @@ addLayer("e", {
 
                 if (hasMilestone("hu", 1) && data.activeChallenge) {
                         let x = data.activeChallenge
-                        if (tmp.e.challenges[x].canComplete && player.e.challenges[x] < layers.e.challenges[x].completionLimit) {
+                        if (tmp.e.challenges[x].canComplete && player.e.challenges[x] < tmp.e.challenges[x].completionLimit) {
                                 data.challenges[data.activeChallenge] += 1
                         }
                 }
@@ -38752,10 +38766,15 @@ addLayer("e", {
                         goal(){
                                 let c = player.e.challenges[22]
                                 let ret = new Decimal(581).plus(c * 4)
-                                if (c >= 1) ret = ret.sub(1)
-                                if (ret.gt(600)) ret = ret.times(1.5).sub(290)
-                                if (ret.gte(1000)) ret = ret.plus(14)
-                                return ret
+                                if (c >= 1)             ret = ret.sub(1)
+                                if (ret.gt(600))        ret = ret.times(1.5).sub(290)
+                                if (ret.gte(1000))      ret = ret.plus(14)
+                                if (c >= 109)           ret = ret.plus((c - 108) * 9)
+                                if (c >= 114)           ret = ret.plus((c - 113) * (c - 109) * 4)
+                                if (c >= 101) {
+                                        ret = ret.times(Decimal.pow(1.01, c)).times(1.97)
+                                }
+                                return ret.floor()
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[22].goal),
                         fullDisplay(){
@@ -38764,7 +38783,7 @@ addLayer("e", {
                                 a += "Reward: log10(Biomass)<sup>" + formatWhole(player.e.challenges[22]) + "</sup> multiplies Biomass"
                                 a += " gain. This challenge counts towards Chromosomeless? and Nucleusless? completions for their primary effects."
                                 //a += " from the Species base gain divider, "
-                                return a + br2 + "Completions: " + player.e.challenges[22] + "/100"
+                                return a + br2 + "Completions: " + player.e.challenges[22] + "/" + formatWhole(tmp.e.challenges[22].completionLimit)
                         },
                         unlocked(){
                                 return hasMilestone("pl", 3)
@@ -38773,7 +38792,9 @@ addLayer("e", {
                                 player.nu.points = decimalZero
                         },
                         countsAs: [],
-                        completionLimit: 100,
+                        completionLimit(){
+                                return hasMilestone("hu", 4) ? 150 : 100
+                        },
                 }, // inChallenge("e", 22)
         },
         milestones: {
@@ -39523,6 +39544,7 @@ addLayer("pl", {
                         if (hasUpgrade("e", 44))        ret = ret.times(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0)))
 
                                                         ret = ret.times(tmp.hu.effect.min(1e100))
+                        if (hasUpgrade("hu", 11))       ret = ret.times(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length))
 
                                                         ret = ret.times(tmp.pl.buyables[11].effect)
                                                         ret = ret.times(tmp.pl.buyables[12].effect)
@@ -40078,7 +40100,7 @@ addLayer("pl", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Plants XVIII"
                         },
                         description(){
-                                return "Each Plant past 100 multiplies DNA gain exponent by 1.01"
+                                return "Each Plant past 100 (max 250) multiplies DNA gain exponent by 1.01"
                         },
                         cost:() => new Decimal(138),
                         unlocked(){
@@ -40597,7 +40619,7 @@ addLayer("hu", {
                 return player.hu.thoughts.points.sqrt().pow10()
         },
         effectDescription(){
-                let start = " multiplying Biomass (max 1e100), Ecosystem, Species, and Oligopotent base by "
+                let start = " multiplying Biomass (max 1e100), Ecosystem (max 1e500), Species, and Oligopotent base by "
                 return start + format(tmp.hu.effect) + "."
         },
         resetsNothing(){
@@ -40662,7 +40684,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans I"
                         },
                         description(){
-                                return "idk yet"
+                                return "Keep Thoughts on reset and per upgrade Thoughts multiply Biomass gain"
                         },
                         cost:() => new Decimal(100),
                         unlocked(){
@@ -40710,9 +40732,23 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per reset per milestone keep a Ecosystem reset and challenge, upgrade Plants XIX and XX, and Stem Cell gain is automaxed [not yet] (<sup>*</sup>)."
+                                return "Reward: Per reset per milestone keep an Ecosystem reset and challenge, upgrade Plants XIX and XX, and Stem Cell gain is automaxed (<sup>*</sup>)."
                         },
                 }, // hasMilestone("hu", 3)
+                4: {
+                        requirementDescription(){
+                                return "60 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte(60)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Animaless? cap is 150, per reset keep an Ecosystem upgrade, and Pluripotent double exponent is 1.03 but disable Heart XXV."
+                        },
+                }, // hasMilestone("hu", 4)
         },
         tabFormat: {
                 "Upgrades": {
@@ -40764,7 +40800,8 @@ addLayer("hu", {
         doReset(layer){
                 if (layer != "hu") return
                 player.hu.time = 0
-                player.hu.thoughts.points = decimalZero
+
+                if (!hasUpgrade("hu", 11)) player.hu.thoughts.points = decimalZero
 
                 /*
                 1. Plants 
@@ -40812,7 +40849,7 @@ addLayer("hu", {
 
                         if (!false) { // upgrades
                                 let eKeptUpgrades = 0
-                                if (false) eKeptUpgrades += player.hu.times
+                                if (hasMilestone("hu", 4)) eKeptUpgrades += player.hu.times
                                 data.upgrades = data.upgrades.slice(0, eKeptUpgrades)
                         }
 
@@ -50981,7 +51018,7 @@ addLayer("tokens", {
                                         div = 40000
                                         if (hasMilestone("e", 11))      div = 42000
                                         if (hasMilestone("sp", 28))     div = Math.max(div, player.e.challenges[11] * 500 + 4e4)
-                                        if (hasUpgrade("pl", 14))       div += player.e.challenges[22] * 225   
+                                        if (hasUpgrade("pl", 14))       div += Math.min(100, player.e.challenges[22]) * 225   
                                 }
                                 if (hasUpgrade("tokens", 284) && add >= 19)     add = 19 
                                 if (hasMilestone("e", 15) && add >= 18)         add = 18
@@ -51140,9 +51177,11 @@ addLayer("tokens", {
 
                                 if (hasUpgrade("tokens", 262)) ret = 1.01
 
-                                if (hasUpgrade("tokens", 291)) ret = 1.16
-                                if (hasMilestone("pl", 25)) {
-                                        ret -= player.pl.points.sub(130).max(0).min(5).times(.002)
+                                if (hasUpgrade("tokens", 291)) {
+                                        ret = 1.16
+                                        if (hasMilestone("pl", 25)) {
+                                                ret -= player.pl.points.sub(130).max(0).min(5).times(.002)
+                                        }
                                 }
                                 
                                 return ret
@@ -53502,7 +53541,6 @@ addLayer("tokens", {
                                         if (hasUpgrade("tokens", id)) continue 
                                         if (!tmp.tokens.upgrades[id].unlocked) continue
                                         if (!tmp.tokens.upgrades[id].canAfford) continue 
-                                        console.log(id)
                                         if (tmp.tokens.upgrades[id].cost.lte(player.tokens.mastery_tokens.points)) return true
                                 }
                         }

@@ -245,7 +245,9 @@ function dnaExpDisplay(){
         if (c != "")                    c += br
         
         if (hasUpgrade("t", 74))        c += "Tissues XXXIV multiplies BX by " + format(player.t.upgrades.length) + br
-        if (hasUpgrade("or", 145))      c += "Heart XXV multiplies BX by " + format(2) + br
+        if (hasUpgrade("or", 145) && !hasMilestone("hu", 4)) { 
+                                        c += "Heart XXV multiplies BX by " + format(2) + br
+        }
         if (hasUpgrade("or", 213))      c += "Kidney III multiplies BX by " + format(2) + br
         if (hasUpgrade("an", 41))       c += "Animals XVI multiplies BX by " + format(player.ch.points.max(6).log(6)) + br
         if (hasMilestone("ch", 23))     c += "Chromosome Milestone 23 multiplies BX by " + format(player.nu.points.max(2).log(2)) + br
@@ -360,6 +362,7 @@ function stemCellFormulaDisplay(){
                 if (hasMilestone("cells", 32))  c += "Cell Milestone 32 multiplies AX by " + format(player.cells.lambda.points.max(10).log10()) + br
                 if (hasMilestone("cells", 38))  c += "Cell Milestone 38 multiplies AX by " + format(player.d.points.max(10).log10()) + br
                 if (hasMilestone("cells", 39))  c += "Cell Milestone 39 multiplies AX by " + format(player.mu.points.max(10).log10()) + br
+                if (hasMilestone("cells", 40))  c += "Cell Milestone 40 multiplies AX by " + format(player.cells.best.max(1).root(player.extremeMode ? 100 : hasUpgrade("tokens", 222) ? 25 : 50)) + br
                 if (hasMilestone("cells", 41))  c += "Cell Milestone 41 multiplies AX by " + format(player.tokens.buyables[11].max(1)) + br
                 if (hasMilestone("cells", 53))  c += "Cell Milestone 53 multiplies AX by " + format(tmp.cells.milestones[53].effect) + br
                 if (hasMilestone("cells", 59) && !player.extremeMode) {
@@ -460,7 +463,6 @@ function stemCellFormulaDisplay(){
                                         c += "Pluripotent multiplies AX by " + format(tmp.cells.buyables[13].effect) + br
                                         c += "Multipotent multiplies AX by " + format(tmp.cells.buyables[21].effect) + br
                                         c += "Oligopotent multiplies AX by " + format(tmp.cells.buyables[22].effect) + br
-        if (hasMilestone("cells", 40))  c += "Cell Milestone 40 multiplies AX by " + format(player.cells.best.max(1).root(player.extremeMode ? 100 : hasUpgrade("tokens", 222) ? 25 : 50)) + br
         if (c.includes("AX"))           c += br
 
         if (inChallenge("cells", 12))   c += "Secondary Challenge multiplies BX by " + format(tmp.cells.challenges[12].challengeEffect) + br
