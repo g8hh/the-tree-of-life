@@ -150,10 +150,20 @@ function getAchStuffFromNumber(n){
                         if (player.ach.hiddenRows >= n/7) return false
                         return player.sp.unlocked
                 }
-        } else if (n <= 7777) {
+        } else if (n <= 1092) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
                         return player.e.unlocked
+                }
+        } else if (n <= 1127) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.pl.unlocked
+                }
+        } else if (n <= 7777) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.hu.unlocked
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){
@@ -1222,7 +1232,6 @@ PROGRESSION_MILESTONES = {
         1034:() => player.or.contaminants.points.gte(Decimal.pow10(1e35)),
         1035:() => player.or.contaminants.points.gte(Decimal.pow10(3e35)),
         1036:() => player.or.contaminants.points.gte(Decimal.pow10(1e36)),
-
         1037:() => layerChallengeCompletions("e") >= 80,
         1038:() => layerChallengeCompletions("e") >= 90,
         1039:() => layerChallengeCompletions("e") >= 100,
@@ -1279,6 +1288,63 @@ PROGRESSION_MILESTONES = {
         1090:() => player.pl.upgrades.length >= 12,
         1091:() => player.pl.upgrades.length >= 13,
         1092:() => player.pl.upgrades.length >= 14,
+
+        1093:() => player.or.contaminants.points.gte(Decimal.pow10(1e47)),
+        1094:() => player.or.contaminants.points.gte(Decimal.pow10(1e48)),
+        1095:() => player.or.contaminants.points.gte(Decimal.pow10(1e49)),
+        1096:() => player.or.contaminants.points.gte(Decimal.pow10(1e50)),
+        1097:() => player.or.contaminants.points.gte(Decimal.pow10(1e51)),
+        1098:() => player.or.contaminants.points.gte(Decimal.pow10(1e52)),
+        1099:() => player.or.contaminants.points.gte(Decimal.pow10(1e53)),
+        1100:() => player.or.contaminants.points.gte(Decimal.pow10(1e54)),
+        1101:() => player.or.contaminants.points.gte(Decimal.pow10(1e55)),
+        1102:() => player.or.contaminants.points.gte(Decimal.pow10(1e56)),
+        1103:() => player.or.contaminants.points.gte(Decimal.pow10(1e57)),
+        1104:() => player.or.contaminants.points.gte(Decimal.pow10(1e58)),
+        1105:() => player.or.contaminants.points.gte(Decimal.pow10(1e59)),
+        1106:() => player.or.contaminants.points.gte(Decimal.pow10(1e60)),
+        1107:() => player.pl.upgrades.length >= 15,
+        1108:() => player.pl.upgrades.length >= 16,
+        1109:() => player.pl.upgrades.length >= 17,
+        1110:() => player.pl.upgrades.length >= 18,
+        1111:() => player.pl.upgrades.length >= 19,
+        1112:() => player.pl.upgrades.length >= 20,
+        1113:() => player.pl.points.gte(250),
+        1114:() => player.or.contaminants.points.gte(Decimal.pow10(1e61)),
+        1115:() => player.or.contaminants.points.gte(Decimal.pow10(1e62)),
+        1116:() => player.or.contaminants.points.gte(Decimal.pow10(1e63)),
+        1117:() => player.or.contaminants.points.gte(Decimal.pow10(1e64)),
+        1118:() => player.or.contaminants.points.gte(Decimal.pow10(1e65)),
+        1119:() => player.or.contaminants.points.gte(Decimal.pow10(1e66)),
+        1120:() => player.or.contaminants.points.gte(Decimal.pow10(1e67)),
+        1121:() => player.hu.thoughts.points.gte(1),
+        1122:() => player.hu.thoughts.points.gte(1e2),
+        1123:() => player.hu.thoughts.points.gte(1e4),
+        1124:() => player.hu.thoughts.points.gte(1e6),
+        1125:() => player.hu.times >= 1,
+        1126:() => player.hu.times >= 10,
+        1127:() => player.hu.times >= 75,
+        1128:() => player.or.contaminants.points.gte(Decimal.pow10(1e68)),
+        1129:() => player.or.contaminants.points.gte(Decimal.pow10(1e69)),
+        1130:() => player.or.contaminants.points.gte(Decimal.pow10(1e70)),
+        1131:() => player.or.contaminants.points.gte(Decimal.pow10(1e71)),
+        1132:() => player.or.contaminants.points.gte(Decimal.pow10(1e72)),
+        1133:() => player.or.contaminants.points.gte(Decimal.pow10(1e73)),
+        1134:() => player.or.contaminants.points.gte(Decimal.pow10(1e74)),
+        1135:() => layerChallengeCompletions("e") >= 280,
+        1136:() => layerChallengeCompletions("e") >= 290,
+        1137:() => layerChallengeCompletions("e") >= 300,
+        1138:() => layerChallengeCompletions("e") >= 310,
+        1139:() => layerChallengeCompletions("e") >= 315,
+        1140:() => layerChallengeCompletions("e") >= 320,
+        1141:() => layerChallengeCompletions("e") >= 325,
+        1142:() => player.or.contaminants.points.gte(Decimal.pow10(1e75)),
+        1143:() => player.or.contaminants.points.gte(Decimal.pow10(1e76)),
+        1144:() => player.or.contaminants.points.gte(Decimal.pow10(1e77)),
+        1145:() => player.or.contaminants.points.gte(Decimal.pow10(1e78)),
+        1146:() => player.or.contaminants.points.gte(Decimal.pow10(1e79)),
+        1147:() => player.or.contaminants.points.gte(Decimal.pow10(1e80)),
+        1148:() => player.or.contaminants.points.gte(Decimal.pow10(1e81)),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -2318,7 +2384,6 @@ PROGRESSION_MILESTONES_TEXT = {
         1034:"1e1e35 Contaminants",
         1035:"1e3e35 Contaminants",
         1036:"1e1e36 Contaminants",
-
         1037:"80 Ecosystem challenges",
         1038:"90 Ecosystem challenges",
         1039:"100 Ecosystem challenges",
@@ -2375,6 +2440,63 @@ PROGRESSION_MILESTONES_TEXT = {
         1090:"12 Plant upgrades",
         1091:"13 Plant upgrades",
         1092:"14 Plant upgrades",
+
+        1093:"1e1e47 Contaminants",
+        1094:"1e1e48 Contaminants",
+        1095:"1e1e49 Contaminants",
+        1096:"1e1e50 Contaminants",
+        1097:"1e1e51 Contaminants",
+        1098:"1e1e52 Contaminants",
+        1099:"1e1e53 Contaminants",
+        1100:"1e1e54 Contaminants",
+        1101:"1e1e55 Contaminants",
+        1102:"1e1e56 Contaminants",
+        1103:"1e1e57 Contaminants",
+        1104:"1e1e58 Contaminants",
+        1105:"1e1e59 Contaminants",
+        1106:"1e1e60 Contaminants",
+        1107:"15 Plant upgrades",
+        1108:"16 Plant upgrades",
+        1109:"17 Plant upgrades",
+        1110:"18 Plant upgrades",
+        1111:"19 Plant upgrades",
+        1112:"20 Plant upgrades",
+        1113:"250 Plants",
+        1114:"1e1e61 Contaminants",
+        1115:"1e1e62 Contaminants",
+        1116:"1e1e63 Contaminants",
+        1117:"1e1e64 Contaminants",
+        1118:"1e1e65 Contaminants",
+        1119:"1e1e66 Contaminants",
+        1120:"1e1e67 Contaminants",
+        1121:"a thought",
+        1122:"100 thoughts",
+        1123:"10,000 thoughts",
+        1124:"1,000,000 thoughts",
+        1125:"a Human reset",
+        1126:"10 Human resets",
+        1127:"75 Human resets",
+        1128:"1e1e68 Contaminants",
+        1129:"1e1e69 Contaminants",
+        1130:"1e1e70 Contaminants",
+        1131:"1e1e71 Contaminants",
+        1132:"1e1e72 Contaminants",
+        1133:"1e1e73 Contaminants",
+        1134:"1e1e74 Contaminants",
+        1135:"280 Ecosystem challenges",
+        1136:"290 Ecosystem challenges",
+        1137:"300 Ecosystem challenges",
+        1138:"310 Ecosystem challenges",
+        1139:"315 Ecosystem challenges",
+        1140:"320 Ecosystem challenges",
+        1141:"325 Ecosystem challenges",
+        1142:"1e1e75 Contaminants",
+        1143:"1e1e76 Contaminants",
+        1144:"1e1e77 Contaminants",
+        1145:"1e1e78 Contaminants",
+        1146:"1e1e79 Contaminants",
+        1147:"1e1e80 Contaminants",
+        1148:"1e1e81 Contaminants",
 }
 
 

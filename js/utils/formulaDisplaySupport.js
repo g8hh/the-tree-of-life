@@ -255,7 +255,10 @@ function dnaExpDisplay(){
         if (hasMilestone("ch", 26) && !hasMilestone("pl", 19)) {
                                         c += "Chromosome Milestone 26 multiplies BX by 1.31" + br
         }
-        if (hasMilestone("nu", 17))     c += "Nucleus Milestone 17 multiplies BX by " + format(Decimal.pow(1.01, player.nu.points)) + br
+        if (hasMilestone("nu", 17)) {
+                let exp = player.nu.points.min(3333).times(player.nu.points).sqrt()
+                                        c += "Nucleus Milestone 17 multiplies BX by " + format(Decimal.pow(1.01, exp)) + br
+        }
         if (hasUpgrade("sp", 84))       c += "Upgraded Effect XIV multiplies BX by " + format(Decimal.pow(1.01, player.sp.upgrades.length ** (hasUpgrade("sp", 134) ? 1.1 : 1))) + br
         if (hasChallenge("sp", 32))     c += "Truly Energyless multiplies BX by " + format(tmp.sp.challenges[32].reward) + br
         if (hasUpgrade("e", 24))        c += "Ecosystems IX multiplies BX by " + format(player.tokens.mastery_tokens.total.max(1).sqrt()) + br
@@ -1012,6 +1015,8 @@ function biomassFormulaDisplay(){
         if (hasUpgrade("e", 31))        c += "Ecosystems XI multiplies AX by " + format(player.nu.points.max(10).log10().pow(player.e.upgrades.length)) + br
         if (hasUpgrade("e", 34))        c += "Ecosystems XIV multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.pl.points.min(100).sub(15).max(0))) + br
         if (hasUpgrade("e", 44))        c += "Ecosystems XIX multiplies AX by " + format(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0))) + br
+        if (hasUpgrade("hu", 11))       c += "Humans I multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length).pow(hasUpgrade("hu", 12) ? player.hu.milestones.length : 1))
+
 
                                         c += "Sprout multiplies AX by " + format(tmp.pl.buyables[11].effect) + br
                                         c += "Leaf multiplies AX by " + format(tmp.pl.buyables[12].effect) + br
