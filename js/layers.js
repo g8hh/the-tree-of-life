@@ -5088,7 +5088,7 @@ addLayer("sci", {
                 rows: 5,
                 cols: 3,
                 11: {
-                        title: "α ~ 1/147",
+                        title: "α ~ 1/137",
                         cost(){
                                 let amt = getBuyableAmount("sci", 11)
                                 let exp = amt.div(tmp.sci.buyables[11].expDiv).plus(1)
