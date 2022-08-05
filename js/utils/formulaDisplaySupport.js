@@ -257,6 +257,7 @@ function dnaExpDisplay(){
         if (hasUpgrade("sp", 84))       c += "Upgraded Effect XIV multiplies BX by " + format(Decimal.pow(1.01, player.sp.upgrades.length ** (hasUpgrade("sp", 134) ? 1.1 : 1))) + br
         if (hasChallenge("sp", 32))     c += "Truly Energyless multiplies BX by " + format(tmp.sp.challenges[32].reward) + br
         if (hasUpgrade("e", 24))        c += "Ecosystems IX multiplies BX by " + format(player.tokens.mastery_tokens.total.max(1).sqrt()) + br
+        if (hasUpgrade("pl", 43))       c += "Plants XVIII multiplies BX by " + format(Decimal.pow(1.01, player.pl.points.sub(100))) + br
 
                                         c += br + "Netting a result of " + format(tmp.d.getGainExp) + br2
 
@@ -683,7 +684,7 @@ function energyFormulaDisplay(){
         if (hasUpgrade("or", 323) && !hasUpgrade("tokens", 144)) {
                                         c += "Lung XIII multiplies AX by " + format(tmp.or.upgrades[323].effect) + br
         }
-        if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
+        if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect.min("ee12")) + br
         if (hasUpgrade("an", 15))       c += "Animals V multiplies AX by " + format(player.an.grid[607].extras.plus(1)) + br
         if (hasMilestone("an", 23)) {
                 let base = player.an.grid[404].extras.plus(1)
@@ -979,6 +980,41 @@ function ecosystemFormulaDisplay(){
         if (hasMilestone("pl", 2))      c += "Plant Milestone 2 multiplies AX by " + format(player.ch.points.max(10).log10().pow(player.pl.milestones.length)) + br
         if (hasMilestone("pl", 6))      c += "Plant Milestone 6 multiplies AX by " + format(player.nu.points.sub(1200).max(1)) + br
         if (hasUpgrade("pl", 24))       c += "Plants IX multiplies AX by " + format(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt())) + br
+
+        return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+}
+
+function biomassFormulaDisplay(){
+        let a = "Base biomass gain is " + format(tmp.pl.biomass.getBaseGain, 3) + " (AX)"
+        let b = "AX is initially 1 and is multiplied by the following factors"
+        let c = ""
+                        
+        let ret = player.e.points.max(10).log10().sub(hasMilestone("pl", 4) ? 0 : 100).max(0)
+
+        if (hasUpgrade("pl", 13))       ret = ret.pow(player.pl.points.max(1).min(160))
+
+        if (hasMilestone("pl", 1))      c += "Plant Milestone 1 multiplies AX by " + format(Decimal.pow(3, player.e.challenges[21] - 33).max(1)) + br
+        if (hasMilestone("pl", 2))      c += "Plant Milestone 2 multiplies AX by " + format(player.ch.points.max(10).log10().pow(player.pl.milestones.length)) + br
+        if (hasUpgrade("pl", 12)) {
+                let exp = player.tokens.mastery_tokens.total.sub(hasMilestone("pl", 3) ? 0 : 500).max(0)
+                if (hasMilestone("pl", 6))      exp = exp.plus(player.nu.points.sub(1200).max(0))
+                if (hasUpgrade("tokens", 292))  exp = exp.plus(player.nu.points.sub(2030).max(0))
+                
+                let b1 = Decimal.pow(1.01, exp)
+
+                let upgs = player.pl.upgrades.length + (hasUpgrade("e", 31) ? player.e.upgrades.filter(x => x > 30 & x < 40).length : 0)
+                                        c += "Plants II multiplies AX by " + format(b1.pow(upgs)) + br
+        }
+        if (hasUpgrade("pl", 24))       c += "Plants IX multiplies AX by " + format(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt())) + br
+                                        c += "Animaless? multiplies AX by " + format(player.pl.biomass.points.max(10).log10().pow(player.e.challenges[22])) + br
+        if (hasUpgrade("e", 31))        c += "Ecosystems XI multiplies AX by " + format(player.nu.points.max(10).log10().pow(player.e.upgrades.length)) + br
+        if (hasUpgrade("e", 34))        c += "Ecosystems XIV multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.pl.points.min(100).sub(15).max(0))) + br
+        if (hasUpgrade("e", 44))        c += "Ecosystems XIX multiplies AX by " + format(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0))) + br
+
+                                        c += "Sprout multiplies AX by " + format(tmp.pl.buyables[11].effect) + br
+                                        c += "Leaf multiplies AX by " + format(tmp.pl.buyables[12].effect) + br
+                                        c += "Stem multiplies AX by " + format(tmp.pl.buyables[13].effect) + br
+                                        c += "Flower multiplies AX by " + format(tmp.pl.buyables[21].effect) + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
