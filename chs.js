@@ -2902,7 +2902,7 @@ var cnItems = {
     "Species Milestone 10 counts every Token II and unlock two more Species challenges": "物种里程碑 10 计算每个代币 II 并解锁另外两个物种挑战",
     "Species Milestone 22 becomes every (10 - this row upgrades": "物种里程碑 22 变为每 (10 - 此行升级",
     "Token II buyables' cost exponent is 1.22": "代币 II 可购买物品的成本指数为 1.22",
-    "": "",
+    " Science multiplies B Point and color gain, quadruple Oxygen Science gain, and remove 21%'s base cost": " 科学倍增 B 点和颜色增益，四倍氧气科学增益，并移除 21% 的基础成本",
     "": "",
     "": "",
     "": "",
