@@ -28913,6 +28913,7 @@ addLayer("or", {
                         },
                         baseExp(){
                                 if (hasUpgrade("tokens", 242))  {
+                                        if (hasUpgrade("hu", 14))       return .78
                                         if (hasMilestone("hu", 6))      return .77
                                         if (hasMilestone("hu", 3)) {
                                                 if (hasUpgrade("pl", 45)) return .76
@@ -29361,6 +29362,7 @@ addLayer("or", {
                         if (hasMilestone("an", 10))     ret = ret.times(5)
                         if (hasUpgrade("nu", 13))       ret = ret.times(4)
                         if (player.sp.unlocked)         ret = ret.times(5)
+                        if (hasMilestone("hu", 5))      ret = ret.times(player.hu.times + 1)
                         return ret 
                 }, // tmp.or.buyables.getIntestineMaxBulk
                 401: {
@@ -38779,6 +38781,9 @@ addLayer("e", {
                                 if (c >= 101) {
                                         ret = ret.times(Decimal.pow(1.01, c)).times(1.97)
                                 }
+                                if (hasUpgrade("hu", 14) && c >= 119) {
+                                        ret = new Decimal(10500).plus((c - 119) * 40)
+                                }
                                 return ret.floor()
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[22].goal),
@@ -39866,6 +39871,7 @@ addLayer("pl", {
                         },
                         base(){
                                 let sub = hasMilestone("pl", 16) ? 100 * (36 - Math.min(player.pl.milestones.length, 36)) : 2100
+                                if (false) sub = 0
                                 let ret = player.nu.points.sub(sub).max(1)
                                 
                                 return ret
@@ -39885,6 +39891,7 @@ addLayer("pl", {
 
                                 let eformula = "(Nucleus-SUB)^x<br>" + format(tmp.pl.buyables[21].base) + "^x"
                                 let sub = hasMilestone("pl", 16) ? 100 * (36 - Math.min(player.pl.milestones.length, 36)) : 2100
+                                if (false) eformula = eformula.replace("-SUB", "")
                                 if (hasMilestone("pl", 16)) eformula = eformula.replace("SUB", formatWhole(sub))
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -40613,6 +40620,8 @@ addLayer("hu", {
         getGainExp(){
                 let ret = new Decimal(3)
 
+                if (hasUpgrade("hu", 13))       ret = ret.plus(player.hu.upgrades.length - 2)
+
                 return ret
         },
         getBaseGain(){
@@ -40647,8 +40656,12 @@ addLayer("hu", {
                 layers.hu.thoughts.update(diff)
 
                 if (hasMilestone("hu", 2)) data.everMile2 = true
+
+                if (hasMilestone("hu", 9)) {
+                        player.hu.points = player.hu.points.plus(tmp.hu.getResetGain.times(.1).times(diff))
+                }
         },
-        row: 2,
+        row: 3,
         prestigeButtonText(){
                 let b = ""
                 if (tmp.hu.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.hu.getNextAt) + " Biomass."
@@ -40681,6 +40694,7 @@ addLayer("hu", {
                         data.points = data.points.plus(gainThisTick)
                         data.best = data.best.max(data.points)
                         data.total = data.total.plus(gainThisTick)
+
                 },
         },
         buyables: {
@@ -40713,6 +40727,30 @@ addLayer("hu", {
                         unlocked(){
                                 return player.pl.best.gte(276) || hasUpgrade("hu", 12)
                         }, // hasUpgrade("hu", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans III"
+                        },
+                        description(){
+                                return "Add 1 to the Human gain exponent for this and subsequent upgrades"
+                        },
+                        cost:() => new Decimal(2e5),
+                        unlocked(){
+                                return player.pl.best.gte(285) || hasUpgrade("hu", 13)
+                        }, // hasUpgrade("hu", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans IV"
+                        },
+                        description(){
+                                return "Animaless? is easier and the make exponent is .78"
+                        },
+                        cost:() => new Decimal(1e7),
+                        unlocked(){
+                                return player.pl.best.gte(298) || hasUpgrade("hu", 14)
+                        }, // hasUpgrade("hu", 14)
                 },
         },
         milestones: {
@@ -40783,7 +40821,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Keep a Plant upgrade and milestone per reset."
+                                return "Reward: Keep a Plant upgrade and milestone per reset and you can bulk (Human resets + 1) more Energy buyables."
                         },
                 }, // hasMilestone("hu", 5)
                 6: {
@@ -40841,6 +40879,34 @@ addLayer("hu", {
                                 return "Reward: Totipotent cost exponent is 1.03 but remove Heart."
                         },
                 }, // hasMilestone("hu", 8)
+                9: {
+                        requirementDescription(){
+                                return "283 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(283)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Mastery II base is 4, gain 10% of your Humans on reset per second, and each second Plant after 283 reduces the Mastery III base by 1 (max 15)."
+                        },
+                }, // hasMilestone("hu", 9)
+                10: {
+                        requirementDescription(){
+                                return "321 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(321)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Mastery II base is 3 and if you have 330 Plants then it is 2."
+                        },
+                }, // hasMilestone("hu", 10)
         },
         tabFormat: {
                 "Upgrades": {
@@ -51214,6 +51280,8 @@ addLayer("tokens", {
                                 if (hasMilestone("pl", 24) && player.pl.points.gte(122)) {
                                                                 dBase = 5  
                                 }
+                                if (hasMilestone("hu", 9))      dBase = 4
+                                if (hasMilestone("hu", 10))     dBase = player.pl.points.gte(330) ? 2 : 3
                                 if (player.tokens.buyables[202].gte(50)) return Decimal.pow(dBase, player.tokens.buyables[202].pow(2))
                                 let add = 11
                                 return player.tokens.buyables[202].plus(add).pow10().pow(39)
@@ -51223,6 +51291,8 @@ addLayer("tokens", {
                                 let add = 11
                                 let x = player.sp.points.root(39).max(1).log10().sub(add).ceil().max(0)
                                 if (x.lte(49)) return x 
+                                if (hasMilestone("hu", 10))     return player.sp.points.max(1).log(player.pl.points.gte(330) ? 2 : 3).sqrt().ceil()
+                                if (hasMilestone("hu", 9))      return player.sp.points.max(1).log(4).sqrt().ceil()
                                 if (hasMilestone("pl", 24) && player.pl.points.gte(122)) return player.sp.points.max(1).log(5).sqrt().ceil()
                                 if (hasMilestone("pl", 11))     return player.sp.points.max(1).log(6).sqrt().ceil()
                                 if (hasUpgrade("pl", 13))       return player.sp.points.max(1).log(7).sqrt().ceil()
@@ -51247,6 +51317,8 @@ addLayer("tokens", {
                                 if (hasMilestone("pl", 24) && player.pl.points.gte(122)) {
                                                                         eformula = "5<sup>x<sup>2</sup></sup>"
                                 }
+                                if (hasMilestone("hu", 9))              eformula = "4<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("hu", 10))             eformula = (player.pl.points.gte(330) ? "2" : "3") + "<sup>x<sup>2</sup></sup>"
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
@@ -51267,6 +51339,10 @@ addLayer("tokens", {
                                         if (ret >= 100)         ret = Math.max(100, ret - player.pl.points.sub(90).max(0).toNumber())
                                 }
                                 if (hasMilestone("hu", 2))      ret -= Math.min(75, player.hu.times)
+                                if (hasMilestone("hu", 9)) {
+                                        let e = player.pl.points.sub(283).max(0).div(2).floor()
+                                                                ret -= e.min(15).toNumber()
+                                }
 
                                 return ret
                         },
