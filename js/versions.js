@@ -12,7 +12,7 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.pl.points.gte(560)
+	return player.pl.points.gte(525)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -25,7 +25,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
 	<br><h3 style='color: #CC0000'>v2.005</h3><br>
-		- Balanced until 560 Plants.<br>
+		- Balanced until 525 Plants.<br>
 		- Added two Human milestones.<br>
 		- Added two Human upgrades.<br>
 		- Buffed Plants XV and inposed a softcap on Plants XVIII.<br>

@@ -1017,13 +1017,16 @@ function biomassFormulaDisplay(){
         if (hasUpgrade("e", 31))        c += "Ecosystems XI multiplies AX by " + format(player.nu.points.max(10).log10().pow(player.e.upgrades.length)) + br
         if (hasUpgrade("e", 34))        c += "Ecosystems XIV multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.pl.points.min(100).sub(15).max(0))) + br
         if (hasUpgrade("e", 44))        c += "Ecosystems XIX multiplies AX by " + format(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0))) + br
-        if (hasUpgrade("hu", 11))       c += "Humans I multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length).pow(hasUpgrade("hu", 12) ? player.hu.milestones.length : 1))
+        if (hasUpgrade("hu", 11))       c += "Humans I multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length).pow(hasUpgrade("hu", 12) ? player.hu.milestones.length : 1)) + br
 
-
-                                        c += "Sprout multiplies AX by " + format(tmp.pl.buyables[11].effect) + br
-                                        c += "Leaf multiplies AX by " + format(tmp.pl.buyables[12].effect) + br
-                                        c += "Stem multiplies AX by " + format(tmp.pl.buyables[13].effect) + br
-                                        c += "Flower multiplies AX by " + format(tmp.pl.buyables[21].effect) + br
+        let f = function(x){
+                if (x.lt("1e10000")) return x 
+                return x.log10().sqrt().sub(50).pow10().pow(200)
+        }
+                                        c += "Sprout multiplies AX by " + format(f(tmp.pl.buyables[11].effect)) + br
+                                        c += "Leaf multiplies AX by " + format(f(tmp.pl.buyables[12].effect)) + br
+                                        c += "Stem multiplies AX by " + format(f(tmp.pl.buyables[13].effect)) + br
+                                        c += "Flower multiplies AX by " + format(f(tmp.pl.buyables[21].effect)) + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
