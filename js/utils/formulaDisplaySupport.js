@@ -248,7 +248,9 @@ function dnaExpDisplay(){
         if (hasUpgrade("or", 145) && !hasMilestone("hu", 4)) { 
                                         c += "Heart XXV multiplies BX by " + format(2) + br
         }
-        if (hasUpgrade("or", 213))      c += "Kidney III multiplies BX by " + format(2) + br
+        if (hasUpgrade("or", 213) && !hasUpgrade("hu", 22)) {
+                                        c += "Kidney VIII multiplies BX by " + format(2) + br
+        }
         if (hasUpgrade("an", 41))       c += "Animals XVI multiplies BX by " + format(player.ch.points.max(6).log(6)) + br
         if (hasMilestone("ch", 23))     c += "Chromosome Milestone 23 multiplies BX by " + format(player.nu.points.max(2).log(2)) + br
         if (hasMilestone("ch", 25))     c += "Chromosome Milestone 25 multiplies BX by " + format(player.nu.points.max(1).sqrt()) + br
