@@ -29546,6 +29546,7 @@ addLayer("or", {
                                         b = decimalOne
                                         c = new Decimal(1.04)
                                 }
+                                if (hasMilestone("hu", 14)) c = new Decimal(1.02)
                                 return [a,b,c]
                         },
                         cost(){
@@ -29649,7 +29650,8 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2e6*1000<sup>x</sup>*1.1<sup>x<sup>2</sup></sup>" 
-                                if (hasMilestone("sp", 10)) cost2 = "1.04<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("sp", 10))     cost2 = "1.04<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("hu", 14))     cost2 = "1.02<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
@@ -29670,6 +29672,7 @@ addLayer("or", {
                                 }
                                 if (hasMilestone("an", 43)) c = new Decimal(3)
                                 if (hasUpgrade("tokens", 114)) c = new Decimal(1.09)
+                                if (hasMilestone("hu", 14)) c = new Decimal(1.03)
                                 return [a,b,c]
                         },
                         cost(){
@@ -29750,9 +29753,10 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e195*1e10<sup>x</sup>*9<sup>x<sup>2</sup></sup>" 
-                                if (hasMilestone("ch", 26)) cost2 = "5<sup>x<sup>2</sup></sup>"
-                                if (hasMilestone("an", 43)) cost2 = cost2.replace("5", "3")
-                                if (hasUpgrade("tokens", 114)) cost2 = cost2.replace("3", "1.09")
+                                if (hasMilestone("ch", 26))     cost2 = "5<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("an", 43))     cost2 = cost2.replace("5", "3")
+                                if (hasUpgrade("tokens", 114))  cost2 = cost2.replace("3", "1.09")
+                                if (hasMilestone("hu", 14))     cost2 = "1.03<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
                                 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
@@ -29772,6 +29776,7 @@ addLayer("or", {
                                         c = new Decimal(1.5)
                                 }
                                 if (hasUpgrade("tokens", 122)) c = new Decimal(1.16)
+                                if (hasMilestone("hu", 14)) c = new Decimal(1.04)
                                 return [a,b,c]
                         },
                         cost(){
@@ -29875,8 +29880,9 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e28*1e5<sup>x</sup>*2<sup>x<sup>2</sup></sup>" 
-                                if (hasMilestone("an", 39)) cost2 = "1.5<sup>x<sup>2</sup></sup>"
-                                if (hasUpgrade("tokens", 122)) cost2 = cost2.replace("1.5", "1.16")
+                                if (hasMilestone("an", 39))     cost2 = "1.5<sup>x<sup>2</sup></sup>"
+                                if (hasUpgrade("tokens", 122))  cost2 = cost2.replace("1.5", "1.16")
+                                if (hasMilestone("hu", 14))     cost2 = "1.04<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
@@ -29896,6 +29902,7 @@ addLayer("or", {
                                         c = new Decimal(1.71)
                                 }
                                 if (hasMilestone("an", 42)) c = new Decimal(1.25)
+                                if (hasMilestone("hu", 14)) c = new Decimal(1.05)
                                 return [a,b,c]
                         },
                         cost(){
@@ -30000,8 +30007,9 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e58*1e8<sup>x</sup>*4<sup>x<sup>2</sup></sup>" 
-                                if (hasMilestone("ch", 33)) cost2 = "1.71<sup>x<sup>2</sup></sup>"
-                                if (hasMilestone("an", 42)) cost2 = cost2.replace("1.71", "1.25")
+                                if (hasMilestone("ch", 33))     cost2 = "1.71<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("an", 42))     cost2 = cost2.replace("1.71", "1.25")
+                                if (hasMilestone("hu", 14))     cost2 = "1.05<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
@@ -30021,6 +30029,7 @@ addLayer("or", {
                                         c = new Decimal(1.75)
                                 }
                                 if (hasMilestone("sp", 27)) c = new Decimal(1.36)
+                                if (hasMilestone("hu", 14)) c = new Decimal(1.06)
                                 return [a,b,c]
                         },
                         cost(){
@@ -30127,8 +30136,9 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e300*1e17<sup>x</sup>*3<sup>x<sup>2</sup></sup>" 
-                                if (hasMilestone("an", 43)) cost2 = "1.75<sup>x<sup>2</sup></sup>"
-                                if (hasMilestone("sp", 27)) cost2 = cost2.replace("1.75", "1.36")
+                                if (hasMilestone("an", 43))     cost2 = "1.75<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("sp", 27))     cost2 = cost2.replace("1.75", "1.36")
+                                if (hasMilestone("hu", 14))     cost2 = "1.06<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
@@ -30148,6 +30158,7 @@ addLayer("or", {
                                         c = new Decimal(2)
                                 }
                                 if (hasUpgrade("tokens", 135)) c = new Decimal(1.49)
+                                if (hasMilestone("hu", 14)) c = new Decimal(1.07)
                                 return [a,b,c]
                         },
                         cost(){
@@ -30252,8 +30263,9 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e672*1e19<sup>x</sup>*20<sup>x<sup>2</sup></sup>" 
-                                if (hasMilestone("ch", 29)) cost2 = "2<sup>x<sup>2</sup></sup>"
-                                if (hasUpgrade("tokens", 135)) cost2 = cost2.replace("2", "1.49")
+                                if (hasMilestone("ch", 29))     cost2 = "2<sup>x<sup>2</sup></sup>"
+                                if (hasUpgrade("tokens", 135))  cost2 = cost2.replace("2", "1.49")
+                                if (hasMilestone("hu", 14))     cost2 = "1.07<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
@@ -30275,6 +30287,7 @@ addLayer("or", {
                                 if (hasMilestone("ch", 31)) c = new Decimal(3.5)
                                 if (hasMilestone("sp", 23)) c = new Decimal(2.25)
                                 if (hasUpgrade("tokens", 141))  c = new Decimal(1.64)
+                                if (hasMilestone("hu", 14)) c = new Decimal(1.08)
                                 return [a,b,c]
                         },
                         cost(){
@@ -30355,10 +30368,11 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e925*1e52<sup>x</sup>*50<sup>x<sup>2</sup></sup>" 
-                                if (hasMilestone("ch", 30)) cost2 = "5.6<sup>x<sup>2</sup></sup>"
-                                if (hasMilestone("ch", 31)) cost2 = cost2.replace("5.6", "3.5")
-                                if (hasMilestone("sp", 23)) cost2 = cost2.replace("3.5", "2.25")
-                                if (hasUpgrade("tokens", 141)) cost2 = cost2.replace("2.25", "1.64")
+                                if (hasMilestone("ch", 30))     cost2 = "5.6<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("ch", 31))     cost2 = cost2.replace("5.6", "3.5")
+                                if (hasMilestone("sp", 23))     cost2 = cost2.replace("3.5", "2.25")
+                                if (hasUpgrade("tokens", 141))  cost2 = cost2.replace("2.25", "1.64")
+                                if (hasMilestone("hu", 14))     cost2 = "1.08<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
@@ -30379,6 +30393,7 @@ addLayer("or", {
                                 }
                                 if (hasUpgrade("nu", 24)) c = new Decimal(2.5)
                                 if (hasUpgrade("tokens", 274))  c = new Decimal(1.81)
+                                if (hasMilestone("hu", 14)) c = new Decimal(1.09)
                                 return [a,b,c]
                         },
                         cost(){
@@ -30492,6 +30507,7 @@ addLayer("or", {
                                 if (hasMilestone("ch", 27))     cost2 = "8<sup>x<sup>2</sup></sup>" 
                                 if (hasUpgrade("nu", 24))       cost2 = cost2.replace("8", "2.5")
                                 if (hasUpgrade("tokens", 274))  cost2 = cost2.replace("2.5", "1.81")
+                                if (hasMilestone("hu", 14))     cost2 = "1.09<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
@@ -40674,6 +40690,7 @@ addLayer("hu", {
                 abtime: 0,
                 time: 0,
                 times: 0,
+                passiveTime: 0, 
                 thoughts: {
                         points: decimalZero,
                         best: decimalZero,
@@ -40744,6 +40761,12 @@ addLayer("hu", {
 
                 if (hasMilestone("hu", 9)) {
                         player.hu.points = player.hu.points.plus(tmp.hu.getResetGain.times(.1).times(diff))
+                }
+
+                if (hasMilestone("hu", 11)) data.passiveTime += diff 
+                if (data.passiveTime > 1) {
+                        data.passiveTime = Math.min(10, data.passiveTime - 1)
+                        data.times += 1
                 }
         },
         row: 3,
@@ -40989,7 +41012,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Remove Flower base cost and Multipotent cost exponent is 1.03 ."
+                                return "Reward: Remove Flower base cost, Multipotent cost exponent is 1.03, and bulk 10x Token II buyables."
                         },
                 }, // hasMilestone("hu", 7)
                 8: {
@@ -41056,7 +41079,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: make exponent is .79 and Oligopotent exponent is 1.03 ."
+                                return "Reward: make exponent is .79, Oligopotent exponent is 1.03, and gain a human reset per second."
                         },
                 }, // hasMilestone("hu", 11)
                 12: {
@@ -41128,6 +41151,20 @@ addLayer("hu", {
                                 return "Reward: Pluripotent base is 3<sup>Mastery Tokens</sup>, Sprout base is log10(log(Stem Cells)), gain 4x Humans, and Top Quark's coefficient is .5 but remove Cell, DNA, and Tissues, and remove Token II via Cell."
                         },
                 }, // hasMilestone("hu", 13)
+                14: {
+                        requirementDescription(){
+                                return "675 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(675)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Energy buyable's cost bases are 1.01/1.02/1.03 etc and if you have 725 Plants Strange Quark's is coefficient*(C<sup>.95</sup>)."
+                        },
+                }, // hasMilestone("hu", 14)
         },
         tabFormat: {
                 "Upgrades": {
@@ -50653,6 +50690,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("tokens", 101))  ma *= 4
                                 if (hasMilestone("e", 2))       ma *= 5
                                 if (hasUpgrade("pl", 34))       ma *= 10
+                                if (hasMilestone("hu", 7))      ma *= 10
 
                                 maxNewLevels = Math.min(ma, maxNewLevels)
 
@@ -50950,8 +50988,11 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow11Total
                                 let c = tmp.tokens.buyables.getCol2Total
 
-                                if (hasMilestone("ch", 34)) return c.pow(.9).times(tmp.tokens.buyables[112].coefficient)
-                                if (hasMilestone("or", 10)) return c.pow(.8).times(tmp.tokens.buyables[112].coefficient)
+                                if (hasMilestone("hu", 14) && player.pl.points.gte(725)) {
+                                                                return c.pow(.95).times(tmp.tokens.buyables[112].coefficient)
+                                }
+                                if (hasMilestone("ch", 34))     return c.pow(.9).times(tmp.tokens.buyables[112].coefficient)
+                                if (hasMilestone("or", 10))     return c.pow(.8).times(tmp.tokens.buyables[112].coefficient)
 
                                 return c.pow(.8).sub(r.sqrt()).max(0).times(tmp.tokens.buyables[112].coefficient)
                         },
@@ -50990,9 +51031,10 @@ addLayer("tokens", {
 
                                 let eformula = format(tmp.tokens.buyables[112].coefficient)
                                 eformula += "(C<sup>.8</sup>-R<sup>.5</sup>)*x<br>" 
-                                if (hasMilestone("or", 10)) eformula = eformula.replace("-R<sup>.5</sup>", "")
-                                eformula += format(tmp.tokens.buyables[112].base, 4) + "*x" 
-                                if (hasMilestone("ch", 34)) eformula = eformula.replace(".8", ".9")
+                                if (hasMilestone("or", 10))     eformula = eformula.replace("-R<sup>.5</sup>", "")
+                                                                eformula += format(tmp.tokens.buyables[112].base, 4) + "*x" 
+                                if (hasMilestone("ch", 34))     eformula = eformula.replace(".8", ".9")
+                                if (hasMilestone("hu", 14) && player.pl.points.gte(725))     eformula = eformula.replace(".9", ".95")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
