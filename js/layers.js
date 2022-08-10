@@ -22872,7 +22872,7 @@ addLayer("cells", {
                                         eformula = eformula.replace("log2", "log10")
                                         eformula = eformula.replace("Tissues XXIX", "Tissues")
                                 }
-                                if (hasMilestone("hu", 13)) eformula = eformula.replace("log10(Tissues)", "3^Mastery Tokens")
+                                if (hasMilestone("hu", 13)) eformula = eformula.replace("log10(Tissues)", "3<sup>Mastery Tokens</sup>")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -22914,6 +22914,9 @@ addLayer("cells", {
                                 if (hasMilestone("e", 2))       ret = ret.div(2)
                                 if (hasMilestone("e", 9))       ret = ret.div(2.5)
                                 if (hasUpgrade("e", 24))        ret = ret.div(4)
+
+                                if (hasMilestone("hu", 17))     ret = new Decimal(1e8)
+                                if (hasUpgrade("hu", 32))       ret = ret.sub(player.ch.points).max(1e5)
                                 
                                 return ret
                         },
@@ -22947,6 +22950,7 @@ addLayer("cells", {
                         },
                         base(){
                                 if (player.cells.challenges[21] >= 3 && inChallenge("cells", 21)) return decimalOne
+                                if (hasMilestone("hu", 17))     return player.or.points.max(10).log10().pow(player.pl.points.sqrt())
                                 if (hasMilestone("hu", 16))     return player.an.points.max(10).log10().pow(player.pl.points.sqrt())
                                 if (hasUpgrade("hu", 21))       return player.tokens.tokens2.total.max(1).pow(player.pl.points.sqrt())
                                 if (hasUpgrade("e", 31))        return player.tokens.tokens2.total.max(1).pow(player.nu.points.max(10).log10())
@@ -22969,6 +22973,7 @@ addLayer("cells", {
                                 if (hasUpgrade("e", 31))        eformula = eformula.replace("^", "<sup>log10(Nucleus)</sup>^")
                                 if (hasUpgrade("hu", 21))       eformula = eformula.replace("log10(Nucleus)", "sqrt(Plants)")
                                 if (hasMilestone("hu", 16))     eformula = eformula.replace("Tokens II", "log10(Animals)")
+                                if (hasMilestone("hu", 17))     eformula = eformula.replace("Animals", "Organs")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -39931,16 +39936,23 @@ addLayer("pl", {
                                 if (hasMilestone("hu", 7)) ret = decimalOne
                                 return ret
                         },
+                        costBase(){
+                                let ret = new Decimal(1e4)
+
+                                if (hasUpgrade("hu", 32)) ret = ret.sub(player.pl.points).plus(5000).max(100)
+
+                                return ret 
+                        },
                         cost(){
                                 let init = tmp.pl.buyables[21].getInit
-                                let base = new Decimal(1e4)
+                                let base = tmp.pl.buyables[21].costBase
                                 let exp = new Decimal(1.5)
 
                                 return base.pow(player.pl.buyables[21].pow(exp)).times(init)
                         },
                         getMaxAfford(){
                                 let init = tmp.pl.buyables[21].getInit
-                                let base = new Decimal(1e4)
+                                let base = tmp.pl.buyables[21].costBase
                                 let exp = new Decimal(1.5)
 
                                 let pts = player.pl.biomass.points.div(init)
@@ -39994,8 +40006,9 @@ addLayer("pl", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "INIT*10,000^(x<sup>1.5</sup>)" 
+                                let cost2 = "INIT*BASE^(x<sup>1.5</sup>)" 
                                 cost2 = cost2.replace("INIT", format(tmp.pl.buyables[21].getInit, 0))
+                                cost2 = cost2.replace("BASE", formatWhole(tmp.pl.buyables[21].costBase))
                                 if (hasMilestone("hu", 7)) cost2 = cost2.slice(2, )
                                 let cost3 = "</b><br>"
 
@@ -40965,6 +40978,18 @@ addLayer("hu", {
                                 return hasUpgrade("hu", 25)
                         }, // hasUpgrade("hu", 31)
                 },
+                32: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XII"
+                        },
+                        description(){
+                                return "Chromosomes subtract from Multipotent's base (max 99,900,000) and Flower's base is 15,000 - Plants"
+                        },
+                        cost:() => new Decimal(1e44),
+                        unlocked(){
+                                return hasUpgrade("hu", 32) || player.pl.best.gte(1555)
+                        }, // hasUpgrade("hu", 32)
+                },
         },
         milestones: {
                 1: {
@@ -41245,6 +41270,23 @@ addLayer("hu", {
                                 return "Reward: The Token II is Multipotent's base is log10(Animals) and milestones<sup>milestones-14</sup> multiplies Human gain."
                         },
                 }, // hasMilestone("hu", 16)
+                17: {
+                        requirementDescription(){
+                                return "1409 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(1409)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                player.cells.buyables[21] = decimalZero
+                        },
+                        effectDescription(){
+                                return "Reward: The log10(Animals) is Multipotent's base is log10(Organs) and each 6th Plant after 1460 subtracts .001 from the Mastery III base (max 15 times) but it's cost base is 1e8 and reset it's levels."
+                        },
+                }, // hasMilestone("hu", 17)
         },
         tabFormat: {
                 "Upgrades": {
@@ -51724,6 +51766,9 @@ addLayer("tokens", {
                                                 ret -= player.pl.points.sub(1074).div(6).floor().max(0).min(5).times(.001)
                                                 ret -= player.pl.points.sub(1103).div(5).floor().max(0).min(5).times(.001)
                                                 ret -= player.pl.points.sub(1129).div(4).floor().max(0).min(15).times(.001)
+                                        }
+                                        if (hasMilestone("hu", 17)) {
+                                                ret -= player.pl.points.sub(1460).div(6).floor().max(0).min(15).times(.001)
                                         }
                                 }
                                 
