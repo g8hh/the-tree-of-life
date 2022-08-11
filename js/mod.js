@@ -70,6 +70,7 @@ function addedPlayerData() { return {
 	paused: false,
 	shiftAlias: false,
 	controlAlias: false,
+	CUSTOM_SAVES_PAGE: 0,
 }}
 
 function getLastSaveDisplay(a){

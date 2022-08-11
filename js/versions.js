@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.010",
+	num: "2.011",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,18 +12,25 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.pl.points.gte(1900)
+	return player.pl.points.gte(2970)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v2.010)<br><br>
+		Reaching the endgame screen (updated at least as of v2.011)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v2.011</h3><br>
+		- Added a new UI for custom saves.<br>
+		- Balanced until 2970 Plants.<br>
+		- Added two Human milestones.<br>
+		- Added two Human upgrades.<br>
+		- Buffed Humans XIII.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v2.010</h3><br>
 		- Balanced until 1900 Plants.<br>
 		- Added a Human milestone.<br>
