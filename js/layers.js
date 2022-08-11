@@ -39642,11 +39642,13 @@ addLayer("pl", {
                                 let upgs = player.pl.upgrades.length + (hasUpgrade("e", 31) ? player.e.upgrades.filter(x => x > 30 & x < 40).length : 0)
                                 ret = ret.times(b1.pow(upgs))
                         }
-                        if (hasUpgrade("e", 31))        ret = ret.times(player.nu.points.max(10).log10().pow(player.e.upgrades.length))
+                        if (!hasMilestone("hu", 18)) {
+                                if (hasUpgrade("e", 31))        ret = ret.times(player.nu.points.max(10).log10().pow(player.e.upgrades.length))
+                                if (hasUpgrade("e", 34))        ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.pl.points.min(100).sub(15).max(0)))
+                                if (hasUpgrade("e", 44))        ret = ret.times(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0)))
+                        }
                                                         ret = ret.times(player.pl.biomass.points.max(10).log10().pow(player.e.challenges[22]))
-                        if (hasUpgrade("e", 34))        ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.pl.points.min(100).sub(15).max(0)))
                         if (hasUpgrade("pl", 24))       ret = ret.times(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt()))
-                        if (hasUpgrade("e", 44))        ret = ret.times(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0)))
 
                                                         ret = ret.times(tmp.hu.effect.min(1e100))
                         if (hasUpgrade("hu", 11))       ret = ret.times(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length).pow(hasUpgrade("hu", 12) ? player.hu.milestones.length : 1))
@@ -39684,6 +39686,12 @@ addLayer("pl", {
         buyables: {
                 rows: 3,
                 cols: 3,
+                maxBulk(){
+                        let ret = 1
+                        if (hasUpgrade("hu", 21))       ret *= 5
+                        if (hasUpgrade("hu", 33))       ret *= 4
+                        return ret
+                },
                 11: {
                         title: "Sprout",
                         getInit(){
@@ -39724,10 +39732,9 @@ addLayer("pl", {
                                 let data = player.pl
                                 let id = 11
                                 let ma = tmp.pl.buyables[id].getMaxAfford
-                                let maxBulk = hasUpgrade("hu", 21) ? 5 : 1
                                 let up 
                                 if (false) up = ma.sub(data.buyables[id]).max(0)
-                                else up = hasUpgrade("hu", 21) ? ma.sub(data.buyables[id]).min(maxBulk) : 1
+                                else up = hasUpgrade("hu", 21) ? ma.sub(data.buyables[id]).min(tmp.pl.buyables.maxBulk) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!false) {
                                         data.biomass.points = data.biomass.points.sub(tmp.pl.buyables[id].cost)
@@ -39803,10 +39810,9 @@ addLayer("pl", {
                                 let data = player.pl
                                 let id = 12
                                 let ma = tmp.pl.buyables[id].getMaxAfford
-                                let maxBulk = hasUpgrade("hu", 21) ? 5 : 1
                                 let up 
                                 if (false) up = ma.sub(data.buyables[id]).max(0)
-                                else up = hasUpgrade("hu", 21) ? ma.sub(data.buyables[id]).min(maxBulk) : 1
+                                else up = hasUpgrade("hu", 21) ? ma.sub(data.buyables[id]).min(tmp.pl.buyables.maxBulk) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!false) {
                                         data.biomass.points = data.biomass.points.sub(tmp.pl.buyables[id].cost)
@@ -39887,10 +39893,9 @@ addLayer("pl", {
                                 let data = player.pl
                                 let id = 13
                                 let ma = tmp.pl.buyables[id].getMaxAfford
-                                let maxBulk = hasUpgrade("hu", 21) ? 5 : 1
                                 let up 
                                 if (false) up = ma.sub(data.buyables[id]).max(0)
-                                else up = hasUpgrade("hu", 21) ? ma.sub(data.buyables[id]).min(maxBulk) : 1
+                                else up = hasUpgrade("hu", 21) ? ma.sub(data.buyables[id]).min(tmp.pl.buyables.maxBulk) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!false) {
                                         data.biomass.points = data.biomass.points.sub(tmp.pl.buyables[id].cost)
@@ -39969,10 +39974,9 @@ addLayer("pl", {
                                 let data = player.pl
                                 let id = 21
                                 let ma = tmp.pl.buyables[id].getMaxAfford
-                                let maxBulk = hasUpgrade("hu", 21) ? 5 : 1
                                 let up 
                                 if (false) up = ma.sub(data.buyables[id]).max(0)
-                                else up = hasUpgrade("hu", 21) ? ma.sub(data.buyables[id]).min(maxBulk) : 1
+                                else up = hasUpgrade("hu", 21) ? ma.sub(data.buyables[id]).min(tmp.pl.buyables.maxBulk) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!false) {
                                         data.biomass.points = data.biomass.points.sub(tmp.pl.buyables[id].cost)
@@ -40870,7 +40874,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans III"
                         },
                         description(){
-                                return "Add 1 to the Human gain exponent per upgrade - 2"
+                                return "Add 1 to the Human gain exponent per upgrade - 2 and bulk 10x Token II buyables"
                         },
                         cost:() => new Decimal(1e5),
                         unlocked(){
@@ -40882,7 +40886,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans IV"
                         },
                         description(){
-                                return "Animaless? is easier and the make exponent is .78"
+                                return "Animaless? is easier, bulk 10x Up Quarks, and the make exponent is .78"
                         },
                         cost:() => new Decimal(1e7),
                         unlocked(){
@@ -40989,6 +40993,18 @@ addLayer("hu", {
                         unlocked(){
                                 return hasUpgrade("hu", 32) || player.pl.best.gte(1555)
                         }, // hasUpgrade("hu", 32)
+                },
+                33: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XIII"
+                        },
+                        description(){
+                                return "Token II buyables' exponent is 1.13 and bulk 4x Plant buyables"
+                        },
+                        cost:() => new Decimal(1e50),
+                        unlocked(){
+                                return hasUpgrade("hu", 32)
+                        }, // hasUpgrade("hu", 33)
                 },
         },
         milestones: {
@@ -41287,6 +41303,20 @@ addLayer("hu", {
                                 return "Reward: The log10(Animals) is Multipotent's base is log10(Organs) and each 6th Plant after 1460 subtracts .001 from the Mastery III base (max 15 times) but it's cost base is 1e8 and reset it's levels."
                         },
                 }, // hasMilestone("hu", 17)
+                18: {
+                        requirementDescription(){
+                                return "1618 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(1618)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Disable Ecosystems XI, XIV, XIX boosts to Biomass gain, upon 1660/1675/1685 Plants and Mastery IV exponent is 1.2/1.19/1.18, and each Plant past 1600 subtracts .08 from the Mastery I coefficient (max 150 times)."
+                        },
+                }, // hasMilestone("hu", 18)
         },
         tabFormat: {
                 "Upgrades": {
@@ -50824,6 +50854,7 @@ addLayer("tokens", {
                                 if (hasMilestone("e", 2))       ma *= 5
                                 if (hasUpgrade("pl", 34))       ma *= 10
                                 if (hasMilestone("hu", 7))      ma *= 10
+                                if (hasUpgrade("hu", 14))       ma *= 10
 
                                 maxNewLevels = Math.min(ma, maxNewLevels)
 
@@ -51381,6 +51412,7 @@ addLayer("tokens", {
                         if (hasMilestone("e", 7))       ret *= 4
                         if (hasUpgrade("pl", 22))       ret *= 5
                         if (hasUpgrade("pl", 33))       ret *= 5
+                        if (hasUpgrade("hu", 13))       ret *= 10
                         return ret
                 },
                 191: {
@@ -51638,6 +51670,7 @@ addLayer("tokens", {
                                                                 mult -= 18 * player.e.challenges[21]
                                 if (hasMilestone("pl", 3))      mult -= player.pl.points.min(hasMilestone("pl", 15) ? 75 : 50).max(0).toNumber()
                                 if (hasMilestone("e", 19))      mult -= player.pl.points.min(100).sub(95).max(0).toNumber()
+                                if (hasMilestone("hu", 18))     mult -= player.pl.points.sub(1600).max(0).min(150).times(.08).toNumber()
                                 
                                 return [add, mult]
                         },
@@ -51665,7 +51698,8 @@ addLayer("tokens", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[201]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 201)) + " Tokens II</b><br>"
                                 let eformula = "MULT*(ADD+x)<sup>2</sup>"
-                                eformula = eformula.replace("MULT", formatWhole(tmp.tokens.buyables[201].getBases[1]))
+                                let f = hasMilestone("hu", 18) ? format : formatWhole
+                                eformula = eformula.replace("MULT", f(tmp.tokens.buyables[201].getBases[1], 2))
                                 eformula = eformula.replace("ADD", formatWhole(tmp.tokens.buyables[201].getBases[0]))
 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
@@ -51814,8 +51848,13 @@ addLayer("tokens", {
                                 return base
                         },
                         expBase(){
+                                if (hasMilestone("hu", 18)) {
+                                        if (player.pl.points.gte(1685))     return 1.18
+                                        if (player.pl.points.gte(1675))     return 1.19
+                                        if (player.pl.points.gte(1660))     return 1.2
+                                }
                                 if (hasUpgrade("hu", 24)) {
-                                        if (player.pl.points.gte(949)) return 1.22
+                                        if (player.pl.points.gte(949))  return 1.22
                                         return 2 - .1 * player.pl.points.sub(886).div(6).max(0).min(7).floor().toNumber()
                                 }
                                 return 2
