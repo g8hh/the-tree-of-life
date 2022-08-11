@@ -235,11 +235,15 @@ function exportSave() {
 	doPopup("export", "", "Save Exported!", 1, "#25B9E3");
 }
 
-function importSave(imported = undefined, forced = false) {
+function importSave(imported = undefined, forced = false, fromCustomSaves = false) {
 	if (imported === undefined) imported = prompt("Paste your save here")
 	try {
 		let confirmString = "This save appears to be for a different mod! Are you sure you want to import?"
-		if (CUSTOM_SAVES_IDS.includes(imported)) imported = CUSTOM_SAVES[imported]
+		if (CUSTOM_SAVES_IDS.includes(imported)) {
+			let cString = "Are you sure you want to import the '" + imported + "' save?" 
+			if (fromCustomSaves) if (!confirm(cString)) return 
+			imported = CUSTOM_SAVES[imported]
+		}
 		let x = atob(imported)
 		console.log(x)
 		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
