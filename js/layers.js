@@ -36134,7 +36134,7 @@ addLayer("nu", {
                                 data2.upgrades = data2.upgrades.slice(0, anKeptUpgrades)
                         }
 
-                        if (!hasMilestone("nu", 5) && !hasMilestone("sp", 2) && !hasMilestone("e", 1)) {
+                        if (!hasMilestone("nu", 5) && !hasMilestone("sp", 2) && !player.e.unlocked) {
                                 data2.achievements = []
                         }
 
@@ -38147,7 +38147,7 @@ addLayer("sp", {
                                 data2.upgrades = data2.upgrades.slice(0, anKeptUpgrades)
                         }
 
-                        if (!hasMilestone("nu", 5) && !hasMilestone("e", 1)) {
+                        if (!hasMilestone("nu", 5) && !player.e.unlocked) {
                                 data2.achievements = []
                         }
 
@@ -41987,6 +41987,20 @@ addLayer("hu", {
                                 return "Reward: At 18,350 Plants Hope is a waking dream base is sqrt(Plants) and at 18610/18900/19920/20030 Plants I think therefore I am base is reduced by 1."
                         },
                 }, // hasMilestone("hu", 29)
+                30: {
+                        requirementDescription(){
+                                return "20,270 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(20270)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Each 15th Plant after 20800 subtracts .0001 from the Chromosome exponent (max 100 times), bulk 5x Plant buyables, Leaf cost base is 1e11-Chromosomes (max 1e8), and at 21000, 21290, 21580, and 21960 subtract 1 from the I think therefore I am base."
+                        },
+                }, // hasMilestone("hu", 30)
                 31: {
                         requirementDescription(){
                                 return "23,880 Plants"
