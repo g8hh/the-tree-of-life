@@ -34206,7 +34206,7 @@ addLayer("ch", {
         baseAmount(){return player.an.genes.points},
         type: "static",
         canBuyMax(){
-                return hasUpgrade("ch", 32) || hasMilestone("nu", 2) || hasMilestone("e", 2)
+                return hasUpgrade("ch", 32) || hasMilestone("nu", 2) || hasMilestone("e", 2) || player.hu.unlocked
         },
         base(){
                 let ret = new Decimal(1e10)
@@ -39618,7 +39618,7 @@ addLayer("pl", {
                         let d = hasUpgrade("pl", 25)
                         b = tmp.pl.baseAmount.gte(tmp.pl.getNextAt) && (d !== undefined) && d ? "Next: " : "Req: "
                 }
-                let c = formatWhole(tmp.pl.baseAmount) + "/" + format(tmp.pl.getNextAt) + " " + tmp.pl.baseResource
+                let c = formatWhole(tmp.pl.baseAmount) + " / " + format(tmp.pl.getNextAt) + " " + tmp.pl.baseResource
 
                 return a + br2 + b + c
         },
@@ -41535,7 +41535,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: You autocomplete Species and Ecosystem challenges, Plants resets nothing, and Contaminant gain is automaxed (<sup>*</sup>)."
+                                return "Reward: You autocomplete Species and Ecosystem challenges, Plants resets nothing, keep an Ecosystem milestone per reset, and Contaminant gain is automaxed (<sup>*</sup>)."
                         },
                 }, // hasMilestone("hu", 1)
                 2: {
@@ -41549,7 +41549,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Permanently reduce Nucleus upgrade costs, autobuy Plant buyables, and keep an Ecosystem milestone and subtract 1 from the Mastery III base (max 75) per reset."
+                                return "Reward: Permanently reduce Nucleus upgrade costs, autobuy Plant buyables, and subtract 1 from the Mastery III base (max 75) per reset."
                         },
                 }, // hasMilestone("hu", 2)
                 3: {
@@ -42056,7 +42056,7 @@ addLayer("hu", {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
-                                        let a = "Humans reset all prior layers."
+                                        let a = "Humans reset all prior layers. For unlocking humans, always bulk buy Chromosomes."
                                         let b = "Effect formula: 10<sup>sqrt(Thoughts)</sup>"
                                         let c = "Initial Human gain: (log10(Biomass/1e44,000)/2,000)<sup>3</sup>"
                                         c += br + "Current Human gain: (log10(Biomass/1e44,000)/DIV)<sup>EXP</sup>"
@@ -42139,7 +42139,7 @@ addLayer("hu", {
 
                         if (!false) { // milestones
                                 let eKeptMilestones = 0
-                                if (hasMilestone("hu", 2)) eKeptMilestones += player.hu.times
+                                if (hasMilestone("hu", 1)) eKeptMilestones += player.hu.times
                                 data.milestones = data.milestones.slice(0, eKeptMilestones)
                         }
 
@@ -52276,7 +52276,7 @@ addLayer("tokens", {
                                 let eformula = "10^10^((ADD+x/DIV)<sup>EXP</sup>)"
                                 let costData = tmp.tokens.buyables[192].costData 
                                 eformula = eformula.replace("ADD+", costData[0] == 0 ? "" : formatWhole(costData[0]) + "+")
-                                eformula = eformula.replace("DIV", formatWhole(costData[1]))
+                                eformula = eformula.replace("DIV", format(costData[1]))
                                 eformula = eformula.replace("EXP", format(costData[2], 1))
                                 eformula = eformula.replace("x/1)", "x)")
                                 
