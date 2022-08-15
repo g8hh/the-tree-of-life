@@ -22924,10 +22924,13 @@ addLayer("cells", {
                                 if (hasMilestone("hu", 17))     ret = new Decimal(1e8)
                                 if (hasUpgrade("hu", 32))       ret = ret.sub(player.ch.points).max(1e5)
                                 if (hasMilestone("hu", 20))     ret = ret.sub(player.nu.points).max(100)
+
+                                if (hasMilestone("hu", 32))     ret = new Decimal(1e80).div(Decimal.pow(1.002, player.pl.points))
                                 
                                 return ret
                         },
                         costExp(){
+                                if (hasMilestone("hu", 32)) return 1.02
                                 if (hasMilestone("hu", 7)) return 1.03
                                 return hasUpgrade("pl", 42) ? 1.04 : 1.05
                         },      
@@ -34247,6 +34250,9 @@ addLayer("ch", {
                 if (hasMilestone("hu", 30)) {
                         ret = ret.sub(player.pl.points.sub(20800).div(15).max(0).min(100).floor().div(1e4))
                 }
+                if (hasMilestone("hu", 32)) {
+                        ret = ret.sub(player.pl.points.sub(31100).div(20).max(0).min(100).floor().div(1e4))
+                }
 
                 return ret
         },
@@ -40895,6 +40901,9 @@ addLayer("hu", {
                         if (hasMilestone("hu", 25)) {
                                                         ret = ret.times(Decimal.pow(player.pl.points.gte(7500) ? 1.02 : 1.01, player.pl.points.sub(7200).max(0).min(700)))
                         }
+                        if (hasMilestone("hu", 32)) {
+                                                        ret = ret.times(Decimal.pow(3, player.pl.points.sub(31100).div(150).floor().max(0).min(100)))
+                        }
 
                         return ret
                 },
@@ -41204,6 +41213,12 @@ addLayer("hu", {
                                         if (player.pl.points.gte(28390)) base = base.sub(1)
                                         if (player.pl.points.gte(28940)) base = base.sub(1)
                                         if (player.pl.points.gte(29760)) base = base.sub(1)
+                                }
+                                if (hasMilestone("hu", 32)) {
+                                        if (player.pl.points.gte(33560)) base = base.sub(1)
+                                        if (player.pl.points.gte(34200)) base = base.sub(1)
+                                        if (player.pl.points.gte(34840)) base = base.sub(1)
+                                        if (player.pl.points.gte(35550)) base = base.sub(1)
                                 }
 
                                 return base
@@ -42015,6 +42030,21 @@ addLayer("hu", {
                                 return "Reward: Human gain divider is 40,000 - Plants and each 240th Plant after 24220 (max 8 times) and again at 26550, 26870, 27250, 27570, 27980, 28390, 28940, and 29760 subtract 1 from the I think therefore I am base."
                         },
                 }, // hasMilestone("hu", 31)
+                32: {
+                        requirementDescription(){
+                                return "30,310 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(30310)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "<bdi style='font-size: 80%'>Reward: Multipotent exponent is 1.02 and it's base is 1e80 divided by 1.002 per Plant (min 1e30) and each 20th Plant after 31100 subtracts .0001"
+                                return a + " from the Chromosome cost exponent and each 150th adds .2 to the Token II via Stem Cell divider and triple Thought gain (each max at 100). At 33560, 34200, 34840, and 35550 Plants subtract 1 from the I think therefore I am base.</bdi>"
+                        },
+                }, // hasMilestone("hu", 32)
         },
         tabFormat: {
                 "Upgrades": {
@@ -52245,6 +52275,9 @@ addLayer("tokens", {
                                         add = 2e5
                                         exp = .3
                                         if (hasMilestone("hu", 21)) add = 0
+                                        if (hasMilestone("hu", 32)) {
+                                                div += player.pl.points.sub(31100).div(150).floor().max(0).min(100).div(2).toNumber()
+                                        }
                                 }
                                 return [add, div, exp]
                         },
