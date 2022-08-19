@@ -10496,10 +10496,9 @@ addLayer("mu", {
                         description(){
                                 let a = "Per µ multiply Phosphorus gain by log10(Phosphorus)"
                                 let b = "Currently: " + formatWhole(tmp.mu.upgrades[13].effect)
-                                if (hasUpgrade("mu", 22)) a = a.replace("log10", "log6")
-                                if (hasUpgrade("mu", 25)) a = a.replace("log6", "log5")
-                                if (hasUpgrade("mu", 31)) a = a.replace("log5", "log4")
-                                if (player.extremeMode)   a = a.replace("log4", "log3")
+                                if (hasUpgrade("mu", 31)) a = a.replace("log10", player.extremeMode ? "log3" : "log4")
+                                else if (hasUpgrade("mu", 25)) a = a.replace("log10", "log5")
+                                else if (hasUpgrade("mu", 22)) a = a.replace("log10", "log6")
 
                                 if (hasChallenge("l", 91)) a = a.replace("µ", "µ<sup>.95</sup>")
 
@@ -11647,10 +11646,7 @@ addLayer("mu", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "65+x<sup>2+x/" + formatWhole(tmp.mu.buyables[31].expDiv) + "</sup>" 
-                                if (hasUpgrade("d", 25)) {
-                                        cost2 = cost2.replace("65+", "")
-                                        cost2 = cost2.replace("2+", "")
-                                }
+                                if (hasUpgrade("d", 25))        cost2 = cost2.replace("65+", "").replace("2+", "")
                                 if (player.extremeMode)         cost2 = cost2.replace("65", "69")
                                 if (hasUpgrade("d", 31))        cost2 = cost2.replace("x", "100,000")
                                 let cost3 = "</b><br>"
@@ -13363,11 +13359,8 @@ addLayer("l", {
                                 if (player.extremeMode)         cost2 = cost2.replace("7e11*4", "1e8*2.5")
                                 if (hasUpgrade("l", 25))        cost2 = cost2.slice(4,)
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500")
-                                if (hasChallenge("l", 101)) {
-                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
-                                        cost2 = cost2.replace("</sup>)", ")")
-                                }
-                                if (hasMilestone("cells", 30)) cost2 = cost2.replace("2.5<", format(tmp.l.buyables.getBuyableExponent, 1) + "<")
+                                if (hasChallenge("l", 101))     cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>").replace("</sup>)", ")")
+                                if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5<", format(tmp.l.buyables.getBuyableExponent, 1) + "<")
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -13459,12 +13452,14 @@ addLayer("l", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "log10(Dilation completions)^x<br>" + format(tmp.l.buyables[12].base) + "^x"
-                                if (hasMilestone("l", 27)) eformula = eformula.replace("log10", "log7")
-                                if (hasMilestone("l", 28)) eformula = eformula.replace("log7", "log5")
-                                if (hasMilestone("l", 30)) eformula = eformula.replace("log5", "log4")
-                                if (hasMilestone("l", 31)) eformula = eformula.replace("log4", "ln")
-                                if (hasMilestone("l", 36)) eformula = eformula.replace("ln", "log2")
+                                let eformula = "LOGBASE(Dilation completions)^x<br>" + format(tmp.l.buyables[12].base) + "^x"
+                                let lb = "log10"
+                                if (hasMilestone("l", 27)) lb = "log7"
+                                if (hasMilestone("l", 28)) lb = "log5"
+                                if (hasMilestone("l", 30)) lb = "log4"
+                                if (hasMilestone("l", 31)) lb = "ln"
+                                if (hasMilestone("l", 36)) lb = "log2"
+                                eformula = eformula.replace("LOGBASE", lb)
                                 if (hasMilestone("d", 22)) eformula = eformula.replace("log2(Dilation completions)", "Dilation completions")
                                 if (hasMilestone("cells", 35)) eformula = eformula.replace("Dilation completions", "Lambda")
 
@@ -13475,11 +13470,8 @@ addLayer("l", {
                                 if (player.extremeMode)         cost2 = cost2.replace("5^", "2^")
                                 if (hasUpgrade("l", 31))        cost2 = cost2.slice(5,)
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500")
-                                if (hasChallenge("l", 101)) {
-                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
-                                        cost2 = cost2.replace("</sup>)", ")")
-                                }
-                                if (hasMilestone("cells", 30)) cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
+                                if (hasChallenge("l", 101))     cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>").replace("</sup>)", ")")
+                                if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -13574,10 +13566,7 @@ addLayer("l", {
                                 if (player.extremeMode)         cost2 = cost2.replace("1e21*10", "3e19*8")
                                 if (hasUpgrade("l", 41))        cost2 = cost2.slice(5,)
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500")
-                                if (hasChallenge("l", 101)) {
-                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
-                                        cost2 = cost2.replace("</sup>)", ")")
-                                }
+                                if (hasChallenge("l", 101))     cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>").replace("</sup>)", ")")
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 let cost3 = "</b><br>"
 
@@ -13667,14 +13656,16 @@ addLayer("l", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "log10(tokens)^x<br>" + format(tmp.l.buyables[21].base) + "^x"
-                                if (hasMilestone("l", 38)) eformula = eformula.replace("log10", "log8")
-                                if (hasMilestone("l", 39)) eformula = eformula.replace("log8", "log6")
-                                if (hasMilestone("l", 40)) eformula = eformula.replace("log6", "log5")
-                                if (hasMilestone("l", 41)) eformula = eformula.replace("log5", "log4")
-                                if (hasMilestone("l", 42)) eformula = eformula.replace("log4", "log3")
-                                if (hasMilestone("a", 13)) eformula = eformula.replace("log3", "ln")
-                                if (hasMilestone("a", 14)) eformula = eformula.replace("ln", "log2")
+                                let eformula = "LOGBASE(tokens)^x<br>" + format(tmp.l.buyables[21].base) + "^x"
+                                let lb = "log10"
+                                if (hasMilestone("l", 38)) lb = "log8"
+                                if (hasMilestone("l", 39)) lb = "log6"
+                                if (hasMilestone("l", 40)) lb = "log5"
+                                if (hasMilestone("l", 41)) lb = "log4"
+                                if (hasMilestone("l", 42)) lb = "log3"
+                                if (hasMilestone("a", 13)) lb = "ln"
+                                if (hasMilestone("a", 14)) lb = "log2"
+                                eformula = eformula.replace("LOGBASE", lb)
                                 if (hasChallenge("l", 72)) eformula = eformula.replace("log2(tokens)", "tokens")
                                 if (hasMilestone("cells", 36)) eformula = eformula.replace("tokens", "(2<sup>tokens</sup>)")
 
@@ -13685,10 +13676,7 @@ addLayer("l", {
                                 if (player.extremeMode)         cost2 = cost2.replace("2.4e26", "2.5e27")
                                 if (hasUpgrade("l", 42))        cost2 = cost2.slice(7,)
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500")
-                                if (hasChallenge("l", 101)) {
-                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
-                                        cost2 = cost2.replace("</sup>)", ")")
-                                }
+                                if (hasChallenge("l", 101))     cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>").replace("</sup>)", ")")
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 let cost3 = "</b><br>"
 
@@ -13775,10 +13763,7 @@ addLayer("l", {
                                 if (player.extremeMode)         cost2 = cost2.replace("3e34", "3e36")
                                 if (hasUpgrade("l", 43))        cost2 = cost2.slice(5,)
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500")
-                                if (hasChallenge("l", 101)) {
-                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
-                                        cost2 = cost2.replace("</sup>)", ")")
-                                }
+                                if (hasChallenge("l", 101))     cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>").replace("</sup>)", ")")
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 let cost3 = "</b><br>"
 
@@ -13871,10 +13856,7 @@ addLayer("l", {
                                 if (cost2.split("1.00*")[0] == "") cost2 = cost2.slice(5,) 
                                 // if the cost is 1 remove the first characters
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500")
-                                if (hasChallenge("l", 101)) {
-                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
-                                        cost2 = cost2.replace("</sup>)", ")")
-                                }
+                                if (hasChallenge("l", 101))     cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>").replace("</sup>)", ")")
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 let cost3 = "</b><br>"
 
@@ -13971,10 +13953,7 @@ addLayer("l", {
                                                                 cost2 = cost2.slice(5,)
                                 }
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500") 
-                                if (hasChallenge("l", 101)) {
-                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
-                                        cost2 = cost2.replace("</sup>)", ")")
-                                }
+                                if (hasChallenge("l", 101))     cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>").replace("</sup>)", ")")
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 if (hasMilestone("cells", 34))  cost2 = cost2.replace("158", "2")
                                 let cost3 = "</b><br>"
@@ -14065,10 +14044,7 @@ addLayer("l", {
                                 if (player.extremeMode)         cost2 = cost2.replace("1e166*1600", "1.5e145*250")
                                 if (hasMilestone("l", 39) && player.extremeMode) cost2 = cost2.slice(8,)
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500") 
-                                if (hasChallenge("l", 101)) {
-                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
-                                        cost2 = cost2.replace("</sup>)", ")")
-                                }
+                                if (hasChallenge("l", 101))     cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>").replace("</sup>)", ")")
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 if (hasMilestone("cells", 34))  cost2 = cost2.replace("1600", "2")
                                 let cost3 = "</b><br>"
@@ -14175,11 +14151,7 @@ addLayer("l", {
                                 if (player.extremeMode)         cost2 = cost2.replace("3e281*2e16", "3e241*3e15")
                                 if (hasMilestone("l", 40))      cost2 = cost2.slice(6,)
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500")
-                                if (hasChallenge("l", 101)) {
-                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
-                                        cost2 = cost2.replace("</sup>)", ")")
-                                        cost2 = cost2.replace("2e16", "2468")
-                                }
+                                if (hasChallenge("l", 101))     cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>").replace("</sup>)", ")").replace("2e16", "2468")
                                 if (hasMilestone("d", 17) && player.extremeMode) cost2 = cost2.replace("3e15", "1e5")
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 if (hasMilestone("cells", 34))  cost2 = cost2.replace("2468", "2")
@@ -17543,16 +17515,18 @@ addLayer("a", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "log10(Lives)^x<br>" + format(tmp.a.buyables[13].base) + "^x"
-                                if (hasMilestone("d", 3)) eformula = eformula.replace("log10", "log9")
-                                if (hasMilestone("d", 6)) eformula = eformula.replace("log9", "log8")
-                                if (hasMilestone("d", 7)) eformula = eformula.replace("log8", "log7")
-                                if (hasMilestone("d", 8)) eformula = eformula.replace("log7", "log6")
-                                if (hasMilestone("d", 9)) eformula = eformula.replace("log6", "log5")
-                                if (hasMilestone("d", 10)) eformula = eformula.replace("log5", "log4")
-                                if (hasMilestone("d", 11)) eformula = eformula.replace("log4", "log3")
-                                if (hasMilestone("d", 12)) eformula = eformula.replace("log3", "ln")
-                                if (hasMilestone("d", 13)) eformula = eformula.replace("ln", "log2")
+                                let eformula = "LOGBASE(Lives)^x<br>" + format(tmp.a.buyables[13].base) + "^x"
+                                let lb = "log10"
+                                if (hasMilestone("d", 3)) lb = "log9"
+                                if (hasMilestone("d", 6)) lb = "log8"
+                                if (hasMilestone("d", 7)) lb = "log7"
+                                if (hasMilestone("d", 8)) lb = "log6"
+                                if (hasMilestone("d", 9)) lb = "log5"
+                                if (hasMilestone("d", 10)) lb = "log4"
+                                if (hasMilestone("d", 11)) lb = "log3"
+                                if (hasMilestone("d", 12)) lb = "ln"
+                                if (hasMilestone("d", 13)) lb = "log2"
+                                eformula = eformula.replace("LOGBASE", lb)
                                 if (hasMilestone("cells", 29)) eformula = eformula.replace("log2(Lives)", "µ")
                                 if (hasUpgrade("t", 151)) eformula = eformula.replace("µ", "e1e13")
                                 if (player.extremeMode && !hasUpgrade("sci", 544)) eformula = eformula.replace("µ^x", "(µ<sup>.1</sup>)^x")
@@ -17560,12 +17534,14 @@ addLayer("a", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "1e1450*1e500^x<sup>2</sup>"
+                                let cost2 = "1e1450*1e500^x<sup>EXP</sup>"
                                 if (hasUpgrade("sci", 411)) cost2 = cost2.slice(7, )
-                                if (hasUpgrade("sci", 432)) cost2 = cost2.replace("2<", "1.9<")
-                                if (hasUpgrade("sci", 433)) cost2 = cost2.replace("1.9<", "1.8<")
-                                if (hasUpgrade("sci", 442)) cost2 = cost2.replace("1.8<", "1.7<")
-                                if (hasUpgrade("sci", 444)) cost2 = cost2.replace("1.7<", "1.6<")
+                                let exp = "2"
+                                if (hasUpgrade("sci", 432)) exp = "1.9"
+                                if (hasUpgrade("sci", 433)) exp = "1.8"
+                                if (hasUpgrade("sci", 442)) exp = "1.7"
+                                if (hasUpgrade("sci", 444)) exp = "1.6"
+                                cost2 = cost2.replace("EXP", exp)
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -17786,11 +17762,8 @@ addLayer("a", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e257,000*1e2000^x<sup>1.2</sup>"
-                                if (player.extremeMode) {
-                                        cost2 = cost2.replace("7", "9")
-                                        cost2 = cost2.replace("2000", "1000")
-                                }
-                                if (hasUpgrade("sci", 445)) cost2 = cost2.slice(10,)
+                                if (player.extremeMode)         cost2 = cost2.replace("7", "9").replace("2000", "1000")
+                                if (hasUpgrade("sci", 445))     cost2 = cost2.slice(10,)
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -17916,7 +17889,7 @@ addLayer("a", {
                                 }
 
                                 let eformula = "ln(siRNA levels)^x<br>" + format(tmp.a.buyables[32].base) + "^x"
-                                if (layers.l.grid.getGemEffect(806)) eformula = eformula.replace("ln", "")
+                                if (layers.l.grid.getGemEffect(806)) eformula = eformula.replace("ln(siRNA levels)", "siRNA levels")
                                 if (hasUpgrade("cells", 63)) eformula = eformula.replace("siRNA levels", "log10(log10(Points))")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -17998,14 +17971,14 @@ addLayer("a", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "1e9,484,000*1e7,000^x<sup>2</sup>"
+                                let cost2 = "1e9,484,000*1e7,000^x<sup>EXP</sup>"
                                 if (player.extremeMode) cost2 = cost2.replace("9,484", "28,520")
                                 if (hasUpgrade("sci", 455)) cost2 = cost2.slice(13, )
                                 let expPortion = "2<"
                                 if (hasChallenge("l", 32) && player.extremeMode) expPortion = "1.9<"
                                 if (layers.l.grid.getGemEffect(605) && player.extremeMode) expPortion = "1.8<"
                                 if (layers.l.grid.getGemEffect(207) && player.extremeMode) expPortion = "1.7<"
-                                cost2 = cost2.replace("2<", expPortion)
+                                cost2 = cost2.replace("EXP<", expPortion)
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -19317,10 +19290,7 @@ addLayer("d", {
                                         if (hasUpgrade("an", 33)) a2 = a2.replace("Animal upgrades", "Chromosomes")
                                         if ((layers.l.grid.getGemEffect(701) || hasUpgrade("or", 145)) && !player.extremeMode) a2 = a2.replace("/2", "")
                                         if (layers.l.grid.getGemEffect(408) || hasUpgrade("or", 145)) a2 = a2.replace("/" + div, "")
-                                        if (hasMilestone("cells", 31)) {
-                                                a2 = a2.replace("sqrt(", "")
-                                                a2 = a2.replace(")+0.00", "")
-                                        }
+                                        if (hasMilestone("cells", 31)) a2 = a2.replace("sqrt(", "").replace(")+0.00", "")
 
                                         let b = "DNA resets (in order) Amino Acid content, Life content,"
                                         let c = " the last two rows of Phosphorus and µ upgrades."
@@ -20373,10 +20343,7 @@ addLayer("cells", {
                         },
                         description(){
                                 let a = "<bdi style='font-size: 80%'>Per upgrade multiply Stem Cell and Cell gain by log8(Secondary completions)"
-                                if (player.extremeMode) {
-                                        a = a.replace("log8", "")
-                                        a += "<sup>.9</sup>"
-                                }
+                                if (player.extremeMode) a = a.replace("log8", "") + "<sup>.9</sup>"
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[15].effect) + "</bdi>"
                         },
                         effect(){
@@ -22927,7 +22894,7 @@ addLayer("cells", {
                                 if (hasUpgrade("hu", 32))       ret = ret.sub(player.ch.points).max(1e5)
                                 if (hasMilestone("hu", 20))     ret = ret.sub(player.nu.points).max(100)
 
-                                if (hasMilestone("hu", 32))     ret = new Decimal(1e80).div(Decimal.pow(1.002, player.pl.points))
+                                if (hasMilestone("hu", 32))     ret = new Decimal(1e80).div(Decimal.pow(1.002, player.pl.points)).max(1e7)
                                 
                                 return ret
                         },
@@ -28977,6 +28944,7 @@ addLayer("or", {
                         },
                         baseExp(){
                                 if (hasUpgrade("tokens", 242))  {
+                                        if (hasMilestone("hu", 39))     return .81
                                         if (hasUpgrade("hu", 25))       return .8
                                         if (hasMilestone("hu", 11))     return .79
                                         if (hasUpgrade("hu", 14))       return .78
@@ -33477,6 +33445,9 @@ addLayer("an", {
                         if (hasUpgrade("tokens", 292))  ret = ret.plus(player.pl.points.min(300))
 
                         if (hasMilestone("hu", 15))     ret = new Decimal(9000).plus(player.pl.points)
+                        if (hasMilestone("hu", 35) && player.hu.thoughts.points.gte("4.44e4444")) {
+                                                        ret = ret.plus(1000)
+                        }
 
                         return ret.floor()
                 }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit taxonomy cap taxonomycap
@@ -34258,6 +34229,7 @@ addLayer("ch", {
                         ret = ret.sub(player.pl.points.sub(31100).div(20).max(0).min(100).floor().div(1e4))
                 }
                 if (hasMilestone("hu", 34) && player.pl.points.gte(41710))     ret = new Decimal(1.2)
+                        ret = ret.sub(tmp.hu.buyables[22].effect.min(.01))
 
                 return ret
         },
@@ -39919,8 +39891,9 @@ addLayer("pl", {
                         },
                         getCostBase(){
                                 let ret = new Decimal(30)
-                                if (hasMilestone("e", 18)) ret = new Decimal(28)
-                                if (hasMilestone("e", 19)) ret = ret.sub(player.pl.points.sub(95).max(0)).max(20)
+                                if (hasMilestone("e", 18))      ret = new Decimal(28)
+                                if (hasMilestone("e", 19))      ret = ret.sub(player.pl.points.sub(95).max(0)).max(20)
+                                if (hasMilestone("hu", 38))     ret = new Decimal(18)
 
                                 return ret
                         },
@@ -40790,6 +40763,7 @@ addLayer("hu", {
         baseAmount(){return player.pl.biomass.points},
         type: "custom",
         getGainDivider(){
+                if (hasMilestone("hu", 36))     return new Decimal(300).sub(player.hu.buyables[22]).max(20)
                 if (hasMilestone("hu", 31))     return new Decimal(4e4).sub(player.pl.points).max(200)
                 if (hasUpgrade("hu", 44))       return 15000
                 if (hasUpgrade("hu", 43)) {
@@ -40833,7 +40807,7 @@ addLayer("hu", {
                 if (tmp.hu.buyables[12].effect.gt(1)) {
                         let base = tmp.hu.buyables[12].effect
                         let data = player.hu.buyables
-                        let ids = [11, 12, 21]
+                        let ids = [11, 12, 21, 22]
                         let exp = decimalZero
                         for (i in ids) {
                                 exp = exp.plus(data[ids[i]])
@@ -40909,10 +40883,13 @@ addLayer("hu", {
                                                         ret = ret.times(10)
                         }
                         if (hasMilestone("hu", 25)) {
-                                                        ret = ret.times(Decimal.pow(player.pl.points.gte(7500) ? 1.02 : 1.01, player.pl.points.sub(7200).max(0).min(700)))
+                                ret = ret.times(Decimal.pow(player.pl.points.gte(7500) ? 1.02 : 1.01, player.pl.points.sub(7200).max(0).min(700)))
                         }
                         if (hasMilestone("hu", 32)) {
-                                                        ret = ret.times(Decimal.pow(3, player.pl.points.sub(31100).div(150).floor().max(0).min(100)))
+                                ret = ret.times(Decimal.pow(3, player.pl.points.sub(31100).div(150).floor().max(0).min(100)))
+                        }
+                        if (hasMilestone("hu", 38)) {
+                                ret = ret.times(Decimal.pow(2, player.pl.points.sub(71700).div(100).floor().max(0).min(100)))
                         }
 
                         return ret
@@ -41308,6 +41285,8 @@ addLayer("hu", {
                         getCostBase(){
                                 let base = new Decimal(5)
 
+                                base = base.sub(tmp.hu.buyables[22].effect)
+
                                 return base
                         },
                         cost(){
@@ -41347,6 +41326,15 @@ addLayer("hu", {
                         base(){
                                 let ret = new Decimal(.3)
 
+                                if (hasMilestone("hu", 39)) {
+                                        if (player.pl.points.gte(87540)) ret = new Decimal(.31)
+                                        if (player.pl.points.gte(89150)) ret = new Decimal(.32)
+                                        if (player.pl.points.gte(91140)) ret = new Decimal(.33)
+                                        if (player.pl.points.gte(92510)) ret = new Decimal(.34)
+                                        if (player.pl.points.gte(93910)) ret = new Decimal(.35)
+                                        if (player.pl.points.gte(94350)) ret = new Decimal(.36)
+                                }
+
                                 return ret
                         },
                         effect(){
@@ -41370,7 +41358,9 @@ addLayer("hu", {
                                 let cost2 = "INIT*BASE^(x<sup>1.4</sup>)" 
                                 cost2 = cost2.replace("INIT", format(tmp.hu.buyables[12].getInit, 0))
                                 if (tmp.hu.buyables[12].getInit.lte(1)) cost2 = cost2.slice(2,)
-                                cost2 = cost2.replace("BASE", formatWhole(tmp.hu.buyables[12].getCostBase))
+                                let cb = tmp.hu.buyables[12].getCostBase
+                                if (cb.lt(5)) cost2 = cost2.replace("BASE", format(cb, 4))
+                                else cost2 = cost2.replace("BASE", "5")
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -41394,7 +41384,7 @@ addLayer("hu", {
                                         base = new Decimal(2e4).sub(player.pl.points).max(400)
                                 }
                                 if (hasMilestone("hu", 33)) {
-                                        base = base.sub(player.pl.points.sub(34900).div(100).max(0).min(200).floor())
+                                        base = base.sub(player.pl.points.sub(34900).div(100).max(0).min(250).floor())
                                 }
 
                                 return base
@@ -41481,6 +41471,10 @@ addLayer("hu", {
                                         if (hasUpgrade("hu", 44)) a = a.plus(player.hu.buyables[12])
                                         base = base.sub(a.min(900))
                                 }
+                                if (hasMilestone("hu", 38)) {
+                                        let a = player.pl.points.sub(71700).div(100).floor().max(0).min(100)
+                                        base = base.sub(a.div(player.pl.points.gte(73360) ? 5 : 10))
+                                }
 
                                 return base
                         },
@@ -41544,7 +41538,87 @@ addLayer("hu", {
                                 let cost2 = "INIT*BASE^(x<sup>1.3</sup>)" 
                                 cost2 = cost2.replace("INIT", format(tmp.hu.buyables[21].getInit, 0))
                                 if (tmp.hu.buyables[21].getInit.lte(1)) cost2 = cost2.slice(2,)
-                                cost2 = cost2.replace("BASE", formatWhole(tmp.hu.buyables[21].getCostBase))
+                                let f = tmp.hu.buyables[21].getCostBase.lt(100) ? format : formatWhole
+                                cost2 = cost2.replace("BASE", f(tmp.hu.buyables[21].getCostBase))
+                                let cost3 = "</b><br>"
+
+                                return br + allEff + cost1 + cost2 + cost3
+                        },
+                },
+                22: {
+                        title: "Give me a place to stand and I will move the earth",
+                        getInit(){
+                                let ret = new Decimal("1e5305").div(tmp.hu.buyables[13].effect).max(1)
+                                return ret
+                        },
+                        getCostBase(){
+                                let base = new Decimal(1e8)
+
+                                if (hasMilestone("hu", 37)) base = new Decimal(3e7).sub(player.nu.points).max(1e5)
+
+                                return base
+                        },
+                        cost(){
+                                let init = tmp.hu.buyables[22].getInit
+                                let base = tmp.hu.buyables[22].getCostBase
+                                let exp = new Decimal(1.2)
+
+                                return base.pow(player.hu.buyables[22].pow(exp)).times(init)
+                        },
+                        getMaxAfford(){
+                                let init = tmp.hu.buyables[22].getInit
+                                let base = tmp.hu.buyables[22].getCostBase
+                                let exp = new Decimal(1.2)
+
+                                let pts = player.hu.thoughts.points.div(init)
+                                if (pts.lt(1)) return decimalZero
+
+                                return pts.log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return player.hu.buyables[12].gte(519)
+                        },
+                        canAfford:() => player.hu.thoughts.points.gte(tmp.hu.buyables[22].cost),
+                        buy(){
+                                if (!this.canAfford()) return
+                                let data = player.hu
+                                let id = 22
+                                let ma = 1//tmp.hu.buyables[id].getMaxAfford
+                                let up 
+                                if (false) up = ma.sub(data.buyables[id]).max(0)
+                                else up = false ? ma.sub(data.buyables[id]).min(/*tmp.hu.buyables.maxBulk*/ 1 ) : 1
+                                data.buyables[id] = data.buyables[id].plus(up)
+                                if (!false) {
+                                        data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
+                                }
+                        },
+                        base(){
+                                let ret = new Decimal(.0001)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.hu.buyables[22].base.times(player.hu.buyables[22])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.hu.buyables[22]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: -"
+                                        let eff2 = format(tmp.hu.buyables[22].effect, 4) + " from Mastery III and <i><b>Tgwitlcwl</b></i> base and Chromosome exponent (max .01/1/.01)</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("hu", 22)) + " Thoughts</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = format(tmp.hu.buyables[22].base, 4) + "*x"
+                                
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "INIT*BASE^(x<sup>1.2</sup>)" 
+                                cost2 = cost2.replace("INIT", format(tmp.hu.buyables[22].getInit, 0))
+                                if (tmp.hu.buyables[22].getInit.lte(1)) cost2 = cost2.slice(2,)
+                                cost2 = cost2.replace("BASE", formatWhole(tmp.hu.buyables[22].getCostBase))
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -42069,7 +42143,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Oligopotent base is 3 and at 35000 Plants and each 100 thereafter subtract 1 from the Hope is a waking dream base (max 200 times). At 35130, 35860, 36590, and 37390 Plants subtract 1 from the I think therefore I am base. At 38280 Plants Leaf's /4 is /1.4."
+                                return "Reward: Oligopotent base is 3 and at 35000 Plants and each 100 thereafter subtract 1 from the Hope is a waking dream base (max 250 times). At 35130, 35860, 36590, and 37390 Plants subtract 1 from the I think therefore I am base. At 38280 Plants Leaf's /4 is /1.4."
                         },
                 }, // hasMilestone("hu", 33)
                 34: {
@@ -42097,9 +42171,65 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per sqrt(Nucleuses) divide Omnipotent base by 1.01 ."
+                                return "Reward: Per sqrt(Nucleuses) divide Omnipotent base by 1.01 and at 4.44e4444 Thoughts increase the Taxonomy cap exponent by 1000."
                         },
                 }, // hasMilestone("hu", 35)
+                36: {
+                        requirementDescription(){
+                                return "48,710 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(48710)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: The Human gain divider is 300-<i>GmaptsaIwmte</i> (max 20) and if you have 51550 / 52075 / 52790 / 53170 / 53790 / 54930 / 57450 / 58970 / 60190 Plants the Mastery IV exponent base is 1.1 / 1.06 / 1.05 / 1.04 / 1.03 / 1.02 / 1.017 / 1.015 / 1.014 ."
+                        },
+                }, // hasMilestone("hu", 36)
+                37: {
+                        requirementDescription(){
+                                return "63,575 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(63575)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: The <i>GmaptsaIwmte</i> base is 20,000,000 - Nucleuses and at 66010 Plants the Mastery V base is 2."
+                        },
+                }, // hasMilestone("hu", 37)
+                38: {
+                        requirementDescription(){
+                                return "70,300 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(70300)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: At 71,800 Plants and each 100th afterwards double Thought gain and subtract .1 from <i>Tulisnwl</i> base (doubles at 73360 Plants), max 100 times and at 73700 Plants the Stem cost base is 18."
+                        },
+                }, // hasMilestone("hu", 38)
+                39: {
+                        requirementDescription(){
+                                return "83,940 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(83940)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Increase the make exponent to .81 and at 87540/89150/91140/92510/93910/94350 Plants the <i>Tgwitlcwl</i> coefficient is .31/.32/.33/.34/.35/.36 ."
+                        },
+                }, // hasMilestone("hu", 39)
         },
         tabFormat: {
                 "Upgrades": {
@@ -52638,6 +52768,7 @@ addLayer("tokens", {
                                         if (hasMilestone("hu", 17)) {
                                                 ret -= player.pl.points.sub(1460).div(6).floor().max(0).min(15).times(.001)
                                         }
+                                        ret -= tmp.hu.buyables[22].effect.min(.01)
                                 }
                                 
                                 return ret
@@ -52663,7 +52794,7 @@ addLayer("tokens", {
                         display(){
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[203]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 203)) + " Nucleuses</b><br>"
-                                let eformula = formatWhole(tmp.tokens.buyables[203].baseCost) + "*" + format(tmp.tokens.buyables[203].expBase, 3) + "<sup>x</sup>"
+                                let eformula = formatWhole(tmp.tokens.buyables[203].baseCost) + "*" + format(tmp.tokens.buyables[203].expBase, 4) + "<sup>x</sup>"
                                 if (hasUpgrade("tokens", 291)) eformula = eformula.replace("x", "sqrt(x)")
                                 if (tmp.tokens.buyables[203].baseCost <= 1) eformula = eformula.slice(2,)
                                 
@@ -52683,6 +52814,17 @@ addLayer("tokens", {
                                 return base
                         },
                         expBase(){
+                                if (hasMilestone("hu", 36)) {
+                                        if (player.pl.points.gte(60190))return 1.01
+                                        if (player.pl.points.gte(58970))return 1.015
+                                        if (player.pl.points.gte(57450))return 1.017
+                                        if (player.pl.points.gte(54930))return 1.02
+                                        if (player.pl.points.gte(53790))return 1.03
+                                        if (player.pl.points.gte(53170))return 1.04
+                                        if (player.pl.points.gte(52790))return 1.05
+                                        if (player.pl.points.gte(52075))return 1.06
+                                        if (player.pl.points.gte(51550))return 1.1
+                                }     
                                 if (hasMilestone("hu", 20))             return 1.17
                                 if (hasMilestone("hu", 18)) {
                                         if (player.pl.points.gte(1685))     return 1.18
@@ -52719,7 +52861,7 @@ addLayer("tokens", {
                                 let eformula = "10<sup><b>EXPb</b><sup>BASE+x</sup>"
                                 eformula = eformula.replace("BASE", formatWhole(tmp.tokens.buyables[211].base))
                                 eformula = eformula.replace(">0+x", ">x")
-                                eformula = eformula.replace("EXPb", formatWhole(tmp.tokens.buyables[211].expBase))
+                                eformula = eformula.replace("EXPb", format(tmp.tokens.buyables[211].expBase, tmp.tokens.buyables[211].expBase < 1.02 ? 4 : 2))
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
@@ -52738,15 +52880,19 @@ addLayer("tokens", {
 
                                 return exp
                         },
+                        base(){
+                                if (hasMilestone("hu", 37) && player.pl.points.gte(66010)) return 2
+                                return 3
+                        },
                         cost(){
                                 let exp = tmp.tokens.buyables[212].costExp
-                                return Decimal.pow(3, player.tokens.buyables[212].pow(exp)).ceil()
+                                return Decimal.pow(tmp.tokens.buyables[212].base, player.tokens.buyables[212].pow(exp)).ceil()
                         },
                         canAfford:() => player.e.points.gte(tmp.tokens.buyables[212].cost),
                         maxAfford(){
                                 let exp = tmp.tokens.buyables[212].costExp
                                 if (player.e.points.eq(0)) return decimalZero
-                                return player.e.points.max(1).log(3).root(exp).floor().plus(1)
+                                return player.e.points.max(1).log(tmp.tokens.buyables[212].base).root(exp).floor().plus(1)
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -52760,8 +52906,9 @@ addLayer("tokens", {
                         display(){
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[212]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 212), 3) + " Ecosystems</b><br>"
-                                let eformula = "3<sup>x<sup>EXP</sup>"
+                                let eformula = "BASE<sup>x<sup>EXP</sup>"
                                 eformula = eformula.replace("EXP", formatWhole(tmp.tokens.buyables[212].costExp))
+                                eformula = eformula.replace("BASE", formatWhole(tmp.tokens.buyables[212].base))
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
