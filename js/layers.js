@@ -22528,7 +22528,7 @@ addLayer("cells", {
 
                                 if (hasUpgrade("hu", 22))       base = new Decimal(1000).sub(player.pl.points).max(10)
                                 if (hasUpgrade("hu", 45))       base = new Decimal(1e20)
-                                if (hasMilestone("hu", 35))     base = base.div(Decimal.pow(1.01, player.nu.points.sqrt())).max(1000)
+                                if (hasMilestone("hu", 35))     base = base.div(Decimal.pow(1.01, player.nu.points.sqrt())).max(100)
                                 
                                 return base
                         },
@@ -22768,6 +22768,8 @@ addLayer("cells", {
                                 if (hasMilestone("e", 17))      base = base.div(Decimal.pow(10, Math.floor(player.e.challenges[21] / 5)))
                                 if (hasMilestone("hu", 34))     base = new Decimal(1e7).sub(player.nu.points).max(1e4)
 
+                                if (hasMilestone("hu", 40))     base = new Decimal(1e308)
+
                                 return base
                         },
                         costExp(){
@@ -22780,6 +22782,7 @@ addLayer("cells", {
                                 if (hasUpgrade("e", 22))        exp = 1.05
                                 if (hasUpgrade("e", 43))        exp = 1.04
                                 if (hasMilestone("hu", 4))      exp = 1.03
+                                if (hasMilestone("hu", 40))     exp = 1.02
 
                                 return exp
                         },
@@ -34229,7 +34232,7 @@ addLayer("ch", {
                         ret = ret.sub(player.pl.points.sub(31100).div(20).max(0).min(100).floor().div(1e4))
                 }
                 if (hasMilestone("hu", 34) && player.pl.points.gte(41710))     ret = new Decimal(1.2)
-                        ret = ret.sub(tmp.hu.buyables[22].effect.min(.01))
+                        ret = ret.sub(tmp.hu.buyables[22].effect.min(hasMilestone("hu", 40) ? .02 : .01))
 
                 return ret
         },
@@ -38384,7 +38387,7 @@ addLayer("e", {
         effectExp(){
                 let exp = new Decimal(hasMilestone("e", 9) ? player.e.milestones.length : 5)
 
-                if (hasUpgrade("tokens", 282)) exp = exp.plus(player.tokens.mastery_tokens.total.sub(300).max(0).div(50))
+                if (hasUpgrade("tokens", 282)) exp = exp.plus(player.tokens.mastery_tokens.total.sub(300).max(0).div(50)).min(7000)
                 
                 return exp
         },
@@ -39680,8 +39683,8 @@ addLayer("pl", {
                                 let additional = ret.times(player.hu.milestones.length)
                                 return additional.pow(decimalOne.sub(tmp.pl.effect).pow(-1)).plus(base)
                         }
-                        if (player.pl.points.lt(1e5)) return ret.pow(decimalOne.sub(tmp.pl.effect).pow(-1))
-                        return ret.pow(.8).pow(player.pl.points.div(100).plus(1))
+                        if (player.pl.points.lt(1e6)) return ret.pow(decimalOne.sub(tmp.pl.effect).pow(-1))
+                        return ret.pow(player.pl.points.div(100).plus(1).div(.8))
                 },
                 update(diff){
                         let gainThisTick = tmp.pl.biomass.getResetGain.times(diff)
@@ -41117,7 +41120,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XVII"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Up Quark's exponent is log3(x)<sup>2</sup> and each 25th Plant after 9175 subtracts 1 from I think therefore I am base, max 10 times</bdi>"
+                                return "<bdi style='font-size: 80%'>Up Quark's exponent is log3(x)<sup>2</sup> and each 25th Plant after 9175 subtracts 1 from <i>IttIa</i> base, max 10 times</bdi>"
                         },
                         cost:() => new Decimal(1e233),
                         unlocked(){
@@ -41141,7 +41144,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XIX"
                         },
                         description(){
-                                return "Human Milestone 27 also counts The greatest wealth is to live content with little Human gain divider is 15,000"
+                                return "Human Milestone 27 also counts <i>Tgwitlcwl</i> with little Human gain divider is 15,000"
                         },
                         cost:() => new Decimal("1e535"),
                         unlocked(){
@@ -41165,7 +41168,10 @@ addLayer("hu", {
                 rows: 3, 
                 cols: 3,
                 11: {
-                        title: "I think therefore I am",
+                        title() {
+                                if (player.shiftAlias) return "<i><h2>IttIa</h2></i>"
+                                return "I think therefore I am"
+                        },
                         getInit(){
                                 let ret = new Decimal(1e56).div(tmp.hu.buyables[13].effect).max(1)
                                 return ret
@@ -41277,7 +41283,10 @@ addLayer("hu", {
                         },
                 },
                 12: {
-                        title: "The greatest wealth is to live content with little",
+                        title() {
+                                if (player.shiftAlias) return "<i><h2>Tgwitlcwl</h2></i>"
+                                return "The greatest wealth is to live content with little"
+                        },
                         getInit(){
                                 let ret = new Decimal(1e64).div(tmp.hu.buyables[13].effect).max(1)
                                 return ret
@@ -41324,18 +41333,23 @@ addLayer("hu", {
                                 }
                         },
                         base(){
-                                let ret = new Decimal(.3)
-
-                                if (hasMilestone("hu", 39)) {
-                                        if (player.pl.points.gte(87540)) ret = new Decimal(.31)
-                                        if (player.pl.points.gte(89150)) ret = new Decimal(.32)
-                                        if (player.pl.points.gte(91140)) ret = new Decimal(.33)
-                                        if (player.pl.points.gte(92510)) ret = new Decimal(.34)
-                                        if (player.pl.points.gte(93910)) ret = new Decimal(.35)
-                                        if (player.pl.points.gte(94350)) ret = new Decimal(.36)
+                                if (hasMilestone("hu", 40)) {
+                                        if (player.pl.points.gte(132970)) return new Decimal(.40)
+                                        if (player.pl.points.gte(112430)) return new Decimal(.39)
+                                        if (player.pl.points.gte(104680)) return new Decimal(.38)
+                                        if (player.pl.points.gte(101200)) return new Decimal(.37)
                                 }
 
-                                return ret
+                                if (hasMilestone("hu", 39)) {
+                                        if (player.pl.points.gte(94350)) return new Decimal(.36)
+                                        if (player.pl.points.gte(93910)) return new Decimal(.35)
+                                        if (player.pl.points.gte(92510)) return new Decimal(.34)
+                                        if (player.pl.points.gte(91140)) return new Decimal(.33)
+                                        if (player.pl.points.gte(89150)) return new Decimal(.32)
+                                        if (player.pl.points.gte(87540)) return new Decimal(.31)
+                                }
+
+                                return new Decimal(.3)
                         },
                         effect(){
                                 return player.hu.buyables[12].times(tmp.hu.buyables[12].base).plus(2).log(2)
@@ -41367,7 +41381,10 @@ addLayer("hu", {
                         },
                 },
                 13: {
-                        title: "Hope is a waking dream",
+                        title() {
+                                if (player.shiftAlias) return "<i><h2>Hiawd</h2></i>"
+                                return "Hope is a waking dream"
+                        },
                         getInit(){
                                 let ret = new Decimal(1e182).div(tmp.hu.buyables[13].effect).max(1)
                                 return ret
@@ -41458,7 +41475,10 @@ addLayer("hu", {
                         },
                 },
                 21: {
-                        title: "The unexamined life is not worth living",
+                        title() {
+                                if (player.shiftAlias) return "<i><h2>Tulinwl</h2></i>"
+                                return "The unexamined life is not worth living"
+                        },
                         getInit(){
                                 let ret = new Decimal("1e751").div(tmp.hu.buyables[13].effect).max(1)
                                 return ret
@@ -41474,6 +41494,10 @@ addLayer("hu", {
                                 if (hasMilestone("hu", 38)) {
                                         let a = player.pl.points.sub(71700).div(100).floor().max(0).min(100)
                                         base = base.sub(a.div(player.pl.points.gte(73360) ? 5 : 10))
+                                }
+                                if (hasMilestone("hu", 40)) {
+                                        let a = player.pl.points.sub(100425).div(125).floor().max(0).min(200)
+                                        base = base.sub(a.times(.15))
                                 }
 
                                 return base
@@ -41546,7 +41570,10 @@ addLayer("hu", {
                         },
                 },
                 22: {
-                        title: "Give me a place to stand and I will move the earth",
+                        title() {
+                                if (player.shiftAlias) return "<i><h2>GmaptsaIwmte</h2></i>"
+                                return "Give me a place to stand and I will move the earth"
+                        },
                         getInit(){
                                 let ret = new Decimal("1e5305").div(tmp.hu.buyables[13].effect).max(1)
                                 return ret
@@ -41554,7 +41581,7 @@ addLayer("hu", {
                         getCostBase(){
                                 let base = new Decimal(1e8)
 
-                                if (hasMilestone("hu", 37)) base = new Decimal(3e7).sub(player.nu.points).max(1e5)
+                                if (hasMilestone("hu", 37)) base = new Decimal(3e7).sub(player.nu.points).max(1e6)
 
                                 return base
                         },
@@ -41606,6 +41633,8 @@ addLayer("hu", {
                                         let eff1 = "<b><h2>Effect</h2>: -"
                                         let eff2 = format(tmp.hu.buyables[22].effect, 4) + " from Mastery III and <i><b>Tgwitlcwl</b></i> base and Chromosome exponent (max .01/1/.01)</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("hu", 22)) + " Thoughts</b><br>"
+
+                                        if (hasMilestone("hu", 40)) eff2 = eff2.replace(".01/1/.01", ".02/1/.02")
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
@@ -41988,7 +42017,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Bulk 5x Plant and Mastery buyables and Hope is a waking dream's past 40 count towards The greatest wealth is to live content with little, but thought effect doesn't multiply Oligopotent."
+                                return "Reward: Bulk 5x Plant and Mastery buyables and <i>Hiawd</i>'s past 40 count towards <i>Tgwitlcwl</i>, but thought effect doesn't multiply Oligopotent."
                         },
                 }, // hasMilestone("hu", 22)
                 23: {
@@ -42002,7 +42031,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Up Quark's log10 is log6 and upon 5600/5700 Plants the Hope is a waking dream cost base is 550,000/400,000."
+                                return "Reward: Up Quark's log10 is log6 and upon 5600/5700 Plants the <i>Hiawd</i> cost base is 550,000/400,000."
                         },
                 }, // hasMilestone("hu", 23)
                 24: {
@@ -42030,7 +42059,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Each Plant past 7200 subtracts .01 from the Mastery I coefficient and multiplies Thought gain by 1.01 (and 1.02 if you have 7500 Plants), each maxing at 700 and at 7285 Plants, Nucleuses subtract from Hope is a waking dream base (max 390,000)."
+                                return "Reward: Each Plant past 7200 subtracts .01 from the Mastery I coefficient and multiplies Thought gain by 1.01 (and 1.02 if you have 7500 Plants), each maxing at 700 and at 7285 Plants, Nucleuses subtract from <i>Hiawd</i> base (max 390,000)."
                         },
                 }, // hasMilestone("hu", 25)
                 26: {
@@ -42058,7 +42087,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: I think therefore I am subtracts from The unexamined life is not worth living's base (max 900), upon 12345 Plants the Hope is a waking dream cost base is 20,000-Plants (min 400), and Up Quark's log3 becomes log2."
+                                return "Reward: <i>IttIa</i> subtracts from <i>Tulinwl</i>'s base (max 900), upon 12345 Plants the <i>Hiawd</i> cost base is 20,000-Plants (min 400), and Up Quark's log3 becomes log2."
                         },
                 }, // hasMilestone("hu", 27)
                 28: {
@@ -42072,7 +42101,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: After 14300, 15250 and each more 138 thereafter Plants subtract 1 from the I think therefore I am base (max 10 total). Bulk 10x Plant and Mastery Token buyables."
+                                return "Reward: After 14300, 15250 and each more 138 thereafter Plants subtract 1 from the <i>IttIa</i> base (max 10 total). Bulk 10x Plant and Mastery Token buyables."
                         },
                 }, // hasMilestone("hu", 28)
                 29: {
@@ -42086,7 +42115,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: At 18,350 Plants Hope is a waking dream base is sqrt(Plants) and at 18610/18900/19920/20030 Plants I think therefore I am base is reduced by 1."
+                                return "Reward: At 18,350 Plants <i>Hiawd</i> base is sqrt(Plants) and at 18610/18900/19920/20030 Plants <i>IttIa</i> base is reduced by 1."
                         },
                 }, // hasMilestone("hu", 29)
                 30: {
@@ -42100,7 +42129,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Each 15th Plant after 20800 subtracts .0001 from the Chromosome exponent (max 100 times), bulk 5x Plant buyables, Leaf cost base is 1e11-Chromosomes (max 1e8), and at 21000, 21290, 21580, and 21960 subtract 1 from the I think therefore I am base."
+                                return "Reward: Each 15th Plant after 20800 subtracts .0001 from the Chromosome exponent (max 100 times), bulk 5x Plant buyables, Leaf cost base is 1e11-Chromosomes (max 1e8), and at 21000, 21290, 21580, and 21960 subtract 1 from the <i>IttIa</i> base."
                         },
                 }, // hasMilestone("hu", 30)
                 31: {
@@ -42114,7 +42143,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Human gain divider is 40,000 - Plants (min 200) and each 240th Plant after 24220 (max 8 times) and again at 26550, 26870, 27250, 27570, 27980, 28390, 28940, and 29760 subtracts 1 from the I think therefore I am base."
+                                return "Reward: Human gain divider is 40,000 - Plants (min 200) and each 240th Plant after 24220 (max 8 times) and again at 26550, 26870, 27250, 27570, 27980, 28390, 28940, and 29760 subtracts 1 from the <i>IttIa</i> base."
                         },
                 }, // hasMilestone("hu", 31)
                 32: {
@@ -42143,7 +42172,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Oligopotent base is 3 and at 35000 Plants and each 100 thereafter subtract 1 from the Hope is a waking dream base (max 250 times). At 35130, 35860, 36590, and 37390 Plants subtract 1 from the I think therefore I am base. At 38280 Plants Leaf's /4 is /1.4."
+                                return "Reward: Oligopotent base is 3 and at 35000 Plants and each 100 thereafter subtract 1 from the <i>Hiawd</i> base (max 250 times). At 35130, 35860, 36590, and 37390 Plants subtract 1 from the <i>IttIa</i> base. At 38280 Plants Leaf's /4 is /1.4."
                         },
                 }, // hasMilestone("hu", 33)
                 34: {
@@ -42230,6 +42259,34 @@ addLayer("hu", {
                                 return "Reward: Increase the make exponent to .81 and at 87540/89150/91140/92510/93910/94350 Plants the <i>Tgwitlcwl</i> coefficient is .31/.32/.33/.34/.35/.36 ."
                         },
                 }, // hasMilestone("hu", 39)
+                40: {
+                        requirementDescription(){
+                                return "94,790 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(94790)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: The <i>GmaptsaIwmte</i> .01 limits are .02, the Plurpotent cost exponent is 1.02 but it's cost base is 1e308, and each 125th Plant after 100,425 subtracts .15 from the <i>Tulinwl</i> base (max 200 times). At 101,200 / 104,680 / 112,430 / 132,970 Plants the <i>Tgwitlcwl</i> coefficient is .37 / .38 / .39 / .4 ."
+                        },
+                }, // hasMilestone("hu", 40)
+                41: {
+                        requirementDescription(){
+                                return "168,100 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(168100) && false
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: NOT YET Sprout base is cbrt(Nucleuses), per Mastery Token / 2 Biomass multiplies Gene gain, Animal gain is Plants<sup>Nucleuses<sup>3</sup></sup>, Token II via Stem Cell is renamed and now costs Animals but its divider is 600 and exponent is .2, remove Mastery IV, and deactivate all Organ content and Stem Cells."
+                        },
+                }, // hasMilestone("hu", 41)
         },
         tabFormat: {
                 "Upgrades": {
@@ -52768,7 +52825,7 @@ addLayer("tokens", {
                                         if (hasMilestone("hu", 17)) {
                                                 ret -= player.pl.points.sub(1460).div(6).floor().max(0).min(15).times(.001)
                                         }
-                                        ret -= tmp.hu.buyables[22].effect.min(.01)
+                                        ret -= tmp.hu.buyables[22].effect.min(hasMilestone("hu", 40) ? .02 : .01)
                                 }
                                 
                                 return ret
