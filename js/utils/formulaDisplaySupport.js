@@ -1034,6 +1034,9 @@ function biomassFormulaDisplay(){
                 if (hasUpgrade("e", 44))        c += "Ecosystems XIX multiplies AX by " + format(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0))) + br
         }
         if (hasUpgrade("hu", 11))       c += "Humans I multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length).pow(hasUpgrade("hu", 12) ? player.hu.milestones.length : 1)) + br
+        if (hasUpgrade("hu", 61) && player.hu.points.gte("1e5551")) {
+                c += "Humans XXVI multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(player.hu.milestones.length)) + br
+        }
 
         let f = function(x){
                 if (x.lt("1e10000")) return x 
