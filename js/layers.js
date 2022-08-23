@@ -41592,6 +41592,7 @@ addLayer("hu", {
                                         if (player.pl.points.gte(852070)) base = new Decimal(100)
                                 }
                                 if (hasMilestone("hu", 52) && player.hu.points.gte("1e6591")) base = new Decimal(99)
+                                if (hasMilestone("hu", 55)) base = base.min(player.hu.buyables[31].times(-1).plus(214).max(95))
 
                                 return base
                         },
@@ -41790,6 +41791,19 @@ addLayer("hu", {
                                         if (player.hu.points.gte("1e7049")) base = new Decimal(140e3)
                                         if (player.hu.points.gte("1e7110")) base = new Decimal(139e3)
                                 }
+                                if (hasMilestone("hu", 54)) {
+                                        if (player.hu.points.gte("5e7456")) base = new Decimal(133e3)
+                                        if (player.hu.points.gte("1e7616")) base = new Decimal(126e3)
+                                        if (player.hu.points.gte("1e7706")) base = new Decimal(123e3)
+                                        if (player.hu.points.gte("1e7729")) base = new Decimal(120e3)
+                                }
+                                if (hasMilestone("hu", 56)) {
+                                        if (player.hu.points.gte("1e8193")) base = new Decimal(117e3)
+                                        if (player.hu.points.gte("1e8245")) base = new Decimal(112e3)
+                                }
+                                if (hasMilestone("hu", 58)) {
+                                        base = base.div(Decimal.pow(1.001, player.hu.buyables[22].sub(900).max(0)))
+                                }
 
 
                                 return base
@@ -41830,6 +41844,19 @@ addLayer("hu", {
                         },
                         base(){
                                 let ret = new Decimal(.0001)
+
+                                if (hasMilestone("hu", 54)) {
+                                        if (player.hu.points.gte("1e7734")) ret = ret.times(4)
+                                        else if (player.hu.points.gte("5e7630")) ret = ret.times(3)
+                                        else if (player.hu.points.gte("1e7483")) ret = ret.times(2)
+                                }
+                                if (hasMilestone("hu", 56)) ret = ret.plus(.0001)
+                                if (hasMilestone("hu", 57)) {
+                                        if (player.hu.points.gte("1e8323")) ret = ret.plus(.0001)
+                                        if (player.hu.points.gte("1e8435")) ret = ret.plus(.0001)
+                                        if (player.hu.points.gte("1e8542")) ret = ret.plus(.0001)
+                                        if (player.hu.points.gte("1e8693")) ret = ret.plus(.0001)
+                                }
 
                                 return ret
                         },
@@ -41887,6 +41914,7 @@ addLayer("hu", {
                                 if (hasMilestone("hu", 50)) {
                                         if (player.hu.points.gte("1e5341")) base = base.sub(player.pl.points).max(4e5)
                                 }
+                                if (hasMilestone("hu", 54)) base = new Decimal(543210).div(Decimal.pow(1.001, player.hu.buyables[23])).max(1e4)
 
                                 return base
                         },
@@ -41971,9 +41999,14 @@ addLayer("hu", {
                         getCostBase(){
                                 let base = new Decimal(1e15)
 
-                                if (hasMilestone("hu", 51)) base = base.div(player.hu.buyables[31].max(1).pow(1.7).min(1e5))
+                                if (hasMilestone("hu", 53)) base = base.div(Decimal.pow(1.1, player.hu.buyables[31]).min(1e7))
+                                else if (hasMilestone("hu", 51)) base = base.div(player.hu.buyables[31].max(1).pow(1.7).min(1e5))
                                 if (hasUpgrade("hu", 63) && player.hu.points.gte("1e6105")) base = base.div(100/7)
                                 if (hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")) base = base.div(7)
+                                if (hasMilestone("hu", 56) && player.hu.points.gte("1e8089")) base = base.div(2)
+                                if (hasMilestone("hu", 57)) {
+                                        base = new Decimal(25e5).div(Decimal.pow(1.01, player.hu.buyables[31])).max(1e4)
+                                }
 
                                 return base
                         },
@@ -42020,6 +42053,11 @@ addLayer("hu", {
                                         if (player.hu.buyables[12].gte(1213)) ret = ret.plus(2.5)
                                         if (player.hu.buyables[12].gte(1215)) ret = ret.plus(2.5)
                                         if (player.hu.buyables[12].gte(1216)) ret = ret.plus(2.5)
+                                }
+                                if (hasMilestone("hu", 53)) {
+                                        if (player.hu.points.gte("1e7374")) ret = new Decimal(16)
+                                        if (player.hu.points.gte("1e7386")) ret = new Decimal(18)
+                                        if (player.hu.points.gte("5e7402")) ret = new Decimal(21)
                                 }
 
                                 return ret
@@ -42855,6 +42893,90 @@ addLayer("hu", {
                                 return "Reward: The <i>GmaptsaIwmte</i> cost base is 150,000, at 1e6591 Humans the <i>Hiawd</i> base is 99 and the Flower cost base is 50, and at 3e6615 / 1e7007 / 1e7049 / 1e7110 Humans the <i>Badwaftapw</i> effect base is .15 / .15 / .15 / .15 and <i>GmaptsaIwmte</i> base is 148,000 / 145,000 / 140,000 / 139,000."
                         },
                 }, // hasMilestone("hu", 52)
+                53: {
+                        requirementDescription(){
+                                return "5e7337 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("5e7337")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Human Milestone 51 no longer divides <i>Tinhiragt</i> base but per level divide its cost base by 1.1 (max 1e7), and at 1e7374 / 1e7386 / 5e7402 Humans its base is 16 / 18 / 21."
+                        },
+                }, // hasMilestone("hu", 53)
+                54: {
+                        requirementDescription(){
+                                return "5e7420 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("5e7420")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: <i>Badwaftapw</i> base is 543,210/1.001<sup>its levels</sup>, at 5e7456 / 1e7616 / 1e7706 / 1e7729 Humans the <i>GmaptsaIwmte</i> base is 133,000 / 126,000 / 123,000 / 120,000, and at 1e7483 / 5e7630 / 1e7734 Humans double / triple / quadruple <i>GmaptsaIwmte</i> base."
+                        },
+                }, // hasMilestone("hu", 54)
+                55: {
+                        requirementDescription(){
+                                return "1e7824 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("1e7824")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Bulk 10x Mastery Tokens, <i>Hiawd</i> base is 214 - <i>Tinhiragt</i> min 95, at 1e7913 Plants the Top Quark coefficient is <i>Tulinwl</i>/100."
+                        },
+                }, // hasMilestone("hu", 55)
+                56: {
+                        requirementDescription(){
+                                return "1e7960 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("1e7960")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Add .0001 to the <i>GmaptsaIwmte</i> base, at 1e8089 Humans halve the <i>Tinhiragt</i> cost base, and at 1e8193 / 1e8245 Humans the <i>GmaptsaIwmte</i> base is 117,000 / 112,000."
+                        },
+                }, // hasMilestone("hu", 56)
+                57: {
+                        requirementDescription(){
+                                return "3e8308 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("3e8308")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: The <i>Tinhiragt</i> cost base is 2,500,000 and is decreased by 1% per level (min 1e4) and at 1e8323 / 1e8435 / 1e8542 / 1e8693 Humans add .0001 to the <i>GmaptsaIwmte</i> base."
+                        },
+                }, // hasMilestone("hu", 57)
+                58: {
+                        requirementDescription(){
+                                return "3e8668 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("3e8668")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Each <i>GmaptsaIwmte</i> level past 900 decreases it's base by 1.001 ."
+                        },
+                }, // hasMilestone("hu", 58)
         },
         tabFormat: {
                 "Upgrades": {
@@ -52836,6 +52958,9 @@ addLayer("tokens", {
                                 if (!player.ch.everUpgrade33) player.tokens.buyablesBoughtThisTick.push(121)
                         },
                         coefficient(){
+                                if (hasMilestone("hu", 55) && player.hu.points.gte("1e7913")) {
+                                        return player.hu.buyables[21].div(100).max(8)
+                                }
                                 if (hasMilestone("hu", 43) && player.pl.points.gte(412580)) {
                                         return new Decimal(8)
                                 }
@@ -53287,6 +53412,7 @@ addLayer("tokens", {
 
                         if (hasMilestone("hu", 28))     ret *= 10
                         if (hasMilestone("hu", 50))     ret *= 10
+                        if (hasMilestone("hu", 55))     ret *= 10
 
                         return ret
                 },
