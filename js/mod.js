@@ -28,6 +28,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"updateUniverse",
 	"autobuyRadioWaves",
 	"updateBestBuyables",
+	"doImprovedPassiveGain",
 	]
 
 function getStartPoints(){

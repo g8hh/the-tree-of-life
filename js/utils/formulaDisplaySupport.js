@@ -245,7 +245,9 @@ function dnaExpDisplay(){
         if (c != "")                    c += br
         
         if (hasUpgrade("t", 74))        c += "Tissues XXXIV multiplies BX by " + format(player.t.upgrades.length) + br
-        if (hasUpgrade("or", 145))      c += "Heart XXV multiplies BX by " + format(2) + br
+        if (hasUpgrade("or", 145) && !hasMilestone("hu", 4)) { 
+                                        c += "Heart XXV multiplies BX by " + format(2) + br
+        }
         if (hasUpgrade("or", 213))      c += "Kidney III multiplies BX by " + format(2) + br
         if (hasUpgrade("an", 41))       c += "Animals XVI multiplies BX by " + format(player.ch.points.max(6).log(6)) + br
         if (hasMilestone("ch", 23))     c += "Chromosome Milestone 23 multiplies BX by " + format(player.nu.points.max(2).log(2)) + br
@@ -253,7 +255,10 @@ function dnaExpDisplay(){
         if (hasMilestone("ch", 26) && !hasMilestone("pl", 19)) {
                                         c += "Chromosome Milestone 26 multiplies BX by 1.31" + br
         }
-        if (hasMilestone("nu", 17))     c += "Nucleus Milestone 17 multiplies BX by " + format(Decimal.pow(1.01, player.nu.points)) + br
+        if (hasMilestone("nu", 17)) {
+                let exp = player.nu.points.min(3333).times(player.nu.points).sqrt()
+                                        c += "Nucleus Milestone 17 multiplies BX by " + format(Decimal.pow(1.01, exp)) + br
+        }
         if (hasUpgrade("sp", 84))       c += "Upgraded Effect XIV multiplies BX by " + format(Decimal.pow(1.01, player.sp.upgrades.length ** (hasUpgrade("sp", 134) ? 1.1 : 1))) + br
         if (hasChallenge("sp", 32))     c += "Truly Energyless multiplies BX by " + format(tmp.sp.challenges[32].reward) + br
         if (hasUpgrade("e", 24))        c += "Ecosystems IX multiplies BX by " + format(player.tokens.mastery_tokens.total.max(1).sqrt()) + br
@@ -360,6 +365,7 @@ function stemCellFormulaDisplay(){
                 if (hasMilestone("cells", 32))  c += "Cell Milestone 32 multiplies AX by " + format(player.cells.lambda.points.max(10).log10()) + br
                 if (hasMilestone("cells", 38))  c += "Cell Milestone 38 multiplies AX by " + format(player.d.points.max(10).log10()) + br
                 if (hasMilestone("cells", 39))  c += "Cell Milestone 39 multiplies AX by " + format(player.mu.points.max(10).log10()) + br
+                if (hasMilestone("cells", 40))  c += "Cell Milestone 40 multiplies AX by " + format(player.cells.best.max(1).root(player.extremeMode ? 100 : hasUpgrade("tokens", 222) ? 25 : 50)) + br
                 if (hasMilestone("cells", 41))  c += "Cell Milestone 41 multiplies AX by " + format(player.tokens.buyables[11].max(1)) + br
                 if (hasMilestone("cells", 53))  c += "Cell Milestone 53 multiplies AX by " + format(tmp.cells.milestones[53].effect) + br
                 if (hasMilestone("cells", 59) && !player.extremeMode) {
@@ -460,7 +466,6 @@ function stemCellFormulaDisplay(){
                                         c += "Pluripotent multiplies AX by " + format(tmp.cells.buyables[13].effect) + br
                                         c += "Multipotent multiplies AX by " + format(tmp.cells.buyables[21].effect) + br
                                         c += "Oligopotent multiplies AX by " + format(tmp.cells.buyables[22].effect) + br
-        if (hasMilestone("cells", 40))  c += "Cell Milestone 40 multiplies AX by " + format(player.cells.best.max(1).root(player.extremeMode ? 100 : hasUpgrade("tokens", 222) ? 25 : 50)) + br
         if (c.includes("AX"))           c += br
 
         if (inChallenge("cells", 12))   c += "Secondary Challenge multiplies BX by " + format(tmp.cells.challenges[12].challengeEffect) + br
@@ -1010,6 +1015,8 @@ function biomassFormulaDisplay(){
         if (hasUpgrade("e", 31))        c += "Ecosystems XI multiplies AX by " + format(player.nu.points.max(10).log10().pow(player.e.upgrades.length)) + br
         if (hasUpgrade("e", 34))        c += "Ecosystems XIV multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.pl.points.min(100).sub(15).max(0))) + br
         if (hasUpgrade("e", 44))        c += "Ecosystems XIX multiplies AX by " + format(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0))) + br
+        if (hasUpgrade("hu", 11))       c += "Humans I multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length).pow(hasUpgrade("hu", 12) ? player.hu.milestones.length : 1))
+
 
                                         c += "Sprout multiplies AX by " + format(tmp.pl.buyables[11].effect) + br
                                         c += "Leaf multiplies AX by " + format(tmp.pl.buyables[12].effect) + br
