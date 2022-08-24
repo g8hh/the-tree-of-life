@@ -3216,7 +3216,7 @@ var cnPrefix = {
     "": "",
     "": "",
     "": "",
-    "One Thousand ": "100",
+    "One Thousand ": "10",
     "Nine Hundred and ": "9",
     "Eight Hundred and ": "8",
     "Seven Hundred and ": "7",
