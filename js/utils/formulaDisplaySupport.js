@@ -248,7 +248,9 @@ function dnaExpDisplay(){
         if (hasUpgrade("or", 145) && !hasMilestone("hu", 4)) { 
                                         c += "Heart XXV multiplies BX by " + format(2) + br
         }
-        if (hasUpgrade("or", 213))      c += "Kidney III multiplies BX by " + format(2) + br
+        if (hasUpgrade("or", 213) && !hasUpgrade("hu", 22)) {
+                                        c += "Kidney VIII multiplies BX by " + format(2) + br
+        }
         if (hasUpgrade("an", 41))       c += "Animals XVI multiplies BX by " + format(player.ch.points.max(6).log(6)) + br
         if (hasMilestone("ch", 23))     c += "Chromosome Milestone 23 multiplies BX by " + format(player.nu.points.max(2).log(2)) + br
         if (hasMilestone("ch", 25))     c += "Chromosome Milestone 25 multiplies BX by " + format(player.nu.points.max(1).sqrt()) + br
@@ -1015,13 +1017,16 @@ function biomassFormulaDisplay(){
         if (hasUpgrade("e", 31))        c += "Ecosystems XI multiplies AX by " + format(player.nu.points.max(10).log10().pow(player.e.upgrades.length)) + br
         if (hasUpgrade("e", 34))        c += "Ecosystems XIV multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.pl.points.min(100).sub(15).max(0))) + br
         if (hasUpgrade("e", 44))        c += "Ecosystems XIX multiplies AX by " + format(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0))) + br
-        if (hasUpgrade("hu", 11))       c += "Humans I multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length).pow(hasUpgrade("hu", 12) ? player.hu.milestones.length : 1))
+        if (hasUpgrade("hu", 11))       c += "Humans I multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length).pow(hasUpgrade("hu", 12) ? player.hu.milestones.length : 1)) + br
 
-
-                                        c += "Sprout multiplies AX by " + format(tmp.pl.buyables[11].effect) + br
-                                        c += "Leaf multiplies AX by " + format(tmp.pl.buyables[12].effect) + br
-                                        c += "Stem multiplies AX by " + format(tmp.pl.buyables[13].effect) + br
-                                        c += "Flower multiplies AX by " + format(tmp.pl.buyables[21].effect) + br
+        let f = function(x){
+                if (x.lt("1e10000")) return x 
+                return x.log10().sqrt().sub(50).pow10().pow(200)
+        }
+                                        c += "Sprout multiplies AX by " + format(f(tmp.pl.buyables[11].effect)) + br
+                                        c += "Leaf multiplies AX by " + format(f(tmp.pl.buyables[12].effect)) + br
+                                        c += "Stem multiplies AX by " + format(f(tmp.pl.buyables[13].effect)) + br
+                                        c += "Flower multiplies AX by " + format(f(tmp.pl.buyables[21].effect)) + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }

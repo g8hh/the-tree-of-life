@@ -9243,7 +9243,7 @@ addLayer("p", {
                 return start + end1 + end2 + "."
         },
         deactivated(){
-                return hasUpgrade("t", 151)
+                return hasUpgrade("t", 151) || hasMilestone("hu", 13)
         },
         update(diff){
                 if (hasUpgrade("t", 151)) return
@@ -10407,7 +10407,7 @@ addLayer("mu", {
                 return hasUpgrade("mu", 35) || player.or.unlocked
         },
         deactivated(){
-                return hasUpgrade("t", 151)
+                return hasUpgrade("t", 151) || hasMilestone("hu", 13)
         },
         update(diff){
                 if (hasUpgrade("t", 151)) return
@@ -18518,7 +18518,9 @@ addLayer("d", {
                 
                 if (hasUpgrade("t", 74))        ret = ret.times(player.t.upgrades.length)
                 if (hasUpgrade("or", 145) && !hasMilestone("hu", 4)) ret = ret.times(2)
-                if (hasUpgrade("or", 213))      ret = ret.times(2)
+                if (hasUpgrade("or", 213) && !hasUpgrade("hu", 22)) {
+                                                ret = ret.times(2)
+                }
                 if (hasUpgrade("an", 41))       ret = ret.times(player.ch.points.max(6).log(6))
                 if (hasMilestone("ch", 23))     ret = ret.times(player.nu.points.max(2).log(2))
                 if (hasMilestone("ch", 25))     ret = ret.times(player.nu.points.max(1).sqrt())
@@ -18530,7 +18532,11 @@ addLayer("d", {
                                                 ret = ret.times(Decimal.pow(1.01, exp))
                 }
                 if (hasUpgrade("sp", 84))       ret = ret.times(Decimal.pow(1.01, player.sp.upgrades.length ** (hasUpgrade("sp", 134) ? 1.1 : 1)))
-                if (hasUpgrade("pl", 43))       ret = ret.times(Decimal.pow(1.01, player.pl.points.sub(100)))
+                if (hasUpgrade("pl", 43)) {
+                        let e = player.pl.points.sub(100)
+                        if (e.gt(400)) e = e.times(400).sqrt()
+                                                ret = ret.times(Decimal.pow(1.01, e))
+                }
                 if (hasChallenge("sp", 32))     ret = ret.times(tmp.sp.challenges[32].reward)
                 if (hasUpgrade("e", 24))        ret = ret.times(player.tokens.mastery_tokens.total.max(1).sqrt())
 
@@ -18599,6 +18605,9 @@ addLayer("d", {
                 if (tmp.d.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.d.getNextAt) + " Amino Acid."
 
                 return "Reset for <b>" + formatWhole(tmp.d.getResetGain) + "</b> DNA" + b
+        },
+        deactivated(){
+                return hasMilestone("hu", 13)
         },
         layerShown(){
                 if (tmp.d.deactivated) return false
@@ -20263,6 +20272,9 @@ addLayer("cells", {
                 if (tmp.cells.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.cells.getNextAt) + " DNA."
 
                 return "Reset for <b>" + formatWhole(tmp.cells.getResetGain) + "</b> Cells" + b
+        },
+        deactivated(){
+                return hasMilestone("hu", 13)
         },
         layerShown(){
                 if (tmp.cells.deactivated) return false
@@ -22534,10 +22546,13 @@ addLayer("cells", {
                                 if (hasUpgrade("cells", 41))    base = new Decimal(player.extremeMode ? 8.5 : 9.04)
                                 if (hasUpgrade("cells", 42))    base = new Decimal(player.extremeMode ? 8.5 : 9)
                                 if (hasUpgrade("tokens", 132))  base = new Decimal(10)
+
+                                if (hasUpgrade("hu", 22))       base = new Decimal(1000).sub(player.pl.points).max(10)
                                 
                                 return base
                         },
                         costExp(){
+                                if (hasUpgrade("hu", 22)) return 1.03
                                 return hasMilestone("pl", 22) ? 1.04 : 1.05
                         },
                         cost(){
@@ -22813,6 +22828,7 @@ addLayer("cells", {
                         },
                         base(){
                                 if (player.cells.challenges[21] >= 2 && inChallenge("cells", 21)) return decimalOne
+                                if (hasMilestone("hu", 13))     return Decimal.pow(3, player.tokens.tokens2.total)
                                 let ret = tmp.t.effectAmt.max(10).log10()
 
                                 if (hasMilestone("an", 15)) return ret
@@ -22918,6 +22934,7 @@ addLayer("cells", {
                         },
                         base(){
                                 if (player.cells.challenges[21] >= 3 && inChallenge("cells", 21)) return decimalOne
+                                if (hasUpgrade("hu", 21))       return player.tokens.tokens2.total.max(1).pow(player.pl.points.sqrt())
                                 if (hasUpgrade("e", 31))        return player.tokens.tokens2.total.max(1).pow(player.nu.points.max(10).log10())
                                 return player.tokens.tokens2.total.max(1)
                         },
@@ -22935,7 +22952,8 @@ addLayer("cells", {
                                 }
 
                                 let eformula = "Tokens II^x<br>" + format(tmp.cells.buyables[21].base) + "^x"
-                                if (hasUpgrade("e", 31)) eformula = eformula.replace("^", "<sup>log10(Nucleus)</sup>^")
+                                if (hasUpgrade("e", 31))        eformula = eformula.replace("^", "<sup>log10(Nucleus)</sup>^")
+                                if (hasUpgrade("hu", 21))       eformula = eformula.replace("log10(Nucleus)", "sqrt(Plants)")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -22973,6 +22991,7 @@ addLayer("cells", {
                                 return base
                         },
                         costExp(){
+                                if (hasMilestone("hu", 11))     return 1.03
                                 return hasMilestone("pl", 23) ? 1.04 : 1.05
                         },
                         unlocked(){
@@ -23980,6 +23999,9 @@ addLayer("t", {
                 if (tmp.t.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.t.getNextAt) + " Cells."
 
                 return "Reset for <b>" + formatWhole(tmp.t.getResetGain) + "</b> Tissues" + b
+        },
+        deactivated(){
+                return hasMilestone("hu", 13)
         },
         layerShown(){
                 if (tmp.t.deactivated) return false
@@ -25977,6 +25999,10 @@ addLayer("or", {
                 let pts = player.t.points
                 if (pts.lt("1e100")) return decimalZero
 
+                if (hasMilestone("hu", 13)) {
+                        let base = player.nu.points.max(2).pow(player.pl.points.pow(3))
+                                                return base.pow(tmp.or.getGainExp)
+                }
                 if (hasUpgrade("e", 35))        return pts.log10().pow(.41).pow10().pow(tmp.or.getGainExp)
                 if (hasMilestone("sp", 9))      return pts.log10().pow(.4).pow10().pow(tmp.or.getGainExp)
                 if (hasMilestone("nu", 18))     return pts.log10().pow(.35).pow10().root(4).pow(tmp.or.getGainExp)
@@ -26033,6 +26059,12 @@ addLayer("or", {
                 return ret.max(1)
         },
         getGainExp(){
+                if (hasMilestone("hu", 13)) {
+                        let ret = player.cells.buyables[11].cbrt()
+
+
+                        return ret
+                }
                 if (hasUpgrade("e", 35)) return decimalOne
                 let ret = new Decimal(.5)
 
@@ -26288,7 +26320,7 @@ addLayer("or", {
                         } 
                 },
                 getResetGain(){ // energy gain energygain egain engain en gain e gain  egain
-                        if (player.or.air.total.lt("1e2300")) return decimalZero
+                        if (player.or.air.total.lt("1e2300") && !hasMilestone("hu", 12)) return decimalZero
                         if (inChallenge("sp", 21)) return decimalZero
                         let data = player.or.extras
                         let ret = decimalOne
@@ -26346,6 +26378,8 @@ addLayer("or", {
         },
         lungs: {
                 update(diff){
+                        if (hasMilestone("hu", 12)) return 
+
                         let data = player.or
                         let subdata = data.air
 
@@ -26398,6 +26432,7 @@ addLayer("or", {
                         return ["10", "1e5", "1e13", "1e43", "1e117", "1e369"]
                 },
                 getResetGain(){ // air gain airgain again airgain a gain air gain a gain
+                        if (hasMilestone("hu", 12)) return decimalZero
                         let ret = decimalOne
 
                         if (player.hardMode)            ret = ret.div(4)
@@ -27872,7 +27907,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney VIII"
                         },
                         description(){
-                                return "Square base DNA gain, bulk 5x Kidney buyables, and autobuy an"
+                                return "Double DNA gain exponent, bulk 5x Kidney buyables, and autobuy an"
                         },
                         cost(){
                                 return new Decimal("1e70574")
@@ -28913,6 +28948,8 @@ addLayer("or", {
                         },
                         baseExp(){
                                 if (hasUpgrade("tokens", 242))  {
+                                        if (hasMilestone("hu", 11))     return .79
+                                        if (hasUpgrade("hu", 14))       return .78
                                         if (hasMilestone("hu", 6))      return .77
                                         if (hasMilestone("hu", 3)) {
                                                 if (hasUpgrade("pl", 45)) return .76
@@ -29361,6 +29398,7 @@ addLayer("or", {
                         if (hasMilestone("an", 10))     ret = ret.times(5)
                         if (hasUpgrade("nu", 13))       ret = ret.times(4)
                         if (player.sp.unlocked)         ret = ret.times(5)
+                        if (hasMilestone("hu", 5))      ret = ret.times(player.hu.times + 1)
                         return ret 
                 }, // tmp.or.buyables.getIntestineMaxBulk
                 401: {
@@ -38779,6 +38817,9 @@ addLayer("e", {
                                 if (c >= 101) {
                                         ret = ret.times(Decimal.pow(1.01, c)).times(1.97)
                                 }
+                                if (hasUpgrade("hu", 14) && c >= 119) {
+                                        ret = new Decimal(10500).plus((c - 119) * 40)
+                                }
                                 return ret.floor()
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[22].goal),
@@ -39525,6 +39566,21 @@ addLayer("pl", {
                 return player.pl.unlocked || hasMilestone("e", 17)
         },
         biomass: {
+                buyablesEffect(){
+                        let ret = decimalOne
+                        let ids = [11, 12, 13, 21]
+                        for (i in ids) {
+                                let id = ids[i]
+                                let x = tmp.pl.buyables[id].effect
+                                if (x.lt("1e10000")) {
+                                        ret = ret.times(x)
+                                        continue
+                                }
+                                ret = ret.times(x.log10().times(10000).sqrt().times(2).sub(10000).pow10())
+                        }
+
+                        return ret
+                },
                 getBaseGain(){
                         if (!hasMilestone("e", 17)) return decimalZero
                         
@@ -39553,17 +39609,18 @@ addLayer("pl", {
                                                         ret = ret.times(tmp.hu.effect.min(1e100))
                         if (hasUpgrade("hu", 11))       ret = ret.times(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length).pow(hasUpgrade("hu", 12) ? player.hu.milestones.length : 1))
 
-                                                        ret = ret.times(tmp.pl.buyables[11].effect)
-                                                        ret = ret.times(tmp.pl.buyables[12].effect)
-                                                        ret = ret.times(tmp.pl.buyables[13].effect)
-                                                        ret = ret.times(tmp.pl.buyables[21].effect)
+                                                        ret = ret.times(tmp.pl.biomass.buyablesEffect)
 
                         return ret
                 },
                 getResetGain(){ // biomassgain biogain biomass gain bio gain bgain biomgain b gain bmgain
                         let ret = tmp.pl.biomass.getBaseGain
 
-                        if (player.pl.points.lt(1e3)) return ret.times(player.pl.biomass.points.plus(1).pow(tmp.pl.effect))
+                        if (!hasUpgrade("pl", 35)) return ret.times(player.pl.biomass.points.plus(1).pow(tmp.pl.effect))
+                        if (player.pl.points.lt(1e4)) {
+                                let base = ret.times(player.pl.biomass.points.plus(1).pow(tmp.pl.effect))
+                                return ret.pow(decimalOne.sub(tmp.pl.effect).pow(-1)).div(1e10).plus(base)
+                        }
                         if (player.pl.points.lt(1e5)) return ret.pow(decimalOne.sub(tmp.pl.effect).pow(-1))
                         return ret.pow(.8).pow(player.pl.points.div(100).plus(1))
                 },
@@ -39636,6 +39693,8 @@ addLayer("pl", {
                         },
                         base(){
                                 let ret = player.cells.points.max(10).log10().max(10).log10()
+
+                                //if (ret.gt(100)) ret = ret.log10().times(50)
                                 
                                 return ret
                         },
@@ -39653,6 +39712,7 @@ addLayer("pl", {
                                 }
 
                                 let eformula = "log10(log10(Cells))^x<br>" + format(tmp.pl.buyables[11].base) + "^x"
+                                //if (tmp.pl.buyables[11].base.gt(100)) eformula = eformula.replace("log10(log10(Cells))", "50*log10<sup>(3)</sup>(Cells)")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -39866,6 +39926,7 @@ addLayer("pl", {
                         },
                         base(){
                                 let sub = hasMilestone("pl", 16) ? 100 * (36 - Math.min(player.pl.milestones.length, 36)) : 2100
+                                if (hasMilestone("hu", 12)) sub = 0
                                 let ret = player.nu.points.sub(sub).max(1)
                                 
                                 return ret
@@ -39885,6 +39946,7 @@ addLayer("pl", {
 
                                 let eformula = "(Nucleus-SUB)^x<br>" + format(tmp.pl.buyables[21].base) + "^x"
                                 let sub = hasMilestone("pl", 16) ? 100 * (36 - Math.min(player.pl.milestones.length, 36)) : 2100
+                                if (hasMilestone("hu", 12)) eformula = eformula.replace("-SUB", "")
                                 if (hasMilestone("pl", 16)) eformula = eformula.replace("SUB", formatWhole(sub))
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -40075,7 +40137,7 @@ addLayer("pl", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Plants XV"
                         },
                         description(){
-                                return "Up Quark's double exponent is .6"
+                                return "Up Quark's double exponent is .6 and <bdi style='font-size: 80%'>you also gain 1e10x less than the Biomass you'd have to equalize production and gain in a second, per second</bdi>"
                         },
                         cost:() => new Decimal(91),
                         unlocked(){
@@ -40111,7 +40173,7 @@ addLayer("pl", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Plants XVIII"
                         },
                         description(){
-                                return "Each Plant past 100 multiplies DNA gain exponent by 1.01"
+                                return "Each Plant past 100 multiplies DNA gain exponent by 1.01 (softcap at 500)"
                         },
                         cost:() => new Decimal(138),
                         unlocked(){
@@ -40551,7 +40613,12 @@ addLayer("pl", {
                                         let b = "Effect formula: (.2+x/100)/(1+x/100)"
                                         let c = "Initial Biomass gain: log10(Ecosystems)-100"
 
-                                        return a + br2 + b + br2 + c
+                                        if (player.pl.points.lt(450)) return a + br2 + b + br2 + c
+
+                                        let d = "Each buyable's effect on Biomass is softcapped at e10000" + br
+                                        d += "f(x) = 1e200<sup>sqrt(log10(x))-50</sup>"
+                                        
+                                        return a + br2 + b + br2 + c + br2 + d
                                 }],
                         ],
                         unlocked(){
@@ -40613,6 +40680,8 @@ addLayer("hu", {
         getGainExp(){
                 let ret = new Decimal(3)
 
+                if (hasUpgrade("hu", 13))       ret = ret.plus(player.hu.upgrades.length - 2)
+
                 return ret
         },
         getBaseGain(){
@@ -40647,8 +40716,12 @@ addLayer("hu", {
                 layers.hu.thoughts.update(diff)
 
                 if (hasMilestone("hu", 2)) data.everMile2 = true
+
+                if (hasMilestone("hu", 9)) {
+                        player.hu.points = player.hu.points.plus(tmp.hu.getResetGain.times(.1).times(diff))
+                }
         },
-        row: 2,
+        row: 3,
         prestigeButtonText(){
                 let b = ""
                 if (tmp.hu.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.hu.getNextAt) + " Biomass."
@@ -40681,6 +40754,7 @@ addLayer("hu", {
                         data.points = data.points.plus(gainThisTick)
                         data.best = data.best.max(data.points)
                         data.total = data.total.plus(gainThisTick)
+
                 },
         },
         buyables: {
@@ -40713,6 +40787,66 @@ addLayer("hu", {
                         unlocked(){
                                 return player.pl.best.gte(276) || hasUpgrade("hu", 12)
                         }, // hasUpgrade("hu", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans III"
+                        },
+                        description(){
+                                return "Add 1 to the Human gain exponent for this and subsequent upgrades"
+                        },
+                        cost:() => new Decimal(2e5),
+                        unlocked(){
+                                return player.pl.best.gte(285) || hasUpgrade("hu", 13)
+                        }, // hasUpgrade("hu", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans IV"
+                        },
+                        description(){
+                                return "Animaless? is easier and the make exponent is .78"
+                        },
+                        cost:() => new Decimal(1e7),
+                        unlocked(){
+                                return player.pl.best.gte(298) || hasUpgrade("hu", 14)
+                        }, // hasUpgrade("hu", 14)
+                },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans V"
+                        },
+                        description(){
+                                return "Each other Plant past 358 subtracts .001 from the Mastery III base (max 10)"
+                        },
+                        cost:() => new Decimal(1e9),
+                        unlocked(){
+                                return player.pl.best.gte(345) || hasUpgrade("hu", 15)
+                        }, // hasUpgrade("hu", 15)
+                },
+                21: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans VI"
+                        },
+                        description(){
+                                return "Multipotent's exponent is sqrt(Plants)"
+                        },
+                        cost:() => new Decimal(1e12),
+                        unlocked(){
+                                return player.pl.best.gte(392) || hasUpgrade("hu", 21)
+                        }, // hasUpgrade("hu", 21)
+                },
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans VII"
+                        },
+                        description(){
+                                return "Omnipotent's exponent is 1.03 but its cost base is 1000-Plants (min 10) and disable Kidney VIII"
+                        },
+                        cost:() => new Decimal(1e15),
+                        unlocked(){
+                                return player.pl.best.gte(464) || hasUpgrade("hu", 22)
+                        }, // hasUpgrade("hu", 22)
                 },
         },
         milestones: {
@@ -40783,7 +40917,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Keep a Plant upgrade and milestone per reset."
+                                return "Reward: Keep a Plant upgrade and milestone per reset and you can bulk (Human resets + 1) more Energy buyables."
                         },
                 }, // hasMilestone("hu", 5)
                 6: {
@@ -40841,6 +40975,101 @@ addLayer("hu", {
                                 return "Reward: Totipotent cost exponent is 1.03 but remove Heart."
                         },
                 }, // hasMilestone("hu", 8)
+                9: {
+                        requirementDescription(){
+                                return "283 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(283)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Mastery II base is 4, gain 10% of your Humans on reset per second, and each second Plant after 283 reduces the Mastery III base by 1 (max 15)."
+                        },
+                }, // hasMilestone("hu", 9)
+                10: {
+                        requirementDescription(){
+                                return "321 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(321)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Mastery II base is 3 and if you have 330 Plants then it is 2."
+                        },
+                }, // hasMilestone("hu", 10)
+                11: {
+                        requirementDescription(){
+                                return "422 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(422)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: make exponent is .79 and Oligopotent exponent is 1.03 ."
+                        },
+                }, // hasMilestone("hu", 11)
+                12: {
+                        requirementDescription(){
+                                return "442 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(442)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                let d1 = player.or.air
+                                let d2 = player.or.bankedAir
+
+                                d1.points = decimalZero
+                                d1.best   = decimalZero
+                                d1.total  = decimalZero
+
+                                d2[11] = decimalZero
+                                d2[12] = decimalZero
+                                d2[21] = decimalZero
+                                d2[22] = decimalZero
+                                d2[31] = decimalZero
+                                d2[32] = decimalZero
+                        },
+                        effectDescription(){
+                                return "Reward: Flower subtractor is 0 and remove Air."
+                        },
+                }, // hasMilestone("hu", 12)
+                13: {
+                        requirementDescription(){
+                                return "530 Plants"
+                        },
+                        done(){
+                                return player.pl.points.gte(530)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                let d1 = player.tokens.tokens2 
+                                let d2 = player.tokens 
+
+                                d2.buyables[193] = decimalZero
+                                
+                                d1.points = d2.buyables[192].plus(d2.buyables[191])
+                                d1.total  = d1.points 
+                                d1.best   = d1.points
+                        },
+                        effectDescription(){
+                                return "Reward: Pluripotent base is 3<sup>Token II</sup> and Top Quark's coefficient is .3 but remove Cell, DNA, and Tissues, and remove Token II via Cell [not yet]."
+                        },
+                }, // hasMilestone("hu", 13)
         },
         tabFormat: {
                 "Upgrades": {
@@ -41768,7 +41997,10 @@ addLayer("ml", {
                         },
                 },
         },
-        layerShown(){return hasUpgrade("or", 223)},
+        layerShown(){
+                if (hasMilestone("hu", 12)) return false
+                return hasUpgrade("or", 223)
+        },
         tabFormat: {
                 "Lung": {
                         content: [
@@ -50738,6 +50970,7 @@ addLayer("tokens", {
                                 if (!player.ch.everUpgrade33) player.tokens.buyablesBoughtThisTick.push(121)
                         },
                         coefficient(){
+                                if (hasMilestone("hu", 13))     return new Decimal(.3)
                                 if (hasUpgrade("ch", 42))       return player.nu.best.div(1000).min(.14)
                                 if (hasUpgrade("ch", 33))       return new Decimal(.012)
                                 if (hasMilestone("an", 29))     return new Decimal(.011)
@@ -51127,12 +51360,14 @@ addLayer("tokens", {
                                 return [add, div]
                         },
                         maxAfford(){
+                                if (hasMilestone("hu", 13)) return decimalZero
                                 let data = tmp.tokens.buyables[193].costData
                                 return player.cells.points.max(10).log10().max(10).log10().sub(data[0]).times(data[1]).ceil().max(0)
                         },
                         canAfford:() => player.cells.points.gte(tmp.tokens.buyables[193].cost),
                         buy(){
                                 if (!this.canAfford()) return
+                                if (hasMilestone("hu", 13)) return 
                                 let ma = tmp.tokens.buyables[193].maxAfford
                                 ma = ma.sub(player.tokens.buyables[193]).max(0).min(tmp.tokens.buyables.maxTokenIIBulk)
                                 let data = player.tokens
@@ -51141,6 +51376,7 @@ addLayer("tokens", {
                                 data.tokens2.total = data.tokens2.total.plus(ma)
                         },
                         unlocked(){
+                                if (hasMilestone("hu", 13)) return false
                                 return hasMilestone("t", 17)
                         },
                         display(){
@@ -51214,6 +51450,8 @@ addLayer("tokens", {
                                 if (hasMilestone("pl", 24) && player.pl.points.gte(122)) {
                                                                 dBase = 5  
                                 }
+                                if (hasMilestone("hu", 9))      dBase = 4
+                                if (hasMilestone("hu", 10))     dBase = player.pl.points.gte(330) ? 2 : 3
                                 if (player.tokens.buyables[202].gte(50)) return Decimal.pow(dBase, player.tokens.buyables[202].pow(2))
                                 let add = 11
                                 return player.tokens.buyables[202].plus(add).pow10().pow(39)
@@ -51223,6 +51461,8 @@ addLayer("tokens", {
                                 let add = 11
                                 let x = player.sp.points.root(39).max(1).log10().sub(add).ceil().max(0)
                                 if (x.lte(49)) return x 
+                                if (hasMilestone("hu", 10))     return player.sp.points.max(1).log(player.pl.points.gte(330) ? 2 : 3).sqrt().ceil()
+                                if (hasMilestone("hu", 9))      return player.sp.points.max(1).log(4).sqrt().ceil()
                                 if (hasMilestone("pl", 24) && player.pl.points.gte(122)) return player.sp.points.max(1).log(5).sqrt().ceil()
                                 if (hasMilestone("pl", 11))     return player.sp.points.max(1).log(6).sqrt().ceil()
                                 if (hasUpgrade("pl", 13))       return player.sp.points.max(1).log(7).sqrt().ceil()
@@ -51247,6 +51487,8 @@ addLayer("tokens", {
                                 if (hasMilestone("pl", 24) && player.pl.points.gte(122)) {
                                                                         eformula = "5<sup>x<sup>2</sup></sup>"
                                 }
+                                if (hasMilestone("hu", 9))              eformula = "4<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("hu", 10))             eformula = (player.pl.points.gte(330) ? "2" : "3") + "<sup>x<sup>2</sup></sup>"
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
@@ -51267,6 +51509,10 @@ addLayer("tokens", {
                                         if (ret >= 100)         ret = Math.max(100, ret - player.pl.points.sub(90).max(0).toNumber())
                                 }
                                 if (hasMilestone("hu", 2))      ret -= Math.min(75, player.hu.times)
+                                if (hasMilestone("hu", 9)) {
+                                        let e = player.pl.points.sub(283).max(0).div(2).floor()
+                                                                ret -= e.min(15).toNumber()
+                                }
 
                                 return ret
                         },
@@ -51279,6 +51525,9 @@ addLayer("tokens", {
                                         ret = 1.16
                                         if (hasMilestone("pl", 25)) {
                                                 ret -= player.pl.points.sub(130).max(0).min(5).times(.002)
+                                        }
+                                        if (hasUpgrade("hu", 15)) {
+                                                ret -= player.pl.points.sub(358).div(2).floor().max(0).min(10).times(.001)
                                         }
                                 }
                                 
