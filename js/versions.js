@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.020",
+	num: "2.021",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,7 +12,7 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.hu.points.gte("1e11926")
+	return player.hu.points.gte("1e16663")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -24,6 +24,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v2.021</h3><br>
+		- Balanced until 1e16,663 Humans.<br>
+		- Added three Human upgrades.<br>
+		- Added four Human milestones.<br>
+		- Various wording fixes.<br>
 	<br><h3 style='color: #CC0000'>v2.020</h3><br>
 		- Balanced until 1e11,926 Humans.<br>
 		- Added two Human upgrades.<br>

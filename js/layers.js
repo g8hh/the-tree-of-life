@@ -2181,8 +2181,8 @@ addLayer("sci", {
 
                         if (hasUpgrade("sci", 502))     ret = ret.times(Decimal.tetrate(tmp.sci.upgrades.dnaUpgradesLength, 2))
                                                         ret = ret.times(player.sci.dna_science.points.plus(10).log10().pow(tmp.sci.buyables[502].effect))
-                        if (hasUpgrade("sci", 503))     ret = ret.times(player.d.points.max(10).log10().log10().max(1).pow(tmp.sci.upgrades.dnaUpgradesLength))
-                                                        ret = ret.times(player.points.max(100).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect))
+                        if (hasUpgrade("sci", 503))     ret = ret.times(player.d.points.max(1e10).log10().log10().pow(tmp.sci.upgrades.dnaUpgradesLength))
+                                                        ret = ret.times(player.points.max(1e10).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect))
                                                         ret = ret.times(layers.l.grid.getGemEffect(108))
                                                         ret = ret.times(tmp.sci.buyables[511].dna_sci_effect)
                                                         ret = ret.times(tmp.sci.buyables[513].dna_sci_effect)
@@ -5569,7 +5569,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                return player.h.points.max(10).log10().log10().max(1)
+                                return player.h.points.max(1e10).log10().log10()
                         },
                         effect(){
                                 return tmp.sci.buyables[102].base.pow(player.sci.buyables[102])
@@ -7847,7 +7847,7 @@ addLayer("n", {
                 if (hasUpgrade("mini", 81))     ret = ret.times(tmp.mini.d_points.getUpgrades)
                 if (hasUpgrade("n", 35)) {
                         let rede = tmp.n.upgrades[35].effect
-                                                ret = ret.times(player.points.max(10).log10().log10().max(1).pow(rede))
+                                                ret = ret.times(player.points.max(1e10).log10().log10().pow(rede))
                 }
                 if (hasUpgrade("n", 41))        ret = ret.times(player.mini.e_points.points.max(10).log10())
                 if (hasUpgrade("n", 53))        ret = ret.times(Decimal.pow(1.01, player.mini.buyables[211]))
@@ -18481,7 +18481,7 @@ addLayer("d", {
                                                 ret = ret.times(tmp.or.effect)
                 if (player.easyMode)            ret = ret.times(2)
                 if (hasUpgrade("sci", 553))     ret = ret.times(tmp.cells.buyables[13].effect)
-                                                ret = ret.times(player.points.max(100).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect))
+                                                ret = ret.times(player.points.max(1e10).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect))
                                                 ret = ret.times(tmp.an.effect)
                 if (hasUpgrade("sp", 45))       ret = ret.times(player.an.grid[208].extras.plus(1).pow(player.nu.points.pow(9)))
 
@@ -40266,7 +40266,7 @@ addLayer("pl", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Plants XV"
                         },
                         description(){
-                                return "Up Quark's double exponent is .6 and <bdi style='font-size: 80%'>you also gain 1e10x less than the Biomass you'd have to equalize production and gain in a second, per second</bdi>"
+                                return "Up Quark's double exponent is .6 and <bdi style='font-size: 80%'>per second gain 1e10x less Biomass than the Biomass you'd need have to have equal amount and gain per second</bdi>"
                         },
                         cost:() => new Decimal(91),
                         unlocked(){
@@ -42552,7 +42552,7 @@ addLayer("hu", {
                                 tmp.t.effect = decimalOne
                         },
                         effectDescription(){
-                                return "Reward: Pluripotent base is 3<sup>Mastery Tokens</sup>, Sprout base is log10(log(Stem Cells)), gain 4x Humans, and Top Quark's coefficient is .5 but remove Cell, DNA, and Tissues, and remove Token II via Cell."
+                                return "Reward: Pluripotent base is 3<sup>Mastery Tokens</sup>, Sprout base is log10(log10(Stem Cells)), gain 4x Humans, and Top Quark's coefficient is .5 but remove Cell, DNA, and Tissues, and remove Token II via Cell."
                         },
                 }, // hasMilestone("hu", 13)
                 14: {
@@ -43342,7 +43342,7 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Humans XXVI affects Ecosystem gain and at 3e15,690 / 1e15,877 / 1e16,018 Humans the Master V exponent is 1.04 / 1.03 / 1.02 ."
+                                return "Reward: Humans XXVI affects Ecosystem gain and at 3e15,690 / 1e15,877 / 1e16,018 / 3e16,374 / 1e16,492 Humans the Master V exponent is 1.04 / 1.03 / 1.02 / 1.01 / 1."
                         },
                 }, // hasMilestone("hu", 68)
         },
@@ -48111,7 +48111,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(78)
                         },
                         base(){
-                                return player.points.max(10).log10().log10().max(1)
+                                return player.points.max(1e10).log10().log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[123].base.pow(player.mini.buyables[123])
@@ -54081,6 +54081,8 @@ addLayer("tokens", {
                                         if (player.hu.points.gte("3e15690")) exp = new Decimal(1.04)
                                         if (player.hu.points.gte("1e15877")) exp = new Decimal(1.03)
                                         if (player.hu.points.gte("1e16018")) exp = new Decimal(1.02)
+                                        if (player.hu.points.gte("3e16374")) exp = new Decimal(1.01)
+                                        if (player.hu.points.gte("1e16492")) exp = decimalOne
                                 } 
 
                                 return exp
