@@ -40756,10 +40756,7 @@ addLayer("pl", {
                 },
         },
         onPrestige(){
-                return // not for this layer
-                let timesAdd = 1
-                if (player.easyMode) timesAdd *= 2
-                player.e.times += timesAdd
+                tmp.pl.getResetGain = decimalZero
         },
         doReset(layer){
                 if (layer != "pl") return
