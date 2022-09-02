@@ -12,7 +12,7 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.hu.points.gte("1e16663")
+	return player.hu.points.gte("1e47260")
 }
 
 let changelog = `<h1>Changelog:</h1><br>

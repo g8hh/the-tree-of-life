@@ -998,6 +998,10 @@ function ecosystemFormulaDisplay(){
         if (hasMilestone("pl", 2))      c += "Plant Milestone 2 multiplies AX by " + format(player.ch.points.max(10).log10().pow(player.pl.milestones.length)) + br
         if (hasMilestone("pl", 6))      c += "Plant Milestone 6 multiplies AX by " + format(player.nu.points.sub(1200).max(1)) + br
         if (hasUpgrade("pl", 24))       c += "Plants IX multiplies AX by " + format(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt())) + br
+        if (hasMilestone("hu", 68)) {
+                let exp = player.hu.milestones.length
+                                        c += "Human Milestone 68 multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(exp)) + br
+        }
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
