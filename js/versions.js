@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.021",
+	num: "2.022",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -17,13 +17,16 @@ function isEndgameRaw(){
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v2.020)<br><br>
+		Reaching the endgame screen (updated at least as of v2.022)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v2.021</h3><br>
+		- Balanced until 1e47,260 Humans.<br>
+		- Added five Human milestones.<br>
 	<br><h3 style='color: #CC0000'>v2.021</h3><br>
 		- Balanced until 1e16,663 Humans.<br>
 		- Added three Human upgrades.<br>
