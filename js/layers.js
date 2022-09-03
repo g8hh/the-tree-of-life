@@ -35238,6 +35238,12 @@ addLayer("nu", {
                         if (player.pl.points.gte(10615))        ret = new Decimal(1.67)
                 }
                 if (hasUpgrade("hu", 63))       ret = new Decimal(1.66)
+                if (hasMilestone("hu", 74)) {
+                        if (player.hu.points.gte("1e25589"))    ret = new Decimal(1.658)
+                        if (player.hu.points.gte("3e25624"))    ret = new Decimal(1.656)
+                        if (player.hu.points.gte("1e25652"))    ret = new Decimal(1.654)
+                        if (player.hu.points.gte("1e25700"))    ret = new Decimal(1.652)
+                }
 
 
                 if (inChallenge("e", 12))       ret = ret.plus(.1)
@@ -38364,7 +38370,18 @@ addLayer("e", {
         getGainMult(){//e gain egain ecosystemsgain ecosystems gain ecogain eco gain ecosystemgain
                 let ret = decimalOne
 
-                if (hasUpgrade("e", 13))        ret = ret.times(Decimal.pow(1.02, player.tokens.mastery_tokens.total))
+                if (hasUpgrade("e", 13)) {
+                        let base = 1.02
+                        if (hasMilestone("hu", 73)) {
+                                if (player.hu.points.gte("3e22,278"))   base = 1.03
+                                if (player.hu.points.gte("1e22,422"))   base = 1.04
+                                if (player.hu.points.gte("3e22,558"))   base = 1.05
+                                if (player.hu.points.gte("3e22,779"))   base = 1.06
+                                if (player.hu.points.gte("3e22,964"))   base = 1.07
+                                if (player.hu.points.gte("1e23,935"))   base = 1.072
+                        }
+                        ret = ret.times(Decimal.pow(base, player.tokens.mastery_tokens.total))
+                }
                                                 ret = ret.times(tmp.e.challenges[12].ecoMult)
                 if (hasMilestone("pl", 2))      ret = ret.times(player.ch.points.max(10).log10().pow(player.pl.milestones.length))
                 if (hasMilestone("pl", 6))      ret = ret.times(player.nu.points.sub(1200).max(1))
@@ -40807,6 +40824,7 @@ addLayer("hu", {
                         total: decimalZero,
                 },
                 everMile2: false,
+                timeSinceLastBuy: 0,
         }},
         color: "#DDFFDD",
         branches: [],
@@ -40913,6 +40931,8 @@ addLayer("hu", {
                 if (hasUpgrade("hu", 31)) {
                         if (tmp.pl.getResetGain.gt(1) || hasUpgrade("hu", 41)) doReset("pl")
                 }
+
+                data.timeSinceLastBuy += diff
         },
         row: 3,
         prestigeButtonText(){
@@ -40946,6 +40966,9 @@ addLayer("hu", {
                         }
                         if (hasMilestone("hu", 38)) {
                                 ret = ret.times(Decimal.pow(2, player.pl.points.sub(71700).div(100).floor().max(0).min(100)))
+                        }
+                        if (hasMilestone("hu", 74)) {
+                                ret = ret.times(Decimal.pow(1.02, Math.min(180, player.hu.timeSinceLastBuy)))
                         }
 
                         return ret
@@ -41485,6 +41508,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
+                                data.timeSinceLastBuy = 0
                         },
                         base(){
                                 let ret = player.hu.thoughts.points.max(10).log10()
@@ -41531,7 +41555,7 @@ addLayer("hu", {
                         getCostBase(){
                                 let base = new Decimal(5)
 
-                                base = base.sub(tmp.hu.buyables[22].effect.min(2.5))
+                                base = base.sub(tmp.hu.buyables[22].effect.min(2.6))
 
                                 return base
                         },
@@ -41568,6 +41592,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
+                                data.timeSinceLastBuy = 0
                         },
                         base(){
                                 if (hasMilestone("hu", 72)) {
@@ -41722,6 +41747,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
+                                data.timeSinceLastBuy = 0
                         },
                         base(){
                                 let ret = new Decimal(10)
@@ -41824,6 +41850,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
+                                data.timeSinceLastBuy = 0
                         },
                         base(){
                                 let ret = new Decimal(.01)
@@ -41941,6 +41968,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
+                                data.timeSinceLastBuy = 0
                         },
                         base(){
                                 let ret = new Decimal(.0001)
@@ -41970,10 +41998,10 @@ addLayer("hu", {
                                 if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.hu.buyables[22]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: -"
-                                        let eff2 = format(tmp.hu.buyables[22].effect, 4) + " from Mastery III and <i><b>Tgwitlcwl</b></i> base and Chromosome exponent (max .01/2.5/.01)</b><br>"
+                                        let eff2 = format(tmp.hu.buyables[22].effect, 4) + " from Mastery III and <i><b>Tgwitlcwl</b></i> base and Chromosome exponent (max .01/2.6/.01)</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("hu", 22)) + " Thoughts</b><br>"
 
-                                        if (hasMilestone("hu", 40)) eff2 = eff2.replace(".01/2.5/.01", ".08/2.5/.08")
+                                        if (hasMilestone("hu", 40)) eff2 = eff2.replace(".01/2.6/.01", ".08/2.6/.08")
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
@@ -42054,6 +42082,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
+                                data.timeSinceLastBuy = 0
                         },
                         base(){
                                 let ret = new Decimal(.1)
@@ -42151,6 +42180,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
+                                data.timeSinceLastBuy = 0
                         },
                         base(){
                                 let ret = new Decimal(4)
@@ -42181,6 +42211,7 @@ addLayer("hu", {
                                         if (player.hu.points.gte("1e14312"))    ret = ret.plus(1)
                                         if (player.hu.points.gte("1e14386"))    ret = ret.plus(1)
                                 }
+                                if (hasMilestone("hu", 74))     ret = player.hu.buyables[33].max(33)
 
                                 return ret
                         },
@@ -42298,6 +42329,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
+                                data.timeSinceLastBuy = 0
                         },
                         base(){
                                 let ret = new Decimal(.01)
@@ -42402,6 +42434,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
+                                data.timeSinceLastBuy = 0
                         },
                         base(){
                                 let ret = new Decimal(1e6)
@@ -43531,9 +43564,23 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: At 1e21,862, 1e21,916, 3e21,920, 3e22,052, and 1e22,175 Humans subtract .0002 from the Mastery III base."
+                                return "Reward: At 1e21,862, 1e21,916, 3e21,920, 3e22,052, 1e22,175, and 3e23,190 Humans subtract .0002 from the Mastery III base and at 3e22,278 / 1e22,422 / 3e22,558 / 3e22,779 / 3e22,964 / 1e23,935 Humans Ecosystems III becomes 3 / 4 / 5 / 6 / 7 / 7.2%."
                         },
                 }, // hasMilestone("hu", 73)
+                74: {
+                        requirementDescription(){
+                                return "1e25,489 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("1e25489")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: The <i>Tinhiragt</i> base is <i>Hual</i> levels, each second since the previous purchase of a Human buyable increases the thought gain by 2% (max 3 minutes), and at 1e25,589, 3e25,624, 1e25,652, 1e25,700 Humans the Nucleus cost exponent is decreased by 0.002 ."
+                        },
+                }, // hasMilestone("hu", 74)
         },
         tabFormat: {
                 "Upgrades": {
@@ -43564,7 +43611,10 @@ addLayer("hu", {
                         content: [
                                 "main-display",
                                 ["secondary-display", "thoughts"],
-                                ["display-text", function(){return "(+" + format(tmp.hu.thoughts.getResetGain) + "/s)"}],
+                                ["display-text", function(){
+                                        let a = hasMilestone("hu", 74) ? format(player.hu.timeSinceLastBuy) + "s" : ""
+                                        return "(+" + format(tmp.hu.thoughts.getResetGain) + "/s) " + a
+                                }],
                                 "buyables",
                         ],
                         unlocked(){
@@ -54156,6 +54206,7 @@ addLayer("tokens", {
                                                 if (player.hu.points.gte("3e21920")) ret -= .0002
                                                 if (player.hu.points.gte("3e22052")) ret -= .0002
                                                 if (player.hu.points.gte("1e22175")) ret -= .0002
+                                                if (player.hu.points.gte("3e23190")) ret -= .0002
                                         }
                                 }
                                 

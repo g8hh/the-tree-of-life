@@ -993,7 +993,7 @@ function ecosystemFormulaDisplay(){
         let b = "AX is initially 1 and is multiplied by the following factors"
         let c = ""
 
-        if (hasUpgrade("e", 13))        c += "Ecosystems III multiplies AX by " + format(Decimal.pow(1.02, player.tokens.mastery_tokens.total)) + br
+        if (hasUpgrade("e", 13))        c += "Ecosystems III multiplies AX by " + format(Decimal.pow(hasMilestone("hu", 73) && player.hu.points.gte("3e22,278") ? 1.03 : 1.02, player.tokens.mastery_tokens.total)) + br
         if (hasChallenge("e", 12))      c += "Nucleusless? multiplies AX by " + format(tmp.e.challenges[12].ecoMult) + br
         if (hasMilestone("pl", 2))      c += "Plant Milestone 2 multiplies AX by " + format(player.ch.points.max(10).log10().pow(player.pl.milestones.length)) + br
         if (hasMilestone("pl", 6))      c += "Plant Milestone 6 multiplies AX by " + format(player.nu.points.sub(1200).max(1)) + br
