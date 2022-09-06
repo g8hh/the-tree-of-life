@@ -34236,6 +34236,9 @@ addLayer("ch", {
                 }
                 if (hasMilestone("hu", 34) && player.pl.points.gte(41710))     ret = new Decimal(1.2)
                         ret = ret.sub(tmp.hu.buyables[22].effect.min(hasMilestone("hu", 40) ? .08 : .01))
+                if (hasMilestone("hu", 85)) {
+                        ret = ret.sub(player.hu.buyables[33].sub(100).min(100).max(0).div(1e4))
+                }
 
                 return ret
         },
@@ -35252,6 +35255,9 @@ addLayer("nu", {
                         if (player.hu.points.gte("1e25652"))    ret = new Decimal(1.654)
                         if (player.hu.points.gte("1e25700"))    ret = new Decimal(1.652)
                         if (player.hu.points.gte("1e25774"))    ret = new Decimal(1.65)
+                }
+                if (hasMilestone("hu", 85)) {
+                        ret = ret.sub(player.hu.buyables[33].sub(100).min(100).max(0).div(1e4))
                 }
 
 
@@ -36353,6 +36359,12 @@ addLayer("sp", {
                 if (hasUpgrade("tokens", 113))  ret = ret.plus(player.tokens.mastery_tokens.total.min(1000))
                 if (hasMilestone("e", 1))       ret = ret.plus(player.e.milestones.length)
                 if (hasUpgrade("pl", 11))       ret = ret.plus(player.pl.points)
+
+                if (hasMilestone("hu", 85)) {
+                        if (player.hu.points.gte("1e33328")) ret = ret.times(2)
+                        if (player.hu.points.gte("1e33428")) ret = ret.times(2)
+                        if (player.hu.points.gte("1e33556")) ret = ret.times(2)
+                }
 
                 return ret
         },
@@ -40905,7 +40917,8 @@ addLayer("hu", {
                                                 ret = ret.times(base.pow(exp))
                 }
                 if (hasMilestone("hu", 75)) {
-                        ret = ret.times(Decimal.pow(1.2, Math.min(40, player.hu.timeSinceLastBuy)))
+                        let base = hasMilestone("hu", 85) ? player.hu.buyables[33].div(80).max(1.2) : 1.2
+                        ret = ret.times(Decimal.pow(base, Math.min(40, player.hu.timeSinceLastBuy)))
                 }
 
                 return ret
@@ -41958,6 +41971,10 @@ addLayer("hu", {
                                         base = base.div(Decimal.pow(1.001, exp)).max(19e3)
                                 }
                                 if (hasMilestone("hu", 69)) base = new Decimal(20960).sub(player.hu.buyables[22]).max(1e3)
+                                if (hasMilestone("hu", 86)) {
+                                        let exp = player.hu.buyables[33].sub(105).max(0)
+                                        base = base.div(Decimal.pow(1.001, exp)).max(1e3)
+                                }
 
 
                                 return base
@@ -43768,9 +43785,37 @@ addLayer("hu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: At 86, 89, 94, and 100 <i>Hual</i> levels subtract .001 from the Mastery VI base."
+                                return "Reward: At 86, 89, 94, 100, and 101 <i>Hual</i> levels subtract .001 from the Mastery VI base."
                         },
                 }, // hasMilestone("hu", 84)
+                85: {
+                        requirementDescription(){
+                                return "1e33,203 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("1e33203")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: <i>Hual</i> level past 100 subtract .0001 from the Nucleus and Chromosome exponent (max 100), Human Milestone 75 now multiplies by <i>Hual</i> levels / 80 per second, and at 1e33,328, 1e33,428, and 1e33,556 Humans double Species gain exponent."
+                        },
+                }, // hasMilestone("hu", 85)
+                86: {
+                        requirementDescription(){
+                                return "1e33,704 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("1e33704")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: <i>Hual</i> levels past 105 divide the <i>GmaptsaIwmte</i> cost base by 1.001 and at 1e33,932 and 1e34,278 Humans subtract .0001 from the Mastery III base."
+                        },
+                }, // hasMilestone("hu", 86)
         },
         tabFormat: {
                 "Upgrades": {
@@ -54414,6 +54459,10 @@ addLayer("tokens", {
                                         if (hasMilestone("hu", 83) && player.hu.points.gte("1e29897")) {
                                                 ret -= .0001 * player.hu.buyables[33].sub(75).min(5).max(0).toNumber()
                                         }
+                                        if (hasMilestone("hu", 86)) {
+                                                if (player.hu.points.gte("1e33932")) ret -= .0001
+                                                if (player.hu.points.gte("1e34278")) ret -= .0001
+                                        }
                                 }
                                 
                                 return ret
@@ -54587,6 +54636,7 @@ addLayer("tokens", {
                         base(){
                                 if (hasMilestone("hu", 84)) {
                                         let l = player.hu.buyables[33].toNumber()
+                                        if (l >= 101)   return 1.025
                                         if (l >= 100)   return 1.026
                                         if (l >= 94)    return 1.027
                                         if (l >= 89)    return 1.028
