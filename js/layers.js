@@ -41032,7 +41032,7 @@ addLayer("hu", {
                                 ret = ret.times(Decimal.pow(2, player.pl.points.sub(71700).div(100).floor().max(0).min(100)))
                         }
                         if (hasMilestone("hu", 74)) {
-                                ret = ret.times(Decimal.pow(1.02, Math.min(180, player.hu.timeSinceLastBuy)))
+                                ret = ret.times(Decimal.pow(hasMilestone("hu", 91) ? 1.04 : 1.02, Math.min(180, player.hu.timeSinceLastBuy)))
                         }
 
                         return ret
@@ -41573,7 +41573,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
-                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10
+                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
                                 let ret = player.hu.thoughts.points.max(10).log10()
@@ -41660,7 +41660,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
-                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10
+                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
                                 if (hasMilestone("hu", 72)) {
@@ -41818,7 +41818,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
-                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10
+                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
                                 let ret = new Decimal(10)
@@ -41923,7 +41923,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
-                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10
+                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
                                 let ret = new Decimal(.01)
@@ -42045,7 +42045,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
-                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10
+                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
                                 let ret = new Decimal(.0001)
@@ -42159,7 +42159,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
-                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10
+                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
                                 let ret = new Decimal(.1)
@@ -42263,7 +42263,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
-                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10
+                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
                                 let ret = new Decimal(4)
@@ -42415,7 +42415,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
-                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10
+                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
                                 let ret = new Decimal(.01)
@@ -42478,8 +42478,9 @@ addLayer("hu", {
                                 let exp = new Decimal(1047)
 
                                 if (hasMilestone("hu", 70)) {
-                                        let s = player.hu.buyables[33].times(1 + hasMilestone("hu", 75))
-                                        exp = new Decimal(1029).sub(s).max(100)
+                                        let s = player.hu.buyables[33]
+                                        exp = new Decimal(1029).sub(s).max(820)
+                                        if (hasMilestone("hu", 75)) exp = exp.sub(s).max(100)
                                 }
 
                                 return Decimal.pow(2, exp)
@@ -42527,7 +42528,7 @@ addLayer("hu", {
                                 if (!false) {
                                         data.thoughts.points = data.thoughts.points.sub(tmp.hu.buyables[id].cost)
                                 }
-                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10
+                                data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
                                 let ret = new Decimal(1e6)
@@ -43905,6 +43906,34 @@ addLayer("hu", {
                                 return "Reward: The Animal gain Nucleus exponent is 3.1 and 3.25 / 3.4 / 3.55 / 3.7 / 3.85 / 4 at 1e36,817 / 1e36,918 / 1e37,027 / 1e37,126 / 1e37,292 / 1e37,416 Humans."
                         },
                 }, // hasMilestone("hu", 90)
+                91: {
+                        requirementDescription(){
+                                return "1e37,524 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("1e37524")
+                        },
+                        unlocked(){
+                                return hasMilestone("hu", 6)
+                        },
+                        effectDescription(){
+                                return "Reward: Mastery III base is .0001 less and again .0001 less at 1e37,788, 1e37,976, 1e38,182, and 1e38,592 Humans, keep 10% of time since last bought, and Human Milestone 74 is 4%."
+                        },
+                }, // hasMilestone("hu", 91)
+                92: {
+                        requirementDescription(){
+                                return "1e38,895 Humans"
+                        },
+                        done(){
+                                return player.hu.points.gte("1e38895")
+                        },
+                        unlocked(){
+                                return hasMilestone("hu", 6)
+                        },
+                        effectDescription(){
+                                return "Reward: At 1e39,052 / 1e39,223 / 1e39,389 / 1e39,629 / 1e39,941 / 1e42,880 Humans, Mastery VI base is 1.022 / 1.021 / 1.020 / 1.019 / 1.018 / 1.017 ."
+                        },
+                }, // hasMilestone("hu", 92)
         },
         tabFormat: {
                 "Upgrades": {
@@ -54542,18 +54571,25 @@ addLayer("tokens", {
                                                 if (player.hu.points.gte("3e23190")) ret -= .0002
                                         }
                                         if (hasMilestone("hu", 78)) {
-                                                if (player.hu.points.gte("1e26903")) ret -= .0001
-                                                if (player.hu.points.gte("1e26980")) ret -= .0002
-                                                if (player.hu.points.gte("1e27030")) ret -= .0002
-                                                if (player.hu.points.gte("1e27130")) ret -= .0001
-                                                if (player.hu.points.gte("1e27156")) ret -= .0002
+                                                if (player.hu.points.gte("1e26903"))    ret -= .0001
+                                                if (player.hu.points.gte("1e26980"))    ret -= .0002
+                                                if (player.hu.points.gte("1e27030"))    ret -= .0002
+                                                if (player.hu.points.gte("1e27130"))    ret -= .0001
+                                                if (player.hu.points.gte("1e27156"))    ret -= .0002
                                         }
                                         if (hasMilestone("hu", 83) && player.hu.points.gte("1e29897")) {
                                                 ret -= .0001 * player.hu.buyables[33].sub(75).min(5).max(0).toNumber()
                                         }
                                         if (hasMilestone("hu", 86)) {
-                                                if (player.hu.points.gte("1e33932")) ret -= .0001
-                                                if (player.hu.points.gte("1e34278")) ret -= .0001
+                                                if (player.hu.points.gte("1e33932"))    ret -= .0001
+                                                if (player.hu.points.gte("1e34278"))    ret -= .0001
+                                        }
+                                        if (hasMilestone("hu", 91)) {
+                                                ret -= .0001
+                                                if (player.hu.points.gte("1e37788"))    ret -= .0001
+                                                if (player.hu.points.gte("1e37976"))    ret -= .0001
+                                                if (player.hu.points.gte("1e38182"))    ret -= .0001
+                                                if (player.hu.points.gte("1e38529"))    ret -= .0001
                                         }
                                 }
                                 
@@ -54726,6 +54762,14 @@ addLayer("tokens", {
                                 return exp
                         },
                         base(){
+                                if (hasMilestone("hu", 92)) {
+                                        if (player.hu.points.gte("1e42880"))    return 1.017
+                                        if (player.hu.points.gte("1e39941"))    return 1.018
+                                        if (player.hu.points.gte("1e39629"))    return 1.019
+                                        if (player.hu.points.gte("1e39389"))    return 1.020
+                                        if (player.hu.points.gte("1e39223"))    return 1.021
+                                        if (player.hu.points.gte("1e39052"))    return 1.022
+                                }
                                 if (hasMilestone("hu", 87)) {
                                         if (player.hu.points.gte("1e35951"))    return 1.023
                                         if (player.hu.points.gte("1e35157"))    return 1.024
