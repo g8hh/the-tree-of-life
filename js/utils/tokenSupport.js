@@ -60,7 +60,7 @@ function tokenNextAt(){
 
         if (amt.gte(len)) {
                 let tetBase = tmp.tokens.getTetrationBase
-                return Decimal.tetrate(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(4))
+                return Decimal.tetrate(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(hasChallenge("hu", 11) ? 1 : 4))
         }
         amt = Math.round(amt.toNumber())
         let additional = player.hardMode ? 1e4 : 1
