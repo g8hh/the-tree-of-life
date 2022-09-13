@@ -31570,6 +31570,10 @@ addLayer("an", {
                                 if (player.hu.points.gte("1e51649")) exp1 = 4.1
                                 if (player.hu.points.gte("1e52041")) exp1 = 4.2
                         }
+                        if (hasChallenge("hu", 22)) {
+                                if (player.hu.points.gte("1e55126")) exp1 = 4.3
+                                if (player.hu.points.gte("1e55173")) exp1 = 4.4
+                        }
                         let data = hasMilestone("hu", 82) ? player.hu.thoughts : player.pl
                         let ret = data.points.pow(player.nu.points.pow(exp1)).max(1)
                                                 return ret.pow(exp)
@@ -33851,6 +33855,10 @@ addLayer("an", {
                                                         if (player.hu.points.gte("1e51649")) a2 = a2.replace("4.02", "4.1")
                                                         if (player.hu.points.gte("1e52041")) a2 = a2.replace("4.1", "4.2")
                                                 }
+                                                if (hasChallenge("hu", 22)) {
+                                                        if (player.hu.points.gte("1e55126")) a2 = a2.replace("4.2", "4.3")
+                                                        if (player.hu.points.gte("1e55173")) a2 = a2.replace("4.3", "4.4")
+                                                }
                                                 if (hasMilestone("hu", 82))     a2 = a2.replace("Plants", "Thoughts")
                                         } else if (hasUpgrade("tokens", 102))  {
                                                 a2 = "Current Animal gain: 10<sup>log10(Organs)<sup>.11</sup>*EXP</sup>"
@@ -34290,7 +34298,7 @@ addLayer("ch", {
                         let l = player.hu.buyables[33].sub(100)
                         if (l.gt(100)) {
                                 if (hasMilestone("hu", 93) && player.hu.points.gte("1e44444")) {
-                                        l = l.sub(100).div(7).floor().plus(100).min(200)
+                                        l = l.sub(100).div(7).floor().plus(100).min(400)
                                 }
                                 else l = new Decimal(100)
                         }
@@ -35316,7 +35324,7 @@ addLayer("nu", {
                 if (hasMilestone("hu", 85)) {
                         let l = player.hu.buyables[33].sub(100)
                         if (l.gt(100)) {
-                                if (hasMilestone("hu", 93)) l = l.sub(100).div(3).floor().plus(100).min(200)
+                                if (hasMilestone("hu", 93)) l = l.sub(100).div(3).floor().plus(100).min(800)
                                 else l = new Decimal(100)
                         }
                         ret = ret.sub(l.max(0).div(1e4))
@@ -38462,7 +38470,7 @@ addLayer("e", {
         getGainMult(){//e gain egain ecosystemsgain ecosystems gain ecogain eco gain ecosystemgain
                 let ret = decimalOne
 
-                if (hasUpgrade("e", 13)) {
+                if (hasUpgrade("e", 13) && !inChallenge("hu", 12)) {
                         let base = 1.02
                         if (hasMilestone("hu", 73)) {
                                 if (player.hu.points.gte("3e22,278"))   base = 1.03
@@ -39695,6 +39703,8 @@ addLayer("pl", {
         getCostExp(){
                 let ret = new Decimal(2)
 
+                if (inChallenge("hu", 21)) ret = ret.plus(.1)
+
                 return ret
         },
         getResetGain(){
@@ -40066,6 +40076,8 @@ addLayer("pl", {
                                         if (player.pl.points.gte(1148770)) ret = new Decimal(2)
                                 }
 
+                                if (hasChallenge("hu", 12))     ret = new Decimal("1e1000")
+
                                 return ret
                         },
                         cost(){
@@ -40105,7 +40117,8 @@ addLayer("pl", {
                         base(){
                                 let ret = player.pl.buyables[12].max(1)
 
-                                if (hasMilestone("hu", 65)) ret = player.an.points.max(10).log10()
+                                if (hasMilestone("hu", 65))     ret = player.an.points.max(10).log10()
+                                if (hasChallenge("hu", 12))     ret = player.hu.points.max(1)
                                 
                                 return ret
                         },
@@ -40124,6 +40137,7 @@ addLayer("pl", {
 
                                 let eformula = "[Leaf levels]^x<br>" + format(tmp.pl.buyables[13].base) + "^x"
                                 if (hasMilestone("hu", 65)) eformula = eformula.replace("[Leaf levels]", "log10(Animals)")
+                                if (hasChallenge("hu", 12))     eformula = eformula.replace("log10(Animals)", "Humans")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -41717,6 +41731,8 @@ addLayer("hu", {
                                 data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
+                                if (hasChallenge("hu", 22))     return new Decimal(.75)
+                                if (hasChallenge("hu", 21))     return new Decimal(.757)
                                 if (hasMilestone("hu", 72)) {
                                         let s = new Decimal(17)
                                         if (hasMilestone("hu", 79)) s = s.sub(player.hu.buyables[33].sub(50)).max(0)
@@ -41878,6 +41894,7 @@ addLayer("hu", {
                                 let ret = new Decimal(10)
 
                                 if (hasMilestone("hu", 29) && player.pl.points.gte(18350))     ret = player.pl.points.max(100).sqrt()
+                                if (hasChallenge("hu", 21)) ret = decimalZero
                                 ret = ret.plus(tmp.hu.buyables[31].effect)
 
                                 return ret
@@ -42546,12 +42563,13 @@ addLayer("hu", {
                                         if (hasMilestone("hu", 75)) exp = exp.sub(s).max(400)
                                 }
                                 if (hasMilestone("hu", 97)) {
-                                        let s = player.hu.buyables[33].sub(420).div(2).floor().min(150)
+                                        let s = player.hu.buyables[33].sub(420).div(2).floor().min(65)
                                         exp = exp.sub(s)
                                 }
                                 if (hasMilestone("hu", 99)) {
                                         if (player.hu.points.gte("1e53346"))    exp = exp.sub(25)
                                 }
+                                if (hasChallenge("hu", 12)) exp = exp.sub(Math.max(0, layerChallengeCompletions("hu") - 2))
 
                                 return Decimal.pow(2, exp)
                         },
@@ -44082,7 +44100,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Every other <i>Hual</i> level after 420 halves its base and at 1e52,150, 1e52,253, and 1e52,415 Humans subtract .001 from the Mastery VI base."
+                                return "Reward: Every other <i>Hual</i> level after 420 halves its base (max 65 times) and at 1e52,150, 1e52,253, and 1e52,415 Humans subtract .001 from the Mastery VI base."
                         },
                 }, // hasMilestone("hu", 97)
                 98: {
@@ -44132,7 +44150,7 @@ addLayer("hu", {
                 11: {
                         name: "Left", 
                         canComplete(){ 
-                                return player.pl.points.gte(1367500)
+                                return player.pl.points.gte([13675e3, 15505e3, 16150e3, 2e8][player.hu.challenges[11]])
                         },
                         onEnter(){
                                 player.pl.points = decimalZero
@@ -44142,21 +44160,81 @@ addLayer("hu", {
                                 player.pl.buyables[21] = decimalZero
                                 tmp.nu.getResetGain = decimalZero
                         },
-                        completionLimit: 1,
+                        completionLimit: 5,
                         onComplete(){
                                 player.points = decimalZero
                         },
                         fullDisplay(){
                                 let a = "You can't get more than 500 Nucleuses"
-                                let b = "Goal: 13,675,000 Plants"
-                                let c = "Reward: Bulk unlimited Plant buyables, Plant buyables cost nothing, point gain becomes Humans, and subtract 3 from the Token tetration exponent"
+                                let b = "Goal: REQ Plants".replace("REQ", formatWhole([13675e3, 15505e3, 16150e3, 2e8][player.hu.challenges[11]]))
+                                let c = "Reward: Bulk unlimited Plant buyables, Plant buyables cost nothing, point gain becomes Humans,"
+                                c += " and subtract 3 from the Token tetration exponent"
+                                let d = "Completions: " + player.hu.challenges[11] + "/5"
 
-                                return a + br2 + b + br2 + c
+                                return a + br2 + b + br2 + c + br2 + d
                         },
                         unlocked(){
                                 return true
                         },
                 }, // inChallenge("hu", 11) hasChallenge("hu", 11)
+                12: {
+                        name: "Right", 
+                        canComplete(){ 
+                                return player.e.points.gte("e127546e3")
+                        },
+                        completionLimit: 1,
+                        onComplete(){
+                                player.pl.buyables[13] = decimalZero
+                        },
+                        fullDisplay(){
+                                let a = "Disable Ecosystems III"
+                                let b = "Goal: 1e127,546,000 Ecosystems"
+                                let c = "Reward: Stem's cost base is 1e1000, its base is Humans"
+                                c += " and per challenge completion after the first two halve the <i>Hual</i> cost base"
+
+                                return a + br2 + b + br2 + c + br2
+                        },
+                        unlocked(){
+                                return hasChallenge("hu", 11)
+                        },
+                }, // inChallenge("hu", 12) hasChallenge("hu", 12)
+                21: {
+                        name: "Inorrect",
+                        canComplete(){ 
+                                return player.pl.points.gte("400178e3")
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                let a = "Add .1 to the Plant cost exponent"
+                                let b = "Goal: 400,178,000 Plants"
+                                let c = "Reward: Plants no longer effect <i>Hiawd</i> base and <i>Tgwitlcwl</i> coefficient is .757"
+                                c += " and the Mastery III coefficient is .0001 less"
+
+                                return a + br2 + b + br2 + c + br2
+                        },
+                        unlocked(){
+                                return hasChallenge("hu", 12)
+                        },
+                }, // inChallenge("hu", 21) hasChallenge("hu", 21)
+                22: {
+                        name: "Correct",  // imprecise
+                        canComplete(){ 
+                                return player.pl.points.gte("45275e3")
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                let a = "<b>Left</b> and <b>Incorrect</b>"
+                                let b = "Goal: 45,275,000 Plants"
+                                let c = "Reward: <i>Tgwitlcwl</i> coefficient is .75, the Mastery VI coefficient is .001 less"
+                                c += ", and upon 1e55,126 / 1e55,173 Humans increase the Nucleus exponent in Animal gain to 4.3 / 4.4"
+
+                                return a + br2 + b + br2 + c + br2
+                        },
+                        unlocked(){
+                                return hasChallenge("hu", 21)
+                        },
+                        countsAs: [11, 21],
+                }, // inChallenge("hu", 22) hasChallenge("hu", 22)
         },
         tabFormat: {
                 "Upgrades": {
@@ -54835,6 +54913,7 @@ addLayer("tokens", {
                                         if (hasMilestone("hu", 99)) {
                                                 if (player.hu.points.gte("1e53082"))    ret -= .0001
                                         }
+                                        if (hasChallenge("hu", 21))                     ret -= .0001
                                 }
                                 
                                 return ret
@@ -55006,6 +55085,7 @@ addLayer("tokens", {
                                 return exp
                         },
                         base(){
+                                if (hasChallenge("hu", 22))                     return 1.011
                                 if (hasMilestone("hu", 97)) {
                                         if (player.hu.points.gte("1e52415"))    return 1.012
                                         if (player.hu.points.gte("1e52253"))    return 1.013
