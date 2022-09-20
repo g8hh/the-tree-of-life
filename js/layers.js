@@ -41664,7 +41664,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XLI"
                         },
                         description(){
-                                return "Mastery VII base is 3.8 - <i>Hual</i> levels / 1000 and costs Thoughts, autobuy <i>IttIa</i>"
+                                return "Mastery VII base is 3.8 - <i>Hual</i> levels / 1000 and costs Thoughts, autobuy <i>IttIa</i>, and bulk 10x Token II buyables"
                         },
                         cost:() => new Decimal("1e77386"),
                         unlocked(){
@@ -41700,12 +41700,24 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XLIV"
                         },
                         description(){
-                                return "Mastery VI base is 1.002 and subtract 3 from the Human gain exponent"
+                                return "<bdi style='font-size: 80%'>Mastery VI base is 1.002, subtract 3 from the Human gain exponent, and at 1e88,819 Humans the Token II via Animals exponent is .17</bdi>"
                         },
                         cost:() => new Decimal("1e88670"),
                         unlocked(){
                                 return hasUpgrade("hu", 93)
                         }, // hasUpgrade("hu", 94)
+                },
+                95: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XLV"
+                        },
+                        description(){
+                                return "Bulk unlimited Up Quarks and 10x Token II buyables, halve <i>Hual</i> base and multiply its base cost by 1e1111"
+                        },
+                        cost:() => Decimal.pow10(89350 + 100 * Math.cos(new Date().getTime() / 1e5)),
+                        unlocked(){
+                                return hasUpgrade("hu", 94)
+                        }, // hasUpgrade("hu", 95)
                 },
         },
         buyables: {
@@ -42739,8 +42751,9 @@ addLayer("hu", {
                                 return "Hurry up and live"
                         },
                         getInit(){
-                                let ret = new Decimal("1e48278").div(tmp.hu.buyables[13].effect).max(1)
-                                return ret
+                                let ret = new Decimal("1e48278")
+                                if (hasUpgrade("hu", 95))       ret = ret.times("1e1111")
+                                return ret.div(tmp.hu.buyables[13].effect).max(1)
                         },
                         getCostBase(){
                                 let exp = new Decimal(1047)
@@ -42792,6 +42805,7 @@ addLayer("hu", {
                                 }
                                 if (hasChallenge("hu", 12))     exp = exp.sub(Math.max(0, layerChallengeCompletions("hu") - 2))
                                 if (hasChallenge("hu", 51))     exp = exp.plus(1)
+                                if (hasUpgrade("hu", 95))       exp = exp.sub(1)
 
                                 return Decimal.pow(2, exp)
                         },
@@ -54260,23 +54274,25 @@ addLayer("tokens", {
                                 let data = player.tokens
                                 
                                 let maxNewLevels = tmp.tokens.buyables.maxAffordTokenIIBuyables - data.buyables[101].round().toNumber()
-                                let ma = hasMilestone("sp", 3) ? 5 : 1
-                                if (hasUpgrade("tokens", 101))  ma *= 4
-                                if (hasMilestone("e", 2))       ma *= 5
-                                if (hasUpgrade("pl", 34))       ma *= 10
-                                if (hasMilestone("hu", 7))      ma *= 10
-                                if (hasUpgrade("hu", 14))       ma *= 10
-                                if (hasMilestone("hu", 43))     ma *= 20
-                                if (hasMilestone("hu", 50))     ma *= 10
-                                if (hasMilestone("hu", 51))     ma *= 100
-                                if (hasMilestone("hu", 63))     ma *= 100
-                                if (hasMilestone("hu", 77))     ma *= 100
-                                if (hasMilestone("hu", 89))     ma *= 10
-                                if (hasMilestone("hu", 96))     ma *= 100
-                                if (hasUpgrade("hu", 84))       ma *= 10
-                                if (hasChallenge("hu", 61))     ma *= 100
+                                if (!hasUpgrade("hu", 95)) {
+                                        let ma = hasMilestone("sp", 3) ? 5 : 1
+                                        if (hasUpgrade("tokens", 101))  ma *= 4
+                                        if (hasMilestone("e", 2))       ma *= 5
+                                        if (hasUpgrade("pl", 34))       ma *= 10
+                                        if (hasMilestone("hu", 7))      ma *= 10
+                                        if (hasUpgrade("hu", 14))       ma *= 10
+                                        if (hasMilestone("hu", 43))     ma *= 20
+                                        if (hasMilestone("hu", 50))     ma *= 10
+                                        if (hasMilestone("hu", 51))     ma *= 100
+                                        if (hasMilestone("hu", 63))     ma *= 100
+                                        if (hasMilestone("hu", 77))     ma *= 100
+                                        if (hasMilestone("hu", 89))     ma *= 10
+                                        if (hasMilestone("hu", 96))     ma *= 100
+                                        if (hasUpgrade("hu", 84))       ma *= 10
+                                        if (hasChallenge("hu", 61))     ma *= 100
 
-                                maxNewLevels = Math.min(ma, maxNewLevels)
+                                        maxNewLevels = Math.min(ma, maxNewLevels)
+                                }
 
                                 if (!player.ch.everUpgrade33) {
                                         maxNewLevels = 1
@@ -54885,6 +54901,8 @@ addLayer("tokens", {
                         if (hasMilestone("hu", 96))     ret *= 100
                         if (hasChallenge("hu", 31))     ret *= 10
                         if (hasChallenge("hu", 61))     ret *= 100
+                        if (hasUpgrade("hu", 91))       ret *= 10
+                        if (hasUpgrade("hu", 95))       ret *= 10
                         
                         return ret
                 },
@@ -55013,6 +55031,7 @@ addLayer("tokens", {
                                         }
                                         if (hasUpgrade("hu", 84)) div *= 3.2
                                         if (hasChallenge("hu", 62) && player.hu.points.gte("1e75950")) exp = .18
+                                        if (hasUpgrade("hu", 94) && player.hu.points.gte("1e88819")) exp = .17
                                 }
                                 return [add, div, exp]
                         },
