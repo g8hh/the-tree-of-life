@@ -60,7 +60,8 @@ function tokenNextAt(){
 
         if (amt.gte(len)) {
                 let tetBase = tmp.tokens.getTetrationBase
-                return Decimal.tetrate(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(hasChallenge("hu", 11) ? 1 : 4))
+                let add = hasUpgrade("hu", 101) ? 0 : hasChallenge("hu", 11) ? 1 : 4
+                return Decimal.tetrate(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(add))
         }
         amt = Math.round(amt.toNumber())
         let additional = player.hardMode ? 1e4 : 1
@@ -229,7 +230,10 @@ function tokenCost1(x){
 function tokenCFID2(){
         let tertComps = player.cells.challenges[21]
         let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
+        let s = hasUpgrade("hu", 105) && player.hu.points.gte("1e93477")
         
+        if (s)                          return 53
+        if (hasUpgrade("hu", 105))      return 52
         if (hasMilestone("hu", 89))     return 51
         if (r)                          return 50
         if (hasUpgrade("hu", 55))       return 49
@@ -292,7 +296,10 @@ function tokenCFT2(){
         let m3 = m1 && r3c >= 3
         let m4 = m1 && r3c >= 4
         let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
+        let s = hasUpgrade("hu", 105) && player.hu.points.gte("1e93477")
         
+        if (s)                          return "ceil(x<sup>1.04</sup>)"
+        if (hasUpgrade("hu", 105))      return "ceil(x<sup>1.044</sup>)"
         if (hasMilestone("hu", 89))     return "ceil(x<sup>1.05</sup>)"
         if (r)                          return "ceil(x<sup>1.06</sup>)"
         if (hasUpgrade("hu", 55))       return "ceil(x<sup>1.07</sup>)"
@@ -368,7 +375,10 @@ function tokenCost2(x){
         let m3 = m1 && r3c >= 3
         let m4 = m1 && r3c >= 4
         let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
+        let s = hasUpgrade("hu", 105) && player.hu.points.gte("1e93477")
         
+        if (s)                          return x.pow(1.04).ceil()
+        if (hasUpgrade("hu", 105))      return x.pow(1.044).ceil()
         if (hasMilestone("hu", 89))     return x.pow(1.05).ceil()
         if (r)                          return x.pow(1.06).ceil()
         if (hasUpgrade("hu", 55))       return x.pow(1.07).ceil()
