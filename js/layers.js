@@ -14081,7 +14081,7 @@ addLayer("l", {
                                 if (hasMilestone("d", 17) && player.extremeMode) base = 1e5
                                 if (hasChallenge("l", 101)) base = 2467
                                 if (hasMilestone("cells", 34)) base = 2
-                                if (hasMilestone("l", 40)) init = decimalOne
+                                if (hasMilestone("l", 40) && player.extremeMode) init = decimalOne
 
                                 base = new Decimal(base)
 
@@ -14103,7 +14103,7 @@ addLayer("l", {
                                 if (hasMilestone("d", 17) && player.extremeMode) base = 1e5
                                 if (hasChallenge("l", 101)) base = 2468
                                 if (hasMilestone("cells", 34)) base = 2
-                                if (hasMilestone("l", 40)) init = 1
+                                if (hasMilestone("l", 40) && player.extremeMode) init = 1
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[33].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[33].expDiv).plus(1).floor()
@@ -14170,7 +14170,9 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3e281*2e16^(x<sup>1+x/" + formatWhole(tmp.l.buyables[33].expDiv) + "</sup>)" 
                                 if (player.extremeMode)         cost2 = cost2.replace("3e281*2e16", "3e241*3e15")
-                                if (hasMilestone("l", 40))      cost2 = cost2.slice(6,)
+                                if (hasMilestone("l", 40) && player.extremeMode) {
+                                                                cost2 = cost2.slice(6,)
+                                }
                                 if (hasChallenge("l", 81))      cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101))     cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>").replace("</sup>)", ")").replace("2e16", "2468")
                                 if (hasMilestone("d", 17) && player.extremeMode) cost2 = cost2.replace("3e15", "1e5")
@@ -43154,7 +43156,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Mastery II base is 4, gain 10% of your Humans on reset per second, and each second Plant after 283 reduces the Mastery III base by 1 (max 15)."
+                                return "Reward: Mastery II base is 4, gain 10% of your Humans on reset per second, and each second Plant after 283 reduces the Mastery III coefficient by 1 (max 15)."
                         },
                 }, // hasMilestone("hu", 9)
                 10: {
