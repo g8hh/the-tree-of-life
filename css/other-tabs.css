@@ -110,6 +110,23 @@ a {
 	background-color: #439ea3;
 }
 
+.savebutton {
+	height: 20px;
+	min-width: 370px;
+	position: relative;
+	padding-left: 5px;
+	padding-right: 5px;
+	border: 1px solid;
+	background-color: var(--color);
+	border-color: rgba(0, 0, 0, 0.125);
+	color: rgba(0, 0, 0, 1);
+	cursor: pointer;
+}
+
+.savebutton:hover {
+	background-color: #acceda;
+}
+
 .savePopup {
 	display: block;
 	z-index: 10000000000000000000000000000000000000000;

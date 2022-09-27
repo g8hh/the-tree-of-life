@@ -222,9 +222,25 @@ var systemComponents = {
 
 		<br><br><span v-if="player.showBuiltInSaves">
 			<h2 style='color: #00FF99'>Built in saves</h2><br>
-			To import: import the string with <i>capitalization</i> correct and no trailing spaces.<br>
 			<bdi style='color: #F16105'>Warning: Scrolling past here may contains spoilers.</bdi><br><br>
-			<span v-for="(key, i) in CUSTOM_SAVES_IDS">{{key}}<bdi style='color: #FF0000'>,</bdi>  <span v-if="i % 3 == 2"><br></span></span> 
+
+			<button class="opt" onclick="player.CUSTOM_SAVES_PAGE = Math.max(0, player.CUSTOM_SAVES_PAGE - (player.shiftAlias ? 5 : 1))">Previous<br>page<br>(Shift 5x)</button>
+			<button class="opt" onclick="player.CUSTOM_SAVES_PAGE = Math.min(Math.floor(CUSTOM_SAVE_IDS.length / 20), player.CUSTOM_SAVES_PAGE + (player.shiftAlias ? 5 : 1))">Next<br>page<br>(Shift 5x)</button>
+			<br>
+			<span>Page {{player.CUSTOM_SAVES_PAGE+1}} / {{1+Math.floor(CUSTOM_SAVE_IDS.length / 20)}}</span>
+			<br><br>
+
+			<template v-for="(key, i) in CUSTOM_SAVES_IDS">
+				<table>
+					<tr v-if="i >= 20 * player.CUSTOM_SAVES_PAGE && i < (player.CUSTOM_SAVES_PAGE + 1) * 20">
+						<button class="savebutton" v-on:click="importSave(key, false, true)">
+							<span v-if="key.slice(0,2) == 'EX' " style='color: #AA3333'>EXTREME </span>
+							<span v-if="key.slice(0,2) != 'EX' " style='color: #339966'>NORMAL </span>
+							Import '{{key.replace("EX: ", "")}}' save
+						</button>
+					</tr>
+				</table>
+			</template> 
 		</span>
 		<br><br><br><br>
 		</span>
