@@ -41815,6 +41815,30 @@ addLayer("hu", {
                                 return hasUpgrade("hu", 111)
                         }, // hasUpgrade("hu", 112)
                 },
+                113: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans LIII"
+                        },
+                        description(){
+                                return "<i>Siok</i> cost base is 1e15,000 more and each <i>Siok</i> level after 3100 (3095 at 1e95,455 Humans) divides its cost base by 1.001"
+                        },
+                        cost:() => new Decimal("1e95413"),
+                        unlocked(){
+                                return hasUpgrade("hu", 112)
+                        }, // hasUpgrade("hu", 113)
+                },
+                114: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans LIV"
+                        },
+                        description(){
+                                return "<i>Hual</i> base is 128x less, its cost base is 1e12,000 more, and at 1e95,763 Humans the Token II via Animal exponent is .14"
+                        },
+                        cost:() => new Decimal("1e95577"),
+                        unlocked(){
+                                return hasUpgrade("hu", 113)
+                        }, // hasUpgrade("hu", 114)
+                },
         },
         buyables: {
                 rows: 3, 
@@ -42707,6 +42731,7 @@ addLayer("hu", {
                                         ret = ret.times("1e200")
                                         ret = ret.div(player.hu.buyables[33].sub(1000).div(2).floor().max(0).pow10())
                                 }
+                                if (hasUpgrade("hu", 113))      ret = ret.times("1e15000")
                                 return ret.div(tmp.hu.buyables[13].effect).max(1)
                         },
                         getCostBase(){
@@ -42759,6 +42784,10 @@ addLayer("hu", {
                                 }
                                 if (hasMilestone("hu", 100))    base = base.div(2)
                                 if (hasChallenge("hu", 32))     base = base.div(player.hu.challenges[32] > 1 ? 2.5 : 2)
+                                if (hasUpgrade("hu", 113)) {
+                                        let sub = player.hu.points.gte("1e95455") ? 3095 : 3100
+                                        base = base.div(Decimal.pow(1.001, player.hu.buyables[32].sub(sub).max(0))).max(1e4)
+                                }
 
                                 return base
                         },
@@ -42857,6 +42886,7 @@ addLayer("hu", {
                                 if (hasUpgrade("hu", 101) && player.hu.points.gte("1e89853")) {
                                         ret = ret.times("1e1111")
                                 }
+                                if (hasUpgrade("hu", 114))      ret = ret.times("1e12000")
                                 return ret.div(tmp.hu.buyables[13].effect).max(1)
                         },
                         getCostBase(){
@@ -42919,6 +42949,7 @@ addLayer("hu", {
                                         if (player.hu.points.gte("1e94391")) exp = exp.sub(1)
                                         if (player.hu.points.gte("1e94884")) exp = exp.sub(1)
                                 }
+                                if (hasUpgrade("hu", 114))      exp = exp.sub(7)
 
                                 return Decimal.pow(2, exp)
                         },
@@ -55150,6 +55181,9 @@ addLayer("tokens", {
                                         if (hasUpgrade("hu", 103)) exp = .16
                                         else if (hasUpgrade("hu", 84)) div *= 3.2
                                         if (hasUpgrade("hu", 112))      exp = .15
+                                        if (hasUpgrade("hu", 114) && player.hu.points.gte("1e95763")) {
+                                                exp = .14
+                                        }
                                 }
                                 return [add, div, exp]
                         },
