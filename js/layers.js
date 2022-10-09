@@ -41433,7 +41433,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XIX"
                         },
                         description(){
-                                return "Human Milestone 27 also counts <i>Tgwitlcwl</i> with little Human gain divider is 15,000"
+                                return "Human Milestone 27 also counts <i>Tgwitlcwl</i> and Human gain divider is 15,000"
                         },
                         cost:() => new Decimal("1e535"),
                         unlocked(){
