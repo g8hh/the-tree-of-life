@@ -3,6 +3,14 @@ function pointFormulaDisplay(){
         let b = "AX, BX, and CX are initially 1 and boosted as follows."
         let c = ""
 
+        if (hasChallenge("hu", 11)) {
+                let ret = a + br + b + br2 + c
+                ret = ret.replaceAll("AX", makeRed("A"))
+                ret = ret.replaceAll("BX", makeRed("B"))
+                ret = ret.replaceAll("CX", makeRed("C"))
+                return ret
+        }
+
         if (tmp.l.effect.gt(1))         c += "Life effect multiplies AX by " + format(tmp.l.effect) + br
         if (tmp.sci.effect.gt(1))       c += "Science effect multiplies AX by " + format(tmp.sci.effect) + br
         if (hasUpgrade("sci", 302))     c += "N Sci II effect multiplies AX by " + format(tmp.sci.upgrades[302].effect) + br
@@ -163,7 +171,10 @@ function pointFormulaDisplay(){
         }
         if (hasMilestone("or", 23))     c += "Organ Milestone 23 multiplies CX by " + format(player.or.energy.points.max(1).pow(.01 * player.or.milestones.length)) + br
         if (hasUpgrade("an", 25))       c += "Animal X multiplies CX by " + format(player.or.air.points.max(1).pow(.01 * player.an.upgrades.length)) + br
-        if (hasUpgrade("nu", 32))       c += "Nucleuses XII multiplies CX by " + format(player.or.points.max(1).pow(player.ch.points)) + br
+        if (hasUpgrade("nu", 32)) {
+                let eff = hasMilestone("hu", 12) ? player.or.points.max(1).log10().pow(3).pow10().pow(player.ch.points) : player.or.points.max(1).pow(player.ch.points)
+                c += "Nucleuses XII multiplies CX by " + format(eff) + br
+        }
 
         let ret = a + br + b + br2 + c
         ret = ret.replaceAll("AX", makeRed("A"))
@@ -916,8 +927,28 @@ function taxonomyCapFormulaDisplay(){
         let b = "AX is initially 400 and the following factors add to it"
         let c = ""
 
+        if (hasMilestone("hu", 44))  {
+                c = "Human Milestone 44 maxes AX 10 * Plants" + br
+                if (hasMilestone("hu", 71)) {
+                        let x = decimalOne
+                        if (player.hu.points.gte("1e20579")) x = x.times(100)
+                        if (player.hu.points.gte("1e20831")) x = x.times(5)
+                        if (x.gt(1)) c += "Human Milestone 71 multiplies AX by " + format(x) + br 
+                }
+                if (hasMilestone("hu", 95)) {
+                        let x = new Decimal(2)
+                        if (player.hu.points.gte("1e46005")) x = x.times(2)
+                        if (player.hu.points.gte("1e46110")) x = x.times(2)
+                        if (player.hu.points.gte("1e46289")) x = x.times(2)
+                        if (x.gt(1)) c += "Human Milestone 95 multiplies AX by " + format(x) + br 
+                }
+                if (hasUpgrade("hu", 131))    c += "Humans LXI multiplies AX by 5" + br
+
+                return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+        }
+
         if (hasMilestone("hu", 15)) {
-                c = "Human Milestone makes AX Plants + 9000" + br 
+                c = "Human Milestone 15 makes AX Plants + 9000" + br 
                 if (hasMilestone("hu", 35) && player.hu.thoughts.points.gte("4.44e4444")) {
                         c += "Human Milestone 35 adds 1000 to AX" + br
                 }
@@ -993,7 +1024,33 @@ function ecosystemFormulaDisplay(){
         let b = "AX is initially 1 and is multiplied by the following factors"
         let c = ""
 
-        if (hasUpgrade("e", 13))        c += "Ecosystems III multiplies AX by " + format(Decimal.pow(hasMilestone("hu", 73) && player.hu.points.gte("3e22,278") ? 1.03 : 1.02, player.tokens.mastery_tokens.total)) + br
+        if (hasUpgrade("e", 13)) {
+                let base = 1.02
+                if (hasMilestone("hu", 73)) {
+                        if (player.hu.points.gte("3e22,278"))   base = 1.03
+                        if (player.hu.points.gte("1e22,422"))   base = 1.04
+                        if (player.hu.points.gte("3e22,558"))   base = 1.05
+                        if (player.hu.points.gte("3e22,779"))   base = 1.06
+                        if (player.hu.points.gte("3e22,964"))   base = 1.07
+                        if (player.hu.points.gte("1e23,935"))   base = 1.072
+                }
+                if (hasMilestone("hu", 76)) {
+                        if (player.hu.points.gte("1e26,279"))   base = 1.08
+                        if (player.hu.points.gte("1e26,308"))   base = 1.09
+                        if (player.hu.points.gte("1e26,335"))   base = 1.10
+                }
+                if (hasMilestone("hu", 98)) {
+                        if (player.hu.points.gte("1e52,623"))   base = 1.105
+                        if (player.hu.points.gte("1e52,675"))   base = 1.115
+                        if (player.hu.points.gte("1e52,743"))   base = 1.12
+                        if (player.hu.points.gte("1e52,770"))   base = 1.13
+                        if (player.hu.points.gte("1e52,855"))   base = 1.14
+                        if (player.hu.points.gte("1e52,933"))   base = 1.15
+                        if (player.hu.points.gte("1e53,583"))   base = 1.155
+                        if (player.hu.points.gte("1e53,651"))   base = 1.16
+                }
+                c += "Ecosystems III multiplies AX by " + format(Decimal.pow(base, player.tokens.mastery_tokens.total)) + br
+        }
         if (hasChallenge("e", 12))      c += "Nucleusless? multiplies AX by " + format(tmp.e.challenges[12].ecoMult) + br
         if (hasMilestone("pl", 2))      c += "Plant Milestone 2 multiplies AX by " + format(player.ch.points.max(10).log10().pow(player.pl.milestones.length)) + br
         if (hasMilestone("pl", 6))      c += "Plant Milestone 6 multiplies AX by " + format(player.nu.points.sub(1200).max(1)) + br

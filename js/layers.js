@@ -18443,7 +18443,7 @@ addLayer("d", {
                 let pts = player.a.points
                 let init = pts.div(player.extremeMode ? "8e315" : 4.4e144).max(1).log10()
                 if (layers.l.grid.getGemEffect(408) || hasUpgrade("or", 145)) init = init.plus(144.6434526764861874) 
-                if (init.lt(25)) return decimalZero
+                if (init.lt(player.extremeMode ? 100 : 25)) return decimalZero
 
                 let v1 = init
                 if (!hasMilestone("cells", 31)) v1 = v1.sqrt()
@@ -33500,10 +33500,7 @@ addLayer("an", {
                                 if (player.hu.points.gte("1e46110")) ret = ret.times(2)
                                 if (player.hu.points.gte("1e46289")) ret = ret.times(2)
                         }
-                        if (hasUpgrade("hu", 131)) {
-                                ret = ret.times(5)
-                                //if (player.hu.points.gte("1e103805")) ret = ret.times(5)
-                        }
+                        if (hasUpgrade("hu", 131))              ret = ret.times(5)
 
                         return ret.floor()
                 }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit taxonomy cap taxonomycap
@@ -40799,7 +40796,7 @@ addLayer("pl", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: make exponent is .68 and Plant buyables after the first 440 (max 2222) multiply Ecosystem gain by 1.2."
+                                return "Reward: make exponent is .68 and Plant buyables after the first 440 (maxes at 2222 Plants) multiply Ecosystem gain by 1.2."
                         },
                 }, // hasMilestone("pl", 17)
                 18: {
@@ -41328,7 +41325,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans X"
                         },
                         description(){
-                                return "make exponent is .8 and each 6th/5th/4th Plant after 1070/1103/1029 subtracts .001 from the Mastery III base (max 5/5/15 times)"
+                                return "make exponent is .8 and each 6th/5th/4th Plant after 1074/1103/1129 subtracts .001 from the Mastery III base (max 5/5/15 times)"
                         },
                         cost:() => new Decimal(1e29),
                         unlocked(){
@@ -42364,7 +42361,7 @@ addLayer("hu", {
                                 if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.hu.buyables[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: Divide all buyables costs by "
-                                        let eff2 = format(tmp.hu.buyables[13].effect) + "</b><br>"
+                                        let eff2 = format(tmp.hu.buyables[13].effect) + " (min 1)</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("hu", 13)) + " Thoughts</b><br>"
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
@@ -43534,7 +43531,7 @@ addLayer("hu", {
                                 player.cells.buyables[21] = decimalZero
                         },
                         effectDescription(){
-                                return "Reward: The log10(Animals) is Multipotent's base is log10(Organs) and each 6th Plant after 1460 subtracts .001 from the Mastery III base (max 15 times) but it's cost base is 1e8 and reset it's levels."
+                                return "Reward: The log10(Animals) in Multipotent's base is log10(Organs) and each 6th Plant after 1460 subtracts .001 from the Mastery III base (max 15 times) but it's cost base is 1e8 and reset it's levels."
                         },
                 }, // hasMilestone("hu", 17)
                 18: {
@@ -45083,7 +45080,7 @@ addLayer("hu", {
 
                                         if (!hasMilestone("hu", 25)) return a + br2 + b + br2 + c + br2 + d
 
-                                        let e = "Having a level of \"The unexmained life in not worth living\" makes you produce 10x Humans per second"
+                                        let e = "Having a level of <i>Tulinwl</i> makes you produce 10x Humans per second"
                                         return a + br2 + b + br2 + c + br2 + d + br2 + e
                                 }],
                         ],
@@ -45291,6 +45288,9 @@ addLayer("mc", {
                                 player.tab = "cells"
                         },
                 },
+        },
+        deactivated(){
+                return hasMilestone("hu", 41)
         },
         layerShown(){
                 if (hasMilestone("hu", 41)) return false
@@ -48081,9 +48081,12 @@ addLayer("mini", {
                 61: {
                         title: "<bdi style='color:#660099'>Violet</bdi>",
                         cost(){
-                                let base = player.extremeMode ? 1e5 : 1e10
+                                let base = 1e10
                                 let init = new Decimal(1e15)
-                                if (hasMilestone("mini", 10) || player.sci.everhasnsci2) init = decimalOne
+                                if (player.extremeMode) {
+                                        base = 1e5
+                                        if (hasMilestone("mini", 10) || player.sci.everhasnsci2) init = decimalOne
+                                }
                                 let exp = Decimal.pow(getBuyableAmount("mini", 61), 1.1)
                                 return init.times(Decimal.pow(base, exp))
                         },
@@ -48132,8 +48135,10 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e15)*(1e10^x<sup>1.1</sup>)"
-                                if (player.extremeMode) cost2 = cost2.replace("10", "5") 
-                                if (hasMilestone("mini", 10) || player.sci.everhasnsci2) cost2 = "1e10^x<sup>1.1</sup>"
+                                if (player.extremeMode) {
+                                        cost2 = cost2.replace("10", "5") 
+                                        if (hasMilestone("mini", 10) || player.sci.everhasnsci2) cost2 = "1e10^x<sup>1.1</sup>"
+                                }
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -52838,6 +52843,7 @@ addLayer("mini", {
                                 return "1e63 B Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.b_points.points.gte(hasUpgrade("h", 44) ? 1e84 : 1e63)
                         },
                         unlocked(){
@@ -52853,6 +52859,7 @@ addLayer("mini", {
                                 return "5e94 B Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.b_points.points.gte(hasUpgrade("h", 44) ? 1e105 : 5e94)
                         },
                         unlocked(){
@@ -52868,6 +52875,7 @@ addLayer("mini", {
                                 return "3e106 B Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.b_points.points.gte(hasUpgrade("h", 44) ? 1e128 : 3e106)
                         },
                         unlocked(){
@@ -52883,6 +52891,7 @@ addLayer("mini", {
                                 return "3e121 B Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.b_points.points.gte(hasUpgrade("h", 44) ? 1e156 : 3e121)
                         },
                         unlocked(){
@@ -52898,6 +52907,7 @@ addLayer("mini", {
                                 return "1e170 B Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.b_points.points.gte(hasUpgrade("h", 44) ? "1e459" : 1e170)
                         },
                         unlocked(){
@@ -52913,6 +52923,7 @@ addLayer("mini", {
                                 return "1e192 B Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.b_points.points.gte(hasUpgrade("h", 44) ? "1e532" : 1e192)
                         },
                         unlocked(){
@@ -52928,6 +52939,7 @@ addLayer("mini", {
                                 return "1e281 B Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.b_points.points.gte(hasUpgrade("h", 44) ? "1e741" : 1e281)
                         },
                         unlocked(){
@@ -52943,6 +52955,7 @@ addLayer("mini", {
                                 return "1e46 A Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.a_points.points.gte(hasUpgrade("h", 45) ? 1e34 : 1e46)
                         },
                         unlocked(){
@@ -52957,6 +52970,7 @@ addLayer("mini", {
                                 return "3e55 A Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.a_points.points.gte(3e55)
                         },
                         unlocked(){
@@ -52971,6 +52985,7 @@ addLayer("mini", {
                                 return "5e73 A Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.a_points.points.gte(5e73)
                         },
                         unlocked(){
@@ -52985,6 +53000,7 @@ addLayer("mini", {
                                 return "1e89 A Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.a_points.points.gte(1e89)
                         },
                         unlocked(){
@@ -52999,6 +53015,7 @@ addLayer("mini", {
                                 return "1e114 A Points"
                         },
                         done(){
+                                if (!player.extremeMode) return false
                                 return player.mini.a_points.points.gte(1e114)
                         },
                         unlocked(){
