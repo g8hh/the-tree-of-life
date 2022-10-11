@@ -43741,7 +43741,7 @@ addLayer("hu", {
                         },
                         effectDescription(){
                                 let a = "<bdi style='font-size: 80%'>Reward: Multipotent exponent is 1.02 and it's base is 1e80 divided by 1.002 per Plant (min 1e30) and each 20th Plant after 31,100 subtracts .0001"
-                                return a + " from the Chromosome cost exponent and each 150th adds .2 to the Token II via Stem Cell divider and triple Thought gain (each max at 100).</bdi>"
+                                return a + " from the Chromosome cost exponent and each 150th adds .5 to the Token II via Stem Cell divider and triple Thought gain (each max at 100).</bdi>"
                         },
                 }, // hasMilestone("hu", 32)
                 33: {
