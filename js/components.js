@@ -50,6 +50,7 @@ function loadVue() {
 						</tr>
 					</table>
 				</template> 
+				<br>
 			</span>
 		`
 	})

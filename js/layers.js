@@ -35365,7 +35365,7 @@ addLayer("nu", {
                 if (hasMilestone("hu", 85)) {
                         let l = player.hu.buyables[33].sub(100)
                         if (l.gt(100)) {
-                                if (hasMilestone("hu", 93)) l = l.sub(100).div(3).floor().plus(100).min(1500)
+                                if (hasMilestone("hu", 93)) l = l.sub(100).div(3).floor().plus(100).min(1100)
                                 else l = new Decimal(100)
                         }
                         ret = ret.sub(l.max(0).div(1e4))
@@ -40137,8 +40137,7 @@ addLayer("pl", {
 
                                 if (hasChallenge("hu", 12))     ret = new Decimal("1e1000")
                                 if (hasChallenge("hu", 31)) {
-                                        ret = new Decimal("1e500")
-                                        ret = ret.div(Decimal.pow(1e50, player.hu.challenges[41]))
+                                        ret = new Decimal("1e500").div(Decimal.pow(1e50, player.hu.challenges[41]))
                                 }
                                 if (hasUpgrade("hu", 115))      ret = new Decimal(10)
 
@@ -41076,7 +41075,7 @@ addLayer("hu", {
 
                 if (hasMilestone("hu", 13))     ret = ret.times(4)
                 if (hasMilestone("hu", 15))     ret = ret.times(player.hu.milestones.length)
-                if (hasMilestone("hu", 16))     ret = ret.times(Decimal.pow(player.hu.milestones.length, player.hu.milestones.length - 14))
+                if (hasMilestone("hu", 16))     ret = ret.times(Decimal.pow(player.hu.milestones.length, player.hu.milestones.length - 14).max(1))
                 if (tmp.hu.buyables[12].effect.gt(1)) {
                         let base = tmp.hu.buyables[12].effect
                         let data = player.hu.buyables
@@ -43486,7 +43485,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Energy buyable's cost bases are 1.01/1.02/1.03 etc and if you have 725 Plants Strange Quark's is coefficient*(C<sup>.95</sup>)."
+                                return "Reward: Energy buyable's cost bases are 1.01/1.02/1.03 etc and at 725 Plants Strange Quark's is coefficient*(C<sup>.95</sup>)."
                         },
                 }, // hasMilestone("hu", 14)
                 15: {
@@ -43500,7 +43499,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Taxonomy cap is 9000 + Plants, the number of milestones multiplies Human gain, and Human Milestone 1 uses 10<sup>a<sup>x</sup></sup> where a is randomly chosen between 2 and 3."
+                                return "Reward: Taxonomy cap is 9000 + Plants, the number of milestones multiplies Human gain, and Human Milestone 1 uses 10<sup>a<sup>x</sup></sup> where a is uniformly randomly chosen between 2 and 3."
                         },
                 }, // hasMilestone("hu", 15)
                 16: {
@@ -43615,7 +43614,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Up Quark's log10 is log6 and upon 5600/5700 Plants the <i>Hiawd</i> cost base is 550,000/400,000."
+                                return "Reward: Up Quark's log10 is log6 and upon 5600 / 5700 Plants the <i>Hiawd</i> cost base is 550,000 / 400,000."
                         },
                 }, // hasMilestone("hu", 23)
                 24: {
@@ -43643,7 +43642,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Each Plant past 7200 subtracts .01 from the Mastery I coefficient and multiplies Thought gain by 1.01 (and 1.02 if you have 7500 Plants), each maxing at 700 and at 7285 Plants, Nucleuses subtract from <i>Hiawd</i> base (max 390,000)."
+                                return "Reward: Each Plant past 7200 subtracts .01 from the Mastery I coefficient and multiplies Thought gain by 1.01 (and 1.02 if you have 7500 Plants), each maxing at 700, and at 7285 Plants, Nucleuses subtract from <i>Hiawd</i> base (max 390,000)."
                         },
                 }, // hasMilestone("hu", 25)
                 26: {
@@ -43657,7 +43656,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Each 10th Plant after 10,000 subtracts .0001 from the Chromosome cost exponent, max 100 times, Top Quark's coefficient is .6, and at 10125/10365/10615 Plants, Nucleus' cost exponent is 1.69/1.68/1.67 ."
+                                return "Reward: Each 10th Plant after 10,000 subtracts .0001 from the Chromosome cost exponent, max 100 times, Top Quark's coefficient is .6, and at 10,125 / 10,365 / 10,615 Plants, Nucleus' cost exponent is 1.69 / 1.68 / 1.67 ."
                         },
                 }, // hasMilestone("hu", 26)
                 27: {
@@ -43671,7 +43670,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: <i>IttIa</i> subtracts from <i>Tulinwl</i>'s base (max 900), upon 12345 Plants the <i>Hiawd</i> cost base is 20,000-Plants (min 400), and Up Quark's log3 becomes log2."
+                                return "Reward: <i>IttIa</i> subtracts from <i>Tulinwl</i>'s base (max 900), upon 12,345 Plants the <i>Hiawd</i> cost base is 20,000 - Plants (min 400), and Up Quark's log3 becomes log2."
                         },
                 }, // hasMilestone("hu", 27)
                 28: {
@@ -43685,7 +43684,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: After 14300, 15250 and each more 138 thereafter Plants subtract 1 from the <i>IttIa</i> base (max 10 total). Bulk 10x Plant and Mastery Token buyables."
+                                return "Reward: After 1,4300, 15,250, and each more 138 thereafter Plants subtract 1 from the <i>IttIa</i> base (max 10 total). Bulk 10x Plant and Mastery Token buyables."
                         },
                 }, // hasMilestone("hu", 28)
                 29: {
@@ -43699,21 +43698,21 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: At 18,350 Plants <i>Hiawd</i> base is sqrt(Plants) and at 18610/18900/19920/20030 Plants <i>IttIa</i> base is reduced by 1."
+                                return "Reward: At 18,350 Plants <i>Hiawd</i> base is sqrt(Plants) and at 18,610 / 18,900 / 19,920 / 20,030 Plants <i>IttIa</i> base is reduced by 1."
                         },
                 }, // hasMilestone("hu", 29)
                 30: {
                         requirementDescription(){
-                                return "20,270 Plants"
+                                return "20,260 Plants"
                         },
                         done(){
-                                return player.pl.points.gte(20270)
+                                return player.pl.points.gte(20260)
                         },
                         unlocked(){
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Each 15th Plant after 20800 subtracts .0001 from the Chromosome exponent (max 100 times), bulk 5x Plant buyables, Leaf cost base is 1e11-Chromosomes (max 1e8), and at 21000, 21290, 21580, and 21960 subtract 1 from the <i>IttIa</i> base."
+                                return "Reward: Each 15th Plant after 20,800 subtracts .0001 from the Chromosome exponent (max 100 times), bulk 5x Plant buyables, Leaf cost base is 1e11 - Chromosomes (max 1e8), and at 21,000, 21,290, 21,580, and 21,960 subtract 1 from the <i>IttIa</i> base."
                         },
                 }, // hasMilestone("hu", 30)
                 31: {
@@ -43727,7 +43726,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Human gain divider is 40,000 - Plants (min 200) and each 240th Plant after 24220 (max 8 times) and again at 26550, 26870, 27250, 27570, 27980, 28390, 28940, and 29760 subtracts 1 from the <i>IttIa</i> base."
+                                return "Reward: Human gain divider is 40,000 - Plants (min 200) and each 240th Plant after 24220 (max 8 times) and again at 26,550, 26,870, 27,250, 27,570, 27,980, 28,390, 28,940, and 29,760 subtracts 1 from the <i>IttIa</i> base."
                         },
                 }, // hasMilestone("hu", 31)
                 32: {
@@ -43741,7 +43740,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                let a = "<bdi style='font-size: 80%'>Reward: Multipotent exponent is 1.02 and it's base is 1e80 divided by 1.002 per Plant (min 1e30) and each 20th Plant after 31100 subtracts .0001"
+                                let a = "<bdi style='font-size: 80%'>Reward: Multipotent exponent is 1.02 and it's base is 1e80 divided by 1.002 per Plant (min 1e30) and each 20th Plant after 31,100 subtracts .0001"
                                 return a + " from the Chromosome cost exponent and each 150th adds .2 to the Token II via Stem Cell divider and triple Thought gain (each max at 100).</bdi>"
                         },
                 }, // hasMilestone("hu", 32)
@@ -43756,7 +43755,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Oligopotent base is 3 and at 35000 Plants and each 100 thereafter subtract 1 from the <i>Hiawd</i> base (max 250 times). At 35130, 35860, 36590, and 37390 Plants subtract 1 from the <i>IttIa</i> base. At 38280 Plants Leaf's /4 is /1.4."
+                                return "Reward: Oligopotent base is 3 and at 35,000 Plants and each 100 thereafter subtract 1 from the <i>Hiawd</i> base (max 250 times). At 35,130, 35,860, 36,590, and 37,390 Plants subtract 1 from the <i>IttIa</i> base. At 38,280 Plants Leaf's /4 is /1.4."
                         },
                 }, // hasMilestone("hu", 33)
                 34: {
@@ -43770,7 +43769,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Pluripotent's base is 1e7 - Nucleuses (min 10,000), at 41444 Plants remove Leaf's divider, and at 41710 the Chromosome cost exponnet is 1.2 ."
+                                return "Reward: Pluripotent's base is 1e7 - Nucleuses (min 10,000), at 41,444 Plants remove Leaf's divider, and at 41,710 the Chromosome cost exponent is 1.2 ."
                         },
                 }, // hasMilestone("hu", 34)
                 35: {
@@ -43784,7 +43783,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Per sqrt(Nucleuses) divide Omnipotent base by 1.01 and at 4.44e4444 Thoughts increase the Taxonomy cap exponent by 1000."
+                                return "Reward: Per sqrt(Nucleuses) divide Omnipotent base by 1.01 (minimum 100) and at 4.44e4444 Thoughts increase the Taxonomy cap exponent by 1000."
                         },
                 }, // hasMilestone("hu", 35)
                 36: {
@@ -43798,7 +43797,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: The Human gain divider is 300-<i>GmaptsaIwmte</i> (max 3) and if you have 51550 / 52075 / 52790 / 53170 / 53790 / 54930 / 57450 / 58970 / 60190 Plants the Mastery IV exponent base is 1.1 / 1.06 / 1.05 / 1.04 / 1.03 / 1.02 / 1.017 / 1.015 / 1.014 ."
+                                return "Reward: The Human gain divider is 300 - <i>GmaptsaIwmte</i> (max 3) and if you have 51,550 / 52,075 / 52,790 / 53,170 / 53,790 / 54,930 / 57,450 / 58,970 / 60,190 Plants the Mastery IV exponent base is 1.1 / 1.06 / 1.05 / 1.04 / 1.03 / 1.02 / 1.017 / 1.015 / 1.014 ."
                         },
                 }, // hasMilestone("hu", 36)
                 37: {
@@ -43812,7 +43811,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: The <i>GmaptsaIwmte</i> base is 20,000,000 - Nucleuses and at 66010 Plants the Mastery V base is 2."
+                                return "Reward: The <i>GmaptsaIwmte</i> base is 30,000,000 - Nucleuses (max 1e6) and at 66,010 Plants the Mastery V base is 2."
                         },
                 }, // hasMilestone("hu", 37)
                 38: {
@@ -43826,7 +43825,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: At 71,800 Plants and each 100th afterwards double Thought gain and subtract .1 from <i>Tulisnwl</i> base (doubles at 73360 Plants), max 100 times and at 73700 Plants the Stem cost base is 18."
+                                return "Reward: At 71,800 Plants and each 100th afterwards double Thought gain and subtract .1 from <i>Tulisnwl</i> base (doubles at 73,360 Plants), max 100 times and at 73,700 Plants the Stem cost base is 18."
                         },
                 }, // hasMilestone("hu", 38)
                 39: {
@@ -43840,7 +43839,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Increase the make exponent to .81 and at 87540/89150/91140/92510/93910/94350 Plants the <i>Tgwitlcwl</i> coefficient is .31/.32/.33/.34/.35/.36 ."
+                                return "Reward: Increase the make exponent to .81 and at 87,540 / 89,150 / 91,140 / 92,510 / 93,910 / 94,350 Plants the <i>Tgwitlcwl</i> coefficient is .31 / .32 / .33 / .34 / .35 / .36 ."
                         },
                 }, // hasMilestone("hu", 39)
                 40: {
@@ -43940,7 +43939,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: <i>GmaptsaIwmte</i> cost base is 1,500,000 - Plants (max 250,000) and at 550,930 / 554,670 Plants the <i>Badwaftapw</i> cost base is 3e9 / 1.8e9 - Nucleuses."
+                                return "Reward: <i>GmaptsaIwmte</i> cost base is 1,500,000 - Plants (max 250,000) and at 550,930 / 554,670 Plants the <i>Badwaftapw</i> cost base is 3e9 / 1.8e9 - Nucleuses (max 1e7)."
                         },
                 }, // hasMilestone("hu", 45)
                 46: {
@@ -44024,7 +44023,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Bulk 100x Up Quarks and Token II buyables, <i>Tinhiragt</i> cost base is divided by it's levels<sup>1.7</sup> (max 100,000) and at 1e5581 / 1e6292 / 1e6317 / 1e6356 Humans the <i>GmaptsaIwmte</i> cost base is 200,000 / 186,000 / 170,000 / 160,000."
+                                return "Reward: Bulk 100x Up Quarks and Token II buyables, <i>Tinhiragt</i> cost base is divided by it's levels<sup>1.7</sup> (min 100,000) and at 1e5581 / 1e6292 / 1e6317 / 1e6356 Humans the <i>GmaptsaIwmte</i> cost base is 200,000 / 186,000 / 170,000 / 160,000."
                         },
                 }, // hasMilestone("hu", 51)
                 52: {
@@ -44052,7 +44051,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Human Milestone 51 no longer divides <i>Tinhiragt</i> base but per level divide its cost base by 1.1 (max 1e7), and at 1e7374 / 1e7386 / 5e7402 Humans its base is 16 / 18 / 21."
+                                return "Reward: Human Milestone 51 no longer divides <i>Tinhiragt</i> base but per level divide its cost base by 1.1 (min 1e7), and at 1e7374 / 1e7386 / 5e7402 Humans its base is 16 / 18 / 21."
                         },
                 }, // hasMilestone("hu", 53)
                 54: {
@@ -44066,7 +44065,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: <i>Badwaftapw</i> base is 543,210/1.001<sup>its levels</sup>, at 5e7456 / 1e7616 / 1e7706 / 1e7729 Humans the <i>GmaptsaIwmte</i> base is 133,000 / 126,000 / 123,000 / 120,000, and at 1e7483 / 5e7630 / 1e7734 Humans double / triple / quadruple <i>GmaptsaIwmte</i> base."
+                                return "Reward: <i>Badwaftapw</i> base is 543,210/1.001<sup>its levels</sup> (min 1e4), at 5e7456 / 1e7616 / 1e7706 / 1e7729 Humans the <i>GmaptsaIwmte</i> base is 133,000 / 126,000 / 123,000 / 120,000, and at 1e7483 / 5e7630 / 1e7734 Humans double / triple / quadruple <i>GmaptsaIwmte</i> base."
                         },
                 }, // hasMilestone("hu", 54)
                 55: {
@@ -44080,7 +44079,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Bulk 10x Mastery Tokens, <i>Hiawd</i> base is 214 - <i>Tinhiragt</i> min 95, at 1e7913 Plants the Top Quark coefficient is <i>Tulinwl</i>/100."
+                                return "Reward: Bulk 10x Mastery Tokens, <i>Hiawd</i> base is 214 - <i>Tinhiragt</i> min 95, at 1e7913 Plants the Top Quark coefficient is <i>Tulinwl</i> / 100."
                         },
                 }, // hasMilestone("hu", 55)
                 56: {
@@ -44290,7 +44289,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: <i>Hual</i> cost base is 2<sup>1029</sup> and halves per level and it's exponent is 1.3 (1.19/1.1 at 1e19,689 / 3e21,015 Humans), at 1e19,134 / 3e19,718 / 1e19,584 Humans the Mastery VI base is 1.05 / 1.048 / 1.046, and at 3e19,555 Humans Mastery Tokens<sup>.6</sup> adds to the Ecosystem effect and gain exponents."
+                                return "Reward: <i>Hual</i> cost base is 2<sup>1029</sup> and halves per level and it's exponent is 1.3 (1.19 / 1.1 at 1e19,689 / 3e21,015 Humans), at 1e19,134 / 3e19,718 / 1e19,584 Humans the Mastery VI base is 1.05 / 1.048 / 1.046, and at 3e19,555 Humans Mastery Tokens<sup>.6</sup> adds to the Ecosystem effect and gain exponents."
                         },
                 }, // hasMilestone("hu", 70)
                 71: {
@@ -44612,7 +44611,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Human Milestone 85 counts every third <i>Hual</i> level past 200 for Nucleuses and each seventh for Chromosomes upon 1e44,444 Humans."
+                                return "Reward: Human Milestone 85 counts every third <i>Hual</i> level past 200 for Nucleuses (max 1100) and each seventh for Chromosomes upon 1e44,444 Humans (max 500)."
                         },
                 }, // hasMilestone("hu", 93)
                 94: {
@@ -44696,7 +44695,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Every <i>Siok</i> level after 1900 divides its base by 1.001, at 1e53,082 Humans subtract .0001 from the Mastery III base, and at 1e53,346 Humans the <i>Hual</i> cost exponent is 1.1 but divide its base by 2<sup>25</sup>."
+                                return "Reward: Every <i>Siok</i> level after 1900 divides its base by 1.001 (min 500,000), at 1e53,082 Humans subtract .0001 from the Mastery III base, and at 1e53,346 Humans the <i>Hual</i> cost exponent is 1.1 but divide its base by 2<sup>25</sup>."
                         },
                 }, // hasMilestone("hu", 99)
                 100: {
@@ -44819,7 +44818,7 @@ addLayer("hu", {
                                 let a = "<b>Right</b> and <b>Incorrect</b>"
                                 let b = "Goal: 328,000,000 Plants"
                                 let c = "Reward: Stem cost base is 1e500, buy 10x Token II buyables,"
-                                c += " and upon 1e55,352 / 1e55,460 Humans every 5th / 4th <i>Hual</i> level after 550 halves it base"
+                                c += " and upon 1e55,352 / 1e55,460 Humans every 5th / 4th <i>Hual</i> level after 550 halves it base (max 50)"
 
                                 return a + br2 + b + br2 + c + br2
                         },
