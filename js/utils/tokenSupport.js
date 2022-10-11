@@ -229,6 +229,7 @@ function tokenCost1(x){
 function tokenCFID2(){
         let tertComps = player.cells.challenges[21]
         
+        if (hasUpgrade("hu", 45))       return 44
         if (hasUpgrade("hu", 33))       return 43
         if (hasUpgrade("hu", 24))       return 42
         if (hasMilestone("pl", 21))     return 41
@@ -283,6 +284,7 @@ function tokenCFT2(){
         let m3 = m1 && r3c >= 3
         let m4 = m1 && r3c >= 4
 
+        if (hasUpgrade("hu", 45))       return "ceil(x<sup>1.12</sup>)"
         if (hasUpgrade("hu", 33))       return "ceil(x<sup>1.13</sup>)"
         if (hasUpgrade("hu", 24))       return "ceil(x<sup>1.14</sup>)"
         if (hasMilestone("pl", 21))     return "ceil(x<sup>1.15</sup>)"
@@ -350,6 +352,7 @@ function tokenCost2(x){
         let m3 = m1 && r3c >= 3
         let m4 = m1 && r3c >= 4
 
+        if (hasUpgrade("hu", 45))       return x.pow(1.12).ceil()
         if (hasUpgrade("hu", 33))       return x.pow(1.13).ceil()
         if (hasUpgrade("hu", 24))       return x.pow(1.14).ceil()
         if (hasMilestone("pl", 21))     return x.pow(1.15).ceil()
