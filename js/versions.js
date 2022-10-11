@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.030",
+	num: "2.030.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -15,7 +15,13 @@ function isEndgameRaw(){
 	return player.hu.points.gte("e112847")
 }
 
-let CHANGELOGS = [
+var CHANELOG_VERSION = "v2.030.1"
+
+var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.030.1</h3><br>
+		- Added fourteen rows of achievements.<br>
+		- Many more wording fixes.<br>
+		- Various other changes and bugfixes.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.030</h3><br>
 		- Balanced until 1e112,847 Humans.<br>
 		- Added eleven Human upgrades.<br>

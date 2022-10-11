@@ -43513,7 +43513,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: The Token II is Multipotent's base is log10(Animals) and milestones<sup>milestones-14</sup> multiplies Human gain."
+                                return "Reward: The Token II in Multipotent's base is log10(Animals) and milestones<sup>milestones-14</sup> multiplies Human gain."
                         },
                 }, // hasMilestone("hu", 16)
                 17: {
@@ -44994,22 +44994,22 @@ addLayer("hu", {
         },
         microtabs: {
                 upgrades_content: {
-                        "Primary": {
+                        "First": {
                                 content: [
-                                        ["upgrades", [1, 2, 3, 4, 5, 6, 7, 8]],
+                                        ["upgrades", [1, 2, 3, 4, 5]],
                                 ]
                         },
-                        "Secondary": {
+                        "Second": {
                                 content: [
-                                        ["upgrades", [9, 10, 11, 12, 13, 14]],
+                                        ["upgrades", [6, 7, 8, 9, 10]],
                                 ],
                         },
-                        "Tertiary": {
+                        "Third": {
                                 content: [
-                                        ["upgrades", [15, 16, 17, 18, 19, 20]],
+                                        ["upgrades", [11, 12, 13, 14, 15]],
                                 ],
                                 unlocked(){
-                                        return false
+                                        return hasUpgrade("hu", 105)
                                 },
                         },
                 },

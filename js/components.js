@@ -36,7 +36,7 @@ function loadVue() {
 				<br>
 				
 				<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-					Reaching the endgame screen (updated at least as of v2.030)<br><br>
+					Reaching the endgame screen (updated at least as of <span v-html="CHANELOG_VERSION">let me know if you see this</span>)<br><br>
 				<br><h2 style='color: #00CC00'>Notes</h2><br>
 					- Versions will be vA.B.C<br>
 					- A will be big releases.<br>
