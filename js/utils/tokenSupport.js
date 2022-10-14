@@ -232,6 +232,8 @@ function tokenCFID2(){
         let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
         let s = hasUpgrade("hu", 105) && player.hu.points.gte("1e93477")
         
+        if (hasUpgrade("hu", 151))      return 55
+        if (hasUpgrade("hu", 143))      return 54
         if (s)                          return 53
         if (hasUpgrade("hu", 105))      return 52
         if (hasMilestone("hu", 89))     return 51
@@ -298,6 +300,8 @@ function tokenCFT2(){
         let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
         let s = hasUpgrade("hu", 105) && player.hu.points.gte("1e93477")
         
+        if (hasUpgrade("hu", 151))      return "ceil(x<sup>1.03</sup>)"
+        if (hasUpgrade("hu", 143))      return "ceil(x<sup>1.035</sup>)"
         if (s)                          return "ceil(x<sup>1.04</sup>)"
         if (hasUpgrade("hu", 105))      return "ceil(x<sup>1.044</sup>)"
         if (hasMilestone("hu", 89))     return "ceil(x<sup>1.05</sup>)"
@@ -377,6 +381,8 @@ function tokenCost2(x){
         let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
         let s = hasUpgrade("hu", 105) && player.hu.points.gte("1e93477")
         
+        if (hasUpgrade("hu", 151))      return x.pow(1.03).ceil()
+        if (hasUpgrade("hu", 143))      return x.pow(1.035).ceil()
         if (s)                          return x.pow(1.04).ceil()
         if (hasUpgrade("hu", 105))      return x.pow(1.044).ceil()
         if (hasMilestone("hu", 89))     return x.pow(1.05).ceil()
