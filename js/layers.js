@@ -42104,6 +42104,30 @@ addLayer("hu", {
                                 return hasUpgrade("hu", 152)
                         }, // hasUpgrade("hu", 153)
                 },
+                154: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans LXXIV"
+                        },
+                        description(){
+                                return "Each 8th <i>Hual</i> level past 3300 adds .001 to <i>Tgwitlcwl</i>'s base (max 250 times) and at 1e114,844 Humans Mastery III's base is 1.325"
+                        },
+                        cost:() => new Decimal("1e114717"),
+                        unlocked(){
+                                return hasUpgrade("hu", 153)
+                        }, // hasUpgrade("hu", 154)
+                },
+                155: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Humans LXXV"
+                        },
+                        description(){
+                                return "Humans LXXIV becomes every 7th and at 1e115,019 / 1e115,460 Humans Token II via Animals' exponent is .128 / .127"
+                        },
+                        cost:() => new Decimal("1e114956"),
+                        unlocked(){
+                                return hasUpgrade("hu", 154)
+                        }, // hasUpgrade("hu", 155)
+                },
         },
         buyables: {
                 rows: 3, 
@@ -42292,6 +42316,10 @@ addLayer("hu", {
                                 data.timeSinceLastBuy *= hasMilestone("hu", 87) / 2 + hasMilestone("hu", 88) / 5 + hasMilestone("hu", 89) / 10 + hasMilestone("hu", 91) / 10
                         },
                         base(){
+                                if (hasUpgrade("hu", 154)) {
+                                        let l = player.hu.buyables[33].sub(3300).max(0).div(8 - hasUpgrade("hu", 155)).floor().min(250)
+                                        return l.plus(750).div(1000)
+                                }
                                 if (hasChallenge("hu", 22))     return new Decimal(.75)
                                 if (hasChallenge("hu", 21))     return new Decimal(.757)
                                 if (hasMilestone("hu", 72)) {
@@ -55539,6 +55567,10 @@ addLayer("tokens", {
                                         }
                                         if (hasUpgrade("hu", 132)) exp = .139
                                         if (hasUpgrade("hu", 142)) exp = .13
+                                        if (hasUpgrade("hu", 155)) {
+                                                if (player.hu.points.gte("1e115,019")) exp = .128
+                                                if (player.hu.points.gte("1e115,460")) exp = .127
+                                        }
                                 }
                                 return [add, div, exp]
                         },
@@ -55909,6 +55941,9 @@ addLayer("tokens", {
                                         if (player.hu.points.gte("1e92297")) ret = 1.383
                                 }
                                 if (hasUpgrade("hu", 111))      ret = 1.3275
+                                if (hasUpgrade("hu", 154) && player.hu.points.gte("1e114844")) {
+                                                                ret = 1.325
+                                }
                                 
                                 return ret
                         },
