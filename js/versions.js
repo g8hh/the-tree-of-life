@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.031",
+	num: "2.032",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,12 +12,17 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.hu.points.gte("e114716")
+	return player.hu.points.gte("e115559")
 }
 
-var CHANELOG_VERSION = "v2.031"
+var CHANELOG_VERSION = "v2.032"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.032</h3><br>
+		- Balanced until 1e115,559 Humans.<br>
+		- Added 2 Human upgrades.<br>
+		- Fixed a bug with Air challenges not showing.<br>
+		- Fixed a bug with token need resepc not showing.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.031</h3><br>
 		- Balanced until 1e114,716 Humans.<br>
 		- Added 8 Human upgrades.<br>`,

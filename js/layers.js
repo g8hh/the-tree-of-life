@@ -9022,7 +9022,7 @@ addLayer("n", {
                                      "23", "31", "32", "33", "41", 
                                      "42", "43", "51", "52", "53", 
                                      "61", "62", "63"]
-                        for (i = 0; i < list4.length; i++){
+                        for (i = 0; i < 18; i++){
                                 data2.buyables[list4[i]] = decimalZero
                                 data2.best_buyables[list4[i]] = decimalZero
                         } //4a
@@ -15631,9 +15631,8 @@ addLayer("l", {
                                          "61", "62", "63"]
 
                         for (let i = 0; i < 18; i ++){
-                                x = resetKeys[i]
-                                data7.buyables[x] = decimalZero
-                                data7.best_buyables[x] = decimalZero
+                                data7.buyables[resetKeys[i]] = decimalZero
+                                data7.best_buyables[resetKeys[i]] = decimalZero
                         }
                         player.tokens.lastRespecDisplayFormulaID = tokenCFID1()
 
@@ -26726,7 +26725,7 @@ addLayer("or", {
                                 return a + br + b + br + c + br + d
                         },
                         unlocked(){
-                                if (hasMilestone("or", 25) && player.or.dontshowairchall) return false
+                                if (hasMilestone("or", 25) && player.or.dontshowairchall && player.or.activeChallenge != 11) return false
                                 return player.or.lungChallengesUnlocked >= 1
                         },
                 }, // inChallenge("or", 11)
@@ -26761,7 +26760,7 @@ addLayer("or", {
                                 return a + br + b + br + c + br + d
                         },
                         unlocked(){
-                                if (hasMilestone("or", 25) && player.or.dontshowairchall) return false
+                                if (hasMilestone("or", 25) && player.or.dontshowairchall && player.or.activeChallenge != 12) return false
                                 return player.or.lungChallengesUnlocked >= 2
                         },
                 }, // inChallenge("or", 12)
@@ -26796,7 +26795,7 @@ addLayer("or", {
                                 return a + br + b + br + c + br + d
                         },
                         unlocked(){
-                                if (hasMilestone("or", 25) && player.or.dontshowairchall) return false
+                                if (hasMilestone("or", 25) && player.or.dontshowairchall && player.or.activeChallenge != 21) return false
                                 return player.or.lungChallengesUnlocked >= 3
                         },
                 }, // inChallenge("or", 21)
@@ -26831,7 +26830,7 @@ addLayer("or", {
                                 return a + br + b + br + c + br + d
                         },
                         unlocked(){
-                                if (hasMilestone("or", 25) && player.or.dontshowairchall) return false
+                                if (hasMilestone("or", 25) && player.or.dontshowairchall && player.or.activeChallenge != 22) return false
                                 return player.or.lungChallengesUnlocked >= 4
                         },
                 }, // inChallenge("or", 22)
@@ -26866,7 +26865,7 @@ addLayer("or", {
                                 return a + br + b + br + c + br + d
                         },
                         unlocked(){
-                                if (hasMilestone("or", 25) && player.or.dontshowairchall) return false
+                                if (hasMilestone("or", 25) && player.or.dontshowairchall && player.or.activeChallenge != 31) return false
                                 return player.or.lungChallengesUnlocked >= 5
                         },
                 }, // inChallenge("or", 31)
@@ -26901,7 +26900,7 @@ addLayer("or", {
                                 return a + br + b + br + c + br + d
                         },
                         unlocked(){
-                                if (hasMilestone("or", 25) && player.or.dontshowairchall) return false
+                                if (hasMilestone("or", 25) && player.or.dontshowairchall && player.or.activeChallenge != 32) return false
                                 return player.or.lungChallengesUnlocked >= 6
                         },
                 }, // inChallenge("or", 32)
@@ -44115,7 +44114,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Remove Animal's effect, the the Nucleus exponent in Animal gain is 2.5, and at 628,550 / 635,780 / 646,646 / 653,960 / 661,230 / 668,580 / 675,960 / 683,360 / 690,690 / 698,120 / 712,980 / 720,490 / 735,510 Plants the <i>Hiawd</i> base is 124 / 122 / 120 / 119 / 117 / 115 / 113 / 112 / 111 / 109 / 108 / 107 / 105."
+                                return "Reward: Remove Animal's effect, the Nucleus exponent in Animal gain is 2.5, and at 628,550 / 635,780 / 646,646 / 653,960 / 661,230 / 668,580 / 675,960 / 683,360 / 690,690 / 698,120 / 712,980 / 720,490 / 735,510 Plants the <i>Hiawd</i> base is 124 / 122 / 120 / 119 / 117 / 115 / 113 / 112 / 111 / 109 / 108 / 107 / 105."
                         },
                 }, // hasMilestone("hu", 46)
                 47: {
@@ -46148,6 +46147,9 @@ addLayer("ml", {
         layerShown(){
                 if (hasMilestone("hu", 12)) return false
                 return hasUpgrade("or", 223)
+        },
+        shouldNotify(){
+                return !!player.or.activeChallenge
         },
         tabFormat: {
                 "Lung": {
@@ -53651,7 +53653,7 @@ addLayer("tokens", {
                 data.bestCharm = data.bestCharm.max(tmp.tokens.buyables[111].effect)
 
                 if (data.total.eq(0)) {
-                        data.lastRespecDisplayFormulaID = Math.max(data.lastRespecDisplayFormulaID, tokenCFID1())
+                        data.lastRespecDisplayFormulaID = tokenCFID1() // it can go down if you lose upgrades
                 }
         },
         updateBestBuyables(){
@@ -54725,8 +54727,7 @@ addLayer("tokens", {
                                      "42", "43", "51", "52", "53", 
                                      "61", "62", "63"]
                                 for (i in x){
-                                        id = x[i]
-                                        player.tokens.buyables[id] = decimalZero
+                                        player.tokens.buyables[x[i]] = decimalZero
                                 }
                                 player.tokens.lastRespecDisplayFormulaID = tokenCFID1()
                         },
