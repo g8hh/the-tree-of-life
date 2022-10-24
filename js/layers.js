@@ -42120,7 +42120,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans LXXV"
                         },
                         description(){
-                                return "Humans LXXIV becomes every 7th and at 1e115,019 / 1e115,460 Humans Token II via Animals' exponent is .128 / .127"
+                                return "Humans LXXIV becomes every 7th and at 1e115,019/1e115,460 / 1e115,559 Humans Token II via Animals' exponent is .128 / .127 / .126"
                         },
                         cost:() => new Decimal("1e114956"),
                         unlocked(){
@@ -55571,6 +55571,7 @@ addLayer("tokens", {
                                         if (hasUpgrade("hu", 155)) {
                                                 if (player.hu.points.gte("1e115,019")) exp = .128
                                                 if (player.hu.points.gte("1e115,460")) exp = .127
+                                                if (player.hu.points.gte("1e115,559")) exp = .126
                                         }
                                 }
                                 return [add, div, exp]
