@@ -40137,7 +40137,9 @@ addLayer("pl", {
                                 let ret = new Decimal(30)
                                 if (hasMilestone("e", 18))      ret = new Decimal(28)
                                 if (hasMilestone("e", 19))      ret = ret.sub(player.pl.points.sub(95).max(0)).max(20)
-                                if (hasMilestone("hu", 38))     ret = new Decimal(18)
+                                if (hasMilestone("hu", 38)) {
+                                        if (player.pl.points.gte(73700)) ret = new Decimal(18)
+                                }
                                 if (hasMilestone("hu", 48)) {
                                         if (player.pl.points.gte(981540))  ret = new Decimal(10)
                                         if (player.pl.points.gte(1015390)) ret = new Decimal(5)
@@ -41577,7 +41579,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XXX"
                         },
                         description(){
-                                return "<i>Tinhiragt</i> base is 5 and is increase to 7.5 at 58 levels and 10 / 12.5 / 15 at 1213 / 1215 / 1216 <i>Tgwitlcwl</i> levels"
+                                return "<i>Tinhiragt</i> base is 5 and is increased to 7.5 at 58 levels and 10 / 12.5 / 15 at 1213 / 1215 / 1216 <i>Tgwitlcwl</i> levels"
                         },
                         cost:() => new Decimal("1e6388"),
                         unlocked(){
@@ -44184,7 +44186,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Bulk 100x Up Quarks and Token II buyables, <i>Tinhiragt</i> cost base is divided by it's levels<sup>1.7</sup> (min 100,000) and at 1e5581 / 1e6292 / 1e6317 / 1e6356 Humans the <i>GmaptsaIwmte</i> cost base is 200,000 / 186,000 / 170,000 / 160,000."
+                                return "Reward: Bulk 100x Up Quarks and Token II buyables, <i>Tinhiragt</i> cost base is divided by it's levels<sup>1.7</sup> (min 100,000) and at 1e5581 / 1e6292 / 1e6317 / 1e6356 Humans the <i>GmaptsaIwmte</i> cost base is 200,000 / 186,000 / 170,000 / 158,000."
                         },
                 }, // hasMilestone("hu", 51)
                 52: {
