@@ -41214,10 +41214,6 @@ addLayer("hu", {
 
                 },
         },
-        buyables: {
-                rows: 3,
-                cols: 3,
-        },
         upgrades: {
                 rows: 10,
                 cols: 5,
@@ -43847,7 +43843,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: After 1,4300, 15,250, and each more 138 thereafter Plants subtract 1 from the <i>IttIa</i> base (max 10 total). Bulk 10x Plant and Mastery Token buyables."
+                                return "Reward: After 14,300, 15,250, and each more 138 thereafter Plants subtract 1 from the <i>IttIa</i> base (max 10 total). Bulk 10x Plant and Mastery Token buyables."
                         },
                 }, // hasMilestone("hu", 28)
                 29: {
@@ -43903,8 +43899,8 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                let a = "<bdi style='font-size: 80%'>Reward: Multipotent exponent is 1.02 and it's base is 1e80 divided by 1.002 per Plant (min 1e30) and each 20th Plant after 31,100 subtracts .0001"
-                                return a + " from the Chromosome cost exponent and each 150th adds .5 to the Token II via Stem Cell divider and triple Thought gain (each max at 100).</bdi>"
+                                let a = "Reward: Multipotent exponent is 1.02 and it's base is 1e80 divided by 1.002 per Plant (min 1e30) and each 20th Plant after 31,100 subtracts .0001"
+                                return a + " from the Chromosome cost exponent and each 150th adds .5 to the Token II via Stem Cell divider and triple Thought gain (each max at 100)."
                         },
                 }, // hasMilestone("hu", 32)
                 33: {
@@ -44242,7 +44238,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Bulk 10x Mastery Tokens, <i>Hiawd</i> base is 214 - <i>Tinhiragt</i> min 95, at 1e7913 Plants the Top Quark coefficient is <i>Tulinwl</i> / 100."
+                                return "Reward: Bulk 10x Mastery Tokens, <i>Hiawd</i> base is 214 - <i>Tinhiragt</i> min 95, at 1e7913 Humans the Top Quark coefficient is <i>Tulinwl</i> / 100."
                         },
                 }, // hasMilestone("hu", 55)
                 56: {
@@ -44284,7 +44280,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Each <i>GmaptsaIwmte</i> level past 900 decreases it's base by 1.001 and double / triple / quadruple / quintuple the effect at 1e8838 / 3e8860 / 3e8893 / 1e8930."
+                                return "Reward: Each <i>GmaptsaIwmte</i> level past 900 divides it's base by 1.001 (min 19,000) and double / triple / quadruple / quintuple the effect at 1e8838 / 3e8860 / 3e8893 / 1e8930."
                         },
                 }, // hasMilestone("hu", 58)
                 59: {
