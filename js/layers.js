@@ -41576,7 +41576,7 @@ addLayer("hu", {
 
                                 base = base.sub(tmp.hu.buyables[22].effect.min(2.6))
                                 if (hasMilestone("hu", 75)) {
-                                        base = base.sub(player.hu.buyables[22].sub(2650).div(5000).min(.6))
+                                        base = base.sub(player.hu.buyables[22].sub(2650).div(5000).min(.6).max(0))
                                 }
 
                                 return base
