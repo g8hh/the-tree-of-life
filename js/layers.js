@@ -14296,8 +14296,9 @@ addLayer("l", {
                         goal: () => Decimal.pow(10, Decimal.pow(2, 1024)),
                         canComplete: () => player.points.gte(tmp.l.challenges[11].goal),
                         rewardDescription(){
-                                let a = "Each tenth challenge unlocks a buyable and boost life gain"
+                                let a = "Each tenth challenge unlocks a buyable (first two in µ) and boost life gain"
                                 if (player.shiftAlias) return a
+                                if (player.d.unlocked || player.l.challenges[11] > 30) a = a.replace("(first two in µ)", "")
                                 let b = "Currently: *" + format(tmp.l.challenges[11].rewardEffect)
                                 let c = "You have completed this challenge<br>" 
                                 c += formatWhole(player.l.challenges[11]) + "/110 times"
@@ -16639,7 +16640,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Gain a C13 gem per second and you buy Life buyables twice as fast."
+                                return "Reward: Gain a C13 gem per second and you autobuy Life buyables twice as fast."
                         },
                 }, // hasMilestone("a", 8)
                 9: {
@@ -31546,6 +31547,8 @@ addLayer("an", {
                 if (player.extremeMode) ret = ret.pow(.75)
 
                 if (inChallenge("e", 22)) ret = ret.sqrt()
+
+                if (!hasMilestone("hu", 41)) ret = ret.min("ee50")
                 
                 return ret.floor()
         },
@@ -36440,7 +36443,7 @@ addLayer("nu", {
 addLayer("sp", {
         name: "Species", 
         symbol: "S", 
-        position: 9, 
+        position: 5, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -44420,7 +44423,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Humans XXVI affects Ecosystem gain and at 3e15,690 / 1e15,877 / 1e16,018 / 3e16,374 / 1e16,492 Humans the Master V exponent is 1.04 / 1.03 / 1.02 / 1.01 / 1."
+                                return "Reward: Humans XXVI affects Ecosystem gain and at 3e15,690 / 1e15,877 / 1e16,018 / 3e16,374 / 1e16,492 Humans the Mastery V exponent is 1.04 / 1.03 / 1.02 / 1.01 / 1."
                         },
                 }, // hasMilestone("hu", 68)
                 69: {
@@ -44434,7 +44437,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: <i>GmaptsaIwmte</i> base is 20,960 - levels and at 3e16,881 Humans <i>Tinhragt</i> levels subtract from its base, 1.3 / 1.6 / 2 at 1e17,975 / 3e18,160 / 3e18,221 Humans."
+                                return "Reward: <i>GmaptsaIwmte</i> base is 20,960 - levels and at 3e16,881 Humans <i>Tinhragt</i> levels subtract from its base, multiplied by 1.3 / 1.6 / 2 at 1e17,975 / 3e18,160 / 3e18,221 Humans."
                         },
                 }, // hasMilestone("hu", 69)
                 70: {
@@ -44448,7 +44451,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: <i>Hual</i> cost base is 2<sup>1029</sup> and halves per level and it's exponent is 1.3 (1.19 / 1.1 at 1e19,689 / 3e21,015 Humans), at 1e19,134 / 3e19,718 / 1e19,584 Humans the Mastery VI base is 1.05 / 1.048 / 1.046, and at 3e19,555 Humans Mastery Tokens<sup>.6</sup> adds to the Ecosystem effect and gain exponents."
+                                return "Reward: <i>Hual</i> cost base is 2<sup>1029</sup> and halves per level and it's exponent is 1.3 (1.19 / 1.1 at 1e19,689 / 3e21,015 Humans), at 1e19,134 / 3e19,718 / 1e19,854 Humans the Mastery VI base is 1.05 / 1.048 / 1.046, and at 3e19,555 Humans Mastery Tokens<sup>.6</sup> adds to the Ecosystem effect and gain exponents."
                         },
                 }, // hasMilestone("hu", 70)
                 71: {
@@ -44462,7 +44465,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: <i>Siok</i> base is .02 and each level decreases its cost base by 1.002, at 3e20,678, 1e20,705, 3e20,805, 1e20,968, 1e21,040, and 1e21,118 Humans subtract .001 from the Mastery VI base, and at 1e20,579 / 1e20,831 Humans increas the Taxonomy cap by 100 / 500x."
+                                return "Reward: <i>Siok</i> base is .02 and each level decreases its cost base by 1.002, at 3e20,678, 1e20,705, 3e20,805, 1e20,968, 1e21,040, and 1e21,118 Humans subtract .001 from the Mastery VI base, and at 1e20,579 / 1e20,831 Humans increase the Taxonomy cap by 100 / 500x."
                         },
                 }, // hasMilestone("hu", 71)
                 72: {
@@ -44518,7 +44521,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Each second since the last Human buyable purchase multiplies Human gain by 1.2 (max 40s), double Milestone 70's affect to <i>Hual</i>, and each <i>GmaptsaIwmte</i> level after 2650 subtracts .0002 from the <i>Tgwitlcwl</i> (halved after 4300)."
+                                return "Reward: Each second since the last Human buyable purchase multiplies Human gain by 1.2 (max 40s), double Milestone 70's affect to <i>Hual</i>, and each <i>GmaptsaIwmte</i> level after 2650 subtracts .0002 from the <i>Tgwitlcwl</i> base (halved after 4300)."
                         },
                 }, // hasMilestone("hu", 75)
                 76: {
@@ -55578,6 +55581,7 @@ addLayer("tokens", {
                                 let costData = tmp.tokens.buyables[192].costData 
                                 let pts = hasMilestone("hu", 41) ? player.an.points : player.cells.stem_cells.points
                                 let ret = pts.max(10).log10().max(10).log10().root(costData[2]).sub(costData[0])
+                                if (!hasMilestone("hu", 41)) return ret.times(costData[1]).ceil().max(0).min(1e20)
                                 return ret.times(costData[1]).ceil().max(0)
                         },
                         cost(){
