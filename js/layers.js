@@ -40948,7 +40948,7 @@ addLayer("pl", {
                         content: [
                                 "main-display",
                                 "secondary-display-biomass",
-                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["prestige-button", "", function (){ return player.pl.points.gte(1e7) ? {'display': 'none'} : {}}],
                                 "blank",
                                 ["upgrades", [1,2,3,4,5]]
                         ],
@@ -41614,7 +41614,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XXXIII"
                         },
                         description(){
-                                return "Bulk 100x Plants and at 3e12,683 / 3e12,704 Humans the Flower base is 8 / 2"
+                                return "Bulk 100x Plant buyables and at 3e12,683 / 3e12,704 Humans the Flower base is 8 / 2"
                         },
                         cost:() => new Decimal("1e12478"),
                         unlocked(){
@@ -42269,8 +42269,8 @@ addLayer("hu", {
 
                                 base = base.sub(tmp.hu.buyables[22].effect.min(2.6))
                                 if (hasMilestone("hu", 75)) {
-                                        base = base.sub(player.hu.buyables[22].sub(2650).div(5000).min(.33))
-                                        base = base.sub(player.hu.buyables[22].sub(4300).div(1e4).min(.12))
+                                        base = base.sub(player.hu.buyables[22].sub(2650).div(5000).min(.33).max(0))
+                                        base = base.sub(player.hu.buyables[22].sub(4300).div(1e4).min(.12).max(0))
                                 }
 
                                 if (hasUpgrade("hu", 111))      base = new Decimal(2)
