@@ -43452,24 +43452,32 @@ addLayer("hu", {
                                 return "Bulk"
                         },
                         unlocked(){
-                                return player.r.unlocked
+                                return player.r.unlocked || hasMilestone("hu", 23)
                         },
-                        canAfford:() => player.hu.timeSinceLastBulk >= 60,
+                        cooldown(){
+                                return 60
+                        },
+                        canAfford:() => player.hu.timeSinceLastBulk >= tmp.hu.buyables[41].cooldown,
                         buy(){
                                 player.hu.timeSinceLastBulk = 0
                                 let ids = [11, 12, 13, 21, 22, 23, 31, 32, 33]
                                 for (i in ids) {
                                         let id = ids[i]
+                                        if (!tmp.hu.buyables[id].unlocked) continue
                                         player.hu.buyables[id] = player.hu.buyables[id].max(tmp.hu.buyables[id].getMaxAfford)
                                 }
-                                player.hu.timeSinceLastBuy += 50
+                                if (player.r.unlocked) player.hu.timeSinceLastBuy += 50
+                                player.hu.thoughts.points = player.hu.thoughts.points.plus(tmp.hu.thoughts.getResetGain.times(50))
                         },
                         style(){
-                                return {"height": "100px", "width": "100px"}
+                                return {"height": "100px", "width": "200px"}
                         },
                         display(){
-                                if (player.hu.timeSinceLastBulk < 60) return "Cooldown: " + formatTime(60 - player.hu.timeSinceLastBulk)
-                                return "Bulk all buyables and add 50s since last buyable"
+                                let cd = tmp.hu.buyables[41].cooldown
+                                if (player.hu.timeSinceLastBulk < cd) return "Cooldown: " + formatTime(cd - player.hu.timeSinceLastBulk)
+                                let a = "Bulk all buyables and get fifty seconds of thought production"
+                                if (player.r.unlocked && hasMilestone("hu", 74)) a = "Bulk all buyables, get fifty seconds of thought production, and add 50s to time since last buyable"
+                                return a + br + "CD: " + formatTime(cd)
                         },
                 },
         },
@@ -43850,7 +43858,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Up Quark's log10 is log6 and upon 5600 / 5700 Plants the <i>Hiawd</i> cost base is 550,000 / 400,000."
+                                return "Reward: Up Quark's log10 is log6, upon 5600 / 5700 Plants the <i>Hiawd</i> cost base is 550,000 / 400,000, and unlock \"Bulk\" (see buyables tab)."
                         },
                 }, // hasMilestone("hu", 23)
                 24: {

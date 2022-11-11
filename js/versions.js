@@ -20,7 +20,8 @@ var CHANELOG_VERSION = "v2.032"
 var CHANGELOGS = [
 	`<br><h3 style='color: #CC0000'>v2.033</h3><br>
 		- Unlock a new layer, Researchers!<br>
-		- Added three Researcher milestones.<br>`,
+		- Added three Researcher milestones.<br>
+		- Added a Human buyable, "bulk."<br>`,
 	`<br><h3 style='color: #CC0000'>v2.032.1</h3><br>
 		- Balanced until 1e115,651 Humans.<br>
 		- Added another effect to Humans LXXV.<br>
