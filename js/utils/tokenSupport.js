@@ -229,7 +229,7 @@ function tokenCost1(x){
 
 function tokenCFID2(){
         let tertComps = player.cells.challenges[21]
-        let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
+        let r = hasUpgrade("hu", 64) && (hasMilestone("r", 6) || player.hu.points.gte("1e6219"))
         let s = hasUpgrade("hu", 105) && player.hu.points.gte("1e93477")
         
         if (hasUpgrade("hu", 151))      return 55
