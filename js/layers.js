@@ -41094,7 +41094,7 @@ addLayer("hu", {
                 if (hasUpgrade("hu", 102))      ret = ret.plus(2.3)
                 if (hasUpgrade("hu", 105))      ret = ret.sub(.3)
                 if (hasUpgrade("hu", 134)) {
-                        if (player.hu.points.gte("1e109220")) ret = ret.plus(1)
+                        if (player.hu.points.gte("1e109220") || hasMilestone("r", 7)) ret = ret.plus(1)
                 }
 
                 return ret
@@ -41194,6 +41194,15 @@ addLayer("hu", {
  
                 data.timeSinceLastBuy += diff * (1 + hasChallenge("hu", 41)) * (1 + 2 * player.r.unlocked)
                 data.timeSinceLastBulk += diff
+
+                let ac = data.activeChallenge
+                if (hasMilestone("r", 7) && ac) {
+                        if (canCompleteChallenge("hu", ac)) {
+                                if (data.challenges[ac] < tmp.hu.challenges[ac].completionLimit) {
+                                        data.challenges[ac] ++ 
+                                }
+                        }
+                }
         },
         row: 3,
         prestigeButtonText(){
@@ -41814,6 +41823,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XLIV"
                         },
                         description(){
+                                if (hasMilestone("r", 7)) return "Mastery VI base is 1.002, subtract 3 from the Human gain exponent, and the Token II via Animals exponent is .17"
                                 return "<bdi style='font-size: 80%'>Mastery VI base is 1.002, subtract 3 from the Human gain exponent, and at 1e88,819 Humans the Token II via Animals exponent is .17</bdi>"
                         },
                         cost:() => new Decimal("1e88670"),
@@ -42001,7 +42011,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans LIX"
                         },
                         description(){
-                                return "Disable Milestone 24, 25, 34, and 38's effects on Thought gain and the Flower exponent is 1.2 and base is 10,000"
+                                return "Disable Milestone 24, 25, 32, and 38's effects on Thought gain and the Flower exponent is 1.2 and base is 10,000"
                         },
                         cost:() => new Decimal("1e101207"),
                         unlocked(){
@@ -42063,6 +42073,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans LXIV"
                         },
                         description(){
+                                if (hasMilestone("r", 7)) return "<i>Badwaftapw</i> base is .003 less, eigth <i>Hual</i> base, and add 1 to the Human exponent"
                                 return "<bdi style='font-size: 80%'><i>Badwaftapw</i> base is .001 less and halve <i>Hual</i> base, repeated at 1e107,161 and 1e109,220 Humans, the final one also adds 1 to the Human gain exponent </bdi>"
                         },
                         cost:() => new Decimal("1e106779"),
@@ -42963,9 +42974,12 @@ addLayer("hu", {
                                 if (hasUpgrade("hu", 92))       ret = new Decimal(.171)
                                 if (hasUpgrade("hu", 93))       ret = new Decimal(.17)
                                 if (hasUpgrade("hu", 134)) {
-                                        ret = new Decimal(.169)
-                                        if (player.hu.points.gte("1e107161")) ret = new Decimal(.168)
-                                        if (player.hu.points.gte("1e109220")) ret = new Decimal(.167)
+                                        if (hasMilestone("r", 7)) ret = new Decimal(.167)
+                                        else {
+                                                ret = new Decimal(.169)
+                                                if (player.hu.points.gte("1e107161")) ret = new Decimal(.168)
+                                                if (player.hu.points.gte("1e109220")) ret = new Decimal(.167)
+                                        }
                                 }
                                 //if (hasUpgrade("hu", 141))      ret = new Decimal(.166)
 
@@ -43391,9 +43405,12 @@ addLayer("hu", {
                                 }
                                 if (hasUpgrade("hu", 114))      exp = exp.sub(7)
                                 if (hasUpgrade("hu", 134)) {
-                                        exp = exp.sub(1)
-                                        if (player.hu.points.gte("1e107161")) exp = exp.sub(1)
-                                        if (player.hu.points.gte("1e109220")) exp = exp.sub(1)
+                                        if (hasMilestone("r", 7)) exp = exp.sub(3)
+                                        else {
+                                                exp = exp.sub(1)
+                                                if (player.hu.points.gte("1e107161")) exp = exp.sub(1)
+                                                if (player.hu.points.gte("1e109220")) exp = exp.sub(1)
+                                        }
                                 }
                                 if (hasUpgrade("hu", 135)) {
                                         exp = exp.sub(1)
@@ -43565,6 +43582,31 @@ addLayer("hu", {
                                 let a = "Bulk all buyables and get fifty seconds of thought production"
                                 if (player.r.unlocked && hasMilestone("hu", 74)) a = "Bulk all buyables, get fifty seconds of thought production, and add 50s to time since last buyable"
                                 return a + br + "CD: " + formatTime(cd)
+                        },
+                },
+                42: {
+                        title() {
+                                return "Bulk II"
+                        },
+                        unlocked(){
+                                return hasMilestone("r", 7)
+                        },
+                        canAfford:() => true,
+                        buy(){
+                                let ids = [11, 12, 13, 21, 22, 23, 31, 32, 33]
+                                for (i in ids) {
+                                        let id = ids[i]
+                                        if (!tmp.hu.buyables[id].unlocked) continue
+                                        player.hu.buyables[id] = player.hu.buyables[id].max(tmp.hu.buyables[id].getMaxAfford)
+                                }
+                                player.hu.timeSinceLastBuy = 0
+                                player.hu.points = player.hu.points.div(1000)
+                        },
+                        style(){
+                                return {"height": "100px", "width": "200px", "background-color": "#ABCABC"}
+                        },
+                        display(){
+                                return "Bulk all buyables, set time since last buyable to 0s and divide Humans by 1000"
                         },
                 },
         },
@@ -44652,7 +44694,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: <i>Siok</i> base is .02 and each level decreases its cost base by 1.002, at 3e20,678, 1e20,705, 3e20,805, 1e20,968, 1e21,040, and 1e21,118 Humans subtract .001 from the Mastery VI base, and at 1e20,579 / 1e20,831 Humans increase the Taxonomy cap by 100 / 500x."
+                                return "Reward: <i>Siok</i> base is .02 and each level divides its cost base by 1.002, at 3e20,678, 1e20,705, 3e20,805, 1e20,968, 1e21,040, and 1e21,118 Humans subtract .001 from the Mastery VI base, and at 1e20,579 / 1e20,831 Humans increase the Taxonomy cap by 100 / 500x."
                         },
                 }, // hasMilestone("hu", 71)
                 72: {
@@ -44666,7 +44708,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Each <i>Hual</i> level past 17 adds .001 to the <i>Tgwitlcwn</i> base and at 1e21,317 Humans multiply the Ecosystem gain exponent by 100 / 200 / 320 / 440 at 1e21,317 / 3e21,385 / 1e21,536 / 3e21,649 Humans."
+                                return "Reward: Each <i>Hual</i> level past 17 adds .001 to the <i>Tgwitlcwl</i> base and at 1e21,317 Humans multiply the Ecosystem effect exponent by 100 / 200 / 320 / 440 at 1e21,317 / 3e21,385 / 1e21,536 / 3e21,649 Humans."
                         },
                 }, // hasMilestone("hu", 72)
                 73: {
@@ -45175,7 +45217,8 @@ addLayer("hu", {
                         fullDisplay(){
                                 let a = "<b>Right</b> and <b>Incorrect</b>"
                                 let b = "Goal: 328,000,000 Plants"
-                                let c = "Reward: Stem cost base is 1e500, buy 10x Token II buyables,"
+                                let c = "Reward: Stem cost base is 1e500,"
+                                if (!player.r.unlocked) c += " buy 10x Token II buyables,"
                                 c += " and upon 1e55,352 / 1e55,460 Humans every 5th / 4th <i>Hual</i> level after 550 halves it base (max 50)"
 
                                 return a + br2 + b + br2 + c + br2
@@ -45734,9 +45777,23 @@ addLayer("r", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Humans IX, X, XVII, and XXI to XXXV's effects are all instant (shift to see old effect)." 
+                                return "Reward: Humans IX, X, XVII, and XXI to XXXV's effects happen instantly (shift to see old effect)." 
                         },
                 }, // hasMilestone("r", 6)
+                7: {
+                        requirementDescription(){
+                                return "7 Researchers"
+                        },
+                        done(){
+                                return player.r.points.gte(7)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Unlock Bulk II, autocomplete Human challenges, and Humans XLIV and LXIV effects happen instantly (shift to see old effect)." 
+                        },
+                }, // hasMilestone("r", 7)
         },
         tabFormat: {
                 "Upgrades": {
@@ -56143,7 +56200,9 @@ addLayer("tokens", {
                                         div = new Decimal(div).plus(tmp.hu.buyables[33].effect)
                                         
                                         if (hasChallenge("hu", 62) && player.hu.points.gte("1e75950")) exp = .18
-                                        if (hasUpgrade("hu", 94) && player.hu.points.gte("1e88819")) exp = .17
+                                        if (hasUpgrade("hu", 94) && (hasMilestone("r", 7) || player.hu.points.gte("1e88819"))) {
+                                                exp = .17
+                                        }
                                         if (hasUpgrade("hu", 103)) exp = .16
                                         else if (hasUpgrade("hu", 84)) div = div.times(3.2)
                                         if (hasUpgrade("hu", 112))      exp = .15
