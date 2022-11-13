@@ -867,6 +867,7 @@ function geneFormulaDisplay(){
         if (hasMilestone("sp", 26))     c += "Species Milestone 26 multiplies AX by " + format(Decimal.pow(1.1, player.tokens.tokens2.total)) + br
         if (hasMilestone("an", 23))     c += "Animal Milestone 23 multiplies AX by " + format(player.or.energy.points.div("1e14000").plus(1).pow(.002)) + br
         if (hasUpgrade("sp", 143))      c += "Boosted Species XVIII multiplies AX by " + format(player.an.grid[104].extras.plus(1).pow(player.tokens.mastery_tokens.total)) + br
+        if (hasMilestone("hu", 41))     c += "Human Milestone 41 multiplies AX by " + format(player.pl.biomass.points.max(1).pow(player.tokens.mastery_tokens.total.div(1.6))) + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
@@ -914,6 +915,14 @@ function taxonomyCapFormulaDisplay(){
         let a = "Taxonomy cap is AX"
         let b = "AX is initially 400 and the following factors add to it"
         let c = ""
+
+        if (hasMilestone("hu", 15)) {
+                c = "Human Milestone makes AX Plants + 9000" + br 
+                if (hasMilestone("hu", 35) && player.hu.thoughts.points.gte("4.44e4444")) {
+                        c += "Human Milestone 35 adds 1000 to AX" + br
+                }
+                return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+        }
 
         if (hasMilestone("ch", 32))             c = "Chromosome Milestone 32 makes AX Nucleuses + 1200" + br
         else if (hasMilestone("ch", 29))        c = "Chromosome Milestone 29 makes AX Nucleuses + 1500" + br
@@ -968,7 +977,9 @@ function speciesFormulaDisplay(){ // c += " multiplies AX by " + format
                 exp = exp.plus(lvls(6)).plus(lvls(7)).plus(lvls(8))
                                         c += "Nucleuses XIV multiplies AX by " + format(base.pow(exp)) + br
         }
-        if (hasUpgrade("tokens", 114))  c += "Token<sup>2</sup> IX multiplies AX by " + format(player.or.energy.points.max(10).log10()) + br
+        if (hasUpgrade("tokens", 114) && player.or.energy.points.gt(10)) {
+                                        c += "Token<sup>2</sup> IX multiplies AX by " + format(player.or.energy.points.max(10).log10()) + br
+        }
         if (hasUpgrade("tokens", 124))  c += "Token<sup>2</sup> XIV multiplies AX by " + format(Decimal.pow(player.sp.upgrades.length, player.tokens.mastery_tokens.total.div(3))) + br
         if (hasUpgrade("tokens", 251))  c += "M 61 multiplies AX by 10" + br
         if (hasUpgrade("sp", 145))      c += "Boosted Effect XX multiplies AX by " + format(player.an.grid[106].extras.plus(1).pow(.02)) + br
@@ -982,11 +993,15 @@ function ecosystemFormulaDisplay(){
         let b = "AX is initially 1 and is multiplied by the following factors"
         let c = ""
 
-        if (hasUpgrade("e", 13))        c += "Ecosystems III multiplies AX by " + format(Decimal.pow(1.02, player.tokens.mastery_tokens.total)) + br
+        if (hasUpgrade("e", 13))        c += "Ecosystems III multiplies AX by " + format(Decimal.pow(hasMilestone("hu", 73) && player.hu.points.gte("3e22,278") ? 1.03 : 1.02, player.tokens.mastery_tokens.total)) + br
         if (hasChallenge("e", 12))      c += "Nucleusless? multiplies AX by " + format(tmp.e.challenges[12].ecoMult) + br
         if (hasMilestone("pl", 2))      c += "Plant Milestone 2 multiplies AX by " + format(player.ch.points.max(10).log10().pow(player.pl.milestones.length)) + br
         if (hasMilestone("pl", 6))      c += "Plant Milestone 6 multiplies AX by " + format(player.nu.points.sub(1200).max(1)) + br
         if (hasUpgrade("pl", 24))       c += "Plants IX multiplies AX by " + format(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt())) + br
+        if (hasMilestone("hu", 68)) {
+                let exp = player.hu.milestones.length
+                                        c += "Human Milestone 68 multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(exp)) + br
+        }
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
@@ -1010,7 +1025,10 @@ function biomassFormulaDisplay(){
                 let b1 = Decimal.pow(1.01, exp)
 
                 let upgs = player.pl.upgrades.length + (hasUpgrade("e", 31) ? player.e.upgrades.filter(x => x > 30 & x < 40).length : 0)
-                                        c += "Plants II multiplies AX by " + format(b1.pow(upgs)) + br
+                let eff = b1.pow(upgs)
+                if (eff.gt("e15e6")) eff = eff.log10().times(6e7).sqrt().sub(15e6).pow10()
+                ret = ret.times(eff)
+                                        c += "Plants II multiplies AX by " + format(eff) + br
         }
         if (hasUpgrade("pl", 24))       c += "Plants IX multiplies AX by " + format(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt())) + br
                                         c += "Animaless? multiplies AX by " + format(player.pl.biomass.points.max(10).log10().pow(player.e.challenges[22])) + br
@@ -1020,6 +1038,9 @@ function biomassFormulaDisplay(){
                 if (hasUpgrade("e", 44))        c += "Ecosystems XIX multiplies AX by " + format(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0))) + br
         }
         if (hasUpgrade("hu", 11))       c += "Humans I multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(player.hu.upgrades.length).pow(hasUpgrade("hu", 12) ? player.hu.milestones.length : 1)) + br
+        if (hasUpgrade("hu", 61) && player.hu.points.gte("1e5551")) {
+                c += "Humans XXVI multiplies AX by " + format(player.hu.thoughts.points.max(1).pow(player.hu.milestones.length)) + br
+        }
 
         let f = function(x){
                 if (x.lt("1e10000")) return x 

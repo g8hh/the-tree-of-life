@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.016",
+	num: "2.023",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,18 +12,46 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.pl.points.gte(168100)
+	return player.hu.thoughts.points.gte("1e69620")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v2.016)<br><br>
+		Reaching the endgame screen (updated at least as of v2.023)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v2.023</h3><br>
+		- Balanced until 1e69,620 Humans.<br>
+		- Added eleven Human milestones.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v2.022</h3><br>
+		- Balanced until 1e47,260 Humans.<br>
+		- Added five Human milestones.<br>
+	<br><h3 style='color: #CC0000'>v2.021</h3><br>
+		- Balanced until 1e16,663 Humans.<br>
+		- Added three Human upgrades.<br>
+		- Added four Human milestones.<br>
+		- Various wording fixes.<br>
+	<br><h3 style='color: #CC0000'>v2.020</h3><br>
+		- Balanced until 1e11,926 Humans.<br>
+		- Added two Human upgrades.<br>
+		- Added six Human milestones.<br>
+		- Added a Human buyable.<br>
+	<br><h3 style='color: #CC0000'>v2.019</h3><br>
+		- Added six Human milestones.<br>
+	<br><h3 style='color: #CC0000'>v2.018</h3><br>
+		- Balanced until 1e7337 Humans.<br>
+		- Added four Human milestones.<br>
+		- Added ten Human upgrades.<br>
+		- Added a Human buyable.<br>
+	<br><h3 style='color: #CC0000'>v2.017</h3><br>
+		- Balanced until 1e4307 Humans.<br>
+		- Added eight Human milestones.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v2.016</h3><br>
 		- Balanced until 168100 Plants.<br>
 		- Added a Human milestone.<br>

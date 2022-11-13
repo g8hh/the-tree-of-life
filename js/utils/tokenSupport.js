@@ -228,7 +228,14 @@ function tokenCost1(x){
 
 function tokenCFID2(){
         let tertComps = player.cells.challenges[21]
+        let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
         
+        if (r)                          return 50
+        if (hasUpgrade("hu", 55))       return 49
+        if (hasUpgrade("hu", 54))       return 48
+        if (hasUpgrade("hu", 53))       return 47
+        if (hasUpgrade("hu", 52))       return 46
+        if (hasUpgrade("hu", 51))       return 45
         if (hasUpgrade("hu", 45))       return 44
         if (hasUpgrade("hu", 33))       return 43
         if (hasUpgrade("hu", 24))       return 42
@@ -283,7 +290,14 @@ function tokenCFT2(){
         let m2 = m1 && r3c >= 2
         let m3 = m1 && r3c >= 3
         let m4 = m1 && r3c >= 4
-
+        let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
+        
+        if (r)                          return "ceil(x<sup>1.06</sup>)"
+        if (hasUpgrade("hu", 55))       return "ceil(x<sup>1.07</sup>)"
+        if (hasUpgrade("hu", 54))       return "ceil(x<sup>1.08</sup>)"
+        if (hasUpgrade("hu", 53))       return "ceil(x<sup>1.09</sup>)"
+        if (hasUpgrade("hu", 52))       return "ceil(x<sup>1.1</sup>)"
+        if (hasUpgrade("hu", 51))       return "ceil(x<sup>1.11</sup>)"
         if (hasUpgrade("hu", 45))       return "ceil(x<sup>1.12</sup>)"
         if (hasUpgrade("hu", 33))       return "ceil(x<sup>1.13</sup>)"
         if (hasUpgrade("hu", 24))       return "ceil(x<sup>1.14</sup>)"
@@ -351,7 +365,14 @@ function tokenCost2(x){
         let m2 = m1 && r3c >= 2
         let m3 = m1 && r3c >= 3
         let m4 = m1 && r3c >= 4
-
+        let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
+        
+        if (r)                          return x.pow(1.06).ceil()
+        if (hasUpgrade("hu", 55))       return x.pow(1.07).ceil()
+        if (hasUpgrade("hu", 54))       return x.pow(1.08).ceil()
+        if (hasUpgrade("hu", 53))       return x.pow(1.09).ceil()
+        if (hasUpgrade("hu", 52))       return x.pow(1.1).ceil()
+        if (hasUpgrade("hu", 51))       return x.pow(1.11).ceil()
         if (hasUpgrade("hu", 45))       return x.pow(1.12).ceil()
         if (hasUpgrade("hu", 33))       return x.pow(1.13).ceil()
         if (hasUpgrade("hu", 24))       return x.pow(1.14).ceil()
