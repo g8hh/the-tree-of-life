@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.034.1",
+	num: "2.034.2",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -18,6 +18,12 @@ function isEndgameRaw(){
 var CHANELOG_VERSION = "v2.034.1"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.034.2</h3><br>
+		- Added a Researcher milestone.<br>
+		- Various bugfixes and wording fixes.<br>
+		- Gave Bulk II a 1 second cooldown.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.034.1</h3><br>
+		- Added a Researcher milestone.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.034</h3><br>
 		- Balanced until 7 Researchers!<br>
 		- Added four Researcher milestones.<br>

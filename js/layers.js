@@ -39969,7 +39969,7 @@ addLayer("pl", {
                                         for (i in ids) {
                                                 a = a.plus(player.hu.buyables[ids[i]])
                                         }
-                                        base = base.sub(a.pow(2)).max(1e8)
+                                        base = base.sub(a.pow(2)).max(10)
                                 }
 
                                 return base
@@ -41054,6 +41054,7 @@ addLayer("hu", {
                 timeSinceLastBuy: 0,
                 autobuytime: 0,
                 timeSinceLastBulk: 0,
+                timeSinceLastBulk2: 0,
         }},
         color: "#DDFFDD",
         branches: [],
@@ -41107,7 +41108,8 @@ addLayer("hu", {
 
                 ret = ret.times(tmp.hu.getGainMult)
 
-                if (!hasChallenge("hu", 11)) ret = ret.min("e6e4")
+                if (!hasChallenge("hu", 11)) ret = ret.min("e56e3")
+                if (player.hu.upgrades.length < 75) ret = ret.min("e120e3")
 
                 return ret.floor()
         },
@@ -41140,9 +41142,11 @@ addLayer("hu", {
                 return tmp.hu.getResetGain.gt(0) && hasUpgrade("pl", 45)
         },
         effect(){
+                if (hasMilestone("r", 8)) return decimalOne
                 return player.hu.thoughts.points.sqrt().min(1000).pow10()
         },
         effectDescription(){
+                if (hasMilestone("r", 8)) return ""
                 let start = " multiplying Biomass (max 1e100), Ecosystem (max 1e500), Species, and Oligopotent base by "
                 return start + format(tmp.hu.effect) + "."
         },
@@ -41179,10 +41183,16 @@ addLayer("hu", {
                                 data.autobuytime = Math.min(10, data.autobuytime - 1)
                                 ids = ids.concat([12, 22, 31, 33])
                         }
+                        let chance = hasMilestone("r", 9) ? Math.min(1, player.r.milestones.length / 1000) : 0
+                        if (hasMilestone("r", 11)) chance *= 3
                         for (i in ids) {
                                 let id = ids[i]
                                 if (!tmp.hu.buyables[id].unlocked) continue
                                 if (tmp.hu.buyables[id].canAfford) layers.hu.buyables[id].buy()
+                                if (Math.random() < chance) {
+                                        console.log(id)
+                                        data.buyables[id] = data.buyables[id].max(tmp.hu.buyables[id].getMaxAfford)
+                                }
                         }
                 } else {
                         if (hasUpgrade("hu", 91) && tmp.hu.buyables[11].canAfford) layers.hu.buyables[11].buy()
@@ -41194,6 +41204,7 @@ addLayer("hu", {
  
                 data.timeSinceLastBuy += diff * (1 + hasChallenge("hu", 41)) * (1 + 2 * player.r.unlocked)
                 data.timeSinceLastBulk += diff
+                data.timeSinceLastBulk2 += diff
 
                 let ac = data.activeChallenge
                 if (hasMilestone("r", 7) && ac) {
@@ -42060,7 +42071,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans LXIII"
                         },
                         description(){
-                                if (player.r.unlocked) return "The Sprout exponent is 1.25 and its base is 1e10 - (total Human buyable levels)^2"
+                                if (player.r.unlocked) return "The Sprout exponent is 1.25 and its base is 1e10 - (total Human buyable levels)^2 (min 10)"
                                 return "The Sprout exponent is 1.25, its base is 1e10 - (total Human buyable levels)^2, and bulk 10x Mastery Tokens"
                         },
                         cost:() => new Decimal("1e104512"),
@@ -43299,7 +43310,7 @@ addLayer("hu", {
                                 if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.hu.buyables[32]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: -"
-                                        let eff2 = format(tmp.hu.buyables[32].effect, 3) + " from <i>IttIa</i> cost base (softcap at 10)</b><br>"
+                                        let eff2 = format(tmp.hu.buyables[32].effect, 3) + " from <i>IttIa</i> cost base (softcap at 10<sup>**</sup>)</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("hu", 32)) + " Thoughts</b><br>"
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
@@ -43591,7 +43602,7 @@ addLayer("hu", {
                         unlocked(){
                                 return hasMilestone("r", 7)
                         },
-                        canAfford:() => true,
+                        canAfford:() => player.hu.timeSinceLastBulk2 >= 1,
                         buy(){
                                 let ids = [11, 12, 13, 21, 22, 23, 31, 32, 33]
                                 for (i in ids) {
@@ -43600,13 +43611,24 @@ addLayer("hu", {
                                         player.hu.buyables[id] = player.hu.buyables[id].max(tmp.hu.buyables[id].getMaxAfford)
                                 }
                                 player.hu.timeSinceLastBuy = 0
+                                player.hu.timeSinceLastBulk2 = 0
                                 player.hu.points = player.hu.points.div(1000)
                         },
                         style(){
+                                if (!tmp.hu.buyables[42].canAfford) return {"height": "100px", "width": "200px"}
                                 return {"height": "100px", "width": "200px", "background-color": "#ABCABC"}
                         },
                         display(){
-                                return "Bulk all buyables, set time since last buyable to 0s and divide Humans by 1000"
+                                if (player.hu.timeSinceLastBulk2 < 1) {
+                                        let tenpercent = Math.floor(player.hu.timeSinceLastBulk2 * 20 + .5)
+                                        let end = ""
+                                        for (i = 0; i < 21; i++) {
+                                                if (i == tenpercent) end = makeRed(end)
+                                                if (i != 20) end = end.concat("X")
+                                        }
+                                        return "Cooldown: " + formatTime(1 - player.hu.timeSinceLastBulk2) + br + end
+                                }
+                                return "Bulk all buyables, set time since last buyable to 0s and divide Humans by 1000<br>CD: 1.00s"
                         },
                 },
         },
@@ -45134,7 +45156,7 @@ addLayer("hu", {
                                 if (player.hu.challenges[11] == 5) b = ""
                                 let c = "Reward: Bulk unlimited Plant buyables, Plant buyables cost nothing, point gain becomes Humans,"
                                 c += " and subtract 3 from the Token tetration exponent"
-                                if (player.r.unlocked) c = c.replace("Bulk unlimited Plant buyables", "You can gain above 1e60,000 Humans")
+                                if (player.r.unlocked) c = c.replace("Bulk unlimited Plant buyables", "You can gain above 1e56,000 Humans")
                                 let d = "Completions: " + player.hu.challenges[11] + "/5"
 
                                 return a + br2 + b + br2 + c + br2 + d
@@ -45283,12 +45305,18 @@ addLayer("hu", {
                                 let a = "Add 1 to the Nucleus cost exponent"
                                 let b = "Goal: 451,015,000 Plants"
                                 if (hasChallenge("hu", 42)) b = b.replace("451,015", "715,060")
-                                let c = "Reward: <i>Badwaftapw</i> base is .179, the Mastery III base is 1.0003"
-                                c += ", bulk 20x Mastery Tokens, and at 1e58,925 Humans the Mastery VI cost base is 1.01"
+                                let c = "Reward: <i>Badwaftapw</i> base is .179, the Mastery III base is 1.0003, "
+                                if (!player.r.unlocked) c += "bulk 20x Mastery Tokens, "
+                                if (hasMilestone("r", 8)) c += "and the Mastery VI cost base is 1.01"
+                                else c += "and at 1e58,925 Humans the Mastery VI cost base is 1.01"
                                 if (hasChallenge("hu", 42) && (!player.shiftAlias || player.hu.challenges[42] == 2)) {
                                         c = "Reward: Each fifth <i>Hual</i> level past 750 halves its cost base"
-                                        c += ", upon 1e59,285 Humans the Top Quark exponent is 5/6"
-                                        c += ", and upon 1e59,435 and 1e59,732 Humans subtract .001 from the Mastery VI base"
+                                        if (hasMilestone("r", 8)) {
+                                                c += ", the Top Quark exponent is 5/6, and subtract .002 from the Mastery VI base"
+                                        } else {
+                                                c += ", upon 1e59,285 Humans the Top Quark exponent is 5/6"
+                                                c += ", and upon 1e59,435 and 1e59,732 Humans subtract .001 from the Mastery VI base"
+                                        }
                                 }
                                 let d = "Completions: " + player.hu.challenges[42] + "/2"
                                 return a + br2 + b + br2 + c + br2 + d
@@ -45489,6 +45517,7 @@ addLayer("hu", {
                                         let func = tmp.hu.buyables[23].effect.gt(0) ? format : formatWhole
                                         c = c.replace("DIV", formatWhole(tmp.hu.getGainDivider)).replace("EXP", func(tmp.hu.getGainExp))
                                         let d = "<sup>*</sup> If the next value of 10<sup>2<sup>x</sup></sup> allows you to have positive production, you get that amount"
+                                        if (player.hu.buyables[13].gte(1320)) d += br + "<sup>**</sup> x -> sqrt(10*x)"
 
                                         if (!hasMilestone("hu", 25)) return a + br2 + b + br2 + c + br2 + d
 
@@ -45645,7 +45674,8 @@ addLayer("r", {
                 return tmp.r.getResetGain.gt(0)
         },
         effect(){
-                return player.r.total.plus(1).pow(2)
+                let exp = hasMilestone("r", 10) ? player.r.milestones.length : 2
+                return player.r.total.plus(1).pow(exp)
         },
         effectDescription(){
                 let start = " multiplying Human, Thoughts, Biomass, Ecosystems, Species by "
@@ -45707,7 +45737,8 @@ addLayer("r", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Keep a Human reset and milestone per reset [ones with nerfs exlucded], keep all prior autobuyers, buy each Human buyable once per second, triple Human reset gain, and per milestone add 1 to the <i>Tgwitlcwl</i> effect (inside of log2)."
+                                return "Reward: Keep a Human reset and milestone per reset, keep all prior autobuyers, buy each Human buyable once per second, triple Human reset gain, and per milestone add 1 to the <i>Tgwitlcwl</i> effect (inside of log2)."
+                                //return "Reward: Keep a Human reset and milestone per reset [ones with nerfs exlucded], keep all prior autobuyers, buy each Human buyable once per second, triple Human reset gain, and per milestone add 1 to the <i>Tgwitlcwl</i> effect (inside of log2)."
                         },
                 }, // hasMilestone("r", 1)
                 2: {
@@ -45794,6 +45825,62 @@ addLayer("r", {
                                 return "Reward: Unlock Bulk II, autocomplete Human challenges, and Humans XLIV and LXIV effects happen instantly (shift to see old effect)." 
                         },
                 }, // hasMilestone("r", 7)
+                8: {
+                        requirementDescription(){
+                                return "8 Researchers"
+                        },
+                        done(){
+                                return player.r.points.gte(8)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Remove Humans effect and both <b>Good</b> effects apply instantly." 
+                        },
+                }, // hasMilestone("r", 8)
+                9: {
+                        requirementDescription(){
+                                return "13 Researchers"
+                        },
+                        done(){
+                                return player.r.points.gte(13)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: There is a milestones/1000 chance to bulk buy Human buyables (when autobuying only) and keep an upgrade per reset." 
+                        },
+                }, // hasMilestone("r", 9)
+                10: {
+                        requirementDescription(){
+                                return "20 Researchers"
+                        },
+                        done(){
+                                return player.r.points.gte(20)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Keep Human challenges, Researcher effect exponent is milestones." 
+                        },
+                }, // hasMilestone("r", 10)
+                11: {
+                        requirementDescription(){
+                                return "20 Researcher resets"
+                        },
+                        done(){
+                                return player.r.times >= 20
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Milestone 9 chance is tripled." 
+                        },
+                }, // hasMilestone("r", 11)
         },
         tabFormat: {
                 "Upgrades": {
@@ -45827,8 +45914,8 @@ addLayer("r", {
                                         a += br + "For unlocking researchers, always keep Species milestones, upgrades, challenges, and resets. Triple time since last buyable gain."
                                         a += br + "In addition, always autobuy max all token and Plant content. Keep Mastery Token upgrades."
                                         let b = "Effect formula: (1 + Total researchers)^2"
-                                        let c = "Initial Human gain: (log10(Humans/1e105,651))<sup>.25</sup>-9"
-                                        c += br + "Current Human gain: sqrt(log10(Humans/1e105,651))<sup>.25</sup>-9"
+                                        let c = "Initial Researcher gain: (log10(Humans/1e105,651))<sup>.25</sup>-9"
+                                        c += br + "Current Researcher gain: (log10(Humans/1e105,651))<sup>.25</sup>-9"
                                         
                                         return a + br2 + b + br2 + c + br2
                                 }],
@@ -45871,22 +45958,22 @@ addLayer("r", {
                         }
 
                         if (!false) { // upgrades
-                                let rKeptUpgrades = 0
-                                if (false) rKeptUpgrades += player.r.times
-                                data.upgrades = data.upgrades.slice(0, rKeptUpgrades)
+                                let huKeptUpgrades = 0
+                                if (hasMilestone("r", 9)) huKeptUpgrades += player.r.times
+                                data.upgrades = data.upgrades.slice(0, huKeptUpgrades)
                         }
 
                         if (!false) { // milestones
                                 let rKeptMilestones = 0
                                 if (hasMilestone("r", 1)) rKeptMilestones += player.r.times
                                 data.milestones = data.milestones.slice(0, rKeptMilestones)
-                                let excluded = [
+                                /*let excluded = [
                                         13, 17, 22, 40, 41, 
-                                        47 /* might remove*/,
+                                        47 ,
                                         54, 57, 69, // should prb remove
                                         70, 76, 79, 83, 
                                         99, 100]
-                                data.milestones = filterOut(data.milestones, excluded)
+                                data.milestones = filterOut(data.milestones, excluded)*/
                         }
 
                         if (!false) {
@@ -45900,9 +45987,12 @@ addLayer("r", {
                                 data.buyables[32] = decimalZero
                                 data.buyables[33] = decimalZero
                         }
-                        let ids = [11, 12, 21, 22, 31, 32, 41, 42, 51, 52, 61, 62]
-                        for (i in ids) {
-                                player.hu.challenges[ids[i]] = 0
+                        
+                        if (!hasMilestone("r", 10)) {
+                                let ids = [11, 12, 21, 22, 31, 32, 41, 42, 51, 52, 61, 62]
+                                for (i in ids) {
+                                        player.hu.challenges[ids[i]] = 0
+                                }
                         }
                 }
 
@@ -47389,6 +47479,7 @@ addLayer("ach", {
                                 player.subtabs.cells.mainTabs = "Stem"
                         },
                         unlocked(){
+                                if (hasMilestone("hu", 41)) return false
                                 return hasUpgrade("cells", 13) || player.t.unlocked
                         },
                 },
@@ -47687,7 +47778,7 @@ addLayer("ach", {
                                 }
                         },
                         unlocked(){
-                                return tmp.l.challenges[12].unlocked
+                                return tmp.l.challenges[12].unlocked && layerShown("l")
                         },
                 },
         ],
@@ -55869,7 +55960,7 @@ addLayer("tokens", {
                                 if (hasChallenge("hu", 61)) {
                                         return c.pow(.86).times(tmp.tokens.buyables[121].coefficient)
                                 }
-                                if (player.hu.challenges[42] > 1 && player.hu.points.gte("1e59285")) {
+                                if (player.hu.challenges[42] > 1 && (hasMilestone("r", 8) || player.hu.points.gte("1e59285"))) {
                                         return c.pow(5/6).times(tmp.tokens.buyables[121].coefficient)
                                 }
                                 if (hasMilestone("hu", 77)) {
@@ -56217,7 +56308,7 @@ addLayer("tokens", {
                                                 if (player.hu.points.gte("1e115,559")) exp = .126
                                         }
                                 }
-                                return [add, new Decimal(div), exp]
+                                return [new Decimal(add), new Decimal(div), exp]
                         },
                         maxAfford(){
                                 let costData = tmp.tokens.buyables[192].costData 
@@ -56788,9 +56879,13 @@ addLayer("tokens", {
                                 if (hasChallenge("hu", 62))                     return 1.004
                                 if (hasUpgrade("hu", 85))                       return 1.006
                                 if (hasUpgrade("hu", 83))                       return 1.007
-                                if (hasChallenge("hu", 42)) {
+                                if (player.hu.challenges[42] >= 2) {
+                                        if (hasMilestone("r", 8))               return 1.008
                                         if (player.hu.points.gte("1e59732"))    return 1.008
                                         if (player.hu.points.gte("1e59435"))    return 1.009
+                                }
+                                if (hasChallenge("hu", 42)) {
+                                        if (hasMilestone("r", 8))               return 1.01
                                         if (player.hu.points.gte("1e58925"))    return 1.01
                                 }
                                 if (hasChallenge("hu", 22))                     return 1.011
