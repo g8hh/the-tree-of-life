@@ -31850,7 +31850,7 @@ addLayer("an", {
                                                         ret = ret.times(Decimal.pow(.5, player.ch.points))
                         }
                         if (!hasUpgrade("hu", 153)) {
-                                if (hasMilestone("an", 23))     ret = ret.times(player.or.energy.points.div("1e14000").plus(1).pow(.002))
+                                if (hasMilestone("an", 23))     ret = ret.times(player.or.energy.points.div("1e14000").plus(1).pow(.002).min("ee20"))
                                 if (hasMilestone("an", 28))     ret = ret.times(player.an.grid[306].extras.plus(1))
                                 if (hasMilestone("nu", 1))      ret = ret.times(2)
                                 if (hasUpgrade("tokens", 102))  ret = ret.times(player.sp.points.max(1).pow(player.tokens.upgrades.length))
@@ -34335,7 +34335,9 @@ addLayer("ch", {
                         ret = ret.sub(player.pl.points.sub(31100).div(20).max(0).min(100).floor().div(1e4))
                 }
                 if (hasMilestone("hu", 34) && player.pl.points.gte(41710))     ret = new Decimal(1.2)
-                        ret = ret.sub(tmp.hu.buyables[22].effect.min(hasMilestone("hu", 40) ? .08 : .01))
+                
+                ret = ret.sub(tmp.hu.buyables[22].effect.min(hasMilestone("hu", 40) ? .08 : .01))
+                
                 if (hasMilestone("hu", 85)) {
                         let l = player.hu.buyables[33].sub(100)
                         if (l.gt(100)) {
@@ -39527,7 +39529,7 @@ addLayer("e", {
 
                                 191, 192, 193,
                                 201, 202, 203,
-                                211, 212]
+                                211, 212, 213, 214]
                                 
                         let resetbbids = [
                                 11, 12, 13,
@@ -41190,7 +41192,6 @@ addLayer("hu", {
                                 if (!tmp.hu.buyables[id].unlocked) continue
                                 if (tmp.hu.buyables[id].canAfford) layers.hu.buyables[id].buy()
                                 if (Math.random() < chance) {
-                                        console.log(id)
                                         data.buyables[id] = data.buyables[id].max(tmp.hu.buyables[id].getMaxAfford)
                                 }
                         }
@@ -45864,7 +45865,7 @@ addLayer("r", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Keep Human challenges, Researcher effect exponent is milestones." 
+                                return "Reward: Keep Human challenges, Researcher effect exponent is milestones, and Token II via Animals' exponent is 1.2 ." 
                         },
                 }, // hasMilestone("r", 10)
                 11: {
@@ -45878,7 +45879,7 @@ addLayer("r", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Milestone 9 chance is tripled." 
+                                return "Reward: Milestone 9 chance is tripled and resets 21 through 30 subtract .001 from the Mastery VI base (exponent must be x<sup>.20</sup>)." 
                         },
                 }, // hasMilestone("r", 11)
         },
@@ -46061,8 +46062,6 @@ addLayer("r", {
                 }
                 
                 doReset("e", true)
-                player.tokens.buyables[213] = decimalZero
-                player.tokens.buyables[214] = decimalZero
         },
 })
 
@@ -56307,6 +56306,7 @@ addLayer("tokens", {
                                                 if (player.hu.points.gte("1e115,460")) exp = .127
                                                 if (player.hu.points.gte("1e115,559")) exp = .126
                                         }
+                                        if (hasMilestone("r", 10))      exp = .12
                                 }
                                 return [new Decimal(add), new Decimal(div), exp]
                         },
@@ -56872,7 +56872,10 @@ addLayer("tokens", {
                                 return exp
                         },
                         base(){
-                                if (hasUpgrade("hu", 143))                      return 1.030
+                                if (hasUpgrade("hu", 143)) {
+                                        if (hasMilestone("r", 11))              return 1.030 - Math.min(Math.max(0, player.r.times - 20), 10) / 1000
+                                                                                return 1.030
+                                }
                                 if (hasUpgrade("hu", 111))                      return 1.001
                                 if (hasUpgrade("hu", 94))                       return 1.002
                                 if (hasUpgrade("hu", 92))                       return 1.003
@@ -56995,7 +56998,8 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 213)) + " Plants</b><br>"
                                 let eformula = "BASE<sup>x<sup>EXP</sup>"
                                 eformula = eformula.replace("EXP", formatWhole(tmp.tokens.buyables[213].costExp))
-                                eformula = eformula.replace("BASE", format(tmp.tokens.buyables[213].base, hasMilestone("hu", 70) ? 3 : 2)).replace("x<sup>0.33</sup>", "cbrt(x)")
+                                let b = tmp.tokens.buyables[213].base
+                                eformula = eformula.replace("BASE", format(b, b < 1.1 ? 3 : 2)).replace("x<sup>0.33</sup>", "cbrt(x)")
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
