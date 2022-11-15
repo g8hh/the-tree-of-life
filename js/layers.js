@@ -39886,7 +39886,7 @@ addLayer("pl", {
                                 if (hasUpgrade("e", 44))        ret = ret.times(Decimal.pow(1e10, player.pl.points.plus(.0001).cbrt().floor().sub(3.9).max(0)))
                         }
                                                         ret = ret.times(player.pl.biomass.points.max(10).log10().pow(player.e.challenges[22]))
-                        if (hasUpgrade("pl", 24))       ret = ret.times(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt()))
+                        if (hasUpgrade("pl", 24))       ret = ret.times(player.pl.points.max(1).pow(player.pl.points.sub(44).max(0).sqrt()))
 
                                                         ret = ret.times(tmp.hu.effect.min(1e100))
                         if (hasUpgrade("hu", 11)) {
@@ -39898,7 +39898,7 @@ addLayer("pl", {
                                                         ret = ret.times(base.pow(exp))
                         }
                         if (hasUpgrade("hu", 61) && (hasMilestone("r", 6) || player.hu.points.gte("1e5551"))) {
-                                let base = player.hu.thoughts.points 
+                                let base = player.hu.thoughts.points.max(1)
                                                         ret = ret.times(base.pow(player.hu.milestones.length))
                         }
 
@@ -41187,6 +41187,7 @@ addLayer("hu", {
                         }
                         let chance = hasMilestone("r", 9) ? Math.min(1, player.r.milestones.length / 1000) : 0
                         if (hasMilestone("r", 11)) chance *= 3
+                        if (hasMilestone("r", 12)) chance *= 3
                         for (i in ids) {
                                 let id = ids[i]
                                 if (!tmp.hu.buyables[id].unlocked) continue
@@ -45720,7 +45721,7 @@ addLayer("r", {
                         description(){
                                 return "idk yet"
                         },
-                        cost:() => new Decimal(100),
+                        cost:() => new Decimal(1e100),
                         unlocked(){
                                 return true
                         }, // hasUpgrade("r", 11)
@@ -45882,6 +45883,20 @@ addLayer("r", {
                                 return "Reward: Milestone 9 chance is tripled and resets 21 through 30 subtract .001 from the Mastery VI base (exponent must be x<sup>.20</sup>)." 
                         },
                 }, // hasMilestone("r", 11)
+                12: {
+                        requirementDescription(){
+                                return "75 Researchers"
+                        },
+                        done(){
+                                return player.r.points.gte(75)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Milestone 9 chance is tripled, Mastery III base is 1.32, and keep 90% of Human buyable levels (floored)." 
+                        },
+                }, // hasMilestone("r", 12)
         },
         tabFormat: {
                 "Upgrades": {
@@ -45977,7 +45992,17 @@ addLayer("r", {
                                 data.milestones = filterOut(data.milestones, excluded)*/
                         }
 
-                        if (!false) {
+                        if (hasMilestone("r", 12)) {
+                                data.buyables[11] = data.buyables[11].times(.9).floor()
+                                data.buyables[12] = data.buyables[12].times(.9).floor()
+                                data.buyables[13] = data.buyables[13].times(.9).floor()
+                                data.buyables[21] = data.buyables[21].times(.9).floor()
+                                data.buyables[22] = data.buyables[22].times(.9).floor()
+                                data.buyables[23] = data.buyables[23].times(.9).floor()
+                                data.buyables[31] = data.buyables[31].times(.9).floor()
+                                data.buyables[32] = data.buyables[32].times(.9).floor()
+                                data.buyables[33] = data.buyables[33].times(.9).floor()
+                        } else {
                                 data.buyables[11] = decimalZero
                                 data.buyables[12] = decimalZero
                                 data.buyables[13] = decimalZero
@@ -56687,6 +56712,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("hu", 154) && player.hu.points.gte("1e114844")) {
                                                                 ret = 1.325
                                 }
+                                if (hasMilestone("r", 12))      ret = 1.32
                                 
                                 return ret
                         },
