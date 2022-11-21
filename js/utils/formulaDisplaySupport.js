@@ -950,6 +950,10 @@ function taxonomyCapFormulaDisplay(){
                         if (x.gt(1)) c += "Human Milestone 95 multiplies AX by " + format(x) + br 
                 }
                 if (hasUpgrade("hu", 131))    c += "Humans LXI multiplies AX by 5" + br
+                if (hasUpgrade("hu", 151)) {
+                        if (player.hu.points.gte("1e114367")) c += "Humans LXI multiplies AX by 10" + br
+                        if (player.hu.points.gte("1e114390")) c += "Humans LXI multiplies AX by 10" + br
+                }
 
                 return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
         }

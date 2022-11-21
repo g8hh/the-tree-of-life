@@ -23960,7 +23960,9 @@ addLayer("t", {
                 if (hasUpgrade("an", 11))       ret = ret.plus(5)
                 if (hasUpgrade("or", 45))       ret = ret.plus(.91)
                 if (hasUpgrade("ch", 12))       ret = ret.plus(player.ch.upgrades.length)
-                if (hasUpgrade("an", 43))       ret = ret.plus(1)
+                if (hasUpgrade("an", 43) && player.tokens.tokens2.total.gte(2600)) {
+                                                ret = ret.plus(1)
+                }
                 if (hasUpgrade("sp", 51))       ret = ret.plus(1)
                 if (hasChallenge("sp", 12))     ret = ret.plus(tmp.sp.challenges[12].reward)
                 if (hasMilestone("sp", 24))     ret = ret.plus(1)
@@ -31860,7 +31862,7 @@ addLayer("an", {
                                         if (hasUpgrade("an", 51))       ret = ret.times(2)
                                         if (hasUpgrade("ch", 15)) {
                                                 let base = hasUpgrade("an", 34) ? 1.04 : 1.01
-                                                let sub = hasUpgrade("an", 43) ? 0 : 2600
+                                                let sub = (hasUpgrade("an", 43) && player.tokens.tokens2.total.gte(2600)) ? 0 : 2600
                                                 let exp = player.tokens.tokens2.total.sub(sub).max(0)
                                                                         ret = ret.times(Decimal.pow(base, exp))
                                         }
@@ -31888,7 +31890,7 @@ addLayer("an", {
                                                         ret = ret.times(20)
                         }
                         
-                        if (hasUpgrade("an", 43) && !hasMilestone("ch", 29)) {
+                        if (hasUpgrade("an", 43) && player.tokens.tokens2.total.gte(2600) && !hasMilestone("ch", 29)) {
                                                         ret = ret.div(1e42)
                         }
                         if (!player.an.achActive[11] && hasAchievement("an", 11)) {
@@ -32187,6 +32189,7 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XVIII"
                         },
                         description(){
+                                if (player.shiftAlias) return "Requires 2600 Token II to be effective"
                                 return "Chromosomes V counts every Token II and add 1 to the Tissue effect exponent but divide Gene gain by 1e42"
                         },
                         cost:() => new Decimal(4.09e24),
@@ -32532,7 +32535,7 @@ addLayer("an", {
                         effectDescription(){
                                 let a = "Reward: Sapien amount multiplies Air gain"
                                 if (player.sp.unlocked) a += makePurple(", each of the first 22 Species resets multiplies gene gain by 10,")
-                                return a + " and each Token II past 1000 (multiplcatively) increases Gene gain by 1%."
+                                return a + " and each Token II past 1000 (multiplicatively) increases Gene gain by 1%."
                         },
                 }, // hasMilestone("an", 16)
                 17: {
@@ -32698,7 +32701,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: intes<u>TINE</i>'s base becomes sqrt(in<u>TES</u>tine) and remove Chromosome milestone 6 nerfs."
+                                return "Reward: intes<u>TINE</u>'s base becomes sqrt(in<u>TES</u>tine) and remove Chromosome milestone 6 nerfs."
                         },
                 }, // hasMilestone("an", 24)
                 25: {
@@ -33462,6 +33465,27 @@ addLayer("an", {
                         }
                 },
                 maxLevels(){
+                        if (hasMilestone("hu", 44)) {
+                                let ret = player.pl.points.times(10)
+                                if (hasMilestone("hu", 71)) {
+                                        if (player.hu.points.gte("1e20579")) ret = ret.times(100)
+                                        if (player.hu.points.gte("1e20831")) ret = ret.times(5)
+                                }
+                                if (hasMilestone("hu", 95)) {
+                                        ret = ret.times(2)
+                                        if (player.hu.points.gte("1e46005"))    ret = ret.times(2)
+                                        if (player.hu.points.gte("1e46110"))    ret = ret.times(2)
+                                        if (player.hu.points.gte("1e46289"))    ret = ret.times(2)
+                                }
+                                if (hasUpgrade("hu", 131))                      ret = ret.times(5)
+                                if (hasUpgrade("hu", 151)) {
+                                        if (player.hu.points.gte("1e114367"))   ret = ret.times(10)
+                                        if (player.hu.points.gte("1e114390"))   ret = ret.times(10)
+                                }
+
+                                return ret
+                        }
+
                         let ret = new Decimal(400)
 
                         if (hasUpgrade("ch", 23)) {
@@ -33498,22 +33522,6 @@ addLayer("an", {
                         if (hasMilestone("hu", 15))     ret = new Decimal(9000).plus(player.pl.points)
                         if (hasMilestone("hu", 35) && player.hu.thoughts.points.gte("4.44e4444")) {
                                                         ret = ret.plus(1000)
-                        }
-                        if (hasMilestone("hu", 44))     ret = player.pl.points.times(10)
-                        if (hasMilestone("hu", 71)) {
-                                if (player.hu.points.gte("1e20579")) ret = ret.times(100)
-                                if (player.hu.points.gte("1e20831")) ret = ret.times(5)
-                        }
-                        if (hasMilestone("hu", 95)) {
-                                ret = ret.times(2)
-                                if (player.hu.points.gte("1e46005"))    ret = ret.times(2)
-                                if (player.hu.points.gte("1e46110"))    ret = ret.times(2)
-                                if (player.hu.points.gte("1e46289"))    ret = ret.times(2)
-                        }
-                        if (hasUpgrade("hu", 131))                      ret = ret.times(5)
-                        if (hasUpgrade("hu", 151)) {
-                                if (player.hu.points.gte("1e114367"))   ret = ret.times(10)
-                                if (player.hu.points.gte("1e114390"))   ret = ret.times(10)
                         }
 
                         return ret.floor()
