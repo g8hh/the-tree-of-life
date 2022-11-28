@@ -1840,7 +1840,7 @@ addLayer("sci", {
                 
                 let sciBuyIds = []
                 if (hasMilestone("n", 1)) sciBuyIds = [11, 12, 13, 21, 22, 23]
-                if (hasMilestone("n", 1)) sciBuyIds = sciBuyIds.concat([101, 102, 103, 111, 112, 113])
+                if (hasMilestone("n", 2)) sciBuyIds = sciBuyIds.concat([101, 102, 103, 111, 112, 113])
                 let orderNormal = [12, 11, 13, 22, 21, 23, 101, 102, 103, 111, 112, 113]
                 for (let i = 0; i < orderNormal.length; i ++){
                         let id = orderNormal[i]
@@ -8898,7 +8898,7 @@ addLayer("n", {
                                 ["microtabs", "challenge_content"]
                         ],
                         unlocked(){
-                                return hasMilestone("n", 14) || player.p.unlocked
+                                return hasMilestone("n", 14) || player.p.unlocked || player.n.activeChallenge
                         },
                 },
                 "Milestones": {
@@ -9554,7 +9554,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XVI"
                         },
                         description(){
-                                let a = "You have three less token for prestige purposes and Universe becomes ee45"
+                                let a = "You have three less token for prestige purposes and Life Milestone 21 becomes ee45"
                                 if (player.extremeMode) a = a.replace("ee45", "e4e45")
                                 return a
                         },
@@ -9659,7 +9659,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXIV"
                         },
                         description(){
-                                return "Universe is ee46 and add .01 to Constant base"
+                                return "Life Milestone 21 is ee46 and add .01 to Constant base"
                         },
                         cost:() => new Decimal(player.extremeMode ? "e2e46" : "e15e45"),
                         unlocked(){
@@ -9671,7 +9671,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXV"
                         },
                         description(){
-                                return "Universe is ee47 and add .01 to Constant base"
+                                return "Life Milestone 21 is ee47 and add .01 to Constant base"
                         },
                         cost:() => new Decimal(player.extremeMode ? "ee47" : "e3e47"),
                         unlocked(){
@@ -10812,7 +10812,7 @@ addLayer("mu", {
                         },
                         description(){
                                 let a = "α → ∂α log10's become log8"
-                                if (player.extremeMode) a += " and Universe becomes e7e41"
+                                if (player.extremeMode) a += " and Life Milestone 21 becomes e7e41"
                                 return a
                         },
                         cost:() => new Decimal(player.extremeMode ? 2e30 : 3e31),
@@ -10838,7 +10838,7 @@ addLayer("mu", {
                         },
                         description(){
                                 let a = "Oxygen multiplies Point gain"
-                                if (player.extremeMode) a += ", Universe is e2e42, "
+                                if (player.extremeMode) a += ", Life Milestone 21 is e2e42, "
                                 return a + " and token cost exponent is .48"
                         },
                         cost:() => new Decimal(player.extremeMode ? 7e30 : 5e31),
@@ -10852,7 +10852,7 @@ addLayer("mu", {
                         },
                         description(){
                                 let a = "α → ∂α log7's become log6"
-                                if (player.extremeMode) a += " and Universe is e3e42"
+                                if (player.extremeMode) a += " and Life Milestone 21 is e3e42"
                                 return a
                         },
                         cost:() => new Decimal(player.extremeMode ? 9e30 : 6e31),
@@ -10866,7 +10866,7 @@ addLayer("mu", {
                         },
                         description(){
                                 let a = "α → ∂α log6's become log5"
-                                if (player.extremeMode) a += ", Universe is e2e44," 
+                                if (player.extremeMode) a += ", Life Milestone 21 is e2e44," 
                                 return a + " and log10(Lives) exponentiates Life Point gain"
                         },
                         cost:() => new Decimal(player.extremeMode ? 2e32 : 7e31),
@@ -10893,7 +10893,7 @@ addLayer("mu", {
                         },
                         description(){
                                 let a = "N → ΔP cost base is 6"
-                                if (player.extremeMode) a += " and Universe is ee45"
+                                if (player.extremeMode) a += " and Life Milestone 21 is ee45"
                                 return a
                         },
                         cost:() => new Decimal(player.extremeMode ? 6e32 : 9e31),
@@ -11111,7 +11111,7 @@ addLayer("mu", {
                         },
                         effectDescription(){
                                 if (player.extremeMode) return "Per µ milestone double Phosphorus gain"
-                                return "Ponder the universe"
+                                return "Nothing!"
                         },
                 }, // hasMilestone("mu", 12)
                 13: {
@@ -12362,7 +12362,7 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life VIII"
                         },
                         description(){
-                                return "Universe is ee41 and square base life gain"
+                                return "Life Milestone 21 is ee41 and square base life gain"
                         },
                         cost:() => new Decimal(3e16),
                         unlocked(){
@@ -12891,7 +12891,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let b = "Note: Requires having being in Dilation with 39 completions. This will be refered to as \"Universe\"" + br
+                                let b = "Note: Requires having being in Dilation with 39 completions." + br
                                 if (player.extremeMode) b = b.slice(61, )
                                 let a = "Reward: If not in a challenge, you get ee40 Phosphorus after one second."
                                 return b + a
@@ -12910,7 +12910,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Each N → ΔP after 40 multiplies life gain by 1.5 and Universe becomes ee43."
+                                let a = "Reward: Each N → ΔP after 40 multiplies life gain by 1.5 and Life Milestone 21 becomes ee43."
                                 if (player.extremeMode) a = a.replace("ee43", "e2e41")
                                 return a
                         },
@@ -13125,7 +13125,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per milestone multiple life gain by 1.12 and Universe is ee50."
+                                return "Reward: Per milestone multiple life gain by 1.12 and Life Milestone 21 is ee50."
                         },
                 }, // hasMilestone("l", 35)
                 36: {
@@ -13141,8 +13141,8 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: α → ∂β ln becomes log2, Universe is ee51."
-                                return "Reward: α → ∂β ln becomes log2, Universe is ee51, and raise Life Point gain ^1.1.<br>Note: Requires 5e311 Lives."
+                                if (player.extremeMode) return "Reward: α → ∂β ln becomes log2, Life Milestone 21 is ee51."
+                                return "Reward: α → ∂β ln becomes log2, Life Milestone 21 is ee51, and raise Life Point gain ^1.1.<br>Note: Requires 5e311 Lives."
                         },
                 }, // hasMilestone("l", 36)
                 37: {
@@ -13244,7 +13244,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: β → ∂α's log4 becomes log3 and Universe becomes best Phosphorus over Amino reset.<br>Note: Amino is unlocked by getting a C33 gem."
+                                return "Reward: β → ∂α's log4 becomes log3 and Life Milestone 21 becomes best Phosphorus over Amino reset.<br>Note: Amino is unlocked by getting a C33 gem."
                         },
                 }, // hasMilestone("l", 42)
         },
@@ -23472,7 +23472,7 @@ addLayer("cells", {
                                         ["challenges", [1,2,3]],
                                 ],
                                 unlocked(){
-                                        return hasMilestone("cells", 14) || player.t.unlocked
+                                        return hasMilestone("cells", 14) || player.t.unlocked || player.cells.activeChallenge
                                 },
                         },
                 },
@@ -31055,7 +31055,7 @@ addLayer("or", {
                                         ["upgrades", [30, 31, 32, 33, 34, 35, 36]],
                                 ],
                                 unlocked(){
-                                        return hasUpgrade("or", 215)
+                                        return hasUpgrade("or", 215) || player.or.activeChallenge
                                 },
                                 shouldNotify(){
                                         let ids = [301, 302, 303, 304, 305, 
@@ -38206,7 +38206,7 @@ addLayer("sp", {
                                 "challenges",
                         ],
                         unlocked(){
-                                return hasMilestone("an", 44)
+                                return hasMilestone("an", 44) || player.an.activeChallenge
                         },
                 },
                 "Info": {
@@ -39435,7 +39435,8 @@ addLayer("e", {
                                 "challenges",
                         ],
                         unlocked(){
-                                return hasMilestone("e", 10) && !hasMilestone("hu", 41)
+                                if (hasMilestone("hu", 41)) return false
+                                return hasMilestone("e", 10) || player.e.activeChallenge
                         },
                 },
                 "Info": {
@@ -45215,7 +45216,7 @@ addLayer("hu", {
                         fullDisplay(){
                                 let a = "Add .1 to the Plant cost exponent"
                                 let b = "Goal: 400,178,000 Plants"
-                                let c = "Reward: Plants no longer effect <i>Hiawd</i> base and <i>Tgwitlcwl</i> coefficient is .757"
+                                let c = "Reward: Plants no longer affect <i>Hiawd</i> base and <i>Tgwitlcwl</i> coefficient is .757"
                                 c += " and the Mastery III coefficient is .0001 less"
                                 if (player.r.unlocked) c += makeRed(" per challenge keep .25% of time since last buyable")
                                 if (hasMilestone("r", 5)) c = c.replace(".25", ".35")
@@ -45522,7 +45523,7 @@ addLayer("hu", {
                                 "challenges",
                         ],
                         unlocked(){
-                                return hasMilestone("hu", 100)
+                                return hasMilestone("hu", 100) || player.hu.activeChallenge
                         },
                 },
                 "Info": {
