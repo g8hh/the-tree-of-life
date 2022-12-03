@@ -85,14 +85,16 @@ function getAchStuffFromNumber(n){
         a = convertToB16(Math.floor(a*128) + 128)
         b = convertToB16(Math.floor(b*128) + 128)
         c = convertToB16(Math.floor(c*128) + 128)
+        let hasRow = {"background-color": "#" + String(a) + String(b) + String(c)}
 
         // END OF KEEP IN THIS FILE
 
         let style = function(){
+                if (player.ach.hiddenRows >= tens) return {}
                 for (i = 1; i <= 7; i++){
                         if (!hasAchievement("ach", tens + i)) return {}
                 }
-                return {"background-color": "#" + String(a) + String(b) + String(c)}
+                return hasRow
         }
         let unlocked 
         if (n <= 56) {
