@@ -41790,8 +41790,8 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XXXIX"
                         },
                         description(){
-                                if (player.r.unlocked) return "<i>Badwaftapw</i> base is .176, multiply Token II via Animals' divider by 3.2, and add 1 to the Human exponent"
-                                return "<bdi style='font-size: 80%'><i>Badwaftapw</i> base is .176, bulk 10x Up Quarks, multiply Token II via Animals' divider by 3.2, and add 1 to the Human exponent</bdi>"
+                                if (player.r.unlocked) return "<i>Badwaftapw</i> base is .176, multiply Token II via Animals' divider by 3.2, and add 1 to the Human gain exponent"
+                                return "<bdi style='font-size: 80%'><i>Badwaftapw</i> base is .176, bulk 10x Up Quarks, multiply Token II via Animals' divider by 3.2, and add 1 to the Human gain exponent</bdi>"
                         },
                         cost:() => new Decimal("1e60749"),
                         unlocked(){
@@ -41829,8 +41829,8 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XLII"
                         },
                         description(){
-                                if (player.r.unlocked) return "Mastery VI base is 1.003, Nucleus Animal exponent is 7.2, and <i>Badwaptapw</i> base is .171"
-                                return "Mastery VI base is 1.003, Nucleus Animal exponent is 7.2, and <i>Badwaptapw</i> base is .171, autobuy <i>Siok</i>"
+                                if (player.r.unlocked) return "Mastery VI base is 1.003, Nucleus Animal exponent is 7.2, and <i>Badwaftapw</i> base is .171"
+                                return "Mastery VI base is 1.003, Nucleus Animal exponent is 7.2, and <i>Badwaftapw</i> base is .171, autobuy <i>Siok</i>"
                         },
                         cost:() => new Decimal("1e78228"),
                         unlocked(){
@@ -41842,8 +41842,8 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XLIII"
                         },
                         description(){
-                                if (player.r.unlocked) return "Mastery III is now 1.39<sup>log10(x)<sup>2</sup></sup> and <i>Badwaptapw</i> base is .170"
-                                return "Mastery III is now 1.39<sup>log10(x)<sup>2</sup></sup> and <i>Badwaptapw</i> base is .170, autobuy <i>Badwaptapw</i> and <i>Hiawd</i>"
+                                if (player.r.unlocked) return "Mastery III is now 1.39<sup>log10(x)<sup>2</sup></sup> and <i>Badwaftapw</i> base is .170"
+                                return "Mastery III is now 1.39<sup>log10(x)<sup>2</sup></sup> and <i>Badwaftapw</i> base is .170, autobuy <i>Badwaftapw</i> and <i>Hiawd</i>"
                         },
                         cost:() => new Decimal("1e79234"),
                         unlocked(){

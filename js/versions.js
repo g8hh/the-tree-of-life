@@ -18,6 +18,10 @@ function isEndgameRaw(){
 var CHANELOG_VERSION = "v2.035"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.035.2</h3><br>
+		- Fixed a bunch of bugs.<br>
+		- Many wording fixes.<br>
+		- Added ten rows of achievements.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.035</h3><br>
 		- Balanced until 100 Researchers.<br>
 		- Added a Researcher milestone.<br>
