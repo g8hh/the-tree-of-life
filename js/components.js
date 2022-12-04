@@ -263,6 +263,29 @@ function loadVue() {
 		`
 	})
 
+	Vue.component("chem-details", { // upgDouble
+		propts: ['layer'],
+		template:`
+		<div class="upgTable">
+			<div class="upgRow">
+				<div>
+					<column :layer = "'chem'" :data = "[['clickable', 11], ['clickable', 12]]">
+					</column>
+				</div>
+				<div>
+					<button class = "upgDouble">
+					cool stuff here
+					</button>
+				</div>
+				<div>
+					<column :layer = "'chem'" :data = "[['clickable', 13], ['clickable', 14]]">
+					</column>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
 	Vue.component("chemClickable", { // 
 		props: ['name'],
 		template: `

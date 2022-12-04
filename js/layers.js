@@ -46168,6 +46168,66 @@ addLayer("chem", {
                         }, // hasUpgrade("chem", 11)
                 },
         },
+        clickables: {
+                rows: 5,
+                cols: 4,
+                11: {
+                        title: "Increase worker", 
+                        display(){
+                                return "Increase the workers in " + player.chem.focus + " by 1"
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                        },
+                },
+                12: {
+                        title: "Decrease worker", 
+                        display(){
+                                return "Decrease the workers in " + player.chem.focus + " by 1"
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                        },
+                },
+                13: {
+                        title: "Increase scientist", 
+                        display(){
+                                return "Increase the scientists in " + player.chem.focus + " by 1"
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                        },
+                },
+                14: {
+                        title: "Decrease scientist", 
+                        display(){
+                                return "Decrease the scientists in " + player.chem.focus + " by 1"
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                        },
+                },
+        },
         milestones: {
                 1: {
                         requirementDescription(){
@@ -46209,6 +46269,8 @@ addLayer("chem", {
                         content: [
                                 "main-display",
                                 ["chem1", [false, false]], // first is nobel gases, second is third row
+                                "blank",
+                                "chem-details", 
                         ],
                         unlocked(){
                                 return true
