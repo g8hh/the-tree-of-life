@@ -8,7 +8,7 @@ function getPointGen(){
 }
 
 function getPointConstant(){
-	let ret = new Decimal(.1)
+	let ret = decimalTenth
 
 	if (hasChallenge("l", 21) && !hasUpgrade("or", 121)) {
 					ret = ret.plus(1.9)
@@ -411,6 +411,18 @@ Made
 𝞀
 */
 
+/*
+
+function run1000k(func ){
+    let a =  Date.now()
+    for (let i = 0; i < 1e6; i++){
+        func()
+    }
+    console.log( Date.now()-a)
+}
+
+*/
+
 function makeRed(c){
         return "<bdi style='color:#CC0033'>" + c + "</bdi>"
 }
@@ -559,7 +571,7 @@ addLayer("h", {
                 return ret
         },
         getDefaultMaximum(){
-                let ret = new Decimal(4)
+                let ret = decimalFour
 
                 if (hasUpgrade("h", 12))        ret = ret.plus(tmp.h.upgrades[12].effect)
                 if (hasUpgrade("sci", 13))      ret = ret.plus(tmp.sci.upgrades[13].effect)
@@ -811,7 +823,7 @@ addLayer("h", {
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[22].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(5e3) : new Decimal(5)
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(5e3) : decimalFive
                                 return hasUpgrade("h", 31) ? new Decimal(123456) : new Decimal(30)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -1068,7 +1080,7 @@ addLayer("h", {
                                 return player.hardMode ? new Decimal(7e9) : new Decimal(3e9)
                         },
                         effect(){
-                                let b = new Decimal(2)
+                                let b = decimalTwo
 
                                 b = b.plus(tmp.mini.buyables[33].effect)
                                 b = b.plus(tmp.mini.buyables[43].effect)
@@ -5706,7 +5718,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = new Decimal(2)
+                                let ret = decimalTwo
 
                                 if (hasUpgrade("sci", 121)) ret = ret.plus(1)
                                 
@@ -7827,7 +7839,7 @@ addLayer("n", {
                 return ret.floor()
         },
         getGainExp(){
-                let ret = new Decimal(3)
+                let ret = decimalThree
 
                 if (hasUpgrade("c", 31))        ret = ret.times(2)
                 if (hasUpgrade("mini", 82))     ret = ret.times(2)
@@ -8038,7 +8050,7 @@ addLayer("n", {
                         description(){
                                 return "Each upgrade adds .001 to Exponential base"
                         },
-                        cost:() => new Decimal(2),
+                        cost:() => decimalTwo,
                         unlocked(){
                                 return hasMilestone("p", 4) || player.l.unlocked || hasUpgrade("n", 11) && hasUpgrade("n", 12) && hasUpgrade("n", 13) && hasUpgrade("n", 14) && hasUpgrade("n", 15)
                         }, // hasUpgrade("n", 21)
@@ -8050,7 +8062,7 @@ addLayer("n", {
                         description(){
                                 return "Keep the first row of Oxygen and Carbon upgrades upon Nitrogen reset and each upgrade raises C point gain ^1.0002"
                         },
-                        cost:() => new Decimal(3),
+                        cost:() => decimalThree,
                         unlocked(){
                                 return hasMilestone("p", 4) || hasUpgrade("n", 21) || player.l.unlocked
                         }, // hasUpgrade("n", 22)
@@ -9139,7 +9151,7 @@ addLayer("p", {
                 return ret.floor()
         },
         getGainExp(){
-                let ret = new Decimal(4)
+                let ret = decimalFour
 
                 if (hasMilestone("p", 9))       ret = ret.times(2)
                 if (hasMilestone("p", 10))      ret = ret.times(2)
@@ -9242,7 +9254,7 @@ addLayer("p", {
                 if (inChallenge("l", 52) || hasChallenge("l", 52)) return decimalOne
                 let amt = player.p.total
 
-                let exp2 = new Decimal(3)
+                let exp2 = decimalThree
                 if (hasMilestone("p", 4)) exp2 = exp2.plus(.1)
                 if (hasMilestone("p", 5)) exp2 = exp2.plus(.04)
                 if (hasMilestone("p", 6)) exp2 = new Decimal(Math.PI)
@@ -10340,7 +10352,7 @@ addLayer("mu", {
         baseAmount(){return player.p.points.floor()},
         type: "static",
         base(){
-                if (hasUpgrade("l", 22)) return new Decimal(2)
+                if (hasUpgrade("l", 22)) return decimalTwo
                 let ret = new Decimal(100)
                 if (hasUpgrade("mu", 12)) ret = ret.sub(tmp.mu.upgrades[12].effect)
                 if (hasUpgrade("p", 111)) {
@@ -10486,7 +10498,7 @@ addLayer("mu", {
                         description(){
                                 return "Each constant multiplies E Point gain by log10(10+µ) and " + makeRed("E") + " multiplies Phosphorus gain"
                         },
-                        cost:() => new Decimal(2),
+                        cost:() => decimalTwo,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("mu", 11)
@@ -10500,7 +10512,7 @@ addLayer("mu", {
                                 let b = br + "Currently: -" + formatWhole(tmp.mu.upgrades[12].effect) + "</bdi>"
                                 return a + b
                         },
-                        cost:() => new Decimal(4),
+                        cost:() => decimalFour,
                         effect(){
                                 a = 1
                                 if (hasUpgrade("mu", 11)) a += 1
@@ -11380,7 +11392,7 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = new Decimal(3)
+                                let ret = decimalThree
 
                                 if (hasMilestone("mu", 11)) ret = ret.plus(1)
                                 
@@ -11498,7 +11510,7 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = new Decimal(2)
+                                let ret = decimalTwo
 
                                 if (hasUpgrade("p", 35)) ret = ret.plus(.05)
                                 
@@ -11796,7 +11808,7 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = new Decimal(2)
+                                let ret = decimalTwo
 
                                 if (hasMilestone("l", 12))      ret = ret.plus(.1 * player.l.milestones.length)
                                 if (hasUpgrade("p", 45))        ret = ret.plus(player.mu.buyables[33].times(.01))
@@ -11961,7 +11973,7 @@ addLayer("l", {
                 return init.sub(tmp.l.getBaseSubAmount).pow(tmp.l.getGainExp)
         },
         getGainExp(){
-                let ret = new Decimal(.5)
+                let ret = decimalHalf
 
                 if (hasUpgrade("l", 23)) ret = ret.times(2)
 
@@ -13256,7 +13268,7 @@ addLayer("l", {
                         
                         if (hasMilestone("cells", 30))  ret = new Decimal(2.3)
                         if (hasMilestone("cells", 55))  ret = new Decimal(2.2)
-                        if (hasUpgrade("cells", 215))   ret = new Decimal(2)
+                        if (hasUpgrade("cells", 215))   ret = decimalTwo
                         
                         if (hasUpgrade("t", 54))        ret = ret.sub(.1)
 
@@ -13394,8 +13406,8 @@ addLayer("l", {
                         title: "α → ∂β",
                         cost(){
                                 let init = new Decimal(1e16)
-                                let base = new Decimal(5)
-                                if (player.extremeMode) base = new Decimal(2)
+                                let base = decimalFive
+                                if (player.extremeMode) base = decimalTwo
                                 if (hasUpgrade("l", 31)) init = decimalOne
                                 let id = 12
                                 let expDiv = tmp.l.buyables[id].expDiv
@@ -13602,7 +13614,7 @@ addLayer("l", {
                         cost(){
                                 let init = new Decimal(player.extremeMode ? 25e26 : 2.4e26)
                                 if (hasUpgrade("l", 42)) init = decimalOne
-                                let base = new Decimal(2)
+                                let base = decimalTwo
                                 let id = 21
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -13850,7 +13862,7 @@ addLayer("l", {
                         },
                         base(){
                                 if (hasUpgrade("cells", 215)) return decimalOne
-                                let ret = new Decimal(2)
+                                let ret = decimalTwo
 
                                 if (!player.extremeMode)        ret = ret.plus(layers.l.grid.getGemEffect(302))
                                 if (hasMilestone("a", 15))      ret = ret.plus(.25)
@@ -13892,7 +13904,7 @@ addLayer("l", {
                         cost(){
                                 let init = new Decimal(player.extremeMode ? 2e80 : 7e84)
                                 let base = new Decimal(player.extremeMode ? 987 : 158)
-                                if (hasMilestone("cells", 34)) base = new Decimal(2)
+                                if (hasMilestone("cells", 34)) base = decimalTwo
                                 if (hasMilestone("l", 38) && player.extremeMode) init = decimalOne
                                 let id = 31
                                 let expDiv = tmp.l.buyables[id].expDiv
@@ -13991,7 +14003,7 @@ addLayer("l", {
                                 let init = new Decimal(player.extremeMode ? 1.5e145 : 1e166)
                                 let base = new Decimal(player.extremeMode ? 250 : 1600)
                                 if (hasMilestone("l", 39)) init = decimalOne
-                                if (hasMilestone("cells", 34)) base = new Decimal(2)
+                                if (hasMilestone("cells", 34)) base = decimalTwo
                                 let id = 32
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -14533,7 +14545,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                return new Decimal(.5).times(comps)
+                                return decimalHalf.times(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 268.8e3 : 151.5e3)),
                         canComplete(){ 
@@ -15730,7 +15742,7 @@ addLayer("a", {
                 return init.cbrt().sub(7).pow(tmp.a.getGainExp)
         },
         getGainExp(){
-                return new Decimal(2).plus(layers.l.grid.getGemEffect(502))
+                return decimalTwo.plus(layers.l.grid.getGemEffect(502))
         },
         getGainMult(){ // amino gain aminogain again a gain acidgain amino acid gain aminoacidgain
                 let ret = decimalOne
@@ -17330,7 +17342,7 @@ addLayer("a", {
                                 }
                         },
                         base(){
-                                let ret = new Decimal(2)
+                                let ret = decimalTwo
 
                                 if (hasUpgrade("a", 14))        ret = ret.plus(getBuyableAmount("a", 12).min(200).div(1000))
                                 if (hasUpgrade("a", 34))        ret = ret.plus(.001)
@@ -17438,7 +17450,7 @@ addLayer("a", {
                                 }
                         },
                         base(){
-                                let ret = new Decimal(3)
+                                let ret = decimalThree
 
                                 if (hasUpgrade("a", 12))        ret = ret.plus(getBuyableAmount("a", 11).min(200).div(1000))
                                 if (hasUpgrade("a", 34))        ret = ret.plus(.001)
@@ -18516,7 +18528,7 @@ addLayer("d", {
                 return ret.max(1)
         },
         getGainExp(){
-                let ret = new Decimal(2)
+                let ret = decimalTwo
 
                 if (hasChallenge("l", 32))      ret = ret.plus(tmp.l.challenges[32].reward)
                 if (hasUpgrade("d", 33))        ret = ret.plus(player.d.upgrades.length)
@@ -23104,7 +23116,7 @@ addLayer("cells", {
                                 let amt = getBuyableAmount("cells", 111)
                                 let exp = amt.pow(1.1)
                                 let base = new Decimal(1.1)
-                                let init = new Decimal(3)
+                                let init = decimalThree
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -23112,7 +23124,7 @@ addLayer("cells", {
                         },
                         canAfford:() => player.cells.mu.points.gte(tmp.cells.buyables[111].cost),
                         maxAfford(){
-                                let init = new Decimal(3)
+                                let init = decimalThree
                                 let base = new Decimal(1.1)
                                 let exp2 = new Decimal(1.1)
                                 let amt = player.cells.mu.points
@@ -23238,8 +23250,8 @@ addLayer("cells", {
                         cost(){
                                 let amt = getBuyableAmount("cells", 411)
                                 let exp = amt.pow(1.1)
-                                let base = new Decimal(2)
-                                let init = new Decimal(3)
+                                let base = decimalTwo
+                                let init = decimalThree
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -23247,8 +23259,8 @@ addLayer("cells", {
                         },
                         maxAfford(){
                                 let pts = player.cells.iota.points
-                                let init = new Decimal(3)
-                                let base = new Decimal(2)
+                                let init = decimalThree
+                                let base = decimalTwo
                                 let exp = new Decimal(1.1) 
                                 if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).root(exp).plus(1).floor()
@@ -23303,8 +23315,8 @@ addLayer("cells", {
                         cost(){
                                 let amt = getBuyableAmount("cells", 412)
                                 let exp = amt.pow(1.2)
-                                let base = new Decimal(2)
-                                let init = new Decimal(3)
+                                let base = decimalTwo
+                                let init = decimalThree
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -23312,8 +23324,8 @@ addLayer("cells", {
                         },
                         maxAfford(){
                                 let pts = player.cells.iota.points
-                                let init = new Decimal(3)
-                                let base = new Decimal(2)
+                                let init = decimalThree
+                                let base = decimalTwo
                                 let exp = new Decimal(1.2) 
                                 if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).root(exp).plus(1).floor()
@@ -23367,8 +23379,8 @@ addLayer("cells", {
                         cost(){
                                 let amt = getBuyableAmount("cells", 413)
                                 let exp = amt.pow(1.1)
-                                let base = new Decimal(4)
-                                let init = new Decimal(5)
+                                let base = decimalFour
+                                let init = decimalFive
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -23376,8 +23388,8 @@ addLayer("cells", {
                         },
                         maxAfford(){
                                 let pts = player.cells.iota.points
-                                let init = new Decimal(5)
-                                let base = new Decimal(4)
+                                let init = decimalFive
+                                let base = decimalFour
                                 let exp = new Decimal(1.1) 
                                 if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).root(exp).plus(1).floor()
@@ -26099,7 +26111,7 @@ addLayer("or", {
                         return ret
                 }
                 if (hasUpgrade("e", 35)) return decimalOne
-                let ret = new Decimal(.5)
+                let ret = decimalHalf
 
                 if (hasUpgrade("or", 112))      ret = ret.plus(.01 * player.or.upgrades.length)
                 if (hasMilestone("ch", 9) && !hasMilestone("ch", 33)) {
@@ -28790,7 +28802,7 @@ addLayer("or", {
                         getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : 100)
                                 if (pts.lt(1)) return decimalZero
-                                if (pts.eq(1)) return new Decimal(2)
+                                if (pts.eq(1)) return decimalTwo
                                 let exp = decimalOne // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -28860,7 +28872,7 @@ addLayer("or", {
                         cost(){
                                 let amt = getBuyableAmount("or", 202)
                                 let base = new Decimal(player.e.unlocked ? 1 : 5e4)
-                                let exp = new Decimal(2)
+                                let exp = decimalTwo
                                 return amt.pow(amt.times(exp)).times(base)
                         },
                         unlocked(){
@@ -28872,8 +28884,8 @@ addLayer("or", {
                         getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : 5e4)
                                 if (pts.lt(1)) return decimalZero
-                                if (pts.eq(1)) return new Decimal(2)
-                                let exp = new Decimal(2) // if y^y = e^x then y = x/W(x)
+                                if (pts.eq(1)) return decimalTwo
+                                let exp = decimalTwo // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
@@ -28924,7 +28936,7 @@ addLayer("or", {
                         cost(){
                                 let amt = getBuyableAmount("or", 203)
                                 let base = new Decimal(player.e.unlocked ? 1 : 5e45)
-                                let exp = new Decimal(4)
+                                let exp = decimalFour
                                 return amt.pow(amt.times(exp)).times(base)
                         },
                         unlocked(){
@@ -28936,8 +28948,8 @@ addLayer("or", {
                         getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : 5e45)
                                 if (pts.lt(1)) return decimalZero
-                                if (pts.eq(1)) return new Decimal(2)
-                                let exp = new Decimal(4) // if y^y = e^x then y = x/W(x)
+                                if (pts.eq(1)) return decimalTwo
+                                let exp = decimalFour // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
@@ -29033,7 +29045,7 @@ addLayer("or", {
                         getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "5e442")
                                 if (pts.lt(1)) return decimalZero
-                                if (pts.eq(1)) return new Decimal(2)
+                                if (pts.eq(1)) return decimalTwo
                                 let exp = new Decimal(8) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -29101,7 +29113,7 @@ addLayer("or", {
                         getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "1e3486")
                                 if (pts.lt(1)) return decimalZero
-                                if (pts.eq(1)) return new Decimal(2)
+                                if (pts.eq(1)) return decimalTwo
                                 let exp = new Decimal(16) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -29165,7 +29177,7 @@ addLayer("or", {
                         getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "1e17147")
                                 if (pts.lt(1)) return decimalZero
-                                if (pts.eq(1)) return new Decimal(2)
+                                if (pts.eq(1)) return decimalTwo
                                 let exp = new Decimal(32) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -29229,7 +29241,7 @@ addLayer("or", {
                         getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "1e64100")
                                 if (pts.lt(1)) return decimalZero
-                                if (pts.eq(1)) return new Decimal(2)
+                                if (pts.eq(1)) return decimalTwo
                                 let exp = new Decimal(64) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -29293,7 +29305,7 @@ addLayer("or", {
                         getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "1e148127")
                                 if (pts.lt(1)) return decimalZero
-                                if (pts.eq(1)) return new Decimal(2)
+                                if (pts.eq(1)) return decimalTwo
                                 let exp = new Decimal(128) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -29357,7 +29369,7 @@ addLayer("or", {
                         getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "1e289805")
                                 if (pts.lt(1)) return decimalZero
-                                if (pts.eq(1)) return new Decimal(2)
+                                if (pts.eq(1)) return decimalTwo
                                 let exp = new Decimal(256) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -29414,7 +29426,7 @@ addLayer("or", {
                         title: "<u>IN</u>testine",
                         bases(){
                                 let a = new Decimal(10)
-                                let b = new Decimal(5)
+                                let b = decimalFive
                                 let c = new Decimal(1.01)
                                 if (hasUpgrade("tokens", 262)) {
                                         a = decimalOne
@@ -29482,10 +29494,10 @@ addLayer("or", {
                                 if (hasUpgrade("or", 323)) logBase = new Decimal(8)
                                 if (hasUpgrade("or", 325)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 331)) logBase = new Decimal(6)
-                                if (hasUpgrade("an", 25))  logBase = new Decimal(5)
-                                if (hasMilestone("ch", 4)) logBase = new Decimal(4)
-                                if (hasMilestone("an", 22))logBase = new Decimal(3)
-                                if (hasMilestone("ch", 5)) logBase = new Decimal(2)
+                                if (hasUpgrade("an", 25))  logBase = decimalFive
+                                if (hasMilestone("ch", 4)) logBase = decimalFour
+                                if (hasMilestone("an", 22))logBase = decimalThree
+                                if (hasMilestone("ch", 5)) logBase = decimalTwo
                                 let ret = player.tokens.tokens2.total.max(logBase).log(logBase)
                                 
                                 return ret
@@ -29512,10 +29524,10 @@ addLayer("or", {
                                 if (hasUpgrade("or", 323)) logBase = new Decimal(8)
                                 if (hasUpgrade("or", 325)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 331)) logBase = new Decimal(6)
-                                if (hasUpgrade("an", 25))  logBase = new Decimal(5)
-                                if (hasMilestone("ch", 4)) logBase = new Decimal(4)
-                                if (hasMilestone("an", 22))logBase = new Decimal(3)
-                                if (hasMilestone("ch", 5)) logBase = new Decimal(2)
+                                if (hasUpgrade("an", 25))  logBase = decimalFive
+                                if (hasMilestone("ch", 4)) logBase = decimalFour
+                                if (hasMilestone("an", 22))logBase = decimalThree
+                                if (hasMilestone("ch", 5)) logBase = decimalTwo
                                 eformula = eformula.replace("10", formatWhole(logBase))
                                 eformula = eformula.replace("log2.72", "ln")
                                 if (hasAchievement("an", 24) && player.an.achActive[24]) eformula = eformula.replace("log2", "cbrt")
@@ -29610,10 +29622,10 @@ addLayer("or", {
                                 if (hasUpgrade("or", 232)) logBase = new Decimal(8)
                                 if (hasMilestone("or", 22))logBase = new Decimal(7)
                                 if (hasUpgrade("or", 24))  logBase = new Decimal(6)
-                                if (hasMilestone("ch", 6)) logBase = new Decimal(5)
-                                if (hasUpgrade("an", 31))  logBase = new Decimal(4)
-                                if (hasMilestone("an", 23))logBase = new Decimal(3)
-                                if (hasUpgrade("an", 32))  logBase = new Decimal(2)
+                                if (hasMilestone("ch", 6)) logBase = decimalFive
+                                if (hasUpgrade("an", 31))  logBase = decimalFour
+                                if (hasMilestone("an", 23))logBase = decimalThree
+                                if (hasUpgrade("an", 32))  logBase = decimalTwo
                                 let ret = player.or.air.points.max(logBase).log(logBase).max(logBase).log(logBase)
                                 
                                 return ret
@@ -29640,10 +29652,10 @@ addLayer("or", {
                                 if (hasUpgrade("or", 232)) logBase = new Decimal(8)
                                 if (hasMilestone("or", 22))logBase = new Decimal(7)
                                 if (hasUpgrade("or", 24))  logBase = new Decimal(6)
-                                if (hasMilestone("ch", 6)) logBase = new Decimal(5)
-                                if (hasUpgrade("an", 31))  logBase = new Decimal(4)
-                                if (hasMilestone("an", 23))logBase = new Decimal(3)
-                                if (hasUpgrade("an", 32))  logBase = new Decimal(2)
+                                if (hasMilestone("ch", 6)) logBase = decimalFive
+                                if (hasUpgrade("an", 31))  logBase = decimalFour
+                                if (hasMilestone("an", 23))logBase = decimalThree
+                                if (hasUpgrade("an", 32))  logBase = decimalTwo
                                 eformula = eformula.replaceAll("g10", "g" + formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
                                 if (hasMilestone("an", 37)) eformula = eformula.replace("log2(log2(Air)", "log10(Animals)")
@@ -29670,9 +29682,9 @@ addLayer("or", {
                                 if (hasMilestone("ch", 26)) {
                                         a = decimalOne
                                         b = decimalOne
-                                        c = new Decimal(5)
+                                        c = decimalFive
                                 }
-                                if (hasMilestone("an", 43)) c = new Decimal(3)
+                                if (hasMilestone("an", 43)) c = decimalThree
                                 if (hasUpgrade("tokens", 114)) c = new Decimal(1.09)
                                 if (hasMilestone("hu", 14)) c = new Decimal(1.03)
                                 return [a,b,c]
@@ -29771,7 +29783,7 @@ addLayer("or", {
                         bases(){
                                 let a = new Decimal(1e28)
                                 let b = new Decimal(1e5)
-                                let c = new Decimal(2)
+                                let c = decimalTwo
                                 if (hasMilestone("an", 39)) {
                                         a = decimalOne
                                         b = decimalOne
@@ -29840,10 +29852,10 @@ addLayer("or", {
                                 if (hasUpgrade("or", 235))  logBase = new Decimal(8)
                                 if (hasMilestone("or", 25)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 31))   logBase = new Decimal(6)
-                                if (hasUpgrade("an", 23))   logBase = new Decimal(5)
-                                if (hasUpgrade("or", 43))   logBase = new Decimal(4)
-                                if (hasUpgrade("or", 44))   logBase = new Decimal(3)
-                                if (hasUpgrade("or", 45))   logBase = new Decimal(2)
+                                if (hasUpgrade("an", 23))   logBase = decimalFive
+                                if (hasUpgrade("or", 43))   logBase = decimalFour
+                                if (hasUpgrade("or", 44))   logBase = decimalThree
+                                if (hasUpgrade("or", 45))   logBase = decimalTwo
                                 let ret = player.tokens.total.max(logBase).log(logBase)
                                 
                                 return ret
@@ -29870,10 +29882,10 @@ addLayer("or", {
                                 if (hasUpgrade("or", 235))  logBase = new Decimal(8)
                                 if (hasMilestone("or", 25)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 31))   logBase = new Decimal(6)
-                                if (hasUpgrade("an", 23))   logBase = new Decimal(5)
-                                if (hasUpgrade("or", 43))   logBase = new Decimal(4)
-                                if (hasUpgrade("or", 44))   logBase = new Decimal(3)
-                                if (hasUpgrade("or", 45))   logBase = new Decimal(2)
+                                if (hasUpgrade("an", 23))   logBase = decimalFive
+                                if (hasUpgrade("or", 43))   logBase = decimalFour
+                                if (hasUpgrade("or", 44))   logBase = decimalThree
+                                if (hasUpgrade("or", 45))   logBase = decimalTwo
                                 eformula = eformula.replaceAll("g10", "g" + formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
                                 if (hasMilestone("ch", 15)) eformula = eformula.replace("log2(Tokens)", "Chromosomes")
@@ -29897,7 +29909,7 @@ addLayer("or", {
                         bases(){
                                 let a = new Decimal(1e58)
                                 let b = new Decimal(1e8)
-                                let c = new Decimal(4)
+                                let c = decimalFour
                                 if (hasMilestone("ch", 33)) {
                                         a = decimalOne
                                         b = decimalOne
@@ -29966,10 +29978,10 @@ addLayer("or", {
                                 if (hasUpgrade("or", 334))  logBase = new Decimal(8)
                                 if (hasUpgrade("or", 25))   logBase = new Decimal(7)
                                 if (hasUpgrade("or", 335))  logBase = new Decimal(6)
-                                if (hasUpgrade("an", 24))   logBase = new Decimal(5)
-                                if (hasMilestone("ch", 1))  logBase = new Decimal(4)
-                                if (hasMilestone("ch", 2))  logBase = new Decimal(3)
-                                if (hasMilestone("ch", 3))  logBase = new Decimal(2)
+                                if (hasUpgrade("an", 24))   logBase = decimalFive
+                                if (hasMilestone("ch", 1))  logBase = decimalFour
+                                if (hasMilestone("ch", 2))  logBase = decimalThree
+                                if (hasMilestone("ch", 3))  logBase = decimalTwo
                                 let ret = player.or.contaminants.points.max(logBase).log(logBase).max(logBase).log(logBase)
                                 
                                 return ret
@@ -29996,10 +30008,10 @@ addLayer("or", {
                                 if (hasUpgrade("or", 334))  logBase = new Decimal(8)
                                 if (hasUpgrade("or", 25))   logBase = new Decimal(7)
                                 if (hasUpgrade("or", 335))  logBase = new Decimal(6)
-                                if (hasUpgrade("an", 24))   logBase = new Decimal(5)
-                                if (hasMilestone("ch", 1))  logBase = new Decimal(4)
-                                if (hasMilestone("ch", 2))  logBase = new Decimal(3)
-                                if (hasMilestone("ch", 3))  logBase = new Decimal(2)
+                                if (hasUpgrade("an", 24))   logBase = decimalFive
+                                if (hasMilestone("ch", 1))  logBase = decimalFour
+                                if (hasMilestone("ch", 2))  logBase = decimalThree
+                                if (hasMilestone("ch", 3))  logBase = decimalTwo
                                 eformula = eformula.replaceAll("g10", "g" + formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
                                 if (hasMilestone("ch", 24)) eformula = eformula.replace("log2(log2(Contaminants)", "sqrt(log10(Organs))")
@@ -30024,7 +30036,7 @@ addLayer("or", {
                         bases(){
                                 let a = new Decimal(1e300)
                                 let b = new Decimal(1e17)
-                                let c = new Decimal(3)
+                                let c = decimalThree
                                 if (hasMilestone("an", 43)) {
                                         a = decimalOne 
                                         b = decimalOne
@@ -30093,11 +30105,11 @@ addLayer("or", {
                                 if (hasMilestone("an", 7)) logBase = new Decimal(8)
                                 if (hasMilestone("an", 8)) logBase = new Decimal(7)
                                 if (hasMilestone("an", 9)) logBase = new Decimal(6)
-                                if (hasUpgrade("or", 352)) logBase = new Decimal(5)
-                                if (hasUpgrade("or", 353)) logBase = new Decimal(4)
-                                if (hasUpgrade("or", 354)) logBase = new Decimal(3)
+                                if (hasUpgrade("or", 352)) logBase = decimalFive
+                                if (hasUpgrade("or", 353)) logBase = decimalFour
+                                if (hasUpgrade("or", 354)) logBase = decimalThree
                                 if (hasUpgrade("or", 355)) logBase = new Decimal(Math.E)
-                                if (hasUpgrade("an", 13))  logBase = new Decimal(2)
+                                if (hasUpgrade("an", 13))  logBase = decimalTwo
                                 let ret = player.or.energy.points.max(logBase).log(logBase).max(10).log10()
                                 
                                 return ret
@@ -30124,11 +30136,11 @@ addLayer("or", {
                                 if (hasMilestone("an", 7)) logBase = new Decimal(8)
                                 if (hasMilestone("an", 8)) logBase = new Decimal(7)
                                 if (hasMilestone("an", 9)) logBase = new Decimal(6)
-                                if (hasUpgrade("or", 352)) logBase = new Decimal(5)
-                                if (hasUpgrade("or", 353)) logBase = new Decimal(4)
-                                if (hasUpgrade("or", 354)) logBase = new Decimal(3)
+                                if (hasUpgrade("or", 352)) logBase = decimalFive
+                                if (hasUpgrade("or", 353)) logBase = decimalFour
+                                if (hasUpgrade("or", 354)) logBase = decimalThree
                                 if (hasUpgrade("or", 355)) logBase = new Decimal(Math.E)
-                                if (hasUpgrade("an", 13))  logBase = new Decimal(2)
+                                if (hasUpgrade("an", 13))  logBase = decimalTwo
                                 eformula = eformula.replaceAll("(log10", "(log" + formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
                                 if (hasMilestone("an", 34)) eformula = eformula.replace("log10(log2(Energy)", "Nucleuses")
@@ -30157,7 +30169,7 @@ addLayer("or", {
                                 if (hasMilestone("ch", 29)) {
                                         a = decimalOne
                                         b = decimalOne
-                                        c = new Decimal(2)
+                                        c = decimalTwo
                                 }
                                 if (hasUpgrade("tokens", 135)) c = new Decimal(1.49)
                                 if (hasMilestone("hu", 14)) c = new Decimal(1.07)
@@ -30221,11 +30233,11 @@ addLayer("or", {
                                 if (hasUpgrade("or", 234)) logBase = new Decimal(8)
                                 if (hasUpgrade("or", 332)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 333)) logBase = new Decimal(6)
-                                if (hasUpgrade("an", 14))  logBase = new Decimal(5)
-                                if (hasUpgrade("or", 42))  logBase = new Decimal(4)
-                                if (hasUpgrade("an", 21))  logBase = new Decimal(3)
+                                if (hasUpgrade("an", 14))  logBase = decimalFive
+                                if (hasUpgrade("or", 42))  logBase = decimalFour
+                                if (hasUpgrade("an", 21))  logBase = decimalThree
                                 if (hasUpgrade("an", 22))  logBase = new Decimal(Math.E)
-                                if (hasMilestone("an", 20))logBase = new Decimal(2)
+                                if (hasMilestone("an", 20))logBase = decimalTwo
                                 let ret = player.or.points.max(logBase).log(logBase)
                                 
                                 return ret
@@ -30252,11 +30264,11 @@ addLayer("or", {
                                 if (hasUpgrade("or", 234)) logBase = new Decimal(8)
                                 if (hasUpgrade("or", 332)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 333)) logBase = new Decimal(6)
-                                if (hasUpgrade("an", 14))  logBase = new Decimal(5)
-                                if (hasUpgrade("or", 42))  logBase = new Decimal(4)
-                                if (hasUpgrade("an", 21))  logBase = new Decimal(3)
+                                if (hasUpgrade("an", 14))  logBase = decimalFive
+                                if (hasUpgrade("or", 42))  logBase = decimalFour
+                                if (hasUpgrade("an", 21))  logBase = decimalThree
                                 if (hasUpgrade("an", 22))  logBase = new Decimal(Math.E)
-                                if (hasMilestone("an", 20))logBase = new Decimal(2)
+                                if (hasMilestone("an", 20))logBase = decimalTwo
                                 eformula = eformula.replace("g10", "g" + formatWhole(logBase))
                                 eformula = eformula.replace("log2.72", "ln")
                                 if (hasMilestone("nu", 8)) eformula = eformula.replace("log2(Organs)", "Tokens")
@@ -30459,11 +30471,11 @@ addLayer("or", {
                                 if (hasUpgrade("or", 342)) logBase = new Decimal(8)
                                 if (hasUpgrade("or", 343)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 344)) logBase = new Decimal(6)
-                                if (hasMilestone("an", 13)) logBase = new Decimal(5)
-                                if (hasUpgrade("or", 345)) logBase = new Decimal(4)
-                                if (hasUpgrade("or", 34)) logBase = new Decimal(3)
+                                if (hasMilestone("an", 13)) logBase = decimalFive
+                                if (hasUpgrade("or", 345)) logBase = decimalFour
+                                if (hasUpgrade("or", 34)) logBase = decimalThree
                                 if (hasUpgrade("or", 35)) logBase = new Decimal(Math.E)
-                                if (hasUpgrade("or", 351)) logBase = new Decimal(2)
+                                if (hasUpgrade("or", 351)) logBase = decimalTwo
                                 let ret = player.or.buyables[412].max(logBase).log(logBase)
                                 
                                 return ret
@@ -30490,11 +30502,11 @@ addLayer("or", {
                                 if (hasUpgrade("or", 342)) logBase = new Decimal(8)
                                 if (hasUpgrade("or", 343)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 344)) logBase = new Decimal(6)
-                                if (hasMilestone("an", 13)) logBase = new Decimal(5)
-                                if (hasUpgrade("or", 345)) logBase = new Decimal(4)
-                                if (hasUpgrade("or", 34)) logBase = new Decimal(3)
+                                if (hasMilestone("an", 13)) logBase = decimalFive
+                                if (hasUpgrade("or", 345)) logBase = decimalFour
+                                if (hasUpgrade("or", 34)) logBase = decimalThree
                                 if (hasUpgrade("or", 35)) logBase = new Decimal(Math.E)
-                                if (hasUpgrade("or", 351)) logBase = new Decimal(2)
+                                if (hasUpgrade("or", 351)) logBase = decimalTwo
                                 eformula = eformula.replace("10", formatWhole(logBase))
                                 eformula = eformula.replace("log2.72", "ln")
                                 if (hasMilestone("an", 24)) eformula = eformula.replace("log2(in<u>TES</u>tine)", "sqrt(intes<u>TINE</u>)")
@@ -31662,10 +31674,10 @@ addLayer("an", {
                 return ret.max(1)
         },
         getGainExp(){
-                let ret = new Decimal(1/3)
+                let ret = decimalThird
 
-                if (hasUpgrade("an", 12)) ret = new Decimal(1/2)
-                if (hasUpgrade("ch", 14)) ret = new Decimal(1)
+                if (hasUpgrade("an", 12)) ret = decimalHalf
+                if (hasUpgrade("ch", 14)) ret = decimalOne
 
                 if (hasUpgrade("ch", 24)) {
                         let times = hasAchievement("an", 23) && !player.an.achActive[23] ? 3 : 1
@@ -36650,7 +36662,7 @@ addLayer("sp", {
                         description(){
                                 return "The Species effect multiplies Animal gain"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 11)
@@ -36662,7 +36674,7 @@ addLayer("sp", {
                         description(){
                                 return "The Species effect multiplies Organ gain per resets<sup>2</sup> (max 64 resets)"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 12)
@@ -36675,7 +36687,7 @@ addLayer("sp", {
                                 let a = "The Species effect multiplies " + makePurple("OB") + " and " + makeBlue("DB")
                                 return a + " gain per Token II<sup>1.5</sup>"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 13)
@@ -36687,7 +36699,7 @@ addLayer("sp", {
                         description(){
                                 return "The Species effect multiplies Air gain per Token<sup>.7</sup>"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 14)
@@ -36700,7 +36712,7 @@ addLayer("sp", {
                                 if (hasUpgrade("sp", 65) && player.shiftAlias) return "The Species effect multiplies Contaminant gain per (I'm levels)<sup>" + makeOrange(".9") + "</sup>"
                                 return "The Species effect multiplies Contaminant gain per (I'm levels)<sup>.8</sup>"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 15)
@@ -36713,7 +36725,7 @@ addLayer("sp", {
                                 if (hasUpgrade("sp", 71) && player.shiftAlias) return "The Species effect multiplies each Energy buyable amount gain per (its&nbsplevels)<sup>" + makeOrange(".75") + "</sup>"
                                 return "The Species effect multiplies each Energy buyable amount gain per sqrt(its levels)"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 21)
@@ -36726,7 +36738,7 @@ addLayer("sp", {
                                 if (hasUpgrade("sp", 72) && player.shiftAlias) return "The Species effect multiplies row 8 Taxonomy amounts per Sapien level/" + makeOrange("8")
                                 return "The Species effect multiplies row 8 Taxonomy amounts per Sapien level/15"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 22)
@@ -36739,7 +36751,7 @@ addLayer("sp", {
                                 if (hasUpgrade("sp", 73) && player.shiftAlias) return "The Species effect multiplies row 7 Taxonomy amounts gain per (10&nbsp+&nbspChromosomes)<sup>" + makeOrange(".6") + "</sup>"
                                 return "The Species effect multiplies row 7 Taxonomy amounts gain per sqrt(10 + Chromosomes)"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 23)
@@ -36752,7 +36764,7 @@ addLayer("sp", {
                                 if (hasUpgrade("sp", 74) && player.shiftAlias) return "The Species effect multiplies row 6 Taxonomy amounts gain per (8&nbsp+&nbspNucleuses)<sup>" + makeOrange(".7") + "</sup>"
                                 return "The Species effect multiplies row 6 Taxonomy amounts per cbrt(8 + Nucleuses)"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 24)
@@ -36765,7 +36777,7 @@ addLayer("sp", {
                                 if (hasUpgrade("sp", 75) && player.shiftAlias) return "The Species effect multiplies row 5 Taxonomy amounts per " + makeOrange("upgrade")
                                 return "The Species effect multiplies row 5 Taxonomy amounts per sqrt(3 + resets) (max 22 resets)"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 25)
@@ -36778,7 +36790,7 @@ addLayer("sp", {
                                 if (hasUpgrade("sp", 81) && player.shiftAlias) return "The Species effect multiplies row 4 Taxonomy amounts per Nucleuses/" + makeOrange("20")
                                 return "The Species effect multiplies row 4 Taxonomy amounts per Nucleuses/50"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 31)
@@ -36791,7 +36803,7 @@ addLayer("sp", {
                                 if (hasUpgrade("sp", 82) && player.shiftAlias) return "The Species effect multiplies row 3 Taxonomy amounts per log2(Chromosomes)/" + makeOrange("2")
                                 return "The Species effect multiplies row 3 Taxonomy amounts per log2(Chromosomes)/25"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 32)
@@ -36804,7 +36816,7 @@ addLayer("sp", {
                                 if (hasUpgrade("sp", 83) && player.shiftAlias) return "The Species effect multiplies row 2 Taxonomy amounts per log10(Token II)/" + makeOrange("4")
                                 return "The Species effect multiplies row 2 Taxonomy amounts per log10(Token II)/25"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 33)
@@ -36816,7 +36828,7 @@ addLayer("sp", {
                         description(){
                                 return "The Species effect multiplies base DNA gain per sqrt(Token) (capped at 200,000)"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 34)
@@ -36829,7 +36841,7 @@ addLayer("sp", {
                                 if (hasUpgrade("sp", 85) && player.shiftAlias) return "Animalia I amount<sup>.06</sup> " + makeOrange("multiplies") + " Bottom Quarks' base"
                                 return "Animalia I amount<sup>.06</sup> adds to Bottom Quarks' base"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 35)
@@ -36841,7 +36853,7 @@ addLayer("sp", {
                         description(){
                                 return "Animalia III amount<sup>sqrt(Nucleuses)</sup> multiplies in<u>tes</u>TINE gain"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 41)
@@ -36853,7 +36865,7 @@ addLayer("sp", {
                         description(){
                                 return "Animalia IV amount<sup>8</sup> multiplies inTES<u>tine</u> gain"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 42)
@@ -36865,7 +36877,7 @@ addLayer("sp", {
                         description(){
                                 return "Eubacteria I amount<sup>sqrt(Token II)</sup> multiplies <u>in</u>tesTINE gain"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 43)
@@ -36877,7 +36889,7 @@ addLayer("sp", {
                         description(){
                                 return "Eubacteria II amount<sup>Nucleuses<sup>6</sup></sup> multiplies Contaminant gain"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 44)
@@ -36889,7 +36901,7 @@ addLayer("sp", {
                         description(){
                                 return "Archaebacteria amount<sup>Nucleuses<sup>9</sup></sup> multiplies DNA gain"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 45)
@@ -38525,7 +38537,7 @@ addLayer("e", {
                 return baseGain.plus(player.e.challenges[11] ? 0 : 11).root(tmp.e.getGainExp).plus(tmp.e.getResetSub).pow10().max("1e1882")
         },
         getGainExp(){
-                let ret = new Decimal(1/3)
+                let ret = decimalThird
 
                 if (hasMilestone("e", 12))      ret = new Decimal(.04).times(player.e.challenges[11]).plus(.2)
                 if (hasUpgrade("pl", 11))       ret = ret.plus(player.pl.points.div(10).min(2e5))
@@ -38757,7 +38769,7 @@ addLayer("e", {
                         description(){
                                 return "Each milestone subtracts 1 from the Mastery III base and Strange Quark coefficient is 5"
                         },
-                        cost:() => new Decimal(3),
+                        cost:() => decimalThree,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("e", 11)
@@ -39791,7 +39803,7 @@ addLayer("pl", {
                 return new Decimal(10)
         },
         getCostExp(){
-                let ret = new Decimal(2)
+                let ret = decimalTwo
 
                 if (inChallenge("hu", 21))      ret = ret.plus(.1)
                 if (inChallenge("hu", 52))     ret = ret.plus(.2)
@@ -40185,9 +40197,9 @@ addLayer("pl", {
                                 }
                                 if (hasMilestone("hu", 48)) {
                                         if (player.pl.points.gte(981540))  ret = new Decimal(10)
-                                        if (player.pl.points.gte(1015390)) ret = new Decimal(5)
-                                        if (player.pl.points.gte(1054330)) ret = new Decimal(3)
-                                        if (player.pl.points.gte(1148770)) ret = new Decimal(2)
+                                        if (player.pl.points.gte(1015390)) ret = decimalFive
+                                        if (player.pl.points.gte(1054330)) ret = decimalThree
+                                        if (player.pl.points.gte(1148770)) ret = decimalTwo
                                 }
 
                                 if (hasChallenge("hu", 12))     ret = new Decimal("1e1000")
@@ -40196,7 +40208,7 @@ addLayer("pl", {
                                 }
                                 if (hasUpgrade("hu", 115))      ret = new Decimal(10)
                                 if (hasUpgrade("hu", 145) && player.hu.points.gte("1e114260")) {
-                                        ret = new Decimal(2)
+                                        ret = decimalTwo
                                 }
 
                                 return ret
@@ -40288,7 +40300,7 @@ addLayer("pl", {
                                 if (hasMilestone("hu", 52) && player.hu.points.gte("1e6591")) ret = new Decimal(50)
                                 if (hasUpgrade("hu", 73)) {
                                         if (player.hu.points.gte("3e12683")) ret = new Decimal(8)
-                                        if (player.hu.points.gte("3e12704")) ret = new Decimal(2)
+                                        if (player.hu.points.gte("3e12704")) ret = decimalTwo
                                 }
                                 if (hasUpgrade("hu", 124))      ret = new Decimal(1e4)
 
@@ -40381,7 +40393,7 @@ addLayer("pl", {
                         description(){
                                 return "<bdi style='font-size: 80%'>Mastery V's double exponent is 1.25 and each Plant adds 1 to the Species and Animal gain exponents and .1 to the Ecosystem gain exponent</bdi>"
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("pl", 11)
@@ -40393,7 +40405,7 @@ addLayer("pl", {
                         description(){
                                 return "Per upgrade per Mastery Token past 500 gain 1% more Biomass"
                         },
-                        cost:() => new Decimal(4),
+                        cost:() => decimalFour,
                         unlocked(){
                                 return player.pl.biomass.best.gte(2e16) || player.pl.best.gte(4) || hasUpgrade("pl", 12) || player.hu.unlocked
                         }, // hasUpgrade("pl", 12)
@@ -41106,7 +41118,7 @@ addLayer("hu", {
                 return ret
         },
         getGainExp(){
-                let ret = new Decimal(3)
+                let ret = decimalThree
 
                 if (hasUpgrade("hu", 13))       ret = ret.plus(player.hu.upgrades.length - 2)
                 if (hasMilestone("hu", 76))     ret = decimalZero
@@ -42391,7 +42403,7 @@ addLayer("hu", {
                                 return ret
                         },
                         getCostBase(){
-                                let base = new Decimal(5)
+                                let base = decimalFive
 
                                 base = base.sub(tmp.hu.buyables[22].effect.min(2.6))
                                 if (hasMilestone("hu", 75)) {
@@ -42399,7 +42411,7 @@ addLayer("hu", {
                                         base = base.sub(player.hu.buyables[22].sub(4300).div(1e4).min(.12).max(0))
                                 }
 
-                                if (hasUpgrade("hu", 111))      base = new Decimal(2)
+                                if (hasUpgrade("hu", 111))      base = decimalTwo
                                 if (hasUpgrade("hu", 145)) {
                                         base = base.sub(player.hu.buyables[33].sub(3300).max(0).min(1000).div(1e4))
                                 }
@@ -43121,7 +43133,7 @@ addLayer("hu", {
                                 data.timeSinceLastBuy *= tmp.hu.buyables.timesPerBuyables
                         },
                         base(){
-                                let ret = new Decimal(4)
+                                let ret = decimalFour
 
                                 if (hasUpgrade("hu", 65)) {
                                         if (hasMilestone("r", 6)) ret = new Decimal(15)
@@ -46325,7 +46337,7 @@ addLayer("mc", {
                         cost(){
                                 let exp = 2
                                 if (hasUpgrade("mc", 11)) exp -= Math.min(900, player.ach.achievements.length) / 1000
-                                return new Decimal(2).pow(getBuyableAmount("mc", 11).pow(exp))
+                                return decimalTwo.pow(getBuyableAmount("mc", 11).pow(exp))
                         },
                         canAfford:() => player.mc.points.gte(tmp.mc.buyables[11].cost),
                         buy(){
@@ -46348,7 +46360,7 @@ addLayer("mc", {
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         base(){
-                                let ret = new Decimal(2)
+                                let ret = decimalTwo
 
                                 if (hasUpgrade("mc", 12)) ret = ret.plus(player.nu.points.sub(25).max(0).div(100))
 
@@ -48749,7 +48761,7 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
-                                return new Decimal(2).plus(tmp.mini.buyables[23].effect)
+                                return decimalTwo.plus(tmp.mini.buyables[23].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[11].base.pow(player.mini.buyables[11])
@@ -48807,7 +48819,7 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
-                                return new Decimal(2).plus(tmp.mini.buyables[23].effect)
+                                return decimalTwo.plus(tmp.mini.buyables[23].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[12].base.pow(player.mini.buyables[12])
@@ -48860,7 +48872,7 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
-                                return new Decimal(2).plus(tmp.mini.buyables[23].effect)
+                                return decimalTwo.plus(tmp.mini.buyables[23].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[13].base.pow(player.mini.buyables[13])
@@ -48918,7 +48930,7 @@ addLayer("mini", {
                         },
                         initBase(){
                                 if (inChallenge("n", 11)) return decimalZero
-                                return new Decimal(2)
+                                return decimalTwo
                         },
                         base(){
                                 let ret = tmp.mini.buyables[21].initBase
@@ -49049,7 +49061,7 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
-                                let ret = new Decimal(3)
+                                let ret = decimalThree
                                 if (hasUpgrade("h", 52)) ret = ret.plus(1)
                                 ret = ret.plus(tmp.mini.buyables[52].effect)
                                 return ret
@@ -49174,7 +49186,7 @@ addLayer("mini", {
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
                                 
-                                let ret = new Decimal(2)
+                                let ret = decimalTwo
 
                                 ret = ret.plus(tmp.sci.buyables[23].effect)
                                 if (hasUpgrade("sci", 303)) ret = ret.plus(tmp.sci.upgrades[303].effect)
@@ -50685,7 +50697,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(7)
                         },
                         base(){
-                                return new Decimal(2).plus(tmp.mini.buyables[131].effect)
+                                return decimalTwo.plus(tmp.mini.buyables[131].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[122].base.pow(player.mini.buyables[122])
@@ -55075,7 +55087,7 @@ addLayer("tokens", {
                         base(){
                                 if (hasUpgrade("cells", 31)) return decimalOne
                                 if (hasMilestone("cells", 30)){
-                                        let ret = new Decimal(2)
+                                        let ret = decimalTwo
 
                                         if (hasMilestone("cells", 48) && !player.extremeMode) {
                                                 ret = ret.times(Decimal.pow(2, player.cells.milestones.length))
@@ -55894,8 +55906,8 @@ addLayer("tokens", {
                                 }
                                 if (hasUpgrade("tokens", 283))  return new Decimal(7)
                                 if (hasUpgrade("e", 23))        return new Decimal(6)
-                                if (hasUpgrade("e", 11))        return new Decimal(5)
-                                if (hasMilestone("ch", 34))     return new Decimal(4)
+                                if (hasUpgrade("e", 11))        return decimalFive
+                                if (hasMilestone("ch", 34))     return decimalFour
                                 if (hasUpgrade("or", 111))      return new Decimal(10)
                                 let ret = new Decimal(10)
                                 if (hasUpgrade("t", 134))       ret = ret.plus(.7)
@@ -55998,7 +56010,7 @@ addLayer("tokens", {
                                 }
                                 if (hasMilestone("hu", 41))     return new Decimal(36)
                                 if (hasMilestone("hu", 26))     return new Decimal(.6)
-                                if (hasMilestone("hu", 13))     return new Decimal(.5)
+                                if (hasMilestone("hu", 13))     return decimalHalf
                                 if (hasUpgrade("ch", 42))       return player.nu.best.div(1000).min(.14)
                                 if (hasUpgrade("ch", 33))       return new Decimal(.012)
                                 if (hasMilestone("an", 29))     return new Decimal(.011)
@@ -56921,7 +56933,7 @@ addLayer("tokens", {
                 213: {
                         title: "Mastery VI",
                         costExp(){
-                                let exp = new Decimal(1/3)
+                                let exp = decimalThird
 
                                 if (hasUpgrade("hu", 143)) exp = new Decimal(.2)
 
@@ -57066,7 +57078,7 @@ addLayer("tokens", {
                 214: {
                         title: "Mastery VII",
                         costExp(){
-                                let exp = new Decimal(1/2)
+                                let exp = decimalHalf
 
                                 return exp
                         },
@@ -57662,7 +57674,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 22)
                         },
                         effect(){
-                                let c = new Decimal(4) // red c red d
+                                let c = decimalFour // red c red d
                                 // i want df/dt = X and you can upgrade X with stuff and there is prestige
                                 // for d simialr concept but there is a wacka mole game that gives buffs
                                 c = c.plus(tmp.mini.buyables[81].effect)
@@ -57771,7 +57783,7 @@ addLayer("tokens", {
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[11].cost)) return false
                                 return true
                         },
-                        cost:() => new Decimal(3),
+                        cost:() => decimalThree,
                         currencyLocation:() => player.tokens.coins,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
@@ -57799,7 +57811,7 @@ addLayer("tokens", {
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[21].cost)) return false
                                 return player.p.unlocked || hasMilestone("n", 5) || !hasUpgrade("tokens", 22) || hasUpgrade("tokens", 42)
                         },
-                        cost:() => new Decimal(5),
+                        cost:() => decimalFive,
                         currencyLocation:() => player.tokens.coins,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
@@ -57827,7 +57839,7 @@ addLayer("tokens", {
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[22].cost)) return false
                                 return player.p.unlocked || hasMilestone("n", 5) || !hasUpgrade("tokens", 21) || hasUpgrade("tokens", 42)
                         },
-                        cost:() => new Decimal(5),
+                        cost:() => decimalFive,
                         currencyLocation:() => player.tokens.coins,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
