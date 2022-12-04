@@ -41828,8 +41828,8 @@ addLayer("hu", {
                         },
                         description(){
                                 if (player.shiftAlias) return "(max 2650 times)"
-                                if (player.r.unlocked) return "Mastery VII base is 3.8 - <i>Hual</i> levels / 1000"
-                                return "Mastery VII base is 3.8 - <i>Hual</i> levels / 1000 and costs Thoughts, autobuy <i>IttIa</i>, and bulk 10x Token II buyables"
+                                if (player.r.unlocked) return "Mastery VII base is 3.7 - <i>Hual</i> levels / 1000"
+                                return "Mastery VII base is 3.7 - <i>Hual</i> levels / 1000 and costs Thoughts, autobuy <i>IttIa</i>, and bulk 10x Token II buyables"
                         },
                         cost:() => new Decimal("1e77386"),
                         unlocked(){
@@ -41917,7 +41917,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XLVIII"
                         },
                         description(){
-                                return "No longer multiply the Token II via Animal base by 2.3 but its exponent is .16 and at 1e92,297 Humans the Mastery III base is 1.383"
+                                return "No longer multiply the Token II via Animal divider by 3.2 but its exponent is .16 and at 1e92,297 Humans the Mastery III base is 1.383"
                         },
                         cost:() => new Decimal("1e90830"),
                         unlocked(){
@@ -45445,7 +45445,7 @@ addLayer("hu", {
                         fullDisplay(){
                                 let a = "All right column challenges"
                                 let b = "Goal: 40,343,000 Plants"
-                                let c = "Reward: Human Milestone 75 now longer affects Human gain, Mastery VI's base is 1.005"
+                                let c = "Reward: Human Milestone 75 now longer affects Human gain, Mastery VI's base is 1.004"
                                 c += ", each 20th <i>Hual</i> level past 1561 halves its cost base (max 15 times, becomes every 21st / 22nd etc. for times 6+)"
                                 c += ", and at 1e75,950 Humans the <i>Badwaftapw</i> base is .172 and the Token II via Animal exponent is .18"
                                 if (hasMilestone("r", 2)) {
