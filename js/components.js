@@ -192,6 +192,92 @@ function loadVue() {
 		`
 	})
 
+	Vue.component("chem1", {
+		props: ['layer', 'data'],
+		template: `
+		<div class="upgTable">
+			<div class="upgRow">
+				<div class="upgAlign">
+					<chemClickable :name = '"H"'></chemClickable>
+				</div>
+				<div>
+					<blank :data='["360px", "60px"]'> </blank>
+				</div>
+				<div class="upgAlign" v-if="data[0]">
+					<chemClickable :name = '"He"'></chemClickable>
+				</div>
+			</div>
+			<div class="upgRow">
+				<div class="upgAlign">
+					<chemClickable :name = '"Li"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"Be"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"B"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"C"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"N"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"O"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"F"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[0]">
+					<chemClickable :name = '"Ne"'></chemClickable>
+				</div>
+			</div>
+			<div class="upgRow">
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"Na"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"Mg"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"Al"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"Si"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"P"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"S"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"Cl"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[0] && data[1]">
+					<chemClickable :name = '"Ar"'></chemClickable>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
+	Vue.component("chemClickable", { // 
+		props: ['name'],
+		template: `
+			<button class = "mediumUpg can" v-on:mousedown="handleMouseEvent" v-bind:style="name==player.chem.focus ? {'background-color': '#AA5555'} : {}">
+			<h2 v-html="name">x</h2><br><bdi style='font-size: 50%'>Amount:<br>1234</bdi>
+			</button>
+		`,
+		methods: {
+			handleMouseEvent(event) {
+				player.chem.focus = this.name
+			}
+		}
+	})
+
+
 	Vue.component('upgrades', {
 		props: ['layer', 'data'],
 		template: `

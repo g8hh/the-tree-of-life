@@ -45686,6 +45686,8 @@ addLayer("r", {
         getGainExp(){
                 let ret = new Decimal(.25)
 
+                if (hasUpgrade("r", 11))        ret = ret.plus(player.r.upgrades.length * .015)
+
                 return ret
         },
         getBaseGain(){
@@ -45750,9 +45752,9 @@ addLayer("r", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Research I"
                         },
                         description(){
-                                return "idk yet"
+                                return "Unlock <b>Chemistry</b> and per upgrade add .015 to the Researcher gain exponent" //  and subtract 1 from the subtractor (max 9)
                         },
-                        cost:() => new Decimal(1e100),
+                        cost:() => new Decimal(100),
                         unlocked(){
                                 return true
                         }, // hasUpgrade("r", 11)
@@ -46118,6 +46120,115 @@ addLayer("r", {
                 }
                 
                 doReset("e", true)
+        },
+})
+
+addLayer("chem", {
+        name: "Workers", 
+        symbol: "C", 
+        position: 8, 
+        startData(){ return {
+                unlocked: false,
+		points: decimalOne,
+                total: decimalOne,
+                abtime: 0,
+                time: 0,
+                times: 0,
+                passiveTime: 0, 
+                focus: "H",
+        }},
+        color: "#AA0456",
+        branches: [],
+        requires:() => new Decimal("1e115651"), 
+        resource: "Workers",
+        type: "none",
+        update(diff){
+                let data = player.chem
+                
+                if (hasUpgrade("r", 11)) data.unlocked = true
+        },
+        row: 2,
+        layerShown(){
+                if (tmp.chem.deactivated) return false
+                return player.chem.unlocked || hasUpgrade("r", 11)
+        },
+        upgrades: {
+                rows: 5,
+                cols: 5,
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chemistry I"
+                        },
+                        description(){
+                                return "idk yet" //  and subtract 1 from the subtractor (max 9)
+                        },
+                        cost:() => new Decimal(1000),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("chem", 11)
+                },
+        },
+        milestones: {
+                1: {
+                        requirementDescription(){
+                                return "1 Researcher"
+                        },
+                        done(){
+                                return false
+                        },
+                        unlocked(){
+                                return false
+                        },
+                        effectDescription(){
+                                return "Reward: Keep a Human reset and milestone per reset, keep all prior autobuyers, buy each Human buyable once per second, triple Human reset gain, and per milestone add 1 to the <i>Tgwitlcwl</i> effect (inside of log2)."
+                        },
+                }, // hasMilestone("chem", 1)
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: [
+                                "main-display",
+                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                "blank",
+                                ["upgrades", [1,2,3,4,5,6,7,8]],
+                        ],
+                        unlocked(){
+                                return false
+                        },
+                },
+                "Milestones": {
+                        content: [
+                                "main-display",
+                                "milestones",
+                        ],
+                        unlocked(){
+                                return false
+                        },
+                },
+                "Chemistry 1": {
+                        content: [
+                                "main-display",
+                                ["chem1", [false, false]], // first is nobel gases, second is third row
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Info": {
+                        content: [
+                                "main-display",
+                                ["display-text", function(){
+                                        let a = "Welcome to <b>Chemistry</b>!"
+                                        
+                                        return a
+                                }],
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+        },
+        doReset(layer){
         },
 })
 
