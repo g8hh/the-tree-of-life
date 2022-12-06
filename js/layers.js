@@ -39895,6 +39895,17 @@ addLayer("pl", {
                 },
                 getBaseGain(){
                         if (!hasMilestone("e", 17)) return decimalZero
+                        if (hasUpgrade("r", 12)) {
+                                let exp = player.tokens.mastery_tokens.total.plus(player.nu.points.times(2))
+                                
+                                let ret = Decimal.pow(1.2824319950172338, exp) // 1.01 ** 25
+
+                                if (ret.gt("e15e6")) ret = ret.log10().times(6e7).sqrt().sub(15e6).pow10()
+
+                                ret = ret.times(tmp.pl.biomass.buyablesEffect)
+
+                                return ret
+                        }
                         
                         let ret = player.e.points.max(10).log10().sub(hasMilestone("pl", 4) ? 0 : 100).max(0)
 
@@ -40221,14 +40232,14 @@ addLayer("pl", {
                         cost(){
                                 let init = tmp.pl.buyables[13].getInit
                                 let base = tmp.pl.buyables[13].getCostBase
-                                let exp = new Decimal(hasUpgrade("hu", 125) ? 1.5 : hasMilestone("hu", 48) ? 1.6 : 1.7)
+                                let exp = new Decimal(hasUpgrade("r", 12) ? 1.4 : hasUpgrade("hu", 125) ? 1.5 : hasMilestone("hu", 48) ? 1.6 : 1.7)
 
                                 return base.pow(player.pl.buyables[13].pow(exp)).times(init)
                         },
                         getMaxAfford(){
                                 let init = tmp.pl.buyables[13].getInit
                                 let base = tmp.pl.buyables[13].getCostBase
-                                let exp = new Decimal(hasUpgrade("hu", 125) ? 1.5 : hasMilestone("hu", 48) ? 1.6 : 1.7)
+                                let exp = new Decimal(hasUpgrade("r", 12) ? 1.4 : hasUpgrade("hu", 125) ? 1.5 : hasMilestone("hu", 48) ? 1.6 : 1.7)
 
                                 let pts = player.pl.biomass.points.div(init)
                                 if (pts.lt(1)) return decimalZero
@@ -40286,6 +40297,7 @@ addLayer("pl", {
                                 cost2 = cost2.replace("M1*", "").replace("M", "")
                                 if (hasMilestone("hu", 48))     cost2 = cost2.replace("1.7", "1.6")
                                 if (hasUpgrade("hu", 125))      cost2 = cost2.replace("1.6", "1.5")
+                                if (hasUpgrade("r", 12))        cost2 = cost2.replace("1.5", "1.4")
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -45721,6 +45733,11 @@ addLayer("r", {
         getGainMult(){ // researcher gain reseachergain regain re gain rgain r gain researchers gain researchersgain 
                 let ret = decimalOne
 
+                if (player.chem.amount.He.gte(10)) {
+                        let x = player.chem.amount.He.div(5).log(2).floor()
+                        ret = ret.times(x.div(30).plus(1).pow(x))
+                }
+
                 return ret
         },
         canReset(){
@@ -45728,6 +45745,12 @@ addLayer("r", {
         },
         effect(){
                 let exp = hasMilestone("r", 10) ? player.r.milestones.length : 2
+
+                if (player.chem.amount.Ne.gte(10)) {
+                        let x = player.chem.amount.Ne.div(5).log(2).floor()
+                        exp = x.div(8).plus(1).times(exp)
+                }
+
                 return player.r.total.plus(1).pow(exp)
         },
         effectDescription(){
@@ -45788,12 +45811,12 @@ addLayer("r", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Research II"
                         },
                         description(){
-                                return "Unlock <b>Chemistry</b> and per upgrade add .015 to the Researcher gain exponent" //  and subtract 1 from the subtractor (max 9)
+                                return "Disable most effects on Biomass gain and the Stem cost exponent is 1.4"
                         },
-                        cost:() => new Decimal(1e5),
+                        cost:() => new Decimal(1e4),
                         unlocked(){
                                 return hasMilestone("r", 13)
-                        }, // hasUpgrade("r", 11)
+                        }, // hasUpgrade("r", 12)
                 },
         },
         milestones: {
@@ -45977,7 +46000,7 @@ addLayer("r", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Gain 10% of Researchers on reset per second and per milestone - 12 log2(log10(Researchers)) multiplies scientist speed." 
+                                return "Reward: Gain 10% of Researchers on reset per second and per milestone or upgrade - 13 log2(log10(Researchers)) multiplies scientist speed." 
                         },
                 }, // hasMilestone("r", 13)
         },
@@ -46322,7 +46345,7 @@ addLayer("chem", {
                         let ret = decimalOne
 
                         if (hasMilestone("r", 13)) {
-                                let a = Math.max(0, player.r.milestones.length - 12)
+                                let a = Math.max(0, player.r.milestones.length + player.r.upgrades.length - 13)
                                 let x = player.r.points.max(100).log10().log(2)
                                 ret = ret.times(x.pow(a))
                         }
@@ -46537,6 +46560,9 @@ addLayer("chem", {
 
                                         let c1 = "" 
                                         c1 += "H - per level subtract .01 from <i>Ittia</i> base (max 150)" + br
+                                        if (player.chem.chemUnlocks.nobel) {
+                                                c1 += "He - per level multiply Researcher gain by 1+levels/30" + br
+                                        }
                                         c1 += "Li - per level subtract .0001 from Nucleus cost exponent (max 200)" + br
                                         c1 += "Be - per level<sup>.5</sup> subtract .01 from Mastery VII exponent (max 100)" + br
                                         c1 += "B - per level subtract .0007 from Mastery III base (max 100)" + br
@@ -46544,6 +46570,9 @@ addLayer("chem", {
                                         c1 += "N - per 2 levels gain a Chemist (this one only is based on best)" + br
                                         c1 += "O - per level<sup>.5</sup> multiply worker speed by 1+levels" + br
                                         c1 += "F - per level log10(Ecosystems) multiplies Human gain" + br
+                                        if (player.chem.chemUnlocks.nobel) {
+                                                c1 += "Ne - multiply the Researcher effect exponent by 1+levels/8" + br
+                                        }
                                         //c1 += "NOTE!! NONE OF THESE ARE IMPLEMENTED YET"
                                         
                                         return a + br2 + b + br2 + c1
