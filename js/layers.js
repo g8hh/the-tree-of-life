@@ -31566,7 +31566,8 @@ addLayer("an", {
         type: "custom",
         getResetGain(){
                 if (inChallenge("sp", 22)) return decimalZero
-                let ret = tmp.an.getBaseGain.times(tmp.an.getGainMult)
+                let ret = tmp.an.getBaseGain
+                if (!hasMilestone("r", 8)) ret = ret.times(tmp.an.getGainMult)
                 
                 if (player.extremeMode) ret = ret.pow(.75)
 
@@ -45749,6 +45750,12 @@ addLayer("r", {
                         data.passiveTime = Math.min(10, data.passiveTime - 1)
                         data.times += 1
                 }
+
+                if (hasMilestone("r", 13)) {
+                        let x = tmp.r.getResetGain.div(10).times(diff)
+                        data.points = data.points.plus(x)
+                        data.total  = data.total.plus(x)
+                }
         },
         row: 1,
         prestigeButtonText(){
@@ -45774,6 +45781,18 @@ addLayer("r", {
                         cost:() => new Decimal(100),
                         unlocked(){
                                 return true
+                        }, // hasUpgrade("r", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Research II"
+                        },
+                        description(){
+                                return "Unlock <b>Chemistry</b> and per upgrade add .015 to the Researcher gain exponent" //  and subtract 1 from the subtractor (max 9)
+                        },
+                        cost:() => new Decimal(1e5),
+                        unlocked(){
+                                return hasMilestone("r", 13)
                         }, // hasUpgrade("r", 11)
                 },
         },
@@ -45888,7 +45907,7 @@ addLayer("r", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Remove Humans effect and both <b>Good</b> effects apply instantly." 
+                                return "Reward: Remove Humans effect, both <b>Good</b> effects apply instantly, and Animals gain multipliers are 1."
                         },
                 }, // hasMilestone("r", 8)
                 9: {
@@ -45958,7 +45977,7 @@ addLayer("r", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Gain 10% of Researchers on reset per second and per milestone - 12 log2(log10(Researchers)) multiplies scientist speed [not yet]." 
+                                return "Reward: Gain 10% of Researchers on reset per second and per milestone - 12 log2(log10(Researchers)) multiplies scientist speed." 
                         },
                 }, // hasMilestone("r", 13)
         },
@@ -46255,6 +46274,8 @@ addLayer("chem", {
                 
                 if (hasUpgrade("r", 11)) data.unlocked = true
 
+                if (player.chem.amount.H.gte(5120)) data.chemUnlocks.nobel = true
+
                 layers.chem.buildings.update(diff)
         },
         row: 2,
@@ -46284,7 +46305,7 @@ addLayer("chem", {
                         if (b.lt(10)) return decimalZero
                         return b.div(10).log(3).floor().plus(1)
                 },*/
-                getWorkerMultiplier(){
+                getWorkerMultiplier(){ // worker speed workerspeed 
                         let ret = decimalOne
 
                         if (player.easyMode)    ret = ret.times(4)
@@ -46297,8 +46318,14 @@ addLayer("chem", {
 
                         return ret
                 },
-                getScientistMultiplier(){
+                getScientistMultiplier(){ // scientist speed scientistspeed science speed science
                         let ret = decimalOne
+
+                        if (hasMilestone("r", 13)) {
+                                let a = Math.max(0, player.r.milestones.length - 12)
+                                let x = player.r.points.max(100).log10().log(2)
+                                ret = ret.times(x.pow(a))
+                        }
 
                         return ret
                 },
@@ -46424,6 +46451,7 @@ addLayer("chem", {
                                 let a = "You have " + formatWhole(bu[f]) + " " + f + " buildings"
                                 if (bu[f].lt(1e4)) {
                                         a += br + "Next: " + format(bp[f]) + "/" + formatWhole(Decimal.pow(3, bu[f]).times(10))
+                                        a += br + "Speed: " + format(tmp.chem.buildings.getWorkerMultiplier) + " / Worker / second"
                                 }
 
                                 let b = "You have " + format(data.amount[f]) + " " + f
@@ -46492,7 +46520,7 @@ addLayer("chem", {
                                 [
                                         "display-text", 
                                         function(){
-                                                if (!player.chem.chemUnlocks.nobel) return "Unlock more at 4 Hydrogen level [not yet]"
+                                                if (!player.chem.chemUnlocks.nobel) return "Unlock more at 10 Hydrogen levels"
                                         }
                                 ]
                         ],
@@ -59674,7 +59702,7 @@ addLayer("tokens", {
                         "Animals": {
                                 content: [["d-t", animalFormulaDisplay]],
                                 unlocked(){
-                                        return player.an.unlocked
+                                        return player.an.unlocked && !hasMilestone("r", 8)
                                 },
                         },
                         "Genes": {
