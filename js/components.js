@@ -273,12 +273,33 @@ function loadVue() {
 					</column>
 				</div>
 				<div>
-					<button class = "upgDouble">
-					cool stuff here
-					</button>
+					<column :layer="'chem'" :data="[['clickableDouble', 15]]">
+					</column>
 				</div>
 				<div>
 					<column :layer = "'chem'" :data = "[['clickable', 13], ['clickable', 14]]">
+					</column>
+				</div>
+			</div>
+			<div class="upgRow">
+				<div>
+					<column :layer = "'chem'" :data = "[['chemToggle', 1]]">
+					</column>
+				</div>
+				<div>
+					<column :layer = "'chem'" :data = "[['chemToggle', 2]]">
+					</column>
+				</div>
+				<div>
+					<column :layer = "'chem'" :data = "[['chemToggle', 3]]">
+					</column>
+				</div>
+				<div>
+					<column :layer = "'chem'" :data = "[['chemToggle', 4]]">
+					</column>
+				</div>
+				<div>
+					<column :layer = "'chem'" :data = "[['chemToggle', 5]]">
 					</column>
 				</div>
 			</div>
@@ -286,11 +307,25 @@ function loadVue() {
 		`
 	})
 
+	Vue.component("chemToggle", {
+		props: ['layer', 'data'],
+		template: `
+		<button class = "upg96 can" v-on:mousedown="player.chem.toggle = data" v-bind:style="data==player.chem.toggle ? {'background-color': '#AAFFFF'} : {}">
+			<b v-html="['Amount', 'Levels', 'Building Progress', 'Workers', 'Scientists'][data-1]"></b>
+		</button>
+		`
+	})
+
 	Vue.component("chemClickable", { // 
 		props: ['name'],
 		template: `
 			<button class = "mediumUpg can" v-on:mousedown="handleMouseEvent" v-bind:style="name==player.chem.focus ? {'background-color': '#AA5555'} : {}">
-			<h2 v-html="name">x</h2><br><bdi style='font-size: 50%'>Amount:<br>1234</bdi>
+			<h2 v-html="name">x</h2><br>
+			<span style='font-size: 50%' v-if="player.chem.toggle == 1" v-html='"Amount:<br>" + format(player.chem.amount[name])'></span>
+			<span style='font-size: 50%' v-if="player.chem.toggle == 2" v-html='"Levels:<br>" + formatWhole(player.chem.amount[name].lt(10) ? 0 : player.chem.amount[name].div(5).log(2).floor())'></span>
+			<span style='font-size: 50%' v-if="player.chem.toggle == 3" v-html='"Progress:<br>" + format(player.chem.buildingProgress[name])'></span>
+			<span style='font-size: 50%' v-if="player.chem.toggle == 4" v-html='"Workers:<br>" + formatWhole(player.chem.workers[name])'></span>
+			<span style='font-size: 50%' v-if="player.chem.toggle == 5" v-html='"Scientists:<br>" + formatWhole(player.chem.scientists[name])'></span>
 			</button>
 		`,
 		methods: {
@@ -640,6 +675,41 @@ function loadVue() {
 			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
 			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 			<span v-if= "tmp[layer].clickables[data].title"><h2 v-html="tmp[layer].clickables[data].title"></h2><br></span>
+			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
+			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
+			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
+
+		</button>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
+					this.interval = setInterval((function() {
+						let c = layers[this.layer].clickables[this.data]
+						if(this.time >= 5 && run(c.canClick, c)) {
+							run(c.onHold, c)
+						}	
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
+	Vue.component('clickableDouble', {
+		props: ['layer', 'data'],
+		template: `
+		<button 
+			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked" 
+			v-bind:class="{upgDouble: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
+			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
+			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			<span v-if= "tmp[layer].clickables[data].title"><h1 v-html="tmp[layer].clickables[data].title"></h1><br></span>
 			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
 			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
 			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>

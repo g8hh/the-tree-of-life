@@ -35423,6 +35423,10 @@ addLayer("nu", {
                 if (hasMilestone("r", 2)) {
                         ret = ret.sub(.0002 * Math.min(50, player.r.times))
                 }
+                if (player.chem.amount.Li.gte(10)) {
+                        let x = player.chem.amount.Li.div(5).log(2).floor()
+                        ret = ret.sub(x.div(1e4).min(.02))
+                }
 
                 if (inChallenge("e", 12))       ret = ret.plus(.1)
                 if (inChallenge("hu", 42))      ret = ret.plus(1)
@@ -41168,6 +41172,10 @@ addLayer("hu", {
                         ret = ret.times(Decimal.pow(base, Math.min(40, player.hu.timeSinceLastBuy)))
                 }
                                                 ret = ret.times(tmp.r.effect)
+                if (player.chem.amount.F.gte(10)){
+                        let x = player.chem.amount.F.div(5).log(2).floor()
+                                                ret = ret.times(player.e.points.max(10).log10().pow(x))
+                }
 
                 return ret
         },
@@ -42323,6 +42331,11 @@ addLayer("hu", {
                                 if (hasUpgrade("hu", 141))      base = base.sub(3)
                                 base = base.sub(tmp.hu.buyables[32].effect.min(20))
 
+                                if (player.chem.amount.H.gte(10)) {
+                                        let x = player.chem.amount.H.div(5).log(2).floor()
+                                        base = base.sub(x.div(100).min(1.5))
+                                }
+
                                 return base
                         },
                         cost(){
@@ -42413,7 +42426,7 @@ addLayer("hu", {
 
                                 if (hasUpgrade("hu", 111))      base = decimalTwo
                                 if (hasUpgrade("hu", 145)) {
-                                        base = base.sub(player.hu.buyables[33].sub(3300).max(0).min(1000).div(1e4))
+                                        base = base.sub(player.hu.buyables[33].sub(3300).max(0).min(5000).div(1e4))
                                 }
 
                                 return base
@@ -45679,7 +45692,7 @@ addLayer("r", {
         getNextAt(){ 
                 let req = tmp.r.getResetGain.plus(1).floor()
                 let baseamt = req.div(tmp.r.getGainMult)
-                let ret = baseamt.plus(false ? 0 : 9).root(tmp.r.getGainExp).plus(105651).pow10()
+                let ret = baseamt.plus(player.chem.amount.C.gte(10) ? 0 : 9).root(tmp.r.getGainExp).plus(105651).pow10()
 
                 return ret
         },
@@ -45687,11 +45700,15 @@ addLayer("r", {
                 let ret = new Decimal(.25)
 
                 if (hasUpgrade("r", 11))        ret = ret.plus(player.r.upgrades.length * .015)
+                if (player.chem.amount.C.gte(10)) {
+                        let x = player.chem.amount.C.div(5).log(2).floor()
+                                                ret = ret.plus(x.div(100))
+                }
 
                 return ret
         },
         getBaseGain(){
-                return tmp.r.baseAmount.div("1e105651").max(1).log10().pow(tmp.r.getGainExp).sub(false ? 0 : 9).max(0)
+                return tmp.r.baseAmount.div("1e105651").max(1).log10().pow(tmp.r.getGainExp).sub(player.chem.amount.C.gte(10) ? 0 : 9).max(0)
         },
         getResetGain(){
                 let ret = tmp.r.getBaseGain
@@ -45930,6 +45947,20 @@ addLayer("r", {
                                 return "Reward: Milestone 9 chance is tripled, Mastery III base is 1.32, and keep 90% of Human buyable levels (floored)." 
                         },
                 }, // hasMilestone("r", 12)
+                13: {
+                        requirementDescription(){
+                                return "46 Researchers on reset"
+                        },
+                        done(){
+                                return tmp.r.getResetGain.gte(46)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Gain 10% of Researchers on reset per second and per milestone - 12 log2(log10(Researchers)) multiplies scientist speed [not yet]." 
+                        },
+                }, // hasMilestone("r", 13)
         },
         tabFormat: {
                 "Upgrades": {
@@ -46124,7 +46155,7 @@ addLayer("r", {
 })
 
 addLayer("chem", {
-        name: "Workers", 
+        name: "Chemists", 
         symbol: "C", 
         position: 8, 
         startData(){ return {
@@ -46136,16 +46167,95 @@ addLayer("chem", {
                 times: 0,
                 passiveTime: 0, 
                 focus: "H",
+                toggle: 1,
+                chemUnlocks: {
+                        "nobel": false,
+                        "group3": false,
+                },
+                workers: {
+                        "H": decimalZero,
+                        "He": decimalZero,
+                        "Li": decimalZero,
+                        "Be": decimalZero,
+                        "B": decimalZero,
+                        "C": decimalZero,
+                        "N": decimalZero,
+                        "O": decimalZero,
+                        "F": decimalZero,
+                        "Ne": decimalZero,
+                },
+                buildingProgress: {
+                        "H": decimalZero,
+                        "He": decimalZero,
+                        "Li": decimalZero,
+                        "Be": decimalZero,
+                        "B": decimalZero,
+                        "C": decimalZero,
+                        "N": decimalZero,
+                        "O": decimalZero,
+                        "F": decimalZero,
+                        "Ne": decimalZero,
+                },
+                buildings: {
+                        "H": decimalZero,
+                        "He": decimalZero,
+                        "Li": decimalZero,
+                        "Be": decimalZero,
+                        "B": decimalZero,
+                        "C": decimalZero,
+                        "N": decimalZero,
+                        "O": decimalZero,
+                        "F": decimalZero,
+                        "Ne": decimalZero,
+                },
+                scientists: {
+                        "H": decimalZero,
+                        "He": decimalZero,
+                        "Li": decimalZero,
+                        "Be": decimalZero,
+                        "B": decimalZero,
+                        "C": decimalZero,
+                        "N": decimalZero,
+                        "O": decimalZero,
+                        "F": decimalZero,
+                        "Ne": decimalZero,
+                },
+                amount: {
+                        "H": decimalZero,
+                        "He": decimalZero,
+                        "Li": decimalZero,
+                        "Be": decimalZero,
+                        "B": decimalZero,
+                        "C": decimalZero,
+                        "N": decimalZero,
+                        "O": decimalZero,
+                        "F": decimalZero,
+                        "Ne": decimalZero,
+                },
+                best_amount: {
+                        "H": decimalZero,
+                        "He": decimalZero,
+                        "Li": decimalZero,
+                        "Be": decimalZero,
+                        "B": decimalZero,
+                        "C": decimalZero,
+                        "N": decimalZero,
+                        "O": decimalZero,
+                        "F": decimalZero,
+                        "Ne": decimalZero,
+                },
         }},
         color: "#AA0456",
         branches: [],
         requires:() => new Decimal("1e115651"), 
-        resource: "Workers",
+        resource: "Chemists",
         type: "none",
         update(diff){
                 let data = player.chem
                 
                 if (hasUpgrade("r", 11)) data.unlocked = true
+
+                layers.chem.buildings.update(diff)
         },
         row: 2,
         layerShown(){
@@ -46168,55 +46278,157 @@ addLayer("chem", {
                         }, // hasUpgrade("chem", 11)
                 },
         },
+        buildings: {
+                /*getCompletedLevels(s){
+                        let b = player.chem.buildingProgress[s]
+                        if (b.lt(10)) return decimalZero
+                        return b.div(10).log(3).floor().plus(1)
+                },*/
+                getWorkerMultiplier(){
+                        let ret = decimalOne
+
+                        if (player.easyMode)    ret = ret.times(4)
+                        if (player.hardMode)    ret = ret.div(4)
+
+                        if (player.chem.amount.O.gte(10)) {
+                                let x = player.chem.amount.O.div(5).log(2).floor()
+                                ret = ret.times(x.plus(1).pow(x.sqrt()))
+                        }
+
+                        return ret
+                },
+                getScientistMultiplier(){
+                        let ret = decimalOne
+
+                        return ret
+                },
+                update(diff){
+                        let data = player.chem
+                        let ids = [
+                                'H', 'He', 'Li', 'Be', 'B', 
+                                'C', 'N', 'O', 'F', 'Ne'
+                                ]
+
+                        let buildingMult = function(x){return x.times(Decimal.pow(1.1, x))}
+
+                        let bu = data.buildings
+                        let bp = data.buildingProgress
+                        let am = data.amount
+                        let ba = data.best_amount
+
+                        if (data.points.gte(0)) {
+                                let wMult = tmp.chem.buildings.getWorkerMultiplier.times(diff)
+                                let sMult = tmp.chem.buildings.getScientistMultiplier
+                                for (i in ids) {
+                                        let id = ids[i]
+
+                                        bp[id] = bp[id].plus(data.workers[id].times(wMult))
+                                        am[id] = getLogisticAmount(am[id], 
+                                                                data.scientists[id].times(sMult).times(buildingMult(bu[id])),
+                                                                .01,
+                                                                diff)
+                                        ba[id] = ba[id].max(am[id])
+                                        
+                                        if (bp[id].lt(10)) continue
+                                        bu[id] = bu[id].max(bp[id].div(10).log(3).floor().plus(1))
+                                }
+                                if (ba["N"].gte(Decimal.pow(4, player.chem.total).times(5))) {
+                                        let x = ba["N"].div(5).div(Decimal.pow(4, player.chem.total)).log(4).plus(1).floor()
+                                        player.chem.points = player.chem.points.plus(x)
+                                        player.chem.total  = player.chem.total.plus(x)
+                                }
+                        } else {
+                                for (i in ids) {
+                                        am[id] = getLogisticAmount(am[id], new Decimal(0), .01, diff)
+                                }
+                        }
+                },
+        },
         clickables: {
                 rows: 5,
                 cols: 4,
                 11: {
                         title: "Increase worker", 
                         display(){
-                                return "Increase the workers in " + player.chem.focus + " by 1"
+                                return "Increase the workers in " + player.chem.focus + " by 1" + br + "Currently: " + formatWhole(player.chem.workers[player.chem.focus])
                         },
                         unlocked(){
                                 return true
                         },
                         canClick(){
-                                return true
+                                return player.chem.points.gt(0)
                         },
                         onClick(){
+                                player.chem.workers[player.chem.focus] = player.chem.workers[player.chem.focus].plus(1)
+                                player.chem.points = player.chem.points.sub(1)
                         },
                 },
                 12: {
                         title: "Decrease worker", 
                         display(){
-                                return "Decrease the workers in " + player.chem.focus + " by 1"
+                                return "Decrease the workers in " + player.chem.focus + " by 1" + br + "Currently: " + formatWhole(player.chem.workers[player.chem.focus])
                         },
                         unlocked(){
                                 return true
                         },
                         canClick(){
-                                return true
+                                return player.chem.workers[player.chem.focus].gt(0)
                         },
                         onClick(){
+                                player.chem.workers[player.chem.focus] = player.chem.workers[player.chem.focus].sub(1)
+                                player.chem.points = player.chem.points.plus(1)
                         },
                 },
                 13: {
                         title: "Increase scientist", 
                         display(){
-                                return "Increase the scientists in " + player.chem.focus + " by 1"
+                                return "Increase the scientists in " + player.chem.focus + " by 1" + br + "Currently: " + formatWhole(player.chem.scientists[player.chem.focus])
                         },
                         unlocked(){
                                 return true
                         },
                         canClick(){
-                                return true
+                                return player.chem.points.gt(0)
                         },
                         onClick(){
+                                player.chem.scientists[player.chem.focus] = player.chem.scientists[player.chem.focus].plus(1)
+                                player.chem.points = player.chem.points.sub(1)
                         },
                 },
                 14: {
                         title: "Decrease scientist", 
                         display(){
-                                return "Decrease the scientists in " + player.chem.focus + " by 1"
+                                return "Decrease the scientists in " + player.chem.focus + " by 1" + br + "Currently: " + formatWhole(player.chem.scientists[player.chem.focus])
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return player.chem.scientists[player.chem.focus].gt(0)
+                        },
+                        onClick(){
+                                player.chem.scientists[player.chem.focus] = player.chem.scientists[player.chem.focus].sub(1)
+                                player.chem.points = player.chem.points.plus(1)
+                        },
+                },
+                15: {
+                        title(){
+                                return chemAbbrev[player.chem.focus]
+                        }, 
+                        display(){
+                                let data = player.chem 
+                                let bp = data.buildingProgress
+                                let bu = data.buildings
+                                let f = data.focus
+
+                                let a = "You have " + formatWhole(bu[f]) + " " + f + " buildings"
+                                if (bu[f].lt(1e4)) {
+                                        a += br + "Next: " + format(bp[f]) + "/" + formatWhole(Decimal.pow(3, bu[f]).times(10))
+                                }
+
+                                let b = "You have " + format(data.amount[f]) + " " + f
+                                
+                                return a + br2 + b 
                         },
                         unlocked(){
                                 return true
@@ -46268,9 +46480,21 @@ addLayer("chem", {
                 "Chemistry 1": {
                         content: [
                                 "main-display",
-                                ["chem1", [false, false]], // first is nobel gases, second is third row
+                                [
+                                        "chem1", 
+                                        function(){
+                                                return [player.chem.chemUnlocks.nobel, player.chem.chemUnlocks.group3]
+                                        }
+                                ], // first is nobel gases, second is third row
                                 "blank",
                                 "chem-details", 
+                                "blank",
+                                [
+                                        "display-text", 
+                                        function(){
+                                                if (!player.chem.chemUnlocks.nobel) return "Unlock more at 4 Hydrogen level [not yet]"
+                                        }
+                                ]
                         ],
                         unlocked(){
                                 return true
@@ -46281,8 +46505,20 @@ addLayer("chem", {
                                 "main-display",
                                 ["display-text", function(){
                                         let a = "Welcome to <b>Chemistry</b>!"
+                                        let b = "At 10 of each element and each doubling thereafter, you gain buffs, as follows:"
+
+                                        let c1 = "" 
+                                        c1 += "H - per level subtract .01 from <i>Ittia</i> base (max 150)" + br
+                                        c1 += "Li - per level subtract .0001 from Nucleus cost exponent (max 200)" + br
+                                        c1 += "Be - per level<sup>.5</sup> subtract .01 from Mastery VII exponent (max 100)" + br
+                                        c1 += "B - per level subtract .0007 from Mastery III base (max 100)" + br
+                                        c1 += "C - per level add .01 to the Researcher gain exponent (the first level removes the -9)" + br
+                                        c1 += "N - per 2 levels gain a Chemist (this one only is based on best)" + br
+                                        c1 += "O - per level<sup>.5</sup> multiply worker speed by 1+levels" + br
+                                        c1 += "F - per level log10(Ecosystems) multiplies Human gain" + br
+                                        //c1 += "NOTE!! NONE OF THESE ARE IMPLEMENTED YET"
                                         
-                                        return a
+                                        return a + br2 + b + br2 + c1
                                 }],
                         ],
                         unlocked(){
@@ -56847,10 +57083,23 @@ addLayer("tokens", {
                                 return ret
                         },
                         expBase(){
-                                let ret = 1.02
-
-                                if (hasUpgrade("tokens", 262)) ret = 1.01
-
+                                let ret 
+                                if (hasUpgrade("hu", 93)) {
+                                        ret = 1.3900
+                                        if (hasUpgrade("hu", 103)) {
+                                                if (player.hu.points.gte("1e92297")) ret = 1.383
+                                        }
+                                        if (hasUpgrade("hu", 111))      ret = 1.3275
+                                        if (hasUpgrade("hu", 154) && player.hu.points.gte("1e114844")) {
+                                                                        ret = 1.325
+                                        }
+                                        if (hasMilestone("r", 12))      ret = 1.32
+                                        if (player.chem.amount.B.gte(10)) {
+                                                let x = player.chem.amount.B.div(5).log(2).floor().min(100)
+                                                                        ret -= .0007 * x
+                                        }
+                                        return ret 
+                                }
                                 if (hasUpgrade("tokens", 291)) {
                                         ret = 1.16
                                         if (hasMilestone("pl", 25)) {
@@ -56914,20 +57163,15 @@ addLayer("tokens", {
                                                 if (player.hu.points.gte("1e53082"))    ret -= .0001
                                         }
                                         if (hasChallenge("hu", 21))                     ret -= .0001
-                                }
-                                if (hasChallenge("hu", 42))     ret = 1.0003
-                                if (hasUpgrade("hu", 82))       ret = 1.0002
-                                if (hasChallenge("hu", 61))     ret = 1.0001
+                                        if (hasChallenge("hu", 42))     ret = 1.0003
+                                        if (hasUpgrade("hu", 82))       ret = 1.0002
+                                        if (hasChallenge("hu", 61))     ret = 1.0001
 
-                                if (hasUpgrade("hu", 93))       ret = 1.3900
-                                if (hasUpgrade("hu", 103)) {
-                                        if (player.hu.points.gte("1e92297")) ret = 1.383
+                                        return ret
                                 }
-                                if (hasUpgrade("hu", 111))      ret = 1.3275
-                                if (hasUpgrade("hu", 154) && player.hu.points.gte("1e114844")) {
-                                                                ret = 1.325
-                                }
-                                if (hasMilestone("r", 12))      ret = 1.32
+                                ret = 1.02
+
+                                if (hasUpgrade("tokens", 262)) ret = 1.01
                                 
                                 return ret
                         },
@@ -57253,6 +57497,11 @@ addLayer("tokens", {
                         costExp(){
                                 let exp = decimalHalf
 
+                                if (player.chem.amount.Be.gte(10)) {
+                                        let x = player.chem.amount.Be.div(5).log(2).floor()
+                                        exp = exp.sub(x.sqrt().div(100).min(.1))
+                                }
+
                                 return exp
                         },
                         base(){
@@ -57322,9 +57571,9 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 214)) + " Humans</b><br>"
                                 if (hasUpgrade("hu", 91)) cost = cost.replace("Humans", "Thoughts")
                                 let eformula = "BASE<sup>x<sup>EXP</sup>"
-                                eformula = eformula.replace("EXP", formatWhole(tmp.tokens.buyables[214].costExp))
+                                eformula = eformula.replace("EXP", format(tmp.tokens.buyables[214].costExp, 3))
                                 eformula = eformula.replace("BASE", format(tmp.tokens.buyables[214].base, hasMilestone("hu", 70) ? 3 : 2))
-                                eformula = eformula.replace("x<sup>0.33</sup>", "cbrt(x)").replace("x<sup>0.50</sup>", "sqrt(x)")
+                                eformula = eformula.replace("x<sup>0.333</sup>", "cbrt(x)").replace("x<sup>0.500</sup>", "sqrt(x)")
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },

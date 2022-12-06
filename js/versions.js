@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.035",
+	num: "2.036",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,12 +12,22 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.r.points.gte(100)
+	return player.r.milestones.length >= 13
 }
 
-var CHANELOG_VERSION = "v2.035"
+var CHANELOG_VERSION = "v2.036"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.036</h3><br>
+		- Balanced until 13 Researcher milestones.<br>
+		- Added a new file, standardModelSupport.js, the first new file in 43 patches!<br>
+		- Added a new layer, <b>Chemistry</b>!<br>
+		- Added four new Vue components for Chemistry.<br>
+		- Added a Research upgrade.<br>
+		- Added a Research milestone.<br>
+		- Made the CSS border for large buttons larger.<br>
+		- Various code cleanup.<br>
+		- Added a custom save.<br> `,
 	`<br><h3 style='color: #CC0000'>v2.035.2</h3><br>
 		- Fixed a bunch of bugs.<br>
 		- Many wording fixes.<br>

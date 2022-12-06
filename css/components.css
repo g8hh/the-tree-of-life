@@ -146,6 +146,14 @@
 	border-color: rgba(0, 0, 0, 0.125);
 }
 
+.upg96 {
+	height: 50px;
+	width: 96px;
+	border-radius: 25%;
+	border: 2px solid;
+	border-color: rgba(0, 0, 0, 0.125);
+}
+
 .upgDouble {
 	height: 240px;
 	width: 240px;

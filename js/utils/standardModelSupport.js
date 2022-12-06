@@ -54,9 +54,18 @@ const neon22Mass        = new Decimal(21.9913)
 
 
 
-
-
-
+const chemAbbrev        = {
+        "H":    "Hydrogen",
+        "He":   "Helium",
+        "Li":   "Lithium",
+        "Be":   "Beryllium",
+        "B":    "Boron",
+        "C":    "Carbon",
+        "N":    "Nitrogen",
+        "O":    "Oxygen",
+        "F":    "Flourine",
+        "Ne":   "Neon",
+}
 
 
 
