@@ -45775,7 +45775,7 @@ addLayer("r", {
                 }
 
                 if (hasMilestone("r", 13)) {
-                        let x = tmp.r.getResetGain.div(10).times(diff)
+                        let x = tmp.r.getResetGain.div(hasUpgrade("r", 13) ? 1 : 10).times(diff)
                         data.points = data.points.plus(x)
                         data.total  = data.total.plus(x)
                 }
@@ -45817,6 +45817,18 @@ addLayer("r", {
                         unlocked(){
                                 return hasMilestone("r", 13)
                         }, // hasUpgrade("r", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Research III"
+                        },
+                        description(){
+                                return "Token II buyables' cost exponent is 1.02 and gain 10x Researchers passively"
+                        },
+                        cost:() => new Decimal(4e4),
+                        unlocked(){
+                                return hasUpgrade("r", 12)
+                        }, // hasUpgrade("r", 13)
                 },
         },
         milestones: {
@@ -46003,6 +46015,20 @@ addLayer("r", {
                                 return "Reward: Gain 10% of Researchers on reset per second and per milestone or upgrade - 13 log2(log10(Researchers)) multiplies scientist speed." 
                         },
                 }, // hasMilestone("r", 13)
+                14: {
+                        requirementDescription(){
+                                return "15 Be levels"
+                        },
+                        done(){
+                                return player.chem.amount.Be.gte(163840)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Mastery VI base is 1.015 and every N level gives a Chemist." 
+                        },
+                }, // hasMilestone("r", 14)
         },
         tabFormat: {
                 "Upgrades": {
@@ -46037,7 +46063,11 @@ addLayer("r", {
                                         a += br + "In addition, always autobuy max all token and Plant content. Keep Mastery Token upgrades."
                                         let b = "Effect formula: (1 + Total researchers)^2"
                                         let c = "Initial Researcher gain: (log10(Humans/1e105,651))<sup>.25</sup>-9"
-                                        c += br + "Current Researcher gain: (log10(Humans/1e105,651))<sup>.25</sup>-9"
+                                        c += br + "Current Researcher gain: (log10(Humans/1e105,651))<sup>EXP</sup>-SUB"
+
+                                        if (player.chem.amount.C.gte(10)) c = c.replace("-SUB", "")
+                                        c = c.replace("SUB", 9).replace("EXP", format(tmp.r.getGainExp))
+
                                         
                                         return a + br2 + b + br2 + c + br2
                                 }],
@@ -46382,8 +46412,9 @@ addLayer("chem", {
                                         if (bp[id].lt(10)) continue
                                         bu[id] = bu[id].max(bp[id].div(10).log(3).floor().plus(1))
                                 }
-                                if (ba["N"].gte(Decimal.pow(4, player.chem.total).times(5))) {
-                                        let x = ba["N"].div(5).div(Decimal.pow(4, player.chem.total)).log(4).plus(1).floor()
+                                let base = hasMilestone("r", 14) ? 2 : 4
+                                if (ba["N"].gte(Decimal.pow(base, player.chem.total).times(5))) {
+                                        let x = ba["N"].div(5).div(Decimal.pow(base, player.chem.total)).log(base).plus(1).floor()
                                         player.chem.points = player.chem.points.plus(x)
                                         player.chem.total  = player.chem.total.plus(x)
                                 }
@@ -46568,11 +46599,18 @@ addLayer("chem", {
                                         c1 += "B - per level subtract .0007 from Mastery III base (max 100)" + br
                                         c1 += "C - per level add .01 to the Researcher gain exponent (the first level removes the -9)" + br
                                         c1 += "N - per 2 levels gain a Chemist (this one only is based on best)" + br
-                                        c1 += "O - per level<sup>.5</sup> multiply worker speed by 1+levels" + br
+                                        c1 += "O - per level<sup>.5</sup> multiply worker speed by 1 + levels" + br
                                         c1 += "F - per level log10(Ecosystems) multiplies Human gain" + br
                                         if (player.chem.chemUnlocks.nobel) {
-                                                c1 += "Ne - multiply the Researcher effect exponent by 1+levels/8" + br
+                                                c1 += "Ne - multiply the Researcher effect exponent by 1 + levels / 8" + br
                                         }
+                                        if (player.chem.chemUnlocks.group3) {
+                                                c1 += "Na - Mastery VI exponent is .11 and base is 1.7-levels / 400" + br
+                                                c1 += "Mg - Multiply <i>Hual</i> base by log2(2 + levels)<sup>3</sup>" + br
+                                                c1 += "Al - Per level subtract .0001 from Chromosome cost exponent (max 100)" + br
+                                                c1 += "Si - Simplify Species gain and multiply its gain exponent by 1 + levels / 1000" + br                                                
+                                        }
+
                                         //c1 += "NOTE!! NONE OF THESE ARE IMPLEMENTED YET"
                                         
                                         return a + br2 + b + br2 + c1
@@ -57415,6 +57453,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 if (hasUpgrade("hu", 143)) {
+                                        if (hasMilestone("r", 14))              return 1.015
                                         if (hasMilestone("r", 11))              return 1.030 - Math.min(Math.max(0, player.r.times - 20), 10) / 1000
                                                                                 return 1.030
                                 }
