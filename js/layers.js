@@ -54924,7 +54924,7 @@ addLayer("tokens", {
                 let maxEverTokenTwo = decimalZero
 
                 for (i = 0; i < b.length; i++){
-                        bb[b[i]] = bb[b[i]].max(data.buyables[id])
+                        bb[b[i]] = bb[b[i]].max(data.buyables[b[i]])
                         maxEverTokenTwo = maxEverTokenTwo.max(bb[b[i]])
                 }
                 if (hasUpgrade("or", 112) || hasMilestone("hu", 41)) {
