@@ -42163,7 +42163,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans LXVI"
                         },
                         description(){
-                                return "<i>Siok</i> base is .002, subtract 3 from the <i>IttIa</i> base, and at 1e113,523 Humans <i>Siok</i> base is 50,000 - <i>Siok</i> - <i>Hual</i>"
+                                return "<i>Siok</i> base is .002, subtract 3 from the <i>IttIa</i> base, and at 1e113,523 Humans <i>Siok</i> base is 50,000 - 2*<i>Hual</i>"
                         },
                         cost:() => new Decimal("1e112848"),
                         unlocked(){
@@ -42983,10 +42983,10 @@ addLayer("hu", {
                                 if (hasMilestone("hu", 54)) base = new Decimal(543210).div(Decimal.pow(1.001, player.hu.buyables[23])).max(1e4)
                                 if (hasUpgrade("hu", 115) && player.hu.points.gte("1e98196")) base = new Decimal(9990)
                                 if (hasUpgrade("hu", 121)) {
-                                        base = new Decimal(14200).sub(player.hu.buyables[23]).max(5e3)
+                                        base = new Decimal(14200).sub(player.hu.buyables[23]).max(4000)
                                 }
                                 if (hasUpgrade("hu", 144)) {
-                                        base = base.sub(player.hu.buyables[33].sub(3300).max(0)).max(5e3)
+                                        base = base.sub(player.hu.buyables[33].sub(3300).max(0)).max(4000)
                                 }
 
                                 return base
@@ -43296,7 +43296,7 @@ addLayer("hu", {
                                         base = base.div(Decimal.pow(1.001, player.hu.buyables[32].sub(sub).max(0))).max(44444)
                                 }
                                 if (hasUpgrade("hu", 141) && player.hu.points.gte("1e113523")) {
-                                        base = new Decimal(5e4).sub(player.hu.buyables[33]).sub(player.hu.buyables[33]).max(1e4)
+                                        base = new Decimal(5e4).sub(player.hu.buyables[33].times(2)).max(1e4)
                                 }
 
                                 return base
