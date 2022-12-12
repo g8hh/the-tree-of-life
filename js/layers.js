@@ -44361,7 +44361,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: <i>Hiawd</i> base is 149 / 147 / 146 / 144 / 143 / 142 / 140 at 204,670 / 210,800 / 214,220 / 217,830 / 230,510 / 258,000 / 373,280 Plants. At 221,750, 235,880, 441,270, and 450,200 Plants decrease the <i>Badwafttapw</i> cost base by 10, 100, 10, 10 times respectively."
+                                return "Reward: <i>Hiawd</i> base is 149 / 147 / 146 / 144 / 143 / 142 / 140 at 204,670 / 210,800 / 214,220 / 217,830 / 230,510 / 258,000 / 373,280 Plants. At 221,750, 235,880, 441,270, and 450,200 Plants decrease the <i>Badwaftapw</i> cost base by 10, 100, 10, 10 times respectively."
                         },
                 }, // hasMilestone("hu", 42)
                 43: {
@@ -46247,6 +46247,7 @@ addLayer("chem", {
                 workers: {
                         "H": decimalZero,
                         "He": decimalZero,
+
                         "Li": decimalZero,
                         "Be": decimalZero,
                         "B": decimalZero,
@@ -46255,10 +46256,20 @@ addLayer("chem", {
                         "O": decimalZero,
                         "F": decimalZero,
                         "Ne": decimalZero,
+
+                        "Na": decimalZero,
+                        "Mg": decimalZero,
+                        "Al": decimalZero,
+                        "Si": decimalZero,
+                        "P": decimalZero,
+                        "S": decimalZero,
+                        "Cl": decimalZero,
+                        "Ar": decimalZero,
                 },
                 buildingProgress: {
                         "H": decimalZero,
                         "He": decimalZero,
+
                         "Li": decimalZero,
                         "Be": decimalZero,
                         "B": decimalZero,
@@ -46267,10 +46278,20 @@ addLayer("chem", {
                         "O": decimalZero,
                         "F": decimalZero,
                         "Ne": decimalZero,
+
+                        "Na": decimalZero,
+                        "Mg": decimalZero,
+                        "Al": decimalZero,
+                        "Si": decimalZero,
+                        "P": decimalZero,
+                        "S": decimalZero,
+                        "Cl": decimalZero,
+                        "Ar": decimalZero,
                 },
                 buildings: {
                         "H": decimalZero,
                         "He": decimalZero,
+
                         "Li": decimalZero,
                         "Be": decimalZero,
                         "B": decimalZero,
@@ -46279,10 +46300,20 @@ addLayer("chem", {
                         "O": decimalZero,
                         "F": decimalZero,
                         "Ne": decimalZero,
+
+                        "Na": decimalZero,
+                        "Mg": decimalZero,
+                        "Al": decimalZero,
+                        "Si": decimalZero,
+                        "P": decimalZero,
+                        "S": decimalZero,
+                        "Cl": decimalZero,
+                        "Ar": decimalZero,
                 },
                 scientists: {
                         "H": decimalZero,
                         "He": decimalZero,
+
                         "Li": decimalZero,
                         "Be": decimalZero,
                         "B": decimalZero,
@@ -46291,10 +46322,20 @@ addLayer("chem", {
                         "O": decimalZero,
                         "F": decimalZero,
                         "Ne": decimalZero,
+
+                        "Na": decimalZero,
+                        "Mg": decimalZero,
+                        "Al": decimalZero,
+                        "Si": decimalZero,
+                        "P": decimalZero,
+                        "S": decimalZero,
+                        "Cl": decimalZero,
+                        "Ar": decimalZero,
                 },
                 amount: {
                         "H": decimalZero,
                         "He": decimalZero,
+
                         "Li": decimalZero,
                         "Be": decimalZero,
                         "B": decimalZero,
@@ -46303,10 +46344,20 @@ addLayer("chem", {
                         "O": decimalZero,
                         "F": decimalZero,
                         "Ne": decimalZero,
+
+                        "Na": decimalZero,
+                        "Mg": decimalZero,
+                        "Al": decimalZero,
+                        "Si": decimalZero,
+                        "P": decimalZero,
+                        "S": decimalZero,
+                        "Cl": decimalZero,
+                        "Ar": decimalZero,
                 },
                 best_amount: {
                         "H": decimalZero,
                         "He": decimalZero,
+
                         "Li": decimalZero,
                         "Be": decimalZero,
                         "B": decimalZero,
@@ -46315,6 +46366,15 @@ addLayer("chem", {
                         "O": decimalZero,
                         "F": decimalZero,
                         "Ne": decimalZero,
+
+                        "Na": decimalZero,
+                        "Mg": decimalZero,
+                        "Al": decimalZero,
+                        "Si": decimalZero,
+                        "P": decimalZero,
+                        "S": decimalZero,
+                        "Cl": decimalZero,
+                        "Ar": decimalZero,
                 },
         }},
         color: "#AA0456",
@@ -46327,7 +46387,8 @@ addLayer("chem", {
                 
                 if (hasUpgrade("r", 11)) data.unlocked = true
 
-                if (player.chem.amount.H.gte(5120)) data.chemUnlocks.nobel = true
+                if (player.chem.amount.H.gte(5120))     data.chemUnlocks.nobel = true
+                if (player.chem.total.gte(20))          data.chemUnlocks.group3 = true
 
                 layers.chem.buildings.update(diff)
         },
@@ -46575,6 +46636,7 @@ addLayer("chem", {
                                         "display-text", 
                                         function(){
                                                 if (!player.chem.chemUnlocks.nobel) return "Unlock more at 10 Hydrogen levels"
+                                                if (!player.chem.chemUnlocks.group3) return "Unlock more at 20 Chemists"
                                         }
                                 ]
                         ],
@@ -46590,30 +46652,39 @@ addLayer("chem", {
                                         let b = "At 10 of each element and each doubling thereafter, you gain buffs, as follows:"
 
                                         let c1 = "" 
-                                        c1 += "H - per level subtract .01 from <i>Ittia</i> base (max 150)" + br
+                                        let c2 = ""
+                                        let c3 = ""
+                                        c1 += displayChemInitialEffect("H") + br
                                         if (player.chem.chemUnlocks.nobel) {
-                                                c1 += "He - per level multiply Researcher gain by 1+levels/30" + br
+                                                c1 += displayChemInitialEffect("He") + br
                                         }
-                                        c1 += "Li - per level subtract .0001 from Nucleus cost exponent (max 200)" + br
-                                        c1 += "Be - per level<sup>.5</sup> subtract .01 from Mastery VII exponent (max 100)" + br
-                                        c1 += "B - per level subtract .0007 from Mastery III base (max 100)" + br
-                                        c1 += "C - per level add .01 to the Researcher gain exponent (the first level removes the -9)" + br
-                                        c1 += "N - per 2 levels gain a Chemist (this one only is based on best)" + br
-                                        c1 += "O - per level<sup>.5</sup> multiply worker speed by 1 + levels" + br
-                                        c1 += "F - per level log10(Ecosystems) multiplies Human gain" + br
+                                        c2 += displayChemInitialEffect("Li") + br
+                                        c2 += displayChemInitialEffect("Be") + br
+                                        c2 += displayChemInitialEffect("B") + br
+                                        c2 += displayChemInitialEffect("C") + br
+                                        c2 += displayChemInitialEffect("N") + br
+                                        c2 += displayChemInitialEffect("O") + br
+                                        c2 += displayChemInitialEffect("F") + br
                                         if (player.chem.chemUnlocks.nobel) {
-                                                c1 += "Ne - multiply the Researcher effect exponent by 1 + levels / 8" + br
+                                                c2 += displayChemInitialEffect("Ne") + br
                                         }
                                         if (player.chem.chemUnlocks.group3) {
-                                                c1 += "Na - Mastery VI exponent is .11 and base is 1.7-levels / 400" + br
-                                                c1 += "Mg - Multiply <i>Hual</i> base by log2(2 + levels)<sup>3</sup>" + br
-                                                c1 += "Al - Per level subtract .0001 from Chromosome cost exponent (max 100)" + br
-                                                c1 += "Si - Simplify Species gain and multiply its gain exponent by 1 + levels / 1000" + br                                                
+                                                c3 += displayChemInitialEffect("Na") + br
+                                                c3 += displayChemInitialEffect("Mg") + br
+                                                c3 += displayChemInitialEffect("Al") + br
+                                                c3 += displayChemInitialEffect("Si") + br
+                                                c3 += displayChemInitialEffect("P") + br
+                                                c3 += displayChemInitialEffect("S") + br
+                                                c3 += displayChemInitialEffect("Cl") + br
+                                                c3 += displayChemInitialEffect("Ar") + br
+                                                c3 += makeRed("None of group 3 is implemented yet")
                                         }
 
-                                        //c1 += "NOTE!! NONE OF THESE ARE IMPLEMENTED YET"
+                                        let c = c1 + br + c2 + br + c3 + br
+
+                                        // "NOTE!! NONE OF THESE ARE IMPLEMENTED YET"
                                         
-                                        return a + br2 + b + br2 + c1
+                                        return a + br2 + b + br2 + c
                                 }],
                         ],
                         unlocked(){
@@ -48033,11 +48104,16 @@ addLayer("ach", {
                         key: "shift+R", 
                         description: "Shift+R: Go to Stem Cells", 
                         onPress(){
+                                if (layerShown("r")) {
+                                        showTab("r")
+                                        return 
+                                }
                                 if (!hasUpgrade("cells", 13) && !player.t.unlocked) return
                                 showTab("cells")
                                 player.subtabs.cells.mainTabs = "Stem"
                         },
                         unlocked(){
+                                if (layerShown("r")) return true
                                 if (hasMilestone("hu", 41)) return false
                                 return hasUpgrade("cells", 13) || player.t.unlocked
                         },
@@ -48203,6 +48279,16 @@ addLayer("ach", {
                         },
                         unlocked(){
                                 return tmp.sp.layerShown
+                        },
+                },
+                {
+                        key: "r", 
+                        description: "R: Reset for Researchers", 
+                        onPress(){
+                                if (canReset("r")) doReset("r")
+                        },
+                        unlocked(){
+                                return tmp.r.layerShown
                         },
                 },
                 {

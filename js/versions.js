@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.037",
+	num: "2.038",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,12 +12,19 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.r.points.gte(3e4)
+	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.037"
+var CHANELOG_VERSION = "v2.038"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.038</h3><br>
+		- Balanced until 10,000,000 Researchers.<br>
+		- Added a Research upgrade.<br>
+		- Added a Research milestone.<br>
+		- Fixed various bugs.<br>
+		- Various rewording.<br>
+		- Added a custom save.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.037</h3><br>
 		- Balanced until 30,000 Researchers.<br>
 		- Added a Research upgrade.<br>
