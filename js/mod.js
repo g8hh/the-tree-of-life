@@ -71,6 +71,7 @@ function addedPlayerData() { return {
 	shiftAlias: false,
 	controlAlias: false,
 	CUSTOM_SAVES_PAGE: 0,
+	CHANGELOG_PAGE: 0,
 }}
 
 function getLastSaveDisplay(a){
