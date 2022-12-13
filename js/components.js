@@ -23,6 +23,37 @@ function loadVue() {
 				<span class="instant"  v-html="data"></span>
 			`
 		})
+	
+	Vue.component("changelog", {
+		template: `
+			<span>
+				<h1 style='color: #AA0033'>Changelog</h1>
+				<br>
+				<span>Page {{player.CHANGELOG_PAGE+1}} / {{1+Math.floor(CHANGELOGS.length / 20)}}</span>
+				<br>
+				<button class="opt" onclick="player.CHANGELOG_PAGE = Math.max(0, player.CHANGELOG_PAGE - (player.shiftAlias ? 5 : 1))">Previous<br>page<br>(Shift 5x)</button>
+				<button class="opt" onclick="player.CHANGELOG_PAGE = Math.min(Math.floor(CHANGELOGS.length / 20), player.CHANGELOG_PAGE + (player.shiftAlias ? 5 : 1))">Next<br>page<br>(Shift 5x)</button>
+				<br>
+				
+				<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
+					Reaching the endgame screen (updated at least as of <span v-html="CHANELOG_VERSION">let me know if you see this</span>)<br><br>
+				<br><h2 style='color: #00CC00'>Notes</h2><br>
+					- Versions will be vA.B.C<br>
+					- A will be big releases.<br>
+					- B will be each content patch.<br>
+					- C will be small patches without content (bug/wording fixes).<br><br>
+
+				<template v-for="(key, i) in CHANGELOGS">
+					<table>
+						<tr v-if="i >= 20 * player.CHANGELOG_PAGE && i < (player.CHANGELOG_PAGE + 1) * 20">
+							<span class="instant" v-html="key">if you see this please report to the dev</span>
+						</tr>
+					</table>
+				</template> 
+				<br>
+			</span>
+		`
+	})
 
 	// Blank space, data = optional height in px or pair with width and height in px
 	Vue.component('blank', {

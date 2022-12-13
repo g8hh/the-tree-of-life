@@ -187,7 +187,7 @@ function loadOptions() {
 }
 
 function setupModInfo() {
-	modInfo.changelog = changelog
+	modInfo.changelog = CHANGELOGS[0]
 	modInfo.winText = winText ? winText : `Congratulations! You have reached the end and beaten this game, but for now...`
 }
 
