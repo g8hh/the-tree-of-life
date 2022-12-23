@@ -18597,8 +18597,13 @@ addLayer("d", {
                 if (tmp.d.layerShown) data.unlocked = true
                 data.best = data.best.max(data.points)
 
-                let gainPercentage = layers.l.grid.getGemEffect(306).times(diff)
-                if (hasUpgrade("or", 12)) gainPercentage = gainPercentage.plus(diff)
+                let gainPercentage 
+                if (player.ch.unlocked) {
+                        gainPercentage = 2 * diff
+                } else {
+                        gainPercentage = layers.l.grid.getGemEffect(306).times(diff)
+                        if (hasUpgrade("or", 12)) gainPercentage = gainPercentage.plus(diff)
+                }
 
                 data.total = data.total.plus(tmp.d.getResetGain.times(gainPercentage))
                 if (!hasUpgrade("d", 23)) {
