@@ -74,7 +74,7 @@ var CHANGELOGS = [
 		- Balanced until 1e115,559 Humans.<br>
 		- Added 2 Human upgrades.<br>
 		- Fixed a bug with Air challenges not showing.<br>
-		- Fixed a bug with token need resepc not showing.<br>`,
+		- Fixed a bug with token need respec not showing.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.031</h3><br>
 		- Balanced until 1e114,716 Humans.<br>
 		- Added 8 Human upgrades.<br>`,

@@ -40634,7 +40634,7 @@ addLayer("pl", {
                         },
                         cost:() => new Decimal(200),
                         unlocked(){
-                                return player.pl.best.gte(190) || player.hu.unlocked
+                                return player.pl.best.gte(150) || player.hu.unlocked
                         }, // hasUpgrade("pl", 44)
                 },
                 45: {
@@ -44408,7 +44408,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: <i>GmaptsaIwmte</i> cost base is 1,500,000 - Plants (max 250,000) and at 550,930 / 554,670 Plants the <i>Badwaftapw</i> cost base is 3e9 / 1.8e9 - Nucleuses (max 1e7)."
+                                return "Reward: <i>GmaptsaIwmte</i> cost base is 1,500,000 - Plants (max 250,000) and at 550,930 / 554,670 Plants the <i>Badwaftapw</i> cost base is 3e9 / 1.8e9 - Nucleuses (min 1e7)."
                         },
                 }, // hasMilestone("hu", 45)
                 46: {
@@ -45891,7 +45891,7 @@ addLayer("r", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Subtract .001 from the Mastery VII base upon Humans XLI for milestones 4 through 8, <b>Great</b>'s effects happen instantly, divide Bulk cooldown by log10(10+resets) per sqrt(milestone)."
+                                return "Reward: Subtract .001 from the Mastery VII base upon Humans XLI for milestones 4 through 8, <b>Great</b>'s effects happen instantly, divide Bulk cooldown by log10(10+resets) per sqrt(milestones)."
                         },
                 }, // hasMilestone("r", 4)
                 5: {
