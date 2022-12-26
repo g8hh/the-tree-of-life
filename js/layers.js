@@ -45566,7 +45566,7 @@ addLayer("hu", {
                                 "challenges",
                         ],
                         unlocked(){
-                                return hasMilestone("hu", 100) || player.hu.activeChallenge
+                                return hasMilestone("hu", 100) || (player.hu.activeChallenge > 10)
                         },
                 },
                 "Info": {
@@ -55352,6 +55352,8 @@ addLayer("tokens", {
                         base(){
                                 if (hasUpgrade("t", 93)) return decimalOne
 
+                                let ret
+
                                 if (hasMilestone("cells", 24)) {
                                         ret = new Decimal(player.extremeMode ? 1.03 : 1.11)
 
@@ -55381,7 +55383,7 @@ addLayer("tokens", {
                                         return ret
                                 }
 
-                                let ret = new Decimal(20)
+                                ret = new Decimal(20)
 
                                 if (hasUpgrade("o", 23)) ret = ret.pow(player.tokens.total.max(1).pow(3))
 
@@ -55681,8 +55683,9 @@ addLayer("tokens", {
                         },
                         base(){
                                 if (hasUpgrade("cells", 31)) return decimalOne
+                                let ret
                                 if (hasMilestone("cells", 30)){
-                                        let ret = decimalTwo
+                                        ret = decimalTwo
 
                                         if (hasMilestone("cells", 48) && !player.extremeMode) {
                                                 ret = ret.times(Decimal.pow(2, player.cells.milestones.length))
@@ -55690,7 +55693,7 @@ addLayer("tokens", {
 
                                         return ret
                                 }
-                                let ret = new Decimal(1.02)
+                                ret = new Decimal(1.02)
                                 
                                 if (hasUpgrade("h", 73))        ret = ret.plus(.01)
                                 if (hasUpgrade("mu", 52))       ret = ret.plus(.001 * player.mu.upgrades.length)
