@@ -44171,7 +44171,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Each 15th Plant after 20,800 subtracts .0001 from the Chromosome exponent (max 100 times), bulk 5x Plant buyables, Leaf cost base is 1e11 - Chromosomes (max 1e8), and at 21,000, 21,290, 21,580, and 21,960 subtract 1 from the <i>IttIa</i> base."
+                                return "Reward: Each 15th Plant after 20,800 subtracts .0001 from the Chromosome exponent (max 100 times), bulk 5x Plant buyables, Leaf cost base is 1e11 - Chromosomes (min 1e8), and at 21,000, 21,290, 21,580, and 21,960 subtract 1 from the <i>IttIa</i> base."
                         },
                 }, // hasMilestone("hu", 30)
                 31: {
@@ -44256,7 +44256,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: The Human gain divider is 300 - <i>GmaptsaIwmte</i> (max 3) and if you have 51,550 / 52,075 / 52,790 / 53,170 / 53,790 / 54,930 / 57,450 / 58,970 / 60,190 Plants the Mastery IV exponent base is 1.1 / 1.06 / 1.05 / 1.04 / 1.03 / 1.02 / 1.017 / 1.015 / 1.014 ."
+                                return "Reward: The Human gain divider is 300 - <i>GmaptsaIwmte</i> (min 3) and if you have 51,550 / 52,075 / 52,790 / 53,170 / 53,790 / 54,930 / 57,450 / 58,970 / 60,190 Plants the Mastery IV exponent base is 1.1 / 1.06 / 1.05 / 1.04 / 1.03 / 1.02 / 1.017 / 1.015 / 1.014 ."
                         },
                 }, // hasMilestone("hu", 36)
                 37: {
@@ -44270,7 +44270,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: The <i>GmaptsaIwmte</i> base is 30,000,000 - Nucleuses (max 1e6), at 66,010 Plants the Mastery V base is 2, and per milestone subtract .5s from the Bulk cooldown."
+                                return "Reward: The <i>GmaptsaIwmte</i> base is 30,000,000 - Nucleuses (min 1e6), at 66,010 Plants the Mastery V base is 2, and per milestone subtract .5s from the Bulk cooldown."
                         },
                 }, // hasMilestone("hu", 37)
                 38: {
@@ -44436,7 +44436,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: The Human gain divider is 100 - <i>Badwaftapw</i> (max 3), it's effect base is .14, bulk buy 10x Plant buyables, and at 828,140 / 840,000 / 847,970 / 852,070 Plants the <i>Hiawd</i> base is 103 / 102 / 101 / 100."
+                                return "Reward: The Human gain divider is 100 - <i>Badwaftapw</i> (min 3), it's effect base is .14, bulk buy 10x Plant buyables, and at 828,140 / 840,000 / 847,970 / 852,070 Plants the <i>Hiawd</i> base is 103 / 102 / 101 / 100."
                         },
                 }, // hasMilestone("hu", 47)
                 48: {
@@ -44478,7 +44478,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Bulk 10x Up Quarks, Token II buyables, and Mastery Tokens, Mastery VI base is 1.24 and at 1e4880 / 1e4914 / 1e5337 / 1e5376 / 1e5397 / 1e5419 Humans is 1.23 / 1.22 / 1.21 / 1.20 / 1.18 / 1.16, at 1e5341 Humans Plants subtract from the <i>Badwaftapw</i> base."
+                                return "Reward: Bulk 10x Up Quarks, Token II buyables, and Mastery Tokens, Mastery VI base is 1.24 and at 1e4880 / 1e4914 / 1e5337 / 1e5376 / 1e5397 / 1e5419 Humans is 1.23 / 1.22 / 1.21 / 1.20 / 1.18 / 1.16, at 1e5341 Humans Plants subtract from the <i>Badwaftapw</i> base (min 400,000)."
                         },
                 }, // hasMilestone("hu", 50)
                 51: {
@@ -47954,7 +47954,7 @@ addLayer("ach", {
                                 }
                         },
                         unlocked(){
-                                return tmp.mini.layerShown || tmp.a.layerShown
+                                return tmp.mini.layerShown || tmp.an.layerShown
                         },
                 },
                 {
@@ -48107,7 +48107,9 @@ addLayer("ach", {
                 },
                 {
                         key: "shift+R", 
-                        description: "Shift+R: Go to Stem Cells", 
+                        description(){
+                                return player.r.unlocked ? "Shift+R: Go to Researchers" : "Shift+R: Go to Stem Cells"
+                        },
                         onPress(){
                                 if (layerShown("r")) {
                                         showTab("r")
