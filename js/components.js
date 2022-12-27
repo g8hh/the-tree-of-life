@@ -319,13 +319,13 @@ function loadVue() {
 	Vue.component("chemClickable", { // 
 		props: ['name'],
 		template: `
-			<button class = "mediumUpg can" v-on:mousedown="handleMouseEvent" v-bind:style="name==player.chem.focus ? {'background-color': '#AA5555'} : {}">
-			<h2 v-html="name">x</h2><br>
-			<span style='font-size: 50%' v-if="player.chem.toggle == 1" v-html='"Amount:<br>" + format(player.chem.amount[name])'></span>
-			<span style='font-size: 50%' v-if="player.chem.toggle == 2" v-html='"Levels:<br>" + formatWhole(player.chem.amount[name].lt(10) ? 0 : player.chem.amount[name].div(5).log(2).floor())'></span>
-			<span style='font-size: 50%' v-if="player.chem.toggle == 3" v-html='"Progress:<br>" + format(player.chem.buildingProgress[name])'></span>
-			<span style='font-size: 50%' v-if="player.chem.toggle == 4" v-html='"Workers:<br>" + formatWhole(player.chem.workers[name])'></span>
-			<span style='font-size: 50%' v-if="player.chem.toggle == 5" v-html='"Scientists:<br>" + formatWhole(player.chem.scientists[name])'></span>
+			<button class = "mediumUpg can small-gap" v-on:mousedown="handleMouseEvent" v-bind:style="name==player.chem.focus ? {'background-color': '#AA5555'} : {}">
+			<h2 v-html="name" v-bind:style="name==player.chem.focus ? {'color': '#3388CC'} : {}">x</h2><br><br>
+			<span style='font-size: 65%' v-if="player.chem.toggle == 1" v-html='"Amount:<br>" + format(player.chem.amount[name])'></span>
+			<span style='font-size: 65%' v-if="player.chem.toggle == 2" v-html='"Levels:<br>" + formatWhole(player.chem.amount[name].lt(10) ? 0 : player.chem.amount[name].div(5).log(2).floor())'></span>
+			<span style='font-size: 65%' v-if="player.chem.toggle == 3" v-html='"Progress:<br>" + format(player.chem.buildingProgress[name])'></span>
+			<span style='font-size: 65%' v-if="player.chem.toggle == 4" v-html='"Workers:<br>" + formatWhole(player.chem.workers[name])'></span>
+			<span style='font-size: 65%' v-if="player.chem.toggle == 5" v-html='"Scientists:<br>" + formatWhole(player.chem.scientists[name])'></span>
 			</button>
 		`,
 		methods: {

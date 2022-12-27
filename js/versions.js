@@ -18,6 +18,10 @@ function isEndgameRaw(){
 var CHANELOG_VERSION = "v2.038.1"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.038.1</h3><br>
+		- Fixed various bugs, including with hotkeys.<br>
+		- Various rewording.<br>
+		- Made the text for chemistry 30% larger.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.038</h3><br>
 		- Balanced until 10,000,000 Researchers.<br>
 		- Added a Research upgrade.<br>

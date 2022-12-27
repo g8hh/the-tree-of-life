@@ -39816,7 +39816,7 @@ addLayer("pl", {
                 let ret = decimalTwo
 
                 if (inChallenge("hu", 21))      ret = ret.plus(.1)
-                if (inChallenge("hu", 52))     ret = ret.plus(.2)
+                if (inChallenge("hu", 52))      ret = ret.plus(.2)
 
                 return ret
         },
@@ -47808,7 +47808,10 @@ addLayer("ach", {
                         key: "Control+C", 
                         description: "Control+C: Go to changelog", onPress(){
                                 showTab("changelog-tab")
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: ",", 
@@ -47817,7 +47820,10 @@ addLayer("ach", {
                                 let l = player.tab
                                 if (layers[l] == undefined) return
                                 player.subtabs[l].mainTabs = getNextLeftTab(l)
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: ".", 
@@ -47826,7 +47832,10 @@ addLayer("ach", {
                                 let l = player.tab
                                 if (layers[l] == undefined) return
                                 player.subtabs[l].mainTabs = getNextRightTab(l)
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: "ArrowLeft", 
@@ -47836,7 +47845,10 @@ addLayer("ach", {
                                 if (layers[l] == undefined) return
                                 if (!player.arrowHotkeys) return
                                 player.subtabs[l].mainTabs = getNextLeftTab(l)
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: "ArrowRight", 
@@ -47856,7 +47868,10 @@ addLayer("ach", {
                                 if (layers[l] == undefined) return
                                 k = getUnlockedSubtabs(l)
                                 player.subtabs[l].mainTabs = k[0]
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: "shift+>", 
@@ -47866,21 +47881,30 @@ addLayer("ach", {
                                 if (layers[l] == undefined) return
                                 k = getUnlockedSubtabs(l)
                                 player.subtabs[l].mainTabs = k[k.length-1]
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: "Control+S", 
                         description: "Control+S: Save", 
                         onPress(){
                                 save()
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: "shift+Control+S", 
                         description: "Shift+Control+S: Save", 
                         onPress(){
                                 save()
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: "shift+Control+E", 
@@ -47888,14 +47912,20 @@ addLayer("ach", {
                         onPress(){ // forces the endgame screen to pop up 
                                 forceEndgame = true
                                 player.keepGoing = false
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: " ", 
                         description: "Space: Toggle Pause", 
                         onPress(){
                                 if (player.spaceBarPauses) player.paused = !player.paused
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: "THIS SHOULD NOT BE POSSIBLE2",
@@ -47909,7 +47939,10 @@ addLayer("ach", {
                         description: "Shift+1: Go to achievements", 
                         onPress(){
                                 player.tab = "ach"
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: "shift+@", 
@@ -47975,11 +48008,14 @@ addLayer("ach", {
                 {
                         key: "shift+C", 
                         description(){
+                                if (player.chem.unlocked)       return "Shift+C: Go to Chemistry"
                                 if (player.cells.unlocked) return "Shift+C: Go to Cells"
                                 return !hasMilestone("tokens", 23) ? "Shift+C: Go to Carbon" : "Shift+C: Go to C"
                         },
                         onPress(){
-                                if (player.cells.unlocked) {
+                                if (tmp.chem.layerShown) {
+                                        player.tab = "chem"
+                                } else if (tmp.cells.layerShown) {
                                         player.tab = "cells"
                                 } else if (!hasMilestone("tokens", 23)) {
                                         if (!tmp.mini.layerShown) return
@@ -47991,7 +48027,7 @@ addLayer("ach", {
                                 }
                         },
                         unlocked(){
-                                return tmp.mini.layerShown || tmp.c.layerShown || tmp.cells.layerShown
+                                return tmp.mini.layerShown || tmp.c.layerShown || tmp.cells.layerShown || tmp.chem.layerShown
                         },
                 },
                 {
