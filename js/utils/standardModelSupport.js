@@ -102,7 +102,7 @@ const chemAbbrev        = {
 }
 
 const chemInitialEffects = {
-        "H":    "per level subtract .01 from <i>Ittia</i> base (max 150)",
+        "H":    "per level subtract .01 from <i>IttIa</i> base (max 150)",
         "He":   "per level multiply Researcher gain by 1+levels/30",
         "Li":   "per level subtract .0001 from Nucleus cost exponent (max 200)",
         "Be":   "per level<sup>.5</sup> subtract .01 from Mastery VII exponent (max 100)",

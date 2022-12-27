@@ -44566,7 +44566,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Add .0001 to the <i>GmaptsaIwmte</i> base, at 1e8089 Humans halve the <i>Tinhiragt</i> cost base, and at 1e8193 / 1e8245 Humans the <i>GmaptsaIwmte</i> base is 117,000 / 112,000."
+                                return "Reward: Add .0001 to the <i>GmaptsaIwmte</i> base, at 1e8089 Humans halve the <i>Tinhiragt</i> cost base, and at 1e8193 / 1e8245 Humans the <i>GmaptsaIwmte</i> cost base is 117,000 / 112,000."
                         },
                 }, // hasMilestone("hu", 56)
                 57: {
@@ -46654,7 +46654,8 @@ addLayer("chem", {
                                 "main-display",
                                 ["display-text", function(){
                                         let a = "Welcome to <b>Chemistry</b>!"
-                                        let b = "At 10 of each element and each doubling thereafter, you gain buffs, as follows:"
+                                        let b = "Each scientiest produces <u>B</u>(1.1)<sup><u>B</u></sup> elements per second, where <u>B</u> is the number of buildings"
+                                        b += br + "At 10 of an element and each doubling thereafter, you gain buffs, as follows:"
 
                                         let c1 = "" 
                                         let c2 = ""
