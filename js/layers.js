@@ -8910,7 +8910,7 @@ addLayer("n", {
                                 ["microtabs", "challenge_content"]
                         ],
                         unlocked(){
-                                return hasMilestone("n", 14) || player.p.unlocked || player.n.activeChallenge
+                                return hasMilestone("n", 14) || player.p.unlocked || (player.n.activeChallenge > 10)
                         },
                 },
                 "Milestones": {
@@ -38652,8 +38652,7 @@ addLayer("e", {
                 return ret
         },
         effectDescription(){
-                let start = " affecting most prior currency gain by " + format(tmp.e.effect)
-                return start + "."
+                return " affecting most prior currency gain by " + format(tmp.e.effect) + "."
         },
         update(diff){
                 let data = player.e
@@ -45759,8 +45758,7 @@ addLayer("r", {
                 return player.r.total.plus(1).pow(exp)
         },
         effectDescription(){
-                let start = " multiplying Human, Thoughts, Biomass, Ecosystems, Species by "
-                return start + format(tmp.r.effect) + "."
+                return " multiplying Human, Thoughts, Biomass, Ecosystems, Species by " + format(tmp.r.effect) + "."
         },
         resetsNothing(){
                 return false
@@ -47859,7 +47857,10 @@ addLayer("ach", {
                                 if (layers[l] == undefined) return
                                 if (!player.arrowHotkeys) return
                                 player.subtabs[l].mainTabs = getNextRightTab(l)
-                        }
+                        },
+                        unlocked(){
+                                return true
+                        },
                 },
                 {
                         key: "shift+<", 
