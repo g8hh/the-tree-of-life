@@ -23489,7 +23489,7 @@ addLayer("cells", {
                                         ["challenges", [1,2,3]],
                                 ],
                                 unlocked(){
-                                        return hasMilestone("cells", 14) || player.t.unlocked || player.cells.activeChallenge
+                                        return hasMilestone("cells", 14) || player.t.unlocked || (player.cells.activeChallenge > 10)
                                 },
                         },
                 },
@@ -31072,7 +31072,7 @@ addLayer("or", {
                                         ["upgrades", [30, 31, 32, 33, 34, 35, 36]],
                                 ],
                                 unlocked(){
-                                        return hasUpgrade("or", 215) || player.or.activeChallenge
+                                        return hasUpgrade("or", 215) || (player.or.activeChallenge > 10)
                                 },
                                 shouldNotify(){
                                         let ids = [301, 302, 303, 304, 305, 
@@ -38228,7 +38228,7 @@ addLayer("sp", {
                                 "challenges",
                         ],
                         unlocked(){
-                                return hasMilestone("an", 44) || player.an.activeChallenge
+                                return hasMilestone("an", 44) || (player.sp.activeChallenge > 10)
                         },
                 },
                 "Info": {
@@ -39457,7 +39457,7 @@ addLayer("e", {
                         ],
                         unlocked(){
                                 if (hasMilestone("hu", 41)) return false
-                                return hasMilestone("e", 10) || player.e.activeChallenge
+                                return hasMilestone("e", 10) || (player.e.activeChallenge > 10)
                         },
                 },
                 "Info": {
@@ -57416,7 +57416,7 @@ addLayer("tokens", {
                         maxAfford(){
                                 if (hasUpgrade("hu", 93)) { 
                                         let eBase = tmp.tokens.buyables[203].expBase
-                                        return player.nu.points.log(eBase).sqrt().pow10().floor()
+                                        return player.nu.points.max(1).log(eBase).sqrt().pow10().floor()
                                 }
                                 let base = tmp.tokens.buyables[203].baseCost
                                 return player.nu.points.div(base).max(1).log(tmp.tokens.buyables[203].expBase).root(hasUpgrade("tokens", 291) ? .5 : 1).floor().plus(1)

@@ -15,9 +15,11 @@ function isEndgameRaw(){
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.038.2"
+var CHANELOG_VERSION = "v2.038.3"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.038.3</h3><br>
+		- Fixed various bugs, including with completing Human Challenges post Humans XLIII.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.038.1</h3><br>
 		- Fixed various bugs, including with hotkeys.<br>
 		- Various rewording.<br>
