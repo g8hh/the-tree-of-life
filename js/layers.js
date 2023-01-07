@@ -31927,7 +31927,7 @@ addLayer("an", {
                                 } else                  ret = ret.times(25)
                         }
                         if (hasAchievement("an", 12)) {
-                                if ((player.an.achActive[12] || hasMilestone("ch", 16)) && !hasUpgrade("ch", 34)) {
+                                if ((player.an.achActive[12] || hasMilestone("ch", 16)) && !hasUpgrade("ch", 34) && player.ch.points.gte(200)) {
                                                         ret = ret.div(4e49)
                                 } 
                                 if (!player.an.achActive[12] || hasAchievement("an", 22)) {
@@ -44793,7 +44793,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Each <i>Hual</i> level past 17 adds .001 to the <i>Tgwitlcwl</i> base and at 1e21,317 Humans multiply the Ecosystem effect exponent by 100 / 200 / 320 / 440 at 1e21,317 / 3e21,385 / 1e21,536 / 3e21,649 Humans."
+                                return "Reward: Each <i>Hual</i> level past 17 adds .001 to the <i>Tgwitlcwl</i> base and multiply the Ecosystem effect exponent by 100 / 200 / 320 / 440 at 1e21,317 / 3e21,385 / 1e21,536 / 3e21,649 Humans."
                         },
                 }, // hasMilestone("hu", 72)
                 73: {

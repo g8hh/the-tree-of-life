@@ -204,7 +204,7 @@ function updateTaxonomyAmounts(diff) {
 
                 let gain = Decimal.pow(tmp.ch.effect, getLevels(id)).sub(1)
                 if (id > 200) gain = gain.times(getExtras(id-100).plus(1)).times(getExtras(id-101).plus(1))
-                if ((data.achActive[12] || hasMilestone("ch", 16)) && hasAchievement("an", 12)) {
+                if ((data.achActive[12] || hasMilestone("ch", 16)) && hasAchievement("an", 12) && player.ch.points.gte(200)) {
                         let exp = (data.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22) ? 1.25 : 1
                         gain = gain.times(getLevels(id).pow(exp).plus(2).log(2))
                 }
