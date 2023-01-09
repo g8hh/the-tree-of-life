@@ -113,7 +113,7 @@ const chemInitialEffects = {
         "F":    "per level log10(Ecosystems) multiplies Human gain",
         "Ne":   "multiply the Researcher effect exponent by 1 + levels / 8",
         "Na":   "Mastery VI exponent is .11 and base is 1.7 - levels / 400",
-        "Mg":   "Multiply <i>Hual</i> base by log2(2 + levels)<sup>3</sup>",
+        "Mg":   "Multiply <i>Hual</i> base by log2(2 + levels)<sup>sqrt(levels)</sup>",
         "Al":   "Per level subtract .0001 from Chromosome cost exponent (max 100)",
         "Si":   "Simplify Species gain and multiply its gain exponent by 1 + levels / 1000",
         "P":    "Add 1 - levels / 1e4 to Plant buyables exponent (max 100)",

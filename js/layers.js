@@ -16982,10 +16982,10 @@ addLayer("a", {
                 }, // hasMilestone("a", 28)
                 29: {
                         requirementDescription(){
-                                return "1e79,000 Protein"
+                                return "1e80,000 Protein"
                         },
                         done(){
-                                return player.a.protein.points.gte("1e79000")
+                                return player.a.protein.points.gte("1e80000")
                         },
                         unlocked(){
                                 return true
@@ -16997,11 +16997,11 @@ addLayer("a", {
                 30: {
                         requirementDescription(){
                                 if (player.extremeMode) return "1e123,456 Protein"
-                                return "1e118,000 Protein"
+                                return "1e120,000 Protein"
                         },
                         done(){
                                 if (player.extremeMode) return player.a.protein.points.gte("1e123456")
-                                return player.a.protein.points.gte("1e118e3")
+                                return player.a.protein.points.gte("1e120e3")
                         },
                         unlocked(){
                                 return true
@@ -17012,10 +17012,10 @@ addLayer("a", {
                 }, // hasMilestone("a", 30)
                 31: {
                         requirementDescription(){
-                                return "1e160,000 Protein"
+                                return "1e165,432 Protein"
                         },
                         done(){
-                                return player.a.protein.points.gte("1e160e3")
+                                return player.a.protein.points.gte("1e165432")
                         },
                         unlocked(){
                                 return true
@@ -43572,6 +43572,10 @@ addLayer("hu", {
                                         let l = player.hu.buyables[33].sub(3000).min(7000).max(0)
                                         ret = ret.times(Decimal.pow(1.001, l))
                                 }
+                                if (player.chem.amount.Mg.gte(10)) {
+                                        let l = player.chem.amount.Mg.div(5).log(2).floor()
+                                        ret = ret.times(l.plus(2).log(2).pow(l.sqrt().min(10)))
+                                }
 
                                 return ret
                         },
@@ -46450,7 +46454,8 @@ addLayer("chem", {
                         let data = player.chem
                         let ids = [
                                 'H', 'He', 'Li', 'Be', 'B', 
-                                'C', 'N', 'O', 'F', 'Ne'
+                                'C', 'N', 'O', 'F', 'Ne',
+                                'Mg'
                                 ]
 
                         let buildingMult = function(x){return x.times(Decimal.pow(1.1, x))}
