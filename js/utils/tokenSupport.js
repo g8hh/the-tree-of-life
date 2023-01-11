@@ -229,9 +229,10 @@ function tokenCost1(x){
 
 function tokenCFID2(){
         let tertComps = player.cells.challenges[21]
-        let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
+        let r = hasUpgrade("hu", 64) && (hasMilestone("r", 6) || player.hu.points.gte("1e6219"))
         let s = hasUpgrade("hu", 105) && player.hu.points.gte("1e93477")
         
+        if (hasUpgrade("r", 13))        return 56
         if (hasUpgrade("hu", 151))      return 55
         if (hasUpgrade("hu", 143))      return 54
         if (s)                          return 53
@@ -300,6 +301,7 @@ function tokenCFT2(){
         let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
         let s = hasUpgrade("hu", 105) && player.hu.points.gte("1e93477")
         
+        if (hasUpgrade("r", 13))        return "ceil(x<sup>1.02</sup>)"
         if (hasUpgrade("hu", 151))      return "ceil(x<sup>1.03</sup>)"
         if (hasUpgrade("hu", 143))      return "ceil(x<sup>1.035</sup>)"
         if (s)                          return "ceil(x<sup>1.04</sup>)"
@@ -381,6 +383,7 @@ function tokenCost2(x){
         let r = hasUpgrade("hu", 64) && player.hu.points.gte("1e6219")
         let s = hasUpgrade("hu", 105) && player.hu.points.gte("1e93477")
         
+        if (hasUpgrade("r", 13))        return x.pow(1.02).ceil()
         if (hasUpgrade("hu", 151))      return x.pow(1.03).ceil()
         if (hasUpgrade("hu", 143))      return x.pow(1.035).ceil()
         if (s)                          return x.pow(1.04).ceil()

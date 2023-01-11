@@ -950,6 +950,10 @@ function taxonomyCapFormulaDisplay(){
                         if (x.gt(1)) c += "Human Milestone 95 multiplies AX by " + format(x) + br 
                 }
                 if (hasUpgrade("hu", 131))    c += "Humans LXI multiplies AX by 5" + br
+                if (hasUpgrade("hu", 151)) {
+                        if (player.hu.points.gte("1e114367")) c += "Humans LXI multiplies AX by 10" + br
+                        if (player.hu.points.gte("1e114390")) c += "Humans LXI multiplies AX by 10" + br
+                }
 
                 return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
         }
@@ -1074,10 +1078,32 @@ function biomassFormulaDisplay(){
         let a = "Base biomass gain is " + format(tmp.pl.biomass.getBaseGain, 3) + " (AX)"
         let b = "AX is initially 1 and is multiplied by the following factors"
         let c = ""
-                        
-        let ret = player.e.points.max(10).log10().sub(hasMilestone("pl", 4) ? 0 : 100).max(0)
 
-        if (hasUpgrade("pl", 13))       ret = ret.pow(player.pl.points.max(1).min(160))
+        if (hasUpgrade("r", 12)) {
+                let exp = player.tokens.mastery_tokens.total.plus(player.nu.points.times(2))
+                                
+                let ret = Decimal.pow(1.2824319950172338, exp) // 1.01 ** 25
+
+                if (ret.gt("e15e6")) ret = ret.log10().times(6e7).sqrt().sub(15e6).pow10()
+
+                c += "Plants II multiplies AX by " + format(ret) + br
+
+                let f = function(x){
+                        if (x.lt("1e10000")) return x 
+                        return x.log10().sqrt().sub(50).pow10().pow(200)
+                }
+                c += "Sprout multiplies AX by " + format(f(tmp.pl.buyables[11].effect)) + br
+                c += "Leaf multiplies AX by " + format(f(tmp.pl.buyables[12].effect)) + br
+                c += "Stem multiplies AX by " + format(f(tmp.pl.buyables[13].effect)) + br
+                c += "Flower multiplies AX by " + format(f(tmp.pl.buyables[21].effect)) + br
+
+                return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+        }
+                        
+                                        c += "Initial biomass gian is " + format(player.e.points.max(10).log10().sub(hasMilestone("pl", 4) ? 0 : 100).max(0)) + br
+        if (hasUpgrade("pl", 13))       c += "Plants III raises this to the " + formatWhole(player.pl.points.max(1).min(160)) + " power" + br
+
+        
 
         if (hasMilestone("pl", 1))      c += "Plant Milestone 1 multiplies AX by " + format(Decimal.pow(3, player.e.challenges[21] - 33).max(1)) + br
         if (hasMilestone("pl", 2))      c += "Plant Milestone 2 multiplies AX by " + format(player.ch.points.max(10).log10().pow(player.pl.milestones.length)) + br
@@ -1091,7 +1117,6 @@ function biomassFormulaDisplay(){
                 let upgs = player.pl.upgrades.length + (hasUpgrade("e", 31) ? player.e.upgrades.filter(x => x > 30 & x < 40).length : 0)
                 let eff = b1.pow(upgs)
                 if (eff.gt("e15e6")) eff = eff.log10().times(6e7).sqrt().sub(15e6).pow10()
-                ret = ret.times(eff)
                                         c += "Plants II multiplies AX by " + format(eff) + br
         }
         if (hasUpgrade("pl", 24))       c += "Plants IX multiplies AX by " + format(player.pl.points.pow(player.pl.points.sub(44).max(0).sqrt())) + br
