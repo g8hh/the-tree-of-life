@@ -30,6 +30,10 @@ h1, h2, h3, b, input {
 	box-shadow: 0 0 20px var(--points)
 }
 
+.small-gap {
+	line-height: 50%;
+}
+
 .bought {
 	background-color: #77bf5f;
 	cursor: default;
