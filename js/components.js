@@ -175,7 +175,7 @@ function loadVue() {
 	Vue.component('challenge', {
 		props: ['layer', 'data'],
 		template: `
-		<div v-if="tmp[layer].challenges && tmp[layer].challenges[data]!== undefined && tmp[layer].challenges[data].unlocked && !(options.hideChallenges && maxedChallenge(layer, [data]) && !inChallenge(layer, [data]))"
+		<div v-if="tmp[layer].challenges && tmp[layer].challenges[data]!== undefined && (tmp[layer].challenges[data].unlocked || inChallenge(layer, data)) && !(options.hideChallenges && maxedChallenge(layer, [data]) && !inChallenge(layer, [data]))"
 			v-bind:class="['challenge', challengeStyle(layer, data), player[layer].activeChallenge === data ? 'resetNotify' : '']" v-bind:style="tmp[layer].challenges[data].style">
 			<br><h3 v-html="tmp[layer].challenges[data].name"></h3><br><br>
 			<button v-bind:class="{ longUpg: true, can: true, [layer]: true }" v-bind:style="{'background-color': tmp[layer].color}" v-on:click="startChallenge(layer, data)">{{challengeButtonText(layer, data)}}</button><br><br>
@@ -191,6 +191,150 @@ function loadVue() {
 		</div>
 		`
 	})
+
+	Vue.component("chem1", {
+		props: ['layer', 'data'],
+		template: `
+		<div class="upgTable">
+			<div class="upgRow">
+				<div class="upgAlign">
+					<chemClickable :name = '"H"'></chemClickable>
+				</div>
+				<div>
+					<blank :data='["360px", "60px"]'> </blank>
+				</div>
+				<div class="upgAlign" v-if="data[0]">
+					<chemClickable :name = '"He"'></chemClickable>
+				</div>
+			</div>
+			<div class="upgRow">
+				<div class="upgAlign">
+					<chemClickable :name = '"Li"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"Be"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"B"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"C"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"N"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"O"'></chemClickable>
+				</div>
+				<div class="upgAlign">
+					<chemClickable :name = '"F"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[0]">
+					<chemClickable :name = '"Ne"'></chemClickable>
+				</div>
+			</div>
+			<div class="upgRow">
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"Na"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"Mg"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"Al"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"Si"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"P"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"S"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[1]">
+					<chemClickable :name = '"Cl"'></chemClickable>
+				</div>
+				<div class="upgAlign" v-if="data[0] && data[1]">
+					<chemClickable :name = '"Ar"'></chemClickable>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
+	Vue.component("chem-details", { // upgDouble
+		propts: ['layer'],
+		template:`
+		<div class="upgTable">
+			<div class="upgRow">
+				<div>
+					<column :layer = "'chem'" :data = "[['clickable', 11], ['clickable', 12]]">
+					</column>
+				</div>
+				<div>
+					<column :layer="'chem'" :data="[['clickableDouble', 15]]">
+					</column>
+				</div>
+				<div>
+					<column :layer = "'chem'" :data = "[['clickable', 13], ['clickable', 14]]">
+					</column>
+				</div>
+			</div>
+			<div class="upgRow">
+				<div>
+					<column :layer = "'chem'" :data = "[['chemToggle', 1]]">
+					</column>
+				</div>
+				<div>
+					<column :layer = "'chem'" :data = "[['chemToggle', 2]]">
+					</column>
+				</div>
+				<div>
+					<column :layer = "'chem'" :data = "[['chemToggle', 3]]">
+					</column>
+				</div>
+				<div>
+					<column :layer = "'chem'" :data = "[['chemToggle', 4]]">
+					</column>
+				</div>
+				<div>
+					<column :layer = "'chem'" :data = "[['chemToggle', 5]]">
+					</column>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
+	Vue.component("chemToggle", {
+		props: ['layer', 'data'],
+		template: `
+		<button class = "upg96 can" v-on:mousedown="player.chem.toggle = data" v-bind:style="data==player.chem.toggle ? {'background-color': '#AAFFFF'} : {}">
+			<b v-html="['Amount', 'Levels', 'Building Progress', 'Workers', 'Scientists'][data-1]"></b>
+		</button>
+		`
+	})
+
+	Vue.component("chemClickable", { // 
+		props: ['name'],
+		template: `
+			<button class = "mediumUpg can small-gap" v-on:mousedown="handleMouseEvent" v-bind:style="name==player.chem.focus ? {'background-color': '#AA5555'} : {}">
+			<h2 v-html="name" v-bind:style="name==player.chem.focus ? {'color': '#3388CC'} : {}">x</h2><br><br>
+			<span style='font-size: 65%' v-if="player.chem.toggle == 1" v-html='"Amount:<br>" + format(player.chem.amount[name])'></span>
+			<span style='font-size: 65%' v-if="player.chem.toggle == 2" v-html='"Levels:<br>" + formatWhole(player.chem.amount[name].lt(10) ? 0 : player.chem.amount[name].div(5).log(2).floor())'></span>
+			<span style='font-size: 65%' v-if="player.chem.toggle == 3" v-html='"Progress:<br>" + format(player.chem.buildingProgress[name])'></span>
+			<span style='font-size: 65%' v-if="player.chem.toggle == 4" v-html='"Workers:<br>" + formatWhole(player.chem.workers[name])'></span>
+			<span style='font-size: 65%' v-if="player.chem.toggle == 5" v-html='"Scientists:<br>" + formatWhole(player.chem.scientists[name])'></span>
+			</button>
+		`,
+		methods: {
+			handleMouseEvent(event) {
+				player.chem.focus = this.name
+			}
+		}
+	})
+
 
 	Vue.component('upgrades', {
 		props: ['layer', 'data'],
@@ -531,6 +675,41 @@ function loadVue() {
 			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
 			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 			<span v-if= "tmp[layer].clickables[data].title"><h2 v-html="tmp[layer].clickables[data].title"></h2><br></span>
+			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
+			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
+			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
+
+		</button>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
+					this.interval = setInterval((function() {
+						let c = layers[this.layer].clickables[this.data]
+						if(this.time >= 5 && run(c.canClick, c)) {
+							run(c.onHold, c)
+						}	
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
+	Vue.component('clickableDouble', {
+		props: ['layer', 'data'],
+		template: `
+		<button 
+			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked" 
+			v-bind:class="{upgDouble: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
+			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
+			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			<span v-if= "tmp[layer].clickables[data].title"><h1 v-html="tmp[layer].clickables[data].title"></h1><br></span>
 			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
 			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
 			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>

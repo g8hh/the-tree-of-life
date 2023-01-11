@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.032.1",
+	num: "2.038.2",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,12 +12,65 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.hu.points.gte("e115651")
+	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.032"
+var CHANELOG_VERSION = "v2.038.3"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.039</h3><br>
+		- Implemented Magnesium.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.038.3</h3><br>
+		- Fixed various bugs, including with completing Human Challenges post Humans XLIII.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.038.1</h3><br>
+		- Fixed various bugs, including with hotkeys.<br>
+		- Various rewording.<br>
+		- Made the text for chemistry 30% larger.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.038</h3><br>
+		- Balanced until 10,000,000 Researchers.<br>
+		- Added a Research upgrade.<br>
+		- Added a Research milestone.<br>
+		- Fixed various bugs.<br>
+		- Various rewording.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.037</h3><br>
+		- Balanced until 30,000 Researchers.<br>
+		- Added a Research upgrade.<br>
+		- Added two new atoms.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.036</h3><br>
+		- Balanced until 13 Researcher milestones.<br>
+		- Added a new file, standardModelSupport.js, the first new file in 43 patches!<br>
+		- Added a new layer, <b>Chemistry</b>!<br>
+		- Added four new Vue components for Chemistry.<br>
+		- Added a Research upgrade.<br>
+		- Added a Research milestone.<br>
+		- Made the CSS border for large buttons larger.<br>
+		- Various code cleanup.<br>
+		- Added a custom save.<br> `,
+	`<br><h3 style='color: #CC0000'>v2.035.2</h3><br>
+		- Fixed a bunch of bugs.<br>
+		- Many wording fixes.<br>
+		- Added ten rows of achievements.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.035</h3><br>
+		- Balanced until 100 Researchers.<br>
+		- Added a Researcher milestone.<br>
+		- Various bugfixes.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.034.2</h3><br>
+		- Added a Researcher milestone.<br>
+		- Various bugfixes and wording fixes.<br>
+		- Gave Bulk II a 1 second cooldown.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.034.1</h3><br>
+		- Added a Researcher milestone.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.034</h3><br>
+		- Balanced until 7 Researchers!<br>
+		- Added four Researcher milestones.<br>
+		- Lots of bugfixes.<br>
+		- Lots of wording fixes.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.033</h3><br>
+		- Unlock a new layer, Researchers!<br>
+		- Added three Researcher milestones.<br>
+		- Added a Human buyable, "bulk."<br>`,
 	`<br><h3 style='color: #CC0000'>v2.032.1</h3><br>
 		- Balanced until 1e115,651 Humans.<br>
 		- Added another effect to Humans LXXV.<br>
@@ -29,7 +82,7 @@ var CHANGELOGS = [
 		- Balanced until 1e115,559 Humans.<br>
 		- Added 2 Human upgrades.<br>
 		- Fixed a bug with Air challenges not showing.<br>
-		- Fixed a bug with token need resepc not showing.<br>`,
+		- Fixed a bug with token need respec not showing.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.031</h3><br>
 		- Balanced until 1e114,716 Humans.<br>
 		- Added 8 Human upgrades.<br>`,

@@ -29,6 +29,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"autobuyRadioWaves",
 	"updateBestBuyables",
 	"doImprovedPassiveGain",
+	"getCompletedLevels",
 	]
 
 function getStartPoints(){
