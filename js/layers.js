@@ -41966,7 +41966,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans L"
                         },
                         description(){
-                                return "The Token II buyables' exponent is 1.044 and 1.040 at 1e94,377 Humans and subtract .3 from the Human gain exponent"
+                                return "The Token II buyables' exponent is 1.044 and 1.040 at 1e94,477 Humans and subtract .3 from the Human gain exponent"
                         },
                         cost:() => new Decimal("1e93285"),
                         unlocked(){
