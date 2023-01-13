@@ -43416,21 +43416,21 @@ addLayer("hu", {
                                         if (hasMilestone("hu", 75)) exp = exp.sub(s).max(400)
                                 }
                                 if (hasMilestone("hu", 97)) {
-                                        let s = player.hu.buyables[33].sub(420).div(2).floor().min(65)
+                                        let s = player.hu.buyables[33].sub(420).div(2).floor().min(65).max(0)
                                         exp = exp.sub(s)
                                 }
                                 if (hasChallenge("hu", 31) && player.hu.points.gte("1e55352") ) {
-                                        let s = player.hu.buyables[33].sub(550).div(5 - player.hu.points.gte("1e55460")).floor().min(50)
+                                        let s = player.hu.buyables[33].sub(550).div(5 - player.hu.points.gte("1e55460")).floor().min(50).max(0)
                                         exp = exp.sub(s)
                                 }
                                 if (player.hu.challenges[42] > 1) {
-                                        let s = player.hu.buyables[33].sub(750).div(5).floor().min(38)
+                                        let s = player.hu.buyables[33].sub(750).div(5).floor().min(38).max(0)
                                         exp = exp.sub(s)
                                 } 
                                 if (hasChallenge("hu", 52)) {
                                         let s 
                                         if (hasMilestone("r", 4)) s = 25
-                                        else s = player.hu.buyables[33].sub(946).div(8).floor().min(25)
+                                        else s = player.hu.buyables[33].sub(946).div(8).floor().min(25).max(0)
                                         exp = exp.sub(s)
                                 }
                                 if (hasChallenge("hu", 61)) {
