@@ -56721,7 +56721,7 @@ addLayer("tokens", {
                                 if (hasMilestone("ch", 12)) eformula = eformula.replace("4", format(tmp.tokens.buyables[121].coefficient, 3))
                                 if (hasMilestone("hu", 43)) eformula = eformula.replace(".7<", ".8<")
                                 if (hasMilestone("hu", 77)) eformula = eformula.replace(".8<", ".82<")
-                                if (player.hu.challenges[42] > 1 && player.hu.points.gte("1e59285")) {
+                                if (player.hu.challenges[42] > 1 && (hasMilestone("r", 8) || player.hu.points.gte("1e59285"))) {
                                         eformula = eformula.replace(".82<", "5/6<")
                                 }
                                 if (hasChallenge("hu", 61))     eformula = eformula.replace("5/6", ".86")
