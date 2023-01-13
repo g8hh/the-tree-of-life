@@ -36575,6 +36575,7 @@ addLayer("sp", {
         getGainMult(){//sp gain spgain speciesgain species gain sgain s gain 
                 let ret = decimalOne
 
+                if (player.easyMode)            ret = ret.times(4)
                 if (hasMilestone("nu", 20))     ret = ret.times(player.tokens.total.plus(10).log10())
                 if (hasMilestone("sp", 8))      ret = ret.times(new Decimal(player.sp.milestones.length).div(50).plus(.87).pow(player.nu.points))
                 if (hasChallenge("sp", 11))     ret = ret.times(tmp.sp.challenges[11].reward)
@@ -38576,6 +38577,7 @@ addLayer("e", {
         getGainMult(){//e gain egain ecosystemsgain ecosystems gain ecogain eco gain ecosystemgain
                 let ret = decimalOne
 
+                if (player.easyMode)            ret = ret.times(4)
                 if (hasUpgrade("e", 13) && !inChallenge("hu", 12)) {
                         let base = 1.02
                         if (hasMilestone("hu", 73)) {
@@ -41170,6 +41172,7 @@ addLayer("hu", {
         getGainMult(){ // human gain humangain hugain hu gain hgain h gain humgain hum gain 
                 let ret = decimalOne
 
+                if (player.easyMode)            ret = ret.times(4)
                 if (hasMilestone("hu", 13))     ret = ret.times(4)
                 if (hasMilestone("hu", 15))     ret = ret.times(player.hu.milestones.length)
                 if (hasMilestone("hu", 16))     ret = ret.times(Decimal.pow(player.hu.milestones.length, player.hu.milestones.length - 14).max(1))
