@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.039.1",
+	num: "2.040",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -15,9 +15,11 @@ function isEndgameRaw(){
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.039.1"
+var CHANELOG_VERSION = "v2.040"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.040</h3><br>
+		- Implemented Aluminum.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.039.1</h3><br>
 		- Fixed a bug with <i>Hual</i> base decreasing when below intended values.<br>
 		- Fixed a display issue with Research Milestone 8 and Top Quark.<br>`,

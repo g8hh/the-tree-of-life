@@ -34384,6 +34384,10 @@ addLayer("ch", {
                         }
                         ret = ret.sub(l.max(0).div(1e4))
                 }
+                if (player.chem.amount.Al.gte(10)) {
+                        let l = player.chem.amount.Al.div(5).log(2).floor()
+                        ret = ret.sub(l.min(100).div(1e4))
+                }
                 if (inChallenge("hu", 41))      ret = ret.plus(1)
 
                 return ret
@@ -46689,7 +46693,7 @@ addLayer("chem", {
                                                 c3 += displayChemInitialEffect("S") + br
                                                 c3 += displayChemInitialEffect("Cl") + br
                                                 c3 += displayChemInitialEffect("Ar") + br
-                                                c3 += makeRed("None of group 3 is implemented yet")
+                                                c3 += makeRed("Of group 3, only Mg and Al are implemented")
                                         }
 
                                         let c = c1 + br + c2 + br + c3 + br
