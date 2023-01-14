@@ -19,8 +19,8 @@ var CHANELOG_VERSION = "v2.039.1"
 
 var CHANGELOGS = [
 	`<br><h3 style='color: #CC0000'>v2.039.1</h3><br>
-		- Fixed a bug with <i>Hual</i> base decreases when belowe intended values.<br>
-		- Fixed a display issue with Research Milesotne 8 and Top Quark.<br>`,
+		- Fixed a bug with <i>Hual</i> base decreasing when below intended values.<br>
+		- Fixed a display issue with Research Milestone 8 and Top Quark.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.039</h3><br>
 		- Implemented Magnesium.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.038.3</h3><br>
