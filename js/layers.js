@@ -44153,7 +44153,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: After 14,300, 15,250, and each more 138 thereafter Plants subtract 1 from the <i>IttIa</i> base (max 10 total). Bulk 10x Plant and Mastery Token buyables."
+                                return "Reward: After 14,300, 15,250, and each 138 more thereafter Plants subtract 1 from the <i>IttIa</i> base (max 10 total). Bulk 10x Plant and Mastery Token buyables."
                         },
                 }, // hasMilestone("hu", 28)
                 29: {
