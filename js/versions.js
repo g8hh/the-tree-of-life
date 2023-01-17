@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.040",
+	num: "2.041",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -15,9 +15,11 @@ function isEndgameRaw(){
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.040"
+var CHANELOG_VERSION = "v2.041"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.041</h3><br>
+		- Implemented Sulfur.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.040</h3><br>
 		- Implemented Aluminum.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.039.1</h3><br>

@@ -46475,13 +46475,20 @@ addLayer("chem", {
                         if (data.points.gte(0)) {
                                 let wMult = tmp.chem.buildings.getWorkerMultiplier.times(diff)
                                 let sMult = tmp.chem.buildings.getScientistMultiplier
+
+                                let decay = .01 
+                                if (player.chem.amounts.S.gte(10)) {
+                                        let l = player.chem.amounts.S.div(5).log(2).floor().min(100).toNumber()
+                                        decay -= l/1e4
+                                }
+
                                 for (i in ids) {
                                         let id = ids[i]
 
                                         bp[id] = bp[id].plus(data.workers[id].times(wMult))
                                         am[id] = getLogisticAmount(am[id], 
                                                                 data.scientists[id].times(sMult).times(buildingMult(bu[id])),
-                                                                .01,
+                                                                decay,
                                                                 diff)
                                         ba[id] = ba[id].max(am[id])
                                         
