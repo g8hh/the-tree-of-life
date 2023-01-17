@@ -39825,10 +39825,12 @@ addLayer("pl", {
 
                 return ret
         },
+        getMaxAfford(){
+                return player.pl.biomass.points.div(hasUpgrade("e", 33) ? 1 : 1000).max(1).log(tmp.pl.getResetBase).root(tmp.pl.getCostExp).floor().plus(1)
+        },
         getResetGain(){
                 if (hasUpgrade("pl", 25) || player.r.unlocked) {
-                        let gain = player.pl.biomass.points.div(hasUpgrade("e", 33) ? 1 : 1000).max(1).log(tmp.pl.getResetBase).root(tmp.pl.getCostExp).floor().plus(1)
-                        return gain.sub(player.pl.points).max(0)
+                        return tmp.pl.getMaxAfford.sub(player.pl.points).max(0)
                 } else {
                         if (player.pl.biomass.points.gt(tmp.pl.getNextAt)) return decimalOne
                         return decimalZero
