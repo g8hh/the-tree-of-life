@@ -46477,8 +46477,8 @@ addLayer("chem", {
                                 let sMult = tmp.chem.buildings.getScientistMultiplier
 
                                 let decay = .01 
-                                if (player.chem.amounts.S.gte(10)) {
-                                        let l = player.chem.amounts.S.div(5).log(2).floor().min(100).toNumber()
+                                if (player.chem.amount.S.gte(10)) {
+                                        let l = player.chem.amount.S.div(5).log(2).floor().min(100).toNumber()
                                         decay -= l/1e4
                                 }
 
