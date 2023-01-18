@@ -46464,7 +46464,7 @@ addLayer("chem", {
                         let ids = [
                                 'H', 'He', 'Li', 'Be', 'B', 
                                 'C', 'N', 'O', 'F', 'Ne',
-                                'Mg'
+                                'Mg', 'Al', 'S'
                                 ]
 
                         let buildingMult = function(x){return x.times(Decimal.pow(1.1, x))}
