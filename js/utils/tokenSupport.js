@@ -93,7 +93,7 @@ function minusEffectiveTokens(){
         }
         if (hasMilestone("t", 2))       a = a.plus(player.t.milestones.length)
         if (hasMilestone("t", 3))       a = a.plus(player.t.milestones.length)
-        if (hasUpgrade("cells", 45))    a = a.plus(player.cells.upgrades.length)
+        if (hasUpgrade("cells", 45))    a = a.plus(player.cells.upgrades.length * (1 + player.extremeMode))
                                         a = a.plus(tmp.tokens.buyables[112].effect)
         if (hasUpgrade("t", 141))       a = a.plus(player.t.upgrades.length)
         if (hasUpgrade("sci", 244))     a = a.plus(Math.floor(tmp.sci.upgrades.carbonUpgradesLength / 5))

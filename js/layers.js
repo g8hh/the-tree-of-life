@@ -5119,7 +5119,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXXVII"
                         },
                         description(){
-                                return "Remove DNA buyables' base costs and each Secondary Completion after 75 adds .02 to Primase's base [1st not yet]" 
+                                return "Remove DNA buyables' base costs and each Secondary Completion after 75 adds .02 to Primase's base" 
                         },
                         cost:() => new Decimal("1e335600"),
                         currencyLocation:() => player.sci.dna_science,
@@ -6025,7 +6025,7 @@ addLayer("sci", {
                         title: "Topoisomerase",
                         cost(){
                                 let amt = getBuyableAmount("sci", 501)
-                                let init = 300
+                                let init = hasUpgrade("sci", 572) ? 1 : 300
                                 let base = 2
                                 return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
                         },
@@ -6074,6 +6074,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "300*2^x<sup>2</sup>"
+                                if (hasUpgrade("sci", 572)) costmid = "2^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -6083,7 +6084,7 @@ addLayer("sci", {
                         title: "DNA helicase",
                         cost(){
                                 let amt = getBuyableAmount("sci", 502)
-                                let init = 25e3
+                                let init = hasUpgrade("sci", 572) ? 1 : 25e3
                                 let base = 3
                                 return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
                         },
@@ -6128,6 +6129,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "25,000*3^x<sup>2</sup>"
+                                if (hasUpgrade("sci", 572)) costmid = "3^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -6137,7 +6139,7 @@ addLayer("sci", {
                         title: "DNA polymerase",
                         cost(){
                                 let amt = getBuyableAmount("sci", 503)
-                                let init = 1e9
+                                let init = hasUpgrade("sci", 572) ? 1 : 1e9
                                 let base = 4
                                 return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
                         },
@@ -6182,6 +6184,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "1e9*4^x<sup>2</sup>"
+                                if (hasUpgrade("sci", 572)) costmid = "4^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -6191,7 +6194,7 @@ addLayer("sci", {
                         title: "DNA clamp",
                         cost(){
                                 let amt = getBuyableAmount("sci", 511)
-                                let init = 2e19
+                                let init = hasUpgrade("sci", 572) ? 1 : 2e19
                                 let base = 5
                                 return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
                         },
@@ -6244,6 +6247,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "2e19*5^x<sup>2</sup>"
+                                if (hasUpgrade("sci", 572)) costmid = "5^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -6253,7 +6257,7 @@ addLayer("sci", {
                         title: "DNA ligase",
                         cost(){
                                 let amt = getBuyableAmount("sci", 512)
-                                let init = 2e40
+                                let init = hasUpgrade("sci", 572) ? 1 : 2e40
                                 let base = 6
                                 return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
                         },
@@ -6298,6 +6302,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "2e40*6^x<sup>2</sup>"
+                                if (hasUpgrade("sci", 572)) costmid = "6^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -6307,7 +6312,7 @@ addLayer("sci", {
                         title: "Primase",
                         cost(){
                                 let amt = getBuyableAmount("sci", 513)
-                                let init = 1e123
+                                let init = hasUpgrade("sci", 572) ? 1 : 1e123
                                 let base = 7
                                 return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
                         },
@@ -6362,6 +6367,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "1e123*7^x<sup>2</sup>"
+                                if (hasUpgrade("sci", 572)) costmid = "7^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -6371,7 +6377,7 @@ addLayer("sci", {
                         title: "DNA gyrase",
                         cost(){
                                 let amt = getBuyableAmount("sci", 521)
-                                let init = 2e132
+                                let init = hasUpgrade("sci", 572) ? 1 : 2e132
                                 let base = 8
                                 return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
                         },
@@ -6418,6 +6424,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "2e132*8^x<sup>2</sup>"
+                                if (hasUpgrade("sci", 572)) costmid = "8^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -6427,7 +6434,7 @@ addLayer("sci", {
                         title: "Telomerase",
                         cost(){
                                 let amt = getBuyableAmount("sci", 522)
-                                let init = 3e184
+                                let init = hasUpgrade("sci", 572) ? 1 : 3e184
                                 let base = 9
                                 return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
                         },
@@ -6475,6 +6482,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "3e184*9^x<sup>2</sup>"
+                                if (hasUpgrade("sci", 572)) costmid = "9^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -6484,7 +6492,7 @@ addLayer("sci", {
                         title: "Single-strand DNA-binding protein",
                         cost(){
                                 let amt = getBuyableAmount("sci", 523)
-                                let init = 1e254
+                                let init = hasUpgrade("sci", 572) ? 1 : 1e254
                                 let base = 10
                                 return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
                         },
@@ -6538,6 +6546,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "1e254*10^x<sup>2</sup>"
+                                if (hasUpgrade("sci", 572)) costmid = "10^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -19738,13 +19747,11 @@ addLayer("cells", {
                 layers.cells.updateMinigames(diff)
 
                 if (hasMilestone("cells", 9) || hasMilestone("cells", 14)) {
-                        if (player.cells.points.lt(tmp.cells.getResetGain) || !hasMilestone("cells", 14)) {
-                                let gain = tmp.cells.getResetGain.times(diff).div(10)
-                                data.points = data.points.plus(gain)
-                                data.total = data.total.plus(gain)
-                                if (hasMilestone("cells", 14)) {
-                                        player.cells.points = player.cells.points.min(tmp.cells.getResetGain)
-                                }
+                        let gain = tmp.cells.getResetGain.times(diff).div(10)
+                        data.points = data.points.plus(gain)
+                        data.total = data.total.plus(gain)
+                        if (hasMilestone("cells", 14)) {
+                                player.cells.points = player.cells.points.min(tmp.cells.getResetGain)
                         }
                 }
                 if (layers.cells.buyables[11].base().lte(0)) player.cells.activeChallenge = undefined
@@ -20137,7 +20144,11 @@ addLayer("cells", {
                                 if (player.extremeMode) ret = ret.times(player.cells.points.max(1).pow(.01))
                                 else                    ret = ret.times(player.cells.upgrades.length)
                         }
-                        if (hasUpgrade("cells", 52))    ret = ret.times(player.cells.points.max(10).log10().pow(player.tokens.tokens2.total))
+                        if (hasUpgrade("cells", 52)) {
+                                let base = player.cells.points.max(10).log10()
+                                if (player.extremeMode) base = base.times(player.tokens.tokens2.total.max(1).pow(1.5))
+                                                        ret = ret.times(base.pow(player.tokens.tokens2.total))
+                        }
                         if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
 
                         return ret
@@ -20623,7 +20634,7 @@ addLayer("cells", {
                         description(){
                                 return "Tissues effect base is Tissues but Token II multiplies Tissue gain"
                         },
-                        cost:() => new Decimal(player.extremeMode ? "1e114545" : "1e12973"),
+                        cost:() => new Decimal(player.extremeMode ? "1e15509" : "1e12973"),
                         unlocked(){
                                 if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 43) || player.or.unlocked
@@ -20634,9 +20645,10 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XX"
                         },
                         description(){
+                                if (player.extremeMode) return "Unlock two new Token II buyables and per upgrade you have two less token for prestige purposes"
                                 return "Unlock two new Token II buyables and per upgrade you have one less token for prestige purposes"
                         },
-                        cost:() => new Decimal("3e13236"),
+                        cost:() => new Decimal(player.extremeMode ? "1e15713" : "3e13236"),
                         unlocked(){
                                 if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 44) || player.or.unlocked
@@ -20647,9 +20659,10 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXI"
                         },
                         description(){
+                                if (player.extremeMode) return "Per upgrade per Tissue upgrade Primary is 3x easier and Secondary is 1e32x easier"
                                 return "Per upgrade per Tissue upgrade Primary is 1.91x easier and Secondary is 100x easier"
                         },
-                        cost:() => new Decimal("1e13440"),
+                        cost:() => new Decimal(player.extremeMode ? "9e16368" : "1e13440"),
                         unlocked(){
                                 if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 45) || player.or.unlocked
@@ -20660,9 +20673,10 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXII"
                         },
                         description(){
-                                return "Token II via Cell's scaling is twice as easy and per Token II log10(Cells) multiply Stem Cell gain"
+                                if (player.extremeMode) return "Token II via Cell's divider is doubled and per Token II multiply Stem Cell gain by [Token II]^1.5*log10(Cells)"
+                                return "Token II via Cell's divider is doubled and per Token II log10(Cells) multiply Stem Cell gain"
                         },
-                        cost:() => new Decimal("1e13639"),
+                        cost:() => new Decimal(player.extremeMode ? "4e16678" : "1e13639"),
                         unlocked(){
                                 if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 51) || player.or.unlocked
@@ -20675,7 +20689,7 @@ addLayer("cells", {
                         description(){
                                 return "Per upgrade add .008 to Tissue effect exponent"
                         },
-                        cost:() => new Decimal("5e14023"),
+                        cost:() => new Decimal(player.extremeMode ? "4e162678" : "5e14023"),
                         unlocked(){
                                 if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 52) || player.or.unlocked
@@ -22337,7 +22351,7 @@ addLayer("cells", {
                                                 let per = player.extremeMode ? 2.3010299956639813 : 1 //2.3010299956639813 = Math.log10(200)
                                                 exp -= player.cells.challenges[11] * per 
                                         }
-                                        if (hasUpgrade("cells", 51))    exp -= 2
+                                        if (hasUpgrade("cells", 51))    exp -= hasUpgrade("cells", 51) ? 32 : 2
                                         if (hasUpgrade("t", 121)) {
                                                 exp -= 7
                                                 if (hasUpgrade("t", 122)) exp -= 6
@@ -22354,7 +22368,7 @@ addLayer("cells", {
                                 }
                                 if (hasUpgrade("cells", 51)) {
                                         let lvls = player.cells.upgrades.length * player.t.upgrades.length
-                                                                        exp -= Math.log10(1.91) * lvls
+                                                                        exp -= Math.log10(hasUpgrade("cells", 51) ? 3 : 1.91) * lvls
                                 }
                                 if (hasUpgrade("t", 122))               exp -= 150
                                 if (hasUpgrade("t", 125))               exp -= 951
@@ -22452,7 +22466,7 @@ addLayer("cells", {
                                         let per = player.extremeMode ? 2.3010299956639813 : 1 //2.3010299956639813 = Math.log10(200)
                                         exp -= player.cells.challenges[11] * per 
                                 }
-                                if (hasUpgrade("cells", 51))    exp -= 2
+                                if (hasUpgrade("cells", 51))    exp -= hasUpgrade("cells", 51) ? 32 : 2
                                 if (hasUpgrade("t", 121)) {
                                         exp -= 7
                                         if (hasUpgrade("t", 122)) exp -= 6
@@ -25594,16 +25608,18 @@ addLayer("t", {
                 }, // hasMilestone("t", 19)
                 20: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e1,282,700 Stem Cells"
                                 return "1e634,788 Stem Cells"
                         },
                         done(){
-                                if (player.extremeMode) return false
+                                if (player.extremeMode) return player.cells.stem_cells.points.gte("1e1282700")
                                 return player.cells.stem_cells.points.gte("1e634788")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                //if (player.extremeMode) return "Reward: Per Token II multiply Stem Cell gain by 1.6, not effected by Secondary."
                                 return "Reward: Per Token II multiply Stem Cell gain by 1.5, not effected by Secondary."
                         },
                 }, // hasMilestone("t", 20)
@@ -31734,7 +31750,7 @@ addLayer("an", {
                 return tmp.an.getResetGain.gt(0) && player.an.times < 20 && player.an.points.lt(1e5)
         },
         effect(){
-                if (hasMilestone("hu", 46)) return decimalOne
+                if (hasMilestone("hu", 46) || !player.an.unlocked) return decimalOne
                 let pts = player.an.total
                 if (hasUpgrade("or", 33)) pts = player.an.best
                 pts = pts.plus(tmp.nu.effectPrimary)
@@ -56563,7 +56579,7 @@ addLayer("tokens", {
                         title: "STRANGE QUARK",
                         cost:() => layers.tokens.buyables.costFormulaID(112),
                         canAfford(){
-                                if (!player.tokens.tokens2Unl.includes(112)) return player.cells.points.gte("5e13435")
+                                if (!player.tokens.tokens2Unl.includes(112)) return player.cells.points.gte(player.extremeMode ? "1e16560" : "5e13435")
                                 return player.tokens.tokens2.points.gte(tmp.tokens.buyables[112].cost) && !player.tokens.buyablesBoughtThisTick.includes(112)
                         },
                         buy(){
@@ -56625,7 +56641,7 @@ addLayer("tokens", {
                                 return hasUpgrade("cells", 45) || player.an.unlocked
                         },
                         display(){
-                                if (!player.tokens.tokens2Unl.includes(112)) return "<br>You need 5e13435 Cells to unlock this buyable"
+                                if (!player.tokens.tokens2Unl.includes(112)) return "<br>You need " + (player.extremeMode ? "1e16560" : "5e13435") + " Cells to unlock this buyable"
 
                                 if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[112]) + "</b><br>"

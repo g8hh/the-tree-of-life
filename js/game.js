@@ -436,8 +436,7 @@ function runInterval(){
 	fixNaNs()
 	adjustPopupTime(trueDiff)
 	updateParticles(trueDiff)
-	pastTickTimes = pastTickTimes.slice(0, 9)
-	pastTickTimes = [Date.now() - now].concat(pastTickTimes)
+	pastTickTimes = [Date.now() - now].concat(pastTickTimes.slice(0, 9))
 	if (logTicks[0]) console.log("tick ran")
 	ticking = false
 	if (logTicks[1]) console.log("tick logged")

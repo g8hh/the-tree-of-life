@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.041.1",
+	num: "2.043",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -11,13 +11,18 @@ function isEndgame() {
 }
 
 function isEndgameRaw(){
-	if (player.extremeMode) return player.cells.points.gte("1e14760")
+	if (player.extremeMode) return player.cells.points.gte("1e17184")
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.041.1"
+var CHANELOG_VERSION = "v2.043"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.043</h3><br>
+		- Balanced Extreme Mode until 1e17,184 Cells.<br>
+		- Implemented more upgrades.<br>
+		- Fixed Animal effect sometimes being active too early.<br>
+		- Added a custom save.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.042</h3><br>
 		- Balanced Extreme Mode until 1e14,760 Cells.<br>
 		- Added a DNA Science upgrade.<br>

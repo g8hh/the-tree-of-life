@@ -174,6 +174,7 @@ function load() {
 	updateTemp(true)
 	loadVue()
 	updateTemp()
+	updateTemp()
 
 	player.saveMenuOpen = false // Slight quality of life :)
 }
