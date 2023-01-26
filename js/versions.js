@@ -11,13 +11,17 @@ function isEndgame() {
 }
 
 function isEndgameRaw(){
-	if (player.extremeMode) return player.cells.points.gte("1e14545")
+	if (player.extremeMode) return player.cells.points.gte("1e14760")
 	return player.r.points.gte(1e7)
 }
 
 var CHANELOG_VERSION = "v2.041.1"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.042</h3><br>
+		- Balanced Extreme Mode until 1e14,760 Cells.<br>
+		- Added a DNA Science upgrade.<br>
+		- Fixes to the Tetration formula, balance changes incoming in future patches.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.041.1</h3><br>
 		- Potentially fixed bulk plant buy bug.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.041</h3><br>
