@@ -5129,6 +5129,27 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 571) && player.tokens.tokens2.total.gte(7)
                         }, // hasUpgrade("sci", 572)
                 },
+                573: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXXVIII"
+                        },
+                        description(){
+                                if (player.shiftAlias) return "Currently: " + format(tmp.sci.upgrades[573].effect)
+                                return "Per upgrade in this row or below, multiply Tissue gain by log10(log10(DNA Science))" 
+                        },
+                        effect(){
+                                let base = player.sci.dna_science.points.max(10).log10().max(10).log10()
+                                let exp = player.sci.upgrades.filter(x => x > 570 && x < 600).length
+                                return base.pow(exp)
+                        },
+                        cost:() => new Decimal("1e411330"),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 572)
+                        }, // hasUpgrade("sci", 573)
+                },
         },
         buyables: {
                 rows: 5,
@@ -20687,9 +20708,10 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXIII"
                         },
                         description(){
+                                if (player.extremeMode) return "<bdi style='font-size: 80%'>Per upgrade add .008 to Tissue effect exponent and multiply the Tissue effect exponent by 1.33 but Secondary is 1e108x harder</bdi>"
                                 return "Per upgrade add .008 to Tissue effect exponent"
                         },
-                        cost:() => new Decimal(player.extremeMode ? "4e162678" : "5e14023"),
+                        cost:() => new Decimal(player.extremeMode ? "3e17184" : "5e14023"),
                         unlocked(){
                                 if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 52) || player.or.unlocked
@@ -20700,12 +20722,14 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXIV"
                         },
                         description(){
+                                //if (player.extremeMode) return "log10(Lives) multiplies Stem Cell and Cell gain"
                                 return "log10(Lives)* log10(Amino Acid) multiplies Stem Cell and Cell gain"
                         },
                         effect(){
+                                //if (player.extremeMode) return player.l.points.max(10).log10()
                                 return player.l.points.max(10).log10().times(player.a.points.max(10).log10())
                         },
-                        cost:() => new Decimal("1e14272"),
+                        cost:() => new Decimal(player.extremeMode ? "8e18818" : "1e14272"),
                         unlocked(){
                                 if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 53) || player.or.unlocked
@@ -20718,7 +20742,7 @@ addLayer("cells", {
                         description(){
                                 return "Remove Cell milestone 53's -44 and unlock End"
                         },
-                        cost:() => new Decimal("1e14491"),
+                        cost:() => new Decimal(player.extremeMode ? "1e181645" : "1e14491"),
                         unlocked(){
                                 if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 54) || player.or.unlocked
@@ -22428,7 +22452,7 @@ addLayer("cells", {
                                 layers.cells.challenges.onEnter()
                         },
                         completionLimit(){
-                                if (hasUpgrade("t", 75)) return 25
+                                if (hasUpgrade("t", 75)) return player.extremeMode ? 30 : 25
                                 return 10
                         },
                         countsAs: [],
@@ -22487,6 +22511,9 @@ addLayer("cells", {
                                 if (hasMilestone("t", 17))      exp -= 1
                                 if (hasUpgrade("cells", 43) && player.extremeMode) {
                                                                 exp -= 40
+                                }
+                                if (hasUpgrade("cells", 53) && comps >= 80) {
+                                        exp += 108
                                 }
 
                                 return Decimal.pow(10, exp)
@@ -23935,6 +23962,7 @@ addLayer("t", {
                                                 ret = ret.times(player.t.points.plus(10).log10().pow(player.nu.points))
                 }
                 if (hasMilestone("an", 39))     ret = ret.times(player.an.grid[307].extras.plus(1).pow(player.ch.points.min(5000).pow(3)))
+                if (hasUpgrade("sci", 573))     ret = ret.times(tmp.sci.upgrades[573].effect)
                 
                 return ret.max(1)
         },
@@ -24028,6 +24056,10 @@ addLayer("t", {
                 if (hasMilestone("sp", 24))     ret = ret.plus(1)
                 if (hasUpgrade("tokens", 272))  ret = ret.plus(1)
                 if (hasMilestone("e", 13))      ret = ret.plus(1.4)
+
+                if (hasUpgrade("cells", 53) && player.extremeMode) {
+                                                ret = ret.times(1.33)
+                }
 
                 return ret
         },
@@ -24587,7 +24619,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXXV"
                         },
                         description(){
-                                let a = "Primary can now be completed 25 times, but its goal gets progressively harder"
+                                let a = "Primary can now be completed " + (player.extremeMode ? "30" : "25") + " times, but its goal gets progressively harder"
                                 let b = "<br>Requires: 34 Secondary completions"
                                 if (!hasUpgrade("t", 75)) return a + b
                                 return a
