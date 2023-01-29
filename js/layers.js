@@ -18039,7 +18039,7 @@ addLayer("a", {
                                                                 ret = ret.plus(layers.l.grid.getGemEffect(106))
                                                                 ret = ret.plus(layers.l.grid.getGemEffect(801).times(player.a.buyables[33]))
                                 
-                                if (hasUpgrade("cells", 115))   ret = player.cells.mu.points.max(1).pow(player.extremeMode ? .5 : 1)
+                                if (hasUpgrade("cells", 115))   ret = player.cells.mu.points.max(1).pow(player.extremeMode && !hasUpgrade("cells", 55) ? .5 : 1)
                                 if (hasMilestone("cells", 25))  ret = ret.times(tmp.tokens.buyables[13].effect)
                                 
                                 return ret
@@ -18060,7 +18060,7 @@ addLayer("a", {
                                 let eformula = format(tmp.a.buyables[33].base) + "^x"
                                 if (hasUpgrade("cells", 115)) eformula = "(Mu*Infrared)^x" + br + eformula
                                 if (hasUpgrade("t", 92)) eformula = eformula.replace("*Infrared", "")
-                                if (player.extremeMode) eformula = eformula.replace("Mu", "sqrt(Mu)")
+                                if (player.extremeMode && !hasUpgrade("cells", 55)) eformula = eformula.replace("Mu", "sqrt(Mu)")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -20114,7 +20114,7 @@ addLayer("cells", {
                         }        
                         if (hasUpgrade("t", 34))        ret = ret.times(tmp.t.upgrades[34].effect)
                         if (hasUpgrade("t", 92))        ret = ret.times(player.tokens.total.max(1).pow(Math.PI))
-                        if (hasUpgrade("t", 111))       ret = ret.times(5)
+                        if (hasUpgrade("t", 111) && !player.extremeMode)       ret = ret.times(5)
                         if (hasUpgrade("t", 113))       ret = ret.times(player.tokens.tokens2.total.div(69).plus(1).pow(player.tokens.total))
                         if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
                         if (hasUpgrade("t", 144))       ret = ret.times(Decimal.pow(2, player.t.upgrades.length))
@@ -20738,9 +20738,10 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXV"
                         },
                         description(){
+                                if (player.extremeMode) return "Remove Cell milestone 53's -44, shRNA's sqrt, and unlock End"
                                 return "Remove Cell milestone 53's -44 and unlock End"
                         },
-                        cost:() => new Decimal(player.extremeMode ? "1e181645" : "1e14491"),
+                        cost:() => new Decimal(player.extremeMode ? "1e18921" : "1e14491"),
                         unlocked(){
                                 if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 54) || player.or.unlocked
@@ -20753,7 +20754,7 @@ addLayer("cells", {
                         description(){
                                 return "Raise the 3 in Down Quark's base to Token II - 20 and per upgrade dilate Life Point gain ^1.1"
                         },
-                        cost:() => new Decimal("1e22305"),
+                        cost:() => new Decimal(player.extremeMode ? "1e118921" : "1e22305"),
                         unlocked(){
                                 if (hasMilestone("e", 13)) return false
                                 return player.cells.challenges[11] >= 24 || player.or.unlocked
@@ -24945,13 +24946,17 @@ addLayer("t", {
                         description(){
                                 let a = "<bdi style='font-size: 80%'>Tissue gain root is 3*sqrt(Token II) less (up to 500), gain 5x Stem Cells, and Token II via Stem Cell scales at half the speed</bdi>"
                                 let b = "<br>Requires: 82 Secondary completions</bdi>"
+                                if (player.extremeMode) {
+                                        b = b.replace("82", "84")
+                                        a = "Tissue gain root is 3*sqrt(Token II) less (up to 500), and Token II via Stem Cell scales at half the speed"
+                                }
                                 if (!hasUpgrade("t", 111)) return a + b
                                 return a + "</bdi>"
                         },
                         canAfford(){
-                                return player.cells.challenges[12] >= 82
+                                return player.cells.challenges[12] >= (player.extremeMode ? 84 : 82)
                         },
-                        cost:() => new Decimal(1e18),
+                        cost:() => new Decimal(player.extremeMode ? "e1e24" : 1e18),
                         unlocked(){
                                 return hasUpgrade("cells", 55) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 111)
