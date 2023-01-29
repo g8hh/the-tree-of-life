@@ -19769,11 +19769,9 @@ addLayer("cells", {
 
                 if (hasMilestone("cells", 9) || hasMilestone("cells", 14)) {
                         let gain = tmp.cells.getResetGain.times(diff).div(10)
+                        gain = gain.min(tmp.cells.getResetGain.sub(player.cells.points)).max(0)
                         data.points = data.points.plus(gain)
                         data.total = data.total.plus(gain)
-                        if (hasMilestone("cells", 14)) {
-                                player.cells.points = player.cells.points.min(tmp.cells.getResetGain)
-                        }
                 }
                 if (layers.cells.buyables[11].base().lte(0)) player.cells.activeChallenge = undefined
 
