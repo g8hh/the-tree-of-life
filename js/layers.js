@@ -55030,7 +55030,7 @@ addLayer("tokens", {
                         let add = hasUpgrade("hu", 101) ? 0 : hasChallenge("hu", 11) ? 1 : 4
                         
                         let main = decimalZero
-                        while (ptsCopy.gte(tetBase)) {
+                        while (ptsCopy.gte(tetBase) || main.gte(10)) {
                                 main = main.plus(1)
                                 ptsCopy = ptsCopy.log(tetBase)
                         }

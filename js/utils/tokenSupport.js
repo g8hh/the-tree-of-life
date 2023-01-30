@@ -52,6 +52,7 @@ function tokenTetrationBase(){
 
 function tetr(base, exp) {
         base = new Decimal(base)
+        exp = new Decimal(exp).min(10)
         let a = base.pow(exp.sub(exp.floor()))
         for (i = 0; i < exp.floor().toNumber(); i++) {
                 a = base.pow(a)
