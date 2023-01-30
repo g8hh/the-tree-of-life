@@ -2244,6 +2244,7 @@ addLayer("sci", {
                                                         ret = ret.times(tmp.t.effect)
                         if (hasUpgrade("sci", 545))     ret = ret.times(tmp.cells.buyables[111].effect)
                         if (hasUpgrade("cells", 42))    ret = ret.times(Decimal.pow("1e1000", player.tokens.tokens2.total))
+                        if (hasUpgrade("t", 112))       ret = ret.times(tmp.t.effect.pow(player.t.upgrades.length))
 
                         return ret
                 },
@@ -20031,7 +20032,7 @@ addLayer("cells", {
                         let ret = decimalOne
 
                         if (hasUpgrade("sci", 532))     ret = ret.times(tmp.sci.upgrades[532].effect)
-                                                        ret = ret.times(tmp.sci.buyables[522].stem_cell_effect)
+                        if (!hasUpgrade("t", 111))      ret = ret.times(tmp.sci.buyables[522].stem_cell_effect)
                         if (!inChallenge("cells", 12) || player.cells.challenges[12] < 10) {
                                                         ret = ret.times(tmp.sci.buyables[523].stem_cell_effect)
                         }
@@ -20144,6 +20145,7 @@ addLayer("cells", {
                         if (hasMilestone("t", 20) && !hasMilestone("an", 30)) {
                                                         ret = ret.times(Decimal.pow(1.5, player.tokens.tokens2.total))
                         }
+                        if (hasUpgrade("t", 111))       ret = ret.times(tmp.sci.buyables[522].stem_cell_effect)
 
                         return ret
                 },
@@ -24949,7 +24951,7 @@ addLayer("t", {
                                 let b = "<br>Requires: 82 Secondary completions</bdi>"
                                 if (player.extremeMode) {
                                         b = b.replace("82", "84")
-                                        a = "Tissue gain root is 3*sqrt(Token II) less (up to 500), and Token II via Stem Cell scales at half the speed"
+                                        a = "<bdi style='font-size: 80%'>Tissue gain root is 3*sqrt(Token II) less (up to 500), Token II via Stem Cell divider is 2, and Telomerase in not affected by Secondary</bdi>"
                                 }
                                 if (!hasUpgrade("t", 111)) return a + b
                                 return a + "</bdi>"
@@ -24969,13 +24971,17 @@ addLayer("t", {
                         description(){
                                 let a = "Per upgrade Tissue effect affects DNA gain"
                                 let b = "<br>Requires: 83 Secondary completions</bdi>"
+                                if (player.extremeMode) {
+                                        b = b.replace("83", "85")
+                                        a = "Per upgrade Tissue effect affects DNA gain and DNA Science gain"
+                                }
                                 if (!hasUpgrade("t", 112)) return a + b
                                 return a + "</bdi>"
                         },
                         canAfford(){
-                                return player.cells.challenges[12] >= 83
+                                return player.cells.challenges[12] >= (player.extremeMode ? 85 : 83)
                         },
-                        cost:() => new Decimal(player.extremeMode ? 1e124 : 1e19),
+                        cost:() => new Decimal(player.extremeMode ? 3e24 : 1e19),
                         unlocked(){
                                 return hasUpgrade("t", 111) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 112)
@@ -24993,7 +24999,7 @@ addLayer("t", {
                         canAfford(){
                                 return player.cells.challenges[12] >= 84
                         },
-                        cost:() => new Decimal(2e19),
+                        cost:() => new Decimal(player.extremeMode ? 1e100 : 2e19),
                         unlocked(){
                                 return hasUpgrade("t", 112) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 113)
