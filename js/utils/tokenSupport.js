@@ -50,6 +50,15 @@ function tokenTetrationBase(){
         return tetBase 
 }
 
+function tetr(base, exp) {
+        base = new Decimal(base)
+        let a = base.pow(exp.sub(exp.floor()))
+        for (i = 0; i < exp.floor().toNumber(); i++) {
+                a = base.pow(a)
+        }
+        return a
+}
+
 function tokenNextAt(){
         let len = (player.extremeMode ? TOKEN_COSTS_EXTREME : TOKEN_COSTS).length
         let amt = player.tokens.total
@@ -61,7 +70,7 @@ function tokenNextAt(){
         if (amt.gte(len)) {
                 let tetBase = tmp.tokens.getTetrationBase
                 let add = hasUpgrade("hu", 101) ? 0 : hasChallenge("hu", 11) ? 1 : 4
-                return Decimal.tetrate(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(add))
+                return tetr(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(add))
         }
         amt = Math.round(amt.toNumber())
         let additional = player.hardMode ? 1e4 : 1

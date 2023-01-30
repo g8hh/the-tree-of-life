@@ -2207,7 +2207,7 @@ addLayer("sci", {
                 getGainMult(){
                         let ret = decimalOne
 
-                        if (hasUpgrade("sci", 502))     ret = ret.times(Decimal.tetrate(tmp.sci.upgrades.dnaUpgradesLength, 2))
+                        if (hasUpgrade("sci", 502))     ret = ret.times(Decimal.pow(tmp.sci.upgrades.dnaUpgradesLength, tmp.sci.upgrades.dnaUpgradesLength))
                                                         ret = ret.times(player.sci.dna_science.points.plus(10).log10().pow(tmp.sci.buyables[502].effect))
                         if (hasUpgrade("sci", 503))     ret = ret.times(player.d.points.max(1e10).log10().log10().pow(tmp.sci.upgrades.dnaUpgradesLength))
                                                         ret = ret.times(player.points.max(1e10).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect))
@@ -24956,7 +24956,7 @@ addLayer("t", {
                         canAfford(){
                                 return player.cells.challenges[12] >= (player.extremeMode ? 84 : 82)
                         },
-                        cost:() => new Decimal(player.extremeMode ? "e1e24" : 1e18),
+                        cost:() => new Decimal(player.extremeMode ? 1e24 : 1e18),
                         unlocked(){
                                 return hasUpgrade("cells", 55) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 111)
@@ -24974,7 +24974,7 @@ addLayer("t", {
                         canAfford(){
                                 return player.cells.challenges[12] >= 83
                         },
-                        cost:() => new Decimal(1e19),
+                        cost:() => new Decimal(player.extremeMode ? 1e124 : 1e19),
                         unlocked(){
                                 return hasUpgrade("t", 111) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 112)
@@ -55028,9 +55028,16 @@ addLayer("tokens", {
                         //let portion = player.points.slog(tetBase).sub(4).times(tmp.tokens.getTetrationScalingDivisor)
                         let ptsCopy = Decimal.fromComponents(player.points.sign, player.points.layer, player.points.mag)
                         let add = hasUpgrade("hu", 101) ? 0 : hasChallenge("hu", 11) ? 1 : 4
-                        let portion = ptsCopy.slog(tetBase).sub(add).times(tmp.tokens.getTetrationScalingDivisor)
-                        let canAff = portion.plus(len).plus(tmp.tokens.getMinusEffectiveTokens).ceil()
-                        return canAff.sub(player.tokens.total).max(0)
+                        
+                        let main = decimalZero
+                        while (ptsCopy.gte(tetBase)) {
+                                main = main.plus(1)
+                                ptsCopy = ptsCopy.log(tetBase)
+                        }
+                        main = main.plus(ptsCopy.log(tetBase))
+
+                        let canAff = main.sub(add).times(tmp.tokens.getTetrationScalingDivisor).plus(len).plus(tmp.tokens.getMinusEffectiveTokens)
+                        return canAff.ceil().sub(player.tokens.total).max(0)
                 } 
                 if (tmp.tokens.getNextAt.lt(tmp.tokens.baseAmount)) return decimalOne
                 return decimalZero

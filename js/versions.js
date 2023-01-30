@@ -20,7 +20,8 @@ var CHANELOG_VERSION = "v2.045"
 var CHANGELOGS = [
 	`<br><h3 style='color: #CC0000'>v2.045</h3><br>
 		- Balanced Extreme Mode until 1e24 Tissues.<br>
-		- Implemented more upgrades.<br>`,
+		- Implemented more upgrades.<br>
+		- Fixed tetrational scaling formuals.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.044</h3><br>
 		- Balanced Extreme Mode until 1e18,920 Cells.<br>
 		- Implemented more upgrades.<br>
