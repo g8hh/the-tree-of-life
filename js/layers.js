@@ -19379,10 +19379,11 @@ addLayer("d", {
                                         let div = player.extremeMode ? "8e315" : "4.4e144"
                                         let a1 = "Initial DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2-1.50)<sup>2</sup>"
                                         if (player.extremeMode) a1 = a1.replace("1.50", "4.00")
+
                                         let char = tmp.d.getBaseGainAddition.gte(0) ? "+" : "-"
                                         let exp = "<sup>" + format(tmp.d.getGainExp) + "</sup>"
-                                        let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2" + char + format(tmp.d.getBaseGainAddition.abs())
-                                        a2 += ")" + exp 
+                                        let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2" + char + format(tmp.d.getBaseGainAddition.abs()) + ")" + exp 
+                                        a2 = a2.replace("+0.00", "")
                                         if (hasUpgrade("or", 222)) a2 = "Current DNA gain: (2^[Tokens II])" + exp
                                         if (hasUpgrade("or", 21)) a2 = a2.replace("2", "4")
                                         if (hasUpgrade("an", 15)) a2 = a2.replace("4", "[Animal upgrades]")
@@ -55030,7 +55031,7 @@ addLayer("tokens", {
                         let add = hasUpgrade("hu", 101) ? 0 : hasChallenge("hu", 11) ? 1 : 4
                         
                         let main = decimalZero
-                        while (ptsCopy.gte(tetBase) || main.gte(10)) {
+                        while (ptsCopy.gte(tetBase) && main.lt(10)) {
                                 main = main.plus(1)
                                 ptsCopy = ptsCopy.log(tetBase)
                         }
@@ -60041,7 +60042,7 @@ addLayer("tokens", {
                                 content: [
                                         ["buyables", [10,11,12,19]],
                                         ["clickables", [1]],
-                                        ["display-text", "<br>Buying a Token II buyable buffs all the other buyables in its column (denoted by C),<br> and nerfs the buyables in its row (denoted by R).<br><br><br>"],
+                                        ["display-text", "<br>Buying a Token II buyable buffs all the other buyables in its column (denoted by C),<br> and nerfs the buyables in its row (denoted by R).<br><br>"],
                                         ["display-text", function(){
                                                 let d1 = player.tokens.best_buyables
                                                 let d2 = player.tokens.buyables
@@ -60053,7 +60054,7 @@ addLayer("tokens", {
                                                 }
                                                 let a = "Left column amount: " + f(hasUpgrade("or", 113) ? d1 : d2, 1) + " = " + formatWhole(tmp.tokens.buyables.getCol1Total)
                                                 let b = "Right column amount: " + f(hasUpgrade("or", 111) ? d1 : d2, 2) + " = " + formatWhole(tmp.tokens.buyables.getCol2Total)
-                                                return a + br + b
+                                                return a + br + b + br2
                                         }],       
                                 ]
                         },
