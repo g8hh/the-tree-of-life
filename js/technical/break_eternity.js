@@ -2015,15 +2015,15 @@
         if (fracheight !== 0) {
                 if (payload.eq(Decimal.dOne)) {
                         //TODO: for bases above 10, revert to old linear approximation until I can think of something better
-                        /*if (this.gt(10)) payload = this.pow(fracheight);
+                        if (this.gt(10)) payload = this.pow(fracheight);
                         else {
                                 payload = Decimal.fromNumber(Decimal.tetrate_critical(this.toNumber(), fracheight)); //TODO: until the critical section grid can handle numbers below 2, scale them to the base
                                 //TODO: maybe once the critical section grid has very large bases, this math can be appropriate for them too? I'll think about it
                                 if (this.lt(2)) payload = payload.sub(1).mul(this.minus(1)).plus(1);
-                        }*/
+                        }
 
-                        // CHANGE HOW THIS IS IMPLEMENTED SPECIFICALLY FOR THIS GAME
-                        payload = this.pow(fracheight)
+                        /*// CHANGE HOW THIS IS IMPLEMENTED SPECIFICALLY FOR THIS GAME
+                        payload = this.pow(fracheight)*/
                 } else {
                         if (this.eq(10)) payload = payload.layeradd10(fracheight);
                         else payload = payload.layeradd(fracheight, this);

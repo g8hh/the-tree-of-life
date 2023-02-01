@@ -38613,6 +38613,7 @@ addLayer("e", {
                 time: 0,
                 times: 0,
                 passiveTime: 0,
+                everMile13: false,
         }},
         color: "#B5A225",
         branches: [],
@@ -39417,6 +39418,7 @@ addLayer("e", {
                         },
                         onComplete(){
                                 player.cells.upgrades = []
+                                player.e.everMile13 = true
                         },
                         effectDescription(){
                                 return "Reward: Add 50 to the Cell effect exponent and add 1.4 to the Tissue effect exponent but remove Cell upgrades."
@@ -55037,11 +55039,15 @@ addLayer("tokens", {
                         let add = hasUpgrade("hu", 101) ? 0 : hasChallenge("hu", 11) ? 1 : 4
                         
                         let main = decimalZero
-                        while (ptsCopy.gte(tetBase) && main.lt(10)) {
-                                main = main.plus(1)
-                                ptsCopy = ptsCopy.log(tetBase)
+                        if (player.e.everMile13) {
+                                main = ptsCopy.slog(tetBase)
+                        } else {
+                                while (ptsCopy.gte(tetBase) && main.lt(10)) {
+                                        main = main.plus(1)
+                                        ptsCopy = ptsCopy.log(tetBase)
+                                }
+                                main = main.plus(ptsCopy.log(tetBase))
                         }
-                        main = main.plus(ptsCopy.log(tetBase))
 
                         let canAff = main.sub(add).times(tmp.tokens.getTetrationScalingDivisor).plus(len).plus(tmp.tokens.getMinusEffectiveTokens)
                         return canAff.ceil().sub(player.tokens.total).max(0)

@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.045.1",
+	num: "2.046",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -15,9 +15,12 @@ function isEndgameRaw(){
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.045.1"
+var CHANELOG_VERSION = "v2.046"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.046</h3><br>
+		- Buffed Ecosystem milestone 13.<br>
+		- Added a cusotm save.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.045.1</h3><br>
 		- Fixed a bug with getNextAt running twice.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.045</h3><br>
@@ -2739,6 +2742,9 @@ function fixOldSave(oldVersion){
 	}
 	if (player.version < "2.030") {
 		if (!player.extremeMode) player.mini.milestones = []
+	}
+	if (player.version < "2.046") {
+		player.e.everMile13 = player.e.milestones.includes(13) || player.pl.unlocked
 	}
 }
 

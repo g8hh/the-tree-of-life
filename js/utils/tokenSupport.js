@@ -71,6 +71,9 @@ function tokenNextAt(){
         if (amt.gte(len)) {
                 let tetBase = tmp.tokens.getTetrationBase
                 let add = hasUpgrade("hu", 101) ? 0 : hasChallenge("hu", 11) ? 1 : 4
+                if (player.e.everMile13) {
+                        return Decimal.tetrate(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(add))
+                }
                 return tetr(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(add))
         }
         amt = Math.round(amt.toNumber())
