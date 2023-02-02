@@ -242,7 +242,7 @@ function importSave(imported = undefined, forced = false, fromCustomSaves = fals
 		let confirmString = "This save appears to be for a different mod! Are you sure you want to import?"
 		if (CUSTOM_SAVES_IDS.includes(imported)) {
 			let cString = "Are you sure you want to import the '" + imported + "' save?" 
-			if (fromCustomSaves) if (!confirm(cString)) return 
+			if (fromCustomSaves) if (!confirm(cString.replace("EX: ", ""))) return 
 			imported = CUSTOM_SAVES[imported]
 		}
 		let x = atob(imported)
