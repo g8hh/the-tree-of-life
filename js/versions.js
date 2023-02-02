@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.046",
+	num: "2.047",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -11,13 +11,17 @@ function isEndgame() {
 }
 
 function isEndgameRaw(){
-	if (player.extremeMode) return player.t.points.gte(1e24)
+	if (player.extremeMode) return player.t.points.gte(1e28)
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.046"
+var CHANELOG_VERSION = "v2.047"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.047</h3><br>
+		- Balanced Extreme Mode until 1e28 Tissues.<br>
+		- Implemented more upgrades.<br>
+		- Added a DNA-Science upgrade.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.046</h3><br>
 		- Buffed Ecosystem milestone 13.<br>
 		- Added a cusotm save.<br>`,

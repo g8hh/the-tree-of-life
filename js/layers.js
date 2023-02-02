@@ -5151,6 +5151,22 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 572)
                         }, // hasUpgrade("sci", 573)
                 },
+                574: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXXIX"
+                        },
+                        description(){
+                                if (player.shiftAlias) return "Single-stranded DNA-binding protein"
+                                return "Secondary is 1e193x harder if you have 87 completions and S-S D-B P (shift) works in secondary" 
+                        },
+                        cost:() => new Decimal("1e523854"),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 573)
+                        }, // hasUpgrade("sci", 574)
+                },
         },
         buyables: {
                 rows: 5,
@@ -20033,7 +20049,7 @@ addLayer("cells", {
 
                         if (hasUpgrade("sci", 532))     ret = ret.times(tmp.sci.upgrades[532].effect)
                         if (!hasUpgrade("t", 111))      ret = ret.times(tmp.sci.buyables[522].stem_cell_effect)
-                        if (!inChallenge("cells", 12) || player.cells.challenges[12] < 10) {
+                        if (!inChallenge("cells", 12) || player.cells.challenges[12] < 10 || hasUpgrade("sci", 574)) {
                                                         ret = ret.times(tmp.sci.buyables[523].stem_cell_effect)
                         }
                         if (hasUpgrade("sci", 524))     ret = ret.times(tmp.sci.buyables[501].effect.max(1))
@@ -20117,7 +20133,9 @@ addLayer("cells", {
                         if (hasUpgrade("t", 34))        ret = ret.times(tmp.t.upgrades[34].effect)
                         if (hasUpgrade("t", 92))        ret = ret.times(player.tokens.total.max(1).pow(Math.PI))
                         if (hasUpgrade("t", 111) && !player.extremeMode)       ret = ret.times(5)
-                        if (hasUpgrade("t", 113))       ret = ret.times(player.tokens.tokens2.total.div(69).plus(1).pow(player.tokens.total))
+                        if (hasUpgrade("t", 113) && (!player.extremeMode || player.cells.challenges[12] >= 86)) {
+                                                        ret = ret.times(player.tokens.tokens2.total.div(69).plus(1).pow(player.tokens.total))
+                        }
                         if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
                         if (hasUpgrade("t", 144))       ret = ret.times(Decimal.pow(2, player.t.upgrades.length))
                         
@@ -22385,8 +22403,6 @@ addLayer("cells", {
                                                 if (hasUpgrade("t", 124)) exp -= 6
                                                 if (hasUpgrade("t", 125)) exp -= 6
                                         }
-                                        if (hasUpgrade("sci", 551))     exp += -9 * tmp.sci.upgrades[551].lvls
-                                        if (hasUpgrade("t", 102))       exp -= 25
                                 }
                                 if (hasMilestone("t", 14)) {
                                         let per = player.extremeMode ? 7.698970004336019 : 9.778151250383644
@@ -22494,15 +22510,17 @@ addLayer("cells", {
                                 }
                                 if (hasUpgrade("cells", 51))    exp -= hasUpgrade("cells", 51) ? 32 : 2
                                 if (hasUpgrade("t", 121)) {
-                                        exp -= 7
-                                        if (hasUpgrade("t", 122)) exp -= 6
-                                        if (hasUpgrade("t", 123)) exp -= 6
-                                        if (hasUpgrade("t", 124)) exp -= 6
-                                        if (hasUpgrade("t", 125)) exp -= 6
+                                        exp -= player.extremeMode ? 27 : 7
+                                        if (hasUpgrade("t", 122)) exp -= player.extremeMode ? 27 : 6
+                                        if (hasUpgrade("t", 123)) exp -= player.extremeMode ? 27 : 6
+                                        if (hasUpgrade("t", 124)) exp -= player.extremeMode ? 27 : 6
+                                        if (hasUpgrade("t", 125)) exp -= player.extremeMode ? 27 : 6
                                 }
                                 if (hasMilestone("t", 22) && comps == 94) {
                                                                 exp -= 15
                                 }
+                                if (!player.extremeMode)        return Decimal.pow(10, exp)
+
                                 if (hasUpgrade("t", 102))       exp -= 25
                                 if (hasMilestone("t", 16))      exp -= 22.69897000433602 // Math.log10(5e22)
                                 if (hasUpgrade("t", 104))       exp -= 20.3010299956639813 // 22.3010299956639813 = Math.log10(2e20)
@@ -22511,11 +22529,12 @@ addLayer("cells", {
                                 if (hasUpgrade("cells", 41))    exp -= 26
                                 if (hasUpgrade("sci", 571))     exp -= 15 * (player.t.milestones.length - 15)
                                 if (hasMilestone("t", 17))      exp -= 1
-                                if (hasUpgrade("cells", 43) && player.extremeMode) {
-                                                                exp -= 40
-                                }
-                                if (hasUpgrade("cells", 53) && comps >= 80) {
+                                if (hasUpgrade("cells", 43))    exp -= 40
+                                if (hasUpgrade("cells", 53) && comps >= 87) {
                                         exp += 108
+                                }
+                                if (hasUpgrade("sci", 574) && comps >= 87) {
+                                        exp += 193
                                 }
 
                                 return Decimal.pow(10, exp)
@@ -24029,7 +24048,7 @@ addLayer("t", {
                         if (hasUpgrade("t", 84))        per = .13
                         if (hasUpgrade("t", 85))        per = .14
                         if (hasUpgrade("t", 93))        per = .16
-                        if (hasUpgrade("t", 114))       per = .165
+                        if (hasUpgrade("t", 114))       per = player.extremeMode ? .164 : .165
                         if (hasUpgrade("t", 115))       per = .17
                         if (hasUpgrade("t", 133))       per = .18
                         if (hasUpgrade("t", 134))       per = .19
@@ -24992,14 +25011,18 @@ addLayer("t", {
                         },
                         description(){
                                 let a = "Per token multiply Stem Cell gain by 1 + Token II / 69"
+                                if (player.extremeMode) return "If you have 86 Secondary completions, per token multiply Stem Cell gain by 1 + Token II / 69"
                                 let b = "<br>Requires: 84 Secondary completions</bdi>"
+                                if (player.extremeMode) {
+                                        b = b.replace("84", "85")
+                                }
                                 if (!hasUpgrade("t", 113)) return a + b
                                 return a + "</bdi>"
                         },
                         canAfford(){
-                                return player.cells.challenges[12] >= 84
+                                return player.cells.challenges[12] >= (player.extremeMode ? 85 : 84)
                         },
-                        cost:() => new Decimal(player.extremeMode ? 1e100 : 2e19),
+                        cost:() => new Decimal(player.extremeMode ? 1e25 : 2e19),
                         unlocked(){
                                 return hasUpgrade("t", 112) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 113)
@@ -25010,14 +25033,18 @@ addLayer("t", {
                         },
                         description(){
                                 let a = "Tissues IX becomes .165 and the number of upgrades dilates Life Point gain"
+                                if (player.extremeMode) a = a.replace("5", "4")
                                 let b = "<br>Requires: 85 Secondary completions</bdi>"
+                                if (player.extremeMode) {
+                                        b = b.replace("85", "86")
+                                }
                                 if (!hasUpgrade("t", 114)) return a + b
                                 return a + "</bdi>"
                         },
                         canAfford(){
-                                return player.cells.challenges[12] >= 85
+                                return player.cells.challenges[12] >= (player.extremeMode ? 86 : 85)
                         },
-                        cost:() => new Decimal(4e19),
+                        cost:() => new Decimal(player.extremeMode ? 4e25 : 4e19),
                         unlocked(){
                                 return hasUpgrade("t", 113) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 114)
@@ -25029,13 +25056,16 @@ addLayer("t", {
                         description(){
                                 let a = "Tissues IX becomes .17"
                                 let b = "<br>Requires: 86 Secondary completions</bdi>"
+                                if (player.extremeMode) {
+                                        b = b.replace("86", "87")
+                                }
                                 if (!hasUpgrade("t", 115)) return a + b
                                 return a + "</bdi>"
                         },
                         canAfford(){
-                                return player.cells.challenges[12] >= 86
+                                return player.cells.challenges[12] >= (player.extremeMode ? 87 : 86)
                         },
-                        cost:() => new Decimal(1e20),
+                        cost:() => new Decimal(player.extremeMode ? 6e25 : 1e20),
                         unlocked(){
                                 return hasUpgrade("t", 114) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 115)
@@ -25047,13 +25077,17 @@ addLayer("t", {
                         description(){
                                 let a = "Secondary is 10x easier and per upgrade in this row Secondary is 1e6 easier"
                                 let b = "<br>Requires: 87 Secondary completions</bdi>"
+                                if (player.extremeMode) {
+                                        b = b.replace("87", "88")
+                                        a = "Per upgrade in this row Secondary is 1e27 easier"
+                                }
                                 if (!hasUpgrade("t", 121)) return a + b
                                 return a + "</bdi>"
                         },
                         canAfford(){
-                                return player.cells.challenges[12] >= 87
+                                return player.cells.challenges[12] >= (player.extremeMode ? 88 : 87)
                         },
-                        cost:() => new Decimal(2e20),
+                        cost:() => new Decimal(player.extremeMode ? 1e27 : 2e20),
                         unlocked(){
                                 return hasUpgrade("t", 115) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 121)
@@ -25071,7 +25105,7 @@ addLayer("t", {
                         canAfford(){
                                 return player.cells.challenges[12] >= 88
                         },
-                        cost:() => new Decimal(5e20),
+                        cost:() => new Decimal(player.extremeMode ? 3e128 : 5e20),
                         unlocked(){
                                 return hasUpgrade("t", 121) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 122)
@@ -54536,7 +54570,7 @@ addLayer("mini", {
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                return "Reward: Remove B13 and 1/n^2 initial costs.<br>"
+                                return "Reward: Remove B13 and 1/n^2 base costs.<br>"
                         },
                 }, // hasMilestone("mini", 1)
                 2: {
@@ -54552,7 +54586,7 @@ addLayer("mini", {
                                 return player.extremeMode && hasMilestone("mini", 1)
                         },
                         effectDescription(){
-                                return "Reward: Remove B11 and 13.6 eV initial costs.<br>"
+                                return "Reward: Remove B11 and 13.6 eV base costs.<br>"
                         },
                 }, // hasMilestone("mini", 2)
                 3: {
@@ -54568,7 +54602,7 @@ addLayer("mini", {
                                 return player.extremeMode && hasMilestone("mini", 2)
                         },
                         effectDescription(){
-                                return "Reward: Remove B12 initial cost and double H Sci III.<br>"
+                                return "Reward: Remove B12 base cost and double H Sci III.<br>"
                         },
                 }, // hasMilestone("mini", 3)
                 4: {
@@ -58022,7 +58056,7 @@ addLayer("tokens", {
                         effectDescription(){
                                 let a = "Reward: Raise Microwaves effect to the total number of tokens and keep Hydrogen XI and XII.<br>"
                                 if (player.extremeMode) {
-                                        a = "Reward: Raise Microwaves effect to the total number of tokens, keep Hydrogen XI and XII, and autobuy α ~ 1/147.<br>"
+                                        a = "Reward: Raise Microwaves effect to the total number of tokens, keep Hydrogen XI and XII, and autobuy α ~ 1/137.<br>"
                                 }
                                 let b = "Currently: " + format(tmp.tokens.milestones[2].effect)
                                 if (player.shiftAlias) {
@@ -58250,7 +58284,7 @@ addLayer("tokens", {
                         effectDescription(){
                                 let a = "Reward: Gamma Rays and Exponential are based on best amount, square Ultraviolet, "
                                 if (!player.extremeMode) return a + "and keep Oxygen and Carbon upgrades upon token reset.<br>"
-                                return a + "keep Oxygen, Carbon, and Oxygen Science upgrades upon token reset, and autobuy Natural"
+                                return a + "keep Oxygen, Carbon, and Oxygen Science upgrades upon token reset (those unlocked thusfar), and autobuy Natural"
                         },
                 }, // hasMilestone("tokens", 11)
                 12: {
