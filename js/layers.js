@@ -6162,6 +6162,7 @@ addLayer("sci", {
 
                                 if (hasUpgrade("cells", 13))    ret = ret.plus(.1)
                                 if (hasUpgrade("sci", 561))     ret = ret.plus(.01 * tmp.sci.upgrades.dnaUpgradesLength)
+                                if (hasUpgrade("t", 141))       ret = ret.plus(.15 * player.t.upgrades.length)
 
                                 return ret
                         },
@@ -6451,8 +6452,13 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                if (hasUpgrade("sci", 575)) return decimalTwo
-                                return new Decimal(1.5)
+                                let ret = new Decimal(1.5)
+
+                                if (hasUpgrade("sci", 575)) ret = ret.plus(.5)
+
+                                if (hasUpgrade("t", 133)) ret = ret.plus(player.tokens.tokens2.total.div(10))
+
+                                return ret
                         },
                         effect(){
                                 return tmp.sci.buyables[521].base.times(player.sci.buyables[521])
@@ -6509,7 +6515,11 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                return new Decimal(1.5)
+                                let ret = new Decimal(1.5)
+
+                                if (hasUpgrade("t", 133)) ret = ret.plus(player.tokens.tokens2.total.div(10))
+
+                                return ret
                         },
                         effect(){
                                 return tmp.sci.buyables[522].base.times(player.sci.buyables[522])
@@ -20160,6 +20170,9 @@ addLayer("cells", {
                         if (hasUpgrade("t", 132) && player.extremeMode) {
                                                         ret = ret.times(1e6)
                         }
+                        if (hasUpgrade("t", 133) && player.extremeMode) {
+                                                        ret = ret.times(Decimal.pow(1.1, player.tokens.tokens2.total))
+                        }
                         
                         return ret
                 },
@@ -22397,10 +22410,10 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 75) && c >= 10) {
                                         if (player.extremeMode) exp += 513
                                         if (hasMilestone("t", 19)) {
+                                                if (c > 33) c -= .005
+                                                if (c > 31) c = c * .8 + 6.16
+                                                if (c > 30) c = c/2.5 + 18
                                                 exp += Math.pow(c, 3) * 1.2 + 53
-                                                if (c > 30) {
-                                                        exp += (c-30) * c * 100
-                                                }
                                         } else {
                                                 exp += Math.pow(c, c/5) + 655
                                                 if (c >= 15) exp += 50
@@ -25243,16 +25256,18 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXIII"
                         },
                         description(){
-                                let a = "Tissues IX is .18 per, Primary goal is at most 1e8500, and per Token II add .01 to Omnipotent base"
-                                if (player.extremeMode) a = a.replace(", Primary goal is at most 1e8500,", "")
+                                let a = "Tissues IX is .18 per, Primary goal is at most 1e8500, and per Token II add .002 to Omnipotent base"
+                                if (player.extremeMode) {
+                                        a = "<bdi style='font-size: 80%'>Tissues IX is .18 per and per Token II add .002 to Omnipotent base, gain 1.1x Stem Cells, and .1 to Telomerase and DNA gyrase base</bdi>"
+                                }
                                 let b = "<br>Requires: 31 Primary completions"
-                                if (!hasUpgrade("t", 133)) return a + b
+                                if (!hasUpgrade("t", 133) && player.extremeMode) return a + b
                                 return a
                         },
                         canAfford(){
-                                return player.cells.challenges[11] >= 31
+                                return player.cells.challenges[11] >= 31 || !player.extremeMode
                         },
-                        cost:() => new Decimal(player.extremeMode ? 1e140 : 5e30),
+                        cost:() => new Decimal(player.extremeMode ? 1e40 : 5e30),
                         unlocked(){
                                 return hasUpgrade("t", 132) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 133)
@@ -25262,9 +25277,15 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXIV"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Tissues IX is .19 per, Strange Quark effect coefficient is .7 more, Down Quark effect is based on best and triple its base</bdi>"
+                                let a = "<bdi style='font-size: 80%'>Tissues IX is .19 per, Strange Quark effect coefficient is .7 more, Down Quark effect is based on best and triple its base</bdi>"
+                                let b = "<br>Requires: 32 Primary completions"
+                                if (!hasUpgrade("t", 134) && player.extremeMode) return a + b
+                                return a
                         },
-                        cost:() => new Decimal(2e32),
+                        canAfford(){
+                                return player.cells.challenges[11] >= 32 || !player.extremeMode
+                        },
+                        cost:() => new Decimal(player.extremeMode ? 3e41 : 2e32),
                         unlocked(){
                                 return hasUpgrade("t", 133) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 134)
@@ -25274,13 +25295,21 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXV"
                         },
                         description(){
-                                let a = "log10(log10(Points))<sup>.4</sup> multiplies Cell and Stem Cell gain"
+                                let a = "log10<sup>(2)</sup>(Points)<sup>.4</sup> multiplies Cell and Stem Cell gain"
+                                let b = "<br>Requires: 33 Primary completions"
+                                if (player.extremeMode) {
+                                        a = a.replace(".4", "1.61")
+                                }
+                                if (!hasUpgrade("t", 135) && player.extremeMode) return a + b
                                 return a + br + "Currently: " + format(tmp.t.upgrades[135].effect)
                         },
-                        effect(){
-                                return player.points.max(10).log10().max(10).log10().pow(.4)
+                        canAfford(){
+                                return player.cells.challenges[11] >= 33 || !player.extremeMode
                         },
-                        cost:() => new Decimal(2e33),
+                        effect(){
+                                return player.points.max(10).log10().max(10).log10().pow(player.extremeMode ? 1.61 : .4)
+                        },
+                        cost:() => new Decimal(player.extremeMode ? 1e43 : 2e33),
                         unlocked(){
                                 return hasUpgrade("t", 134) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 135)
@@ -25290,9 +25319,16 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXVI"
                         },
                         description(){
-                                return "Per upgrade you have one less token for prestige purposes"
+                                let a = "Per upgrade you have one less token for prestige purposes"
+                                if (player.extremeMode) a += " and add .1 to DNA helicase base"
+                                let b = "<br>Requires: 34 Primary completions"
+                                if (!hasUpgrade("t", 141) && player.extremeMode) return a + b
+                                return a 
                         },
-                        cost:() => new Decimal(1e35),
+                        canAfford(){
+                                return player.cells.challenges[11] >= 34 || !player.extremeMode
+                        },
+                        cost:() => new Decimal(player.extremeMode ? 2e44 : 1e35),
                         unlocked(){
                                 return hasUpgrade("t", 135) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 141)
@@ -25304,7 +25340,7 @@ addLayer("t", {
                         description(){
                                 return "Unlock a Cell buyable"
                         },
-                        cost:() => new Decimal(2e36),
+                        cost:() => new Decimal(player.extremeMode ? 5e145 : 2e36),
                         unlocked(){
                                 return hasUpgrade("t", 141) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 142)
