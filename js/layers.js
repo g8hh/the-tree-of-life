@@ -12997,7 +12997,7 @@ addLayer("l", {
                         },
                         effectDescription(){
                                 let b = "Note: Requires having being in Dilation with 39 completions." + br
-                                if (player.extremeMode) b = b.slice(61, )
+                                if (player.extremeMode) b = ""
                                 let a = "Reward: If not in a challenge, you get ee40 Phosphorus after one second."
                                 return b + a
                         },
