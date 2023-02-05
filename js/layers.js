@@ -2514,7 +2514,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci IV"
                         },
                         description(){
-                                return "Oxygen Science multiplies B Point and color gain, quadruple Oxygen Science gain, and remove 21%'s base cost"
+                                return "Oxygen Science multiplies B Point and color gain, gain 4x Oxygen Science, and remove 21%'s base cost"
                         },
                         cost:() => new Decimal(1e30),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -20166,7 +20166,9 @@ addLayer("cells", {
                                                         ret = ret.times(player.tokens.tokens2.total.div(69).plus(1).pow(player.tokens.total))
                         }
                         if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
-                        if (hasUpgrade("t", 144))       ret = ret.times(Decimal.pow(2, player.t.upgrades.length))
+                        if (hasUpgrade("t", 144) && !player.extremeMode) {
+                                                        ret = ret.times(Decimal.pow(2, player.t.upgrades.length))
+                        }
                         if (hasUpgrade("t", 132) && player.extremeMode) {
                                                         ret = ret.times(1e6)
                         }
@@ -22410,6 +22412,7 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 75) && c >= 10) {
                                         if (player.extremeMode) exp += 513
                                         if (hasMilestone("t", 19)) {
+                                                if (c > 37) c -= .23
                                                 if (c > 33) c -= .005
                                                 if (c > 31) c = c * .8 + 6.16
                                                 if (c > 30) c = c/2.5 + 18
@@ -23045,12 +23048,12 @@ addLayer("cells", {
                         cost(){
                                 let amt = getBuyableAmount("cells", 21)
                                 let exp = amt.pow(tmp.cells.buyables[21].costExp)
-                                let init = new Decimal("1e1120e3")
+                                let init = new Decimal(player.extremeMode ? "1e3e6" : "1e1120e3")
                                 if (hasUpgrade("t", 152) || player.e.unlocked) init = decimalOne
                                 return init.times(tmp.cells.buyables[21].costBase.pow(exp))
                         },
                         costBase(){
-                                let ret = 1e40
+                                let ret = player.extremeMode ? 1e50 : 1e40
                                 if (hasUpgrade("t", 152))       ret = 1e60
                                 if (hasUpgrade("t", 153))       ret = 1e50
                                 if (hasUpgrade("t", 154))       ret = 1e40
@@ -23085,7 +23088,7 @@ addLayer("cells", {
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[21].cost),
                         maxAfford(){
-                                let init = new Decimal("1e1120e3")
+                                let init = new Decimal(player.extremeMode ? "1e3e6" : "1e1120e3")
                                 if (hasUpgrade("t", 152) || player.e.unlocked) init = decimalOne
                                 let pts = player.cells.stem_cells.points
                                 if (pts.lt(init)) return decimalZero
@@ -23135,6 +23138,7 @@ addLayer("cells", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1,120,000*BASE^(x<sup>EXP</sup>)" 
+                                if (player.extremeMode) cost2 = "1e3,000,000*BASE^(x<sup>EXP</sup>)" 
                                 if (hasUpgrade("t", 152) || player.e.unlocked) cost2 = "BASE^(x<sup>EXP</sup>)"
                                 cost2 = cost2.replace("EXP", format(tmp.cells.buyables[21].costExp))
                                 cost2 = cost2.replace("BASE", format(tmp.cells.buyables[21].costBase, 0))
@@ -24027,6 +24031,9 @@ addLayer("t", {
                 }
                 if (hasMilestone("an", 39))     ret = ret.times(player.an.grid[307].extras.plus(1).pow(player.ch.points.min(5000).pow(3)))
                 if (hasUpgrade("sci", 573))     ret = ret.times(tmp.sci.upgrades[573].effect)
+                if (player.tokens.tokens2Unl.includes(122) && player.extremeMode && !player.or.unlocked) {
+                                                ret = ret.div(1e8)
+                }
                 
                 return ret.max(1)
         },
@@ -25338,9 +25345,15 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXVII"
                         },
                         description(){
-                                return "Unlock a Cell buyable"
+                                let a = "Unlock a Cell buyable"
+                                let b = "<br>Requires: 35 Primary completions"
+                                if (!hasUpgrade("t", 142) && player.extremeMode) return a + b
+                                return a 
                         },
-                        cost:() => new Decimal(player.extremeMode ? 5e145 : 2e36),
+                        canAfford(){
+                                return player.cells.challenges[11] >= 35 || !player.extremeMode
+                        },
+                        cost:() => new Decimal(player.extremeMode ? 5e45 : 2e36),
                         unlocked(){
                                 return hasUpgrade("t", 141) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 142)
@@ -25352,7 +25365,7 @@ addLayer("t", {
                         description(){
                                 return "Strange Quark effect is its best ever"
                         },
-                        cost:() => new Decimal(2e40),
+                        cost:() => new Decimal(player.extremeMode ? 5e52 : 2e40),
                         unlocked(){
                                 return hasUpgrade("t", 142) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 143)
@@ -25362,9 +25375,17 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXIX"
                         },
                         description(){
+                                let b = "<br>Requires: 39 Primary completions"
+                                let a = "Unlock two Token buyables and add 1.5 to Down and Strange Quark's coefficient"
+                                if (player.extremeMode) {
+                                        return hasUpgrade("t", 144) ? a : (a + b)
+                                }
                                 return "<bdi style='font-size: 80%'>Unlock two Token buyables, add 1.5 to Down and Strange Quark's coefficient, and per upgrade double Stem Cell gain</bdi>"
                         },
-                        cost:() => new Decimal(2e42),
+                        canAfford(){
+                                return player.cells.challenges[11] >= 39 || !player.extremeMode
+                        },
+                        cost:() => new Decimal(player.extremeMode ? 1e54 : 2e42),
                         unlocked(){
                                 return hasUpgrade("t", 143) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 144)
@@ -25376,7 +25397,7 @@ addLayer("t", {
                         description(){
                                 return "Top Quark effect is its best ever and autobuy Multipotent"
                         },
-                        cost:() => new Decimal(5e58),
+                        cost:() => new Decimal(player.extremeMode ? 3e60 : 5e58),
                         unlocked(){
                                 return hasUpgrade("t", 144) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 145)
@@ -25403,7 +25424,7 @@ addLayer("t", {
                                 tmp.p.layerShown = false
                                 updateTemp()
                         }, // the only thing that is changed is hasMilestone("cells", 39)
-                        cost:() => new Decimal(5e64),
+                        cost:() => new Decimal(player.extremeMode ? 1e100 : 5e64),
                         unlocked(){
                                 return hasUpgrade("cells", 65) || hasUpgrade("t", 151) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 151)
@@ -25817,10 +25838,11 @@ addLayer("t", {
                 }, // hasMilestone("t", 22)
                 23: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e35,944"
                                 return "1e23,701 Cells"
                         },
                         done(){
-                                if (player.extremeMode) return false
+                                if (player.extremeMode) return player.cells.points.gte("1e35944")
                                 return player.cells.points.gte("1e23701")
                         },
                         unlocked(){
@@ -56856,7 +56878,10 @@ addLayer("tokens", {
                         title: "TOP QUARK",
                         cost:() => layers.tokens.buyables.costFormulaID(121),
                         canAfford(){
-                                if (!player.tokens.tokens2Unl.includes(121)) return player.cells.points.gte("1e30400")
+                                if (!player.tokens.tokens2Unl.includes(121)) {
+                                        if (player.extremeMode) return player.t.points.gte(2e57)
+                                        return player.cells.points.gte("1e30400")
+                                }
                                 return player.tokens.tokens2.points.gte(tmp.tokens.buyables[121].cost) && !player.tokens.buyablesBoughtThisTick.includes(121)
                         },
                         buy(){
@@ -56928,7 +56953,10 @@ addLayer("tokens", {
                                 return hasUpgrade("t", 144) || player.hu.unlocked
                         },
                         display(){
-                                if (!player.tokens.tokens2Unl.includes(121)) return "<br>You need 1e30400 Cells to unlock this buyable"
+                                if (!player.tokens.tokens2Unl.includes(121)) {
+                                        if (player.extremeMode) return "<br>You need 2e57 Tissues to unlock this buyable"
+                                        return "<br>You need 1e30400 Cells to unlock this buyable"
+                                }
 
                                 if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[121]) + "</b><br>"
@@ -56972,7 +57000,10 @@ addLayer("tokens", {
                         title: "BOTTOM QUARK",
                         cost:() => layers.tokens.buyables.costFormulaID(122),
                         canAfford(){
-                                if (!player.tokens.tokens2Unl.includes(122)) return player.cells.points.gte("1e30942")
+                                if (!player.tokens.tokens2Unl.includes(122)) {
+                                        if (player.extremeMode) return player.t.points.gte(1e58)
+                                        return player.cells.points.gte("1e30942")
+                                }
                                 return player.tokens.tokens2.points.gte(tmp.tokens.buyables[122].cost) && !player.tokens.buyablesBoughtThisTick.includes(122)
                         },
                         buy(){
@@ -57029,7 +57060,10 @@ addLayer("tokens", {
                                 return hasUpgrade("t", 144) || player.hu.unlocked
                         },
                         display(){
-                                if (!player.tokens.tokens2Unl.includes(122)) return "<br>You need 1e30942 Cells to unlock this buyable"
+                                if (!player.tokens.tokens2Unl.includes(122)) {
+                                        if (player.extremeMode) return "<br>You need 1e58 Tissues to unlock this buyable<br><br>Note: Buying this divides Tissue gain by 1e8 until the next layer unlock"
+                                        return "<br>You need 1e30942 Cells to unlock this buyable"
+                                }
                                 
                                 if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[122]) + "</b><br>"
