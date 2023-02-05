@@ -5257,6 +5257,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XLV"
                         },
                         description(){
+                                if (player.shiftAlias) return "If you don't have DNA Sci XLIII, XLIV, and XLV, then Multipotent base cannot go below 1e50"
                                 return "Multipotent cost base is 1e50"
                         },
                         cost:() => new Decimal("1e2053e3"),
@@ -6857,7 +6858,7 @@ addLayer("sci", {
                 "Info": {
                         content: [
                                 "main-display",
-                                ["display-text", "Every reset other than this resets science"],
+                                ["display-text", "Every layer resets all science content unless otherwise stated"],
                                 ["display-text", function(){
                                         return "You are currently getting " + format(tmp.sci.getResetGain) + " science per second"
                                 }],
@@ -22236,10 +22237,12 @@ addLayer("cells", {
                 47: {
                         requirementDescription(){
                                 if (player.extremeMode) return "2e2840 DNA Science"
-                                return "10 Secondary Challenge Completions"
+                                if (player.or.unlocked) return makeRed("20 Cell challenge completions")
+                                return "10 Secondary challenge completions"
                         },
                         done(){
                                 if (player.extremeMode) return player.sci.dna_science.points.gte("2e2840")
+                                if (player.or.unlocked) return layerChallengeCompletions("cells") >= 20
                                 return player.cells.challenges[12] >= 10
                         },
                         unlocked(){
@@ -23181,6 +23184,9 @@ addLayer("cells", {
                                         if (hasUpgrade("sci", 584))     ret = 1e70
                                         if (hasUpgrade("t", 154))       ret = 1e60
                                         if (hasUpgrade("sci", 585))     ret = 1e50
+                                        if (!hasUpgrade("sci", 583) || !hasUpgrade("sci", 584) || !hasUpgrade("sci", 585)) {
+                                                return new Decimal(ret)
+                                        }
                                 } else {
                                         ret = 1e40
                                         if (hasUpgrade("t", 152))       ret = 1e60
