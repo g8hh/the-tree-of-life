@@ -1863,8 +1863,12 @@ addLayer("sci", {
 
                 let reqSecondary = [11, 13, 14, 21, 25, 31, 32, 41, 42]
                 let orderSecondary = [501, 502, 503, 511, 512, 513, 521, 522, 523]
-                for (let i = 0; i < 9; i ++){
-                        if (hasUpgrade("t", reqSecondary[i])) sciBuyIds.push(orderSecondary[i])
+                if (hasMilestone("or", 1)) {
+                        sciBuyIds = sciBuyIds.concat(orderSecondary)
+                } else {
+                        for (let i = 0; i < 9; i ++){
+                                if (hasUpgrade("t", reqSecondary[i])) sciBuyIds.push(orderSecondary[i])
+                        }
                 }
                 
                 if (data.autobuyreuse && hasMilestone("l", 3)) sciBuyIds.push(302)
@@ -7028,6 +7032,14 @@ addLayer("sci", {
                                    521, 522, 523, 524, 525, 
                                    531, 532, 533, 534, 535,
                                    541, 542, 543, 544, 545]
+                        if (layer != "t" && layer != "cells") {
+                                ids = ids.concat([
+                                        551, 552, 553, 554, 555, 
+                                        561, 562, 563, 564, 565, 
+                                        571, 572, 573, 574, 575,
+                                        581, 582, 583, 584, 585
+                                ])
+                        }
                         let resetContent = true 
                         if (layer == "cells" && hasMilestone("cells", 5)) resetContent = false
                         if (hasMilestone("cells", 33)) resetContent = false
@@ -21341,7 +21353,7 @@ addLayer("cells", {
                         canAfford(){
                                 return player.cells.stem_cells.best.gte(player.extremeMode ? 1e34 : 1e46)
                         },
-                        cost:() => hasMilestone("cells", 38) ? decimalOne : new Decimal(player.extremeMode ? "1e400" : "1e446"),
+                        cost:() => (hasMilestone("cells", 38) || hasMilestone("or", 4)) ? decimalOne : new Decimal(player.extremeMode ? "1e400" : "1e446"),
                         currencyLocation:() => player.cells.iota,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
@@ -22748,6 +22760,7 @@ addLayer("cells", {
                                 if (player.extremeMode) {
                                         if (c == 0) return new Decimal("1e15540")
                                         if (c == 1) return new Decimal("1e14945")
+                                        if (c == 2) return new Decimal("1e114945")
                                 }
 
                                 let exp = new Decimal(167)
@@ -31887,6 +31900,9 @@ addLayer("or", {
                 player.mu.buyables[33] = decimalZero
 
                 player.p.best_over_amino = decimalZero
+
+                if (player.extremeMode) layers.sci.doReset("or")
+
                 resetPreLifeCurrencies()
         },
 })
