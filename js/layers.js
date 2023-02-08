@@ -2346,6 +2346,7 @@ addLayer("sci", {
                         },
                         cost:() => new Decimal(500),
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 return !hasUpgrade("sci", 305)
                         }, // hasUpgrade("sci", 11)
                 },
@@ -2361,6 +2362,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Hydrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 return hasUpgrade("sci", 11) || player.n.unlocked
                         }, // hasUpgrade("sci", 12)
                 },
@@ -2384,6 +2386,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Hydrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 return hasUpgrade("sci", 12) || player.n.unlocked
                         }, // hasUpgrade("sci", 13)
                 },
@@ -2415,6 +2418,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 return hasUpgrade("h", 45) || hasUpgrade("sci", 14) || player.n.unlocked
                         }, // hasUpgrade("sci", 14)
                 },
@@ -2440,6 +2444,7 @@ addLayer("sci", {
                                 return Decimal.pow(1.1, amt)
                         },
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 return hasUpgrade("h", 44) || hasUpgrade("sci", 15) || player.n.unlocked
                         }, // hasUpgrade("sci", 15)
                 },
@@ -2455,6 +2460,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Hydrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 return hasUpgrade("h", 44) && hasUpgrade("h", 45) || player.n.unlocked
                         }, // hasUpgrade("sci", 21)
                 },
@@ -2470,6 +2476,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Hydrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 return hasUpgrade("sci", 21) || player.n.unlocked
                         }, // hasUpgrade("sci", 22)
                 },
@@ -2485,6 +2492,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Hydrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 return hasUpgrade("sci", 22) || player.n.unlocked
                         }, // hasUpgrade("sci", 23)
                 },
@@ -2500,6 +2508,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Hydrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 return hasUpgrade("sci", 23) || player.n.unlocked
                         }, // hasUpgrade("sci", 24)
                 },
@@ -2515,6 +2524,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Hydrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 return hasUpgrade("sci", 24) || player.n.unlocked
                         }, // hasUpgrade("sci", 25)
                 },
@@ -2530,6 +2540,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("o", 13) || player.n.unlocked
                         }, // hasUpgrade("sci", 101)
@@ -2546,6 +2557,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 101) || player.n.unlocked
                         }, // hasUpgrade("sci", 102)
@@ -2562,6 +2574,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("h", 65) || player.n.unlocked
                         }, // hasUpgrade("sci", 103)
@@ -2578,6 +2591,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 103) || player.n.unlocked
                         }, // hasUpgrade("sci", 104)
@@ -2594,6 +2608,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 104) || player.n.unlocked
                         }, // hasUpgrade("sci", 105)
@@ -2610,6 +2625,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return (player.tokens.total.gt(0) && hasUpgrade("sci", 105)) || player.n.unlocked
                         }, // hasUpgrade("sci", 111)
@@ -2626,6 +2642,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return (hasUpgrade("sci", 111) && player.tokens.total.gt(8)) || player.n.unlocked
                         }, // hasUpgrade("sci", 112)
@@ -2642,6 +2659,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return (hasUpgrade("sci", 112) && player.tokens.total.gt(11)) || player.n.unlocked
                         }, // hasUpgrade("sci", 113)
@@ -2664,6 +2682,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("tokens", 61) || hasUpgrade("sci", 114) || player.n.unlocked
                         }, // hasUpgrade("sci", 114)
@@ -2680,6 +2699,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 114) || player.n.unlocked
                         }, // hasUpgrade("sci", 115)
@@ -2696,6 +2716,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasMilestone("tokens", 20) || player.n.unlocked
                         }, // hasUpgrade("sci", 121)
@@ -2719,6 +2740,7 @@ addLayer("sci", {
                                 return format(tmp.sci.upgrades[122].effect)
                         },
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasMilestone("tokens", 22) || player.n.unlocked
                         }, // hasUpgrade("sci", 122)
@@ -2735,6 +2757,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 122) || player.n.unlocked
                         }, // hasUpgrade("sci", 123)
@@ -2757,6 +2780,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 123) || player.n.unlocked
                         }, // hasUpgrade("sci", 124)
@@ -2785,6 +2809,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 402)) return false
                                 return tmp.mini.tabFormat.C.unlocked || player.n.unlocked
                         }, // hasUpgrade("sci", 125)
@@ -2807,6 +2832,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 125) || player.n.unlocked
                         }, // hasUpgrade("sci", 201)
@@ -2830,6 +2856,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 201) || player.n.unlocked
                         }, // hasUpgrade("sci", 202)
@@ -2853,6 +2880,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 202) || player.n.unlocked
                         }, // hasUpgrade("sci", 203)
@@ -2876,6 +2904,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 203) || player.n.unlocked
                         }, // hasUpgrade("sci", 204)
@@ -2896,6 +2925,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 204) || player.n.unlocked
                         }, // hasUpgrade("sci", 205)
@@ -2916,6 +2946,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 205) || player.n.unlocked
                         }, // hasUpgrade("sci", 211)
@@ -2936,6 +2967,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 211) || player.n.unlocked
                         }, // hasUpgrade("sci", 212)
@@ -2962,6 +2994,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 212) || player.n.unlocked
                         }, // hasUpgrade("sci", 213)
@@ -2982,6 +3015,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 213) || player.n.unlocked
                         }, // hasUpgrade("sci", 214)
@@ -3002,6 +3036,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 214) || player.n.unlocked
                         }, // hasUpgrade("sci", 215)
@@ -3022,6 +3057,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 215) || player.n.unlocked
                         }, // hasUpgrade("sci", 221)
@@ -3042,6 +3078,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 221) || player.n.unlocked
                         }, // hasUpgrade("sci", 222)
@@ -3062,6 +3099,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 222) || player.n.unlocked
                         }, // hasUpgrade("sci", 223)
@@ -3082,6 +3120,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 223) || player.n.unlocked
                         }, // hasUpgrade("sci", 224)
@@ -3102,6 +3141,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 224) || player.n.unlocked
                         }, // hasUpgrade("sci", 225)
@@ -3122,6 +3162,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 225) || player.n.unlocked
                         }, // hasUpgrade("sci", 231)
@@ -3142,6 +3183,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 231) || player.n.unlocked
                         }, // hasUpgrade("sci", 232)
@@ -3162,6 +3204,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 232) || player.n.unlocked
                         }, // hasUpgrade("sci", 233)
@@ -3182,6 +3225,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 233) || player.n.unlocked
                         }, // hasUpgrade("sci", 234)
@@ -3202,6 +3246,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 234) || player.n.unlocked
                         }, // hasUpgrade("sci", 235)
@@ -3222,6 +3267,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return player.tokens.total.gte(66) || player.n.unlocked
                         }, // hasUpgrade("sci", 241)
@@ -3238,6 +3284,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 241) || player.n.unlocked
                         }, // hasUpgrade("sci", 242)
@@ -3254,6 +3301,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 242) || player.n.unlocked
                         }, // hasUpgrade("sci", 243)
@@ -3270,6 +3318,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 243) || player.n.unlocked
                         }, // hasUpgrade("sci", 244)
@@ -3286,6 +3335,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 415)) return false
                                 return hasUpgrade("sci", 244) || player.n.unlocked
                         }, // hasUpgrade("sci", 245)
@@ -3307,6 +3357,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasMilestone("n", 14) || player.p.unlocked
                         }, // hasUpgrade("sci", 301)
@@ -3331,6 +3382,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 301) || player.p.unlocked
                         }, // hasUpgrade("sci", 302)
@@ -3352,6 +3404,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 301) || player.p.unlocked
                         }, // hasUpgrade("sci", 303)
@@ -3373,6 +3426,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 301) || player.p.unlocked
                         }, // hasUpgrade("sci", 304)
@@ -3407,6 +3461,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 302) && hasUpgrade("sci", 303) && hasUpgrade("sci", 304) || player.p.unlocked
                         }, // hasUpgrade("sci", 305)
@@ -3423,6 +3478,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 305) || player.p.unlocked
                         }, // hasUpgrade("sci", 311)
@@ -3446,6 +3502,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 311) || player.p.unlocked
                         }, // hasUpgrade("sci", 312)
@@ -3469,6 +3526,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 312) || player.p.unlocked
                         }, // hasUpgrade("sci", 313)
@@ -3489,6 +3547,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 313) || player.p.unlocked
                         }, // hasUpgrade("sci", 314)
@@ -3509,6 +3568,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 314) || player.p.unlocked
                         }, // hasUpgrade("sci", 315)
@@ -3532,6 +3592,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 315) || player.p.unlocked
                         }, // hasUpgrade("sci", 321)
@@ -3555,6 +3616,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 321) || player.p.unlocked
                         }, // hasUpgrade("sci", 322)
@@ -3581,6 +3643,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 322) || player.p.unlocked
                         }, // hasUpgrade("sci", 323)
@@ -3597,6 +3660,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 323) || player.p.unlocked
                         }, // hasUpgrade("sci", 324)
@@ -3613,6 +3677,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 324) || player.p.unlocked
                         }, // hasUpgrade("sci", 325)
@@ -3629,6 +3694,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 325) || player.p.unlocked
                         }, // hasUpgrade("sci", 331)
@@ -3645,6 +3711,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 331) || player.p.unlocked
                         }, // hasUpgrade("sci", 332)
@@ -3661,6 +3728,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 332) || player.p.unlocked
                         }, // hasUpgrade("sci", 333)
@@ -3677,6 +3745,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 333) || player.p.unlocked
                         }, // hasUpgrade("sci", 334)
@@ -3693,6 +3762,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 334) || player.p.unlocked
                         }, // hasUpgrade("sci", 335)
@@ -3710,6 +3780,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 335) || player.p.unlocked
                         }, // hasUpgrade("sci", 341)
@@ -3726,6 +3797,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 341) || player.p.unlocked
                         }, // hasUpgrade("sci", 342)
@@ -3742,6 +3814,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 342) || player.p.unlocked
                         }, // hasUpgrade("sci", 343)
@@ -3762,6 +3835,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 343) || player.p.unlocked
                         }, // hasUpgrade("sci", 344)
@@ -3782,6 +3856,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 344) || player.p.unlocked
                         }, // hasUpgrade("sci", 345)
@@ -3802,6 +3877,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 345) || player.p.unlocked
                         }, // hasUpgrade("sci", 351)
@@ -3830,6 +3906,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 351) || player.p.unlocked
                         }, // hasUpgrade("sci", 352)
@@ -3850,6 +3927,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 352) || player.p.unlocked
                         }, // hasUpgrade("sci", 353)
@@ -3870,6 +3948,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 353) || player.p.unlocked
                         }, // hasUpgrade("sci", 354)
@@ -3891,6 +3970,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 354) || player.p.unlocked
                         }, // hasUpgrade("sci", 355)
@@ -3914,6 +3994,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 355) || player.p.unlocked
                         }, // hasUpgrade("sci", 361)
@@ -3934,6 +4015,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 361) || player.p.unlocked
                         }, // hasUpgrade("sci", 362)
@@ -3957,6 +4039,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 362) || player.p.unlocked
                         }, // hasUpgrade("sci", 363)
@@ -3977,6 +4060,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 363) || player.p.unlocked
                         }, // hasUpgrade("sci", 364)
@@ -3997,10 +4081,12 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen Science",
                         unlocked(){
+                                if (player.or.unlocked) return false
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 364) || player.p.unlocked
                         }, // hasUpgrade("sci", 365)
                 },
+
                 401: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci I"
