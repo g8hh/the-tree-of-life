@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.051",
+	num: "2.052",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -11,13 +11,17 @@ function isEndgame() {
 }
 
 function isEndgameRaw(){
-	if (player.extremeMode) return player.or.contaminants.points.gte(1e10)
+	if (player.extremeMode) return player.or.contaminants.points.gte("1e2600")
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.051"
+var CHANELOG_VERSION = "v2.052"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC6600'>v2.052</h3><br>
+		- Balanced Extreme Mode until 1e2600 Contaminants.<br>
+		- Added twelve Organ Science upgrades.<br>
+		- Implemented more upgrades.<br>`,
 	`<br><h3 style='color: #CC6600'>v2.051</h3><br>
 		- Balanced Extreme Mode until 1e10 Contaminants.<br>
 		- Added five DNA Science upgrades.<br>
