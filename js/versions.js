@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.054",
+	num: "2.055",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -11,13 +11,19 @@ function isEndgame() {
 }
 
 function isEndgameRaw(){
-	if (player.extremeMode) return player.or.air.points.gte("1e646")
+	if (player.extremeMode) return player.or.energy.points.gte("1e362")
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.054"
+var CHANELOG_VERSION = "v2.055"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC6600'>v2.055</h3><br>
+		- Balanced Extreme Mode until 1e362 Energy.<br>
+		- Added four Organ Science upgrades.<br>
+		- Added four Organ Science buyables.<br>
+		- Implemented more upgrades.<br>
+		- Added a custom save.<br>`,
 	`<br><h3 style='color: #CC6600'>v2.054</h3><br>
 		- Balanced Extreme Mode until 1e646 Air.<br>
 		- Added five Organ Science upgrades.<br>
