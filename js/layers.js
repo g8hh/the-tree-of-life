@@ -1882,12 +1882,18 @@ addLayer("sci", {
                 if (data.autobuyreuse && hasMilestone("l", 3)) sciBuyIds.push(302)
                 if (data.autobuyrecycle && hasMilestone("l", 5)) sciBuyIds.push(303)
 
-                if (hasUpgrade("sci", 655))     sciBuyIds = sciBuyIds.concat([601, 602, 603, 631, 632, 633])
-                if (hasUpgrade("or", 234))      sciBuyIds.push(641)
-                if (hasUpgrade("or", 233))      sciBuyIds.push(642)
-                if (hasUpgrade("or", 24))       sciBuyIds.push(643)
-                if (hasUpgrade("or", 334))      sciBuyIds.push(611)
-                if (hasUpgrade("or", 31))       sciBuyIds.push(612)
+                
+                if (player.an.unlocked) {
+                        sciBuyIds = sciBuyIds.concat([601, 602, 603, 611, 612, 631, 632, 633, 641, 642, 643])
+                }
+                else {
+                        if (hasUpgrade("sci", 655))     sciBuyIds = sciBuyIds.concat([601, 602, 603, 631, 632, 633])
+                        if (hasUpgrade("or", 234))      sciBuyIds.push(641)
+                        if (hasUpgrade("or", 233))      sciBuyIds.push(642)
+                        if (hasUpgrade("or", 24))       sciBuyIds.push(643)
+                        if (hasUpgrade("or", 334))      sciBuyIds.push(611)
+                        if (hasUpgrade("or", 31))       sciBuyIds.push(612)
+                }
 
                 let lsb = layers.sci.buyables
                 let tsb = tmp.sci.buyables
@@ -1947,6 +1953,35 @@ addLayer("sci", {
                         for (i in nSciKeys) {
                                 if (boughtYet) break
                                 boughtYet = buyUpg("sci", nSciKeys[i]) 
+                        }
+                }
+
+                if (hasMilestone("an", 1)) {
+                        let boughtYet = false
+                        let proSciKeys = ["401", "402", "403", "404", "405", 
+                                        "411", "412", "413", "414", "415",
+                                        "421", "422", "423", "424", "425",
+                                        "431", "432", "433", "434", "435",
+                                        "441", "442", "443", "444", "445",
+                                        "451", "452", "453", "454", "455",]
+                        let dnaSciKeys = [
+                                        "501", "502", "503", "504", "505", 
+                                        "511", "512", "513", "514", "515",
+                                        "521", "522", "523", "524", "525",
+                                        "531", "532", "533", "534", "535",
+                                        "541", "542", "543", "544", "545",
+                                        "551", "552", "553", "554", "555",
+                                        "561", "562", "563", "564", "565",
+                                        "571", "572", "573", "574", "575",
+                                        "581", "582", "583", "584", "585",
+                                        "591", "592", "593", "594", "595",]
+                        for (i in proSciKeys) {
+                                if (boughtYet) break
+                                boughtYet = buyUpg("sci", proSciKeys[i]) 
+                        }
+                        for (i in dnaSciKeys) {
+                                if (boughtYet) break
+                                boughtYet = buyUpg("sci", dnaSciKeys[i]) 
                         }
                 }
         },
@@ -8504,7 +8539,9 @@ addLayer("sci", {
                                 ["display-text", function(){
                                         return "Organ Science gain is currently " + format(tmp.sci.organ_science.getResetGain, 3) + "/s "
                                 }],
-                                ["microtabs", "organ_content"]
+                                ["microtabs", "organ_content"],
+                                "blank",
+                                "blank",
                         ],
                         unlocked(){
                                 return hasUpgrade("sci", 595) || player.an.unlocked
@@ -8697,7 +8734,8 @@ addLayer("sci", {
                                         551, 552, 553, 554, 555, 
                                         561, 562, 563, 564, 565, 
                                         571, 572, 573, 574, 575,
-                                        581, 582, 583, 584, 585
+                                        581, 582, 583, 584, 585,
+                                        591, 592, 593, 594, 595
                                 ])
                         }
                         let resetContent = true 
@@ -8708,6 +8746,41 @@ addLayer("sci", {
                         let buyIds = [501, 502, 503,
                                       511, 512, 513, 
                                       521, 522, 523,]
+                        for (i in buyIds) {
+                                if (!resetContent) break
+                                data.buyables[buyIds[i]] = decimalZero
+                        }
+                }
+
+                let resetOrgans = true 
+                if (["t", "or", "cells"].includes(layer)) resetOrgans = false
+                if (resetOrgans && !false) {
+                        let subdata = data.organ_science
+                        subdata.total = decimalZero
+                        subdata.best = decimalZero
+                        subdata.points = decimalZero
+                        
+                        let ids = [601, 602, 603, 604, 605, 
+                                   611, 612, 613, 614, 615, 
+                                   621, 622, 623, 624, 625, 
+                                   631, 632, 633, 634, 635,
+                                   641, 642, 643, 644, 645,
+                                   651, 652, 653, 654, 655, 
+                                   /*661, 662, 663, 664, 665, 
+                                   671, 672, 673, 674, 675,
+                                   681, 682, 683, 684, 685,
+                                   691, 692, 693, 694, 695*/
+                                   ]
+
+                        let resetContent = true 
+                        if (resetContent) data.upgrades = filterOut(data.upgrades, ids)
+
+                        let buyIds = [601, 602, 603,
+                                      611, 612, 613,
+                                      621,/*622, 623,*/
+                                      631, 632, 633,
+                                      641, 642, 643,
+                                      651,/* 652, 653,*/]
                         for (i in buyIds) {
                                 if (!resetContent) break
                                 data.buyables[buyIds[i]] = decimalZero
@@ -10253,7 +10326,7 @@ addLayer("n", {
                                 return player.n.times >= 2
                         },
                         unlocked(){
-                                return hasMilestone("n", 1)
+                                return hasMilestone("n", 1) || player.p.unlocked
                         },
                         toggles(){
                                 if (!player.extremeMode || hasUpgrade("sci", 402)) return
@@ -10273,7 +10346,7 @@ addLayer("n", {
                                 return player.n.times >= 3
                         },
                         unlocked(){
-                                return hasMilestone("n", 2)
+                                return hasMilestone("n", 2) || player.p.unlocked
                         },
                         toggles(){
                                 if (!player.extremeMode || hasUpgrade("sci", 305)) return
@@ -10293,7 +10366,7 @@ addLayer("n", {
                                 return player.n.times >= (player.hardMode ? 5 : 4)
                         },
                         unlocked(){
-                                return hasMilestone("n", 3)
+                                return hasMilestone("n", 3) || player.p.unlocked
                         },
                         toggles:() => [["tokens", "autobuytokens"]],
                         effectDescription(){
@@ -10308,7 +10381,7 @@ addLayer("n", {
                                 return player.n.times >= (player.hardMode ? 7 : 5)
                         },
                         unlocked(){
-                                return hasMilestone("n", 4)
+                                return hasMilestone("n", 4) || player.p.unlocked
                         },
                         toggles(){
                                 if (!player.extremeMode || hasUpgrade("sci", 402)) return
@@ -10328,7 +10401,7 @@ addLayer("n", {
                                 return player.n.times >= (player.hardMode ? 9 : 6)
                         },
                         unlocked(){
-                                return hasMilestone("n", 5)
+                                return hasMilestone("n", 5) || player.p.unlocked
                         },
                         toggles(){
                                 if (!player.extremeMode || hasUpgrade("sci", 415)) return
@@ -10348,7 +10421,7 @@ addLayer("n", {
                                 return player.n.times >= (player.hardMode ? 11 : 7)
                         },
                         unlocked(){
-                                return hasMilestone("n", 6)
+                                return hasMilestone("n", 6) || player.p.unlocked
                         },
                         toggles:() => [["tokens", "autobuyradio"]],
                         effectDescription(){
@@ -10363,7 +10436,7 @@ addLayer("n", {
                                 return player.n.times >= (player.hardMode ? 14 : 9)
                         },
                         unlocked(){
-                                return hasMilestone("n", 7)
+                                return hasMilestone("n", 7) || player.p.unlocked
                         },
                         effectDescription(){
                                 return "Reward: Gain 20x coins, keep Egg is here., and you can autobuy the first level of C buyables."
@@ -10377,7 +10450,7 @@ addLayer("n", {
                                 return player.n.times >= (player.hardMode ? 17 : 12)
                         },
                         unlocked(){
-                                return hasMilestone("n", 8)
+                                return hasMilestone("n", 8) || player.p.unlocked
                         },
                         effectDescription(){
                                 return "Reward: Keep coin upgrades on Nitrogen reset."
@@ -10392,7 +10465,7 @@ addLayer("n", {
                                 return player.n.times >= (player.hardMode ? 21 : 15)
                         },
                         unlocked(){
-                                return hasMilestone("n", 9)
+                                return hasMilestone("n", 9) || player.p.unlocked
                         },
                         effectDescription(){
                                 let a = "Reward: Keep the first ten Oxygen and Carbon upgrades upon Nitrogen reset."
@@ -10408,7 +10481,7 @@ addLayer("n", {
                                 return player.n.times >= (player.hardMode ? 25 : 20)
                         },
                         unlocked(){
-                                return hasMilestone("n", 10)
+                                return hasMilestone("n", 10) || player.p.unlocked
                         },
                         effectDescription(){
                                 return "Reward: Token resets don't reset anything."
@@ -10423,7 +10496,7 @@ addLayer("n", {
                                 return player.n.points.gte(128 * (player.hardMode ? 5 : 1))
                         },
                         unlocked(){
-                                return hasMilestone("n", 11)
+                                return hasMilestone("n", 11) || player.p.unlocked
                         },
                         effectDescription(){
                                 return "Reward: Start with 50 tokens."
@@ -10438,7 +10511,7 @@ addLayer("n", {
                                 return player.n.points.gte(256 * (player.hardMode ? 10 : 1))
                         },
                         unlocked(){
-                                return hasMilestone("n", 12)
+                                return hasMilestone("n", 12) || player.p.unlocked
                         },
                         effectDescription(){
                                 return "Reward: Remove the ability to reset for Nitrogen, but get 100% of Nitrogen gain per second."
@@ -10455,7 +10528,7 @@ addLayer("n", {
                                 return player.n.points.div(m).gte(131072)
                         },
                         unlocked(){
-                                return hasMilestone("n", 13)
+                                return hasMilestone("n", 13) || player.p.unlocked
                         },
                         effectDescription(){
                                 let a = "Reward: Unlock Nitrogen challenges which only keep content from before tokens"
@@ -10471,7 +10544,7 @@ addLayer("n", {
                                 return player.n.points.div(player.hardMode ? 10 : 1).gte(1048576) && layerChallengeCompletions("n") >= 3
                         },
                         unlocked(){
-                                return hasMilestone("n", 14)
+                                return hasMilestone("n", 14) || player.p.unlocked
                         },
                         effectDescription(){
                                 return "Reward: Raise Nitrogen IX to the number of N challenge completions."
@@ -10485,7 +10558,7 @@ addLayer("n", {
                                 return player.n.points.div(player.hardMode ? 10 : 1).gte(Decimal.pow(2, 30))
                         },
                         unlocked(){
-                                return hasMilestone("n", 15)
+                                return hasMilestone("n", 15) || player.p.unlocked
                         },
                         effectDescription(){
                                 return "Reward: C Point gain 10 amount multiplies its base."
@@ -10499,7 +10572,7 @@ addLayer("n", {
                                 return player.n.points.div(player.hardMode ? 10 : 1).gte(Decimal.pow(10, 46))
                         },
                         unlocked(){
-                                return hasMilestone("n", 16) && player.mini.e_points.best.gte(1e300)
+                                return hasMilestone("n", 16) && player.mini.e_points.best.gte(1e300) || player.p.unlocked
                         },
                         effectDescription(){
                                 return "Reward: You can bulk 5x E buyables."
@@ -10515,7 +10588,7 @@ addLayer("n", {
                                 return player.n.points.div(player.hardMode ? 7.5 : 7.4).gte(Decimal.pow(10, 942))
                         },
                         unlocked(){
-                                return hasMilestone("n", 17)
+                                return hasMilestone("n", 17) || player.p.unlocked
                         },
                         effectDescription(){
                                 return "Reward: Add .01 to to left distributivity."
@@ -33855,7 +33928,7 @@ addLayer("an", {
         },
         getBaseGain(){
                 let pts = player.or.points
-                if (pts.lt("1e100") && !hasMilestone("hu", 41)) return decimalZero
+                if (pts.lt(player.extremeMode ? 1e121 : 1e100) && !hasMilestone("hu", 41)) return decimalZero
                 let exp = tmp.an.getGainExp
 
                 if (hasMilestone("hu", 41)) {
@@ -33991,7 +34064,7 @@ addLayer("an", {
                 if (hasUpgrade("or", 33)) pts = player.an.best
                 pts = pts.plus(tmp.nu.effectPrimary)
 
-                let exp = pts.plus(player.extremeMode ? 120 : 99).log10().min(1000)
+                let exp = pts.plus(99).log10().min(1000)
                 if (!hasUpgrade("nu", 25)) exp = exp.min(300)
                 if (!hasMilestone("nu", 9)) exp = exp.min(100)
 
@@ -34601,6 +34674,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Keep most prior automation, autobuy Protein Science and DNA Science upgrades, bulk 19x Secondary, and gain 3x Organ resets."
                                 return "Reward: Keep most prior automation, bulk 19x Secondary, and gain 3x Organ resets."
                         },
                 }, // hasMilestone("an", 1)
@@ -36574,6 +36648,7 @@ addLayer("an", {
                 player.mu.buyables[33] = decimalZero
 
                 player.p.best_over_amino = decimalZero
+                if (player.extremeMode) layers.sci.doReset("an")
                 resetPreLifeCurrencies()
         },
 })
@@ -57281,7 +57356,7 @@ addLayer("tokens", {
                 return true // if you can afford every one return true
         },
         shouldNotifyTokenII(){
-                if (hasUpgrade("cells", 42) || player.an.unlocked) {
+                if (hasUpgrade("cells", 42) || player.ch.unlocked) {
                         let data = tmp.tokens.buyables
                         if (data[191].canAfford && !hasMilestone("or", 6)) return true
                         if (data[192].canAfford && !(hasMilestone("hu", 41) || hasMilestone("or", 7))) return true
