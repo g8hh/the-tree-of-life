@@ -1885,6 +1885,7 @@ addLayer("sci", {
                 
                 if (player.an.unlocked) {
                         sciBuyIds = sciBuyIds.concat([601, 602, 603, 611, 612, 631, 632, 633, 641, 642, 643])
+                        if (hasMilestone("an", 4)) sciBuyIds.push(651)
                 }
                 else {
                         if (hasUpgrade("sci", 655))     sciBuyIds = sciBuyIds.concat([601, 602, 603, 631, 632, 633])
@@ -28826,7 +28827,7 @@ addLayer("or", {
                         if (hasMilestone("or", 16))     ret = ret.times(player.or.deoxygenated_blood.points.max(1))
                         if (hasUpgrade("or", 225))      ret = ret.times(player.or.energy.points.max(1).div(1e200).pow(player.or.upgrades.length))
                                                         ret = ret.times(tmp.an.effect)
-                        if (hasMilestone("an", 5))      ret = ret.times(player.or.contaminants.points.plus(10).log10().sqrt().pow10())
+                        if (hasMilestone("an", 5))      ret = ret.times(player.or.contaminants.points.plus(1).log10().sqrt().pow10())
                         if (hasUpgrade("an", 21))       ret = ret.times(player.an.grid[608].extras.plus(1).pow(tmp.an.grid.totalLevels))
                         if (hasMilestone("ch", 21))     ret = ret.times(player.an.grid[305].extras.plus(1).pow(player.ch.points.min(5000).pow(4)))
                         if (hasUpgrade("sp", 15))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[201].pow(hasUpgrade("sp", 115) ? .91 : hasUpgrade("sp", 65) ? .9 : .8)))
@@ -34720,8 +34721,11 @@ addLayer("an", {
                                 return [["an", "autobuyor"]]
                         },
                         effectDescription(){
+                                if (player.extremeMode) {
+                                        return "Reward: Autobuy IN<u>tes</u>tine and Gastroenterology, unlock a Lung upgrade, and autobuy Organ upgrades (only ones unlocked before Animals)."
+                                }
                                 return "Reward: Autobuy IN<u>tes</u>tine, unlock a Lung upgrade, and autobuy Organ upgrades (only ones unlocked before Animals)."
-                        }, // unlock all upgrades
+                        },
                 }, // hasMilestone("an", 4)
                 5: {
                         requirementDescription(){
