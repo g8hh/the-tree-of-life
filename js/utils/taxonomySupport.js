@@ -132,6 +132,16 @@ var TAXONOMY_COSTS = {
         808: [new Decimal(10), new Decimal(5), new Decimal(1.1)],
 }
 
+
+var TAXONOMY_COSTS_EXTREME = {
+        708: [new Decimal(5e7), new Decimal(50), new Decimal(1.1)],
+}
+
+function getTaxonomyCost(id) {
+        if (player.extremeMode && TAXONOMY_COSTS_EXTREME[id]) return TAXONOMY_COSTS_EXTREME[id]
+        return TAXONOMY_COSTS[id]
+}
+
 var TAXONOMY_KEYS = [
         101, 102, 103, 104, 105, 106, 107, 108,
         202, 203, 204, 205, 206, 207, 208, 
@@ -208,9 +218,16 @@ function updateTaxonomyAmounts(diff) {
                         let exp = (data.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22) ? 1.25 : 1
                         gain = gain.times(getLevels(id).pow(exp).plus(2).log(2))
                 }
+                if (id > 700) {
+                        let ret = tmp.sci.buyables[622].main_effect
+                        if (ret.gte(1e10)) ret = ret.log10().pow(10)
+                        gain = gain.times(ret)
+                }
                 gain = gain.times(layerEff[Math.floor(id/100)])
 
                 if (hasUpgrade("pl", 14))       gain = gain.pow(1.001)
+                if (player.extremeMode)         gain = gain.pow(.75)
+                if (hasUpgrade("sci", 661))     gain = gain.pow(tmp.sci.upgrades[661].effect)
 
                 if (hasAchievement("an", 33)) {
                         data.grid[id].extras = gain
