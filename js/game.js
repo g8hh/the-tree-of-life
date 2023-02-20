@@ -166,7 +166,7 @@ function generatePoints(layer, diff) {
 
 var logLayerReset = false
 
-function doReset(layer, force=false) {
+function doReset(layer, force = false) {
 	if (tmp[layer].type == "none") return
 	let row = tmp[layer].row
 	if (logLayerReset) console.log(layer, force)
@@ -183,6 +183,7 @@ function doReset(layer, force=false) {
 		if (layers[layer].onPrestige) run(layers[layer].onPrestige, layers[layer], gain)
 		
 		addPoints(layer, gain)
+		if (layer == "pl") player.pl.points = player.pl.points.min(tmp.pl.getMaxAfford)
 		player[layer].unlocked = true
 		updateMilestones(layer)
 		updateAchievements(layer)
@@ -435,8 +436,7 @@ function runInterval(){
 	fixNaNs()
 	adjustPopupTime(trueDiff)
 	updateParticles(trueDiff)
-	pastTickTimes = pastTickTimes.slice(0, 9)
-	pastTickTimes = [Date.now() - now].concat(pastTickTimes)
+	pastTickTimes = [Date.now() - now].concat(pastTickTimes.slice(0, 9))
 	if (logTicks[0]) console.log("tick ran")
 	ticking = false
 	if (logTicks[1]) console.log("tick logged")

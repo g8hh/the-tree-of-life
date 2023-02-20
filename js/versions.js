@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.038.2",
+	num: "2.053",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -11,13 +11,76 @@ function isEndgame() {
 }
 
 function isEndgameRaw(){
-	if (player.extremeMode) return player.cells.points.gte("1e14545")
+	if (player.extremeMode) return player.or.contaminants.points.gte("1e226000")
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.038.3"
+var CHANELOG_VERSION = "v2.053"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC6600'>v2.053</h3><br>
+		- Balanced Extreme Mode until 1e226,000 Contaminants.<br>
+		- Added six Organ Science upgrades.<br>
+		- Implemented more upgrades.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.052</h3><br>
+		- Balanced Extreme Mode until 1e2600 Contaminants.<br>
+		- Added twelve Organ Science upgrades.<br>
+		- Implemented more upgrades.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.051</h3><br>
+		- Balanced Extreme Mode until 1e10 Contaminants.<br>
+		- Added five DNA Science upgrades.<br>
+		- Added Organ Science.<br>
+		- Added a Organ Science upgrade.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.050</h3><br>
+		- Balanced Extreme Mode until 1e100 Tissues.<br>
+		- Implemented more upgrades.<br>
+		- Added five DNA Science upgrades.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.049</h3><br>
+		- Balanced Extreme Mode until 3e60 Tissues.<br>
+		- Implemented more upgrades.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.048</h3><br>
+		- Balanced Extreme Mode until 1e40 Tissues.<br>
+		- Implemented more upgrades.<br>
+		- Added a DNA-Science upgrade.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.047</h3><br>
+		- Balanced Extreme Mode until 1e28 Tissues.<br>
+		- Implemented more upgrades.<br>
+		- Added a DNA-Science upgrade.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.046</h3><br>
+		- Buffed Ecosystem milestone 13.<br>
+		- Added a cusotm save.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.045.1</h3><br>
+		- Fixed a bug with getNextAt running twice.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.045</h3><br>
+		- Balanced Extreme Mode until 1e24 Tissues.<br>
+		- Implemented more upgrades.<br>
+		- Fixed tetrational scaling formuals.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.044</h3><br>
+		- Balanced Extreme Mode until 1e18,920 Cells.<br>
+		- Implemented more upgrades.<br>
+		- Added a DNA Science upgrade.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.043</h3><br>
+		- Balanced Extreme Mode until 1e17,184 Cells.<br>
+		- Implemented more upgrades.<br>
+		- Fixed Animal effect sometimes being active too early.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.042</h3><br>
+		- Balanced Extreme Mode until 1e14,760 Cells.<br>
+		- Added a DNA Science upgrade.<br>
+		- Fixes to the Tetration formula, balance changes incoming in future patches.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.041.1</h3><br>
+		- Potentially fixed bulk plant buy bug.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.041</h3><br>
+		- Implemented Sulfur.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.040</h3><br>
+		- Implemented Aluminum.<br>`,
+	`<br><h3 style='color: #CC0000'>v2.039.1</h3><br>
+		- Fixed a bug with <i>Hual</i> base decreasing when below intended values.<br>
+		- Fixed a display issue with Research Milestone 8 and Top Quark.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.039</h3><br>
 		- Implemented Magnesium.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.038.3</h3><br>
@@ -837,7 +900,7 @@ var CHANGELOGS = [
 		- Added a grid for Taxonomy.<br>
 		- Various wording changes.<br>
 		- Added a new component.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.224</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.224</h3><br>
 		- Balanced extreme until 1e14545 Cells.<br>
 		- Various extreme mode changes.<br>
 		- Added a DNA Science upgrade.<br>`,
@@ -914,7 +977,7 @@ var CHANGELOGS = [
 		- Added three new layers.<br>
 		- Fixed the order of a custom save.<br>
 		- Balanced until 1e1150 Air.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.211</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.211</h3><br>
 		- Balanced until 1 token II.<br>
 		- Various extreme mode changes.<br>
 		- Added a custom save.<br>`,
@@ -943,20 +1006,20 @@ var CHANGELOGS = [
 		- Added two Organ milestones.<br>
 		- Added a custom save.<br>
 		- Balanced until 1e13 Air.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.206</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.206</h3><br>
 		- Balanced until 63 Secondary completions.<br>
 		- Various extreme mode changes.<br>
 		- Added a custom save.<br>
 		- Added a DNA Science upgrade.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.205</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.205</h3><br>
 		- Balanced until 59 Secondary completions.<br>
 		- Various extreme mode changes.<br>
 		- Added two DNA Science upgrades.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.204</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.204</h3><br>
 		- Balanced until 51 Secondary completions.<br>
 		- Various extreme mode changes.<br>
 		- Added a DNA Science upgrade.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.203</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.203</h3><br>
 		- Balanced until 45 Secondary completions.<br>
 		- Various extreme mode changes.<br>
 		- Various display fixes.<br>
@@ -1017,28 +1080,28 @@ var CHANGELOGS = [
 		- Added a display for cheapest DNA Science buyable.<br>
 		- Added a display for next at for Organ gain.<br>
 		- Made the 7e242 Life milestone only require 2.5e242.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.197</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.197</h3><br>
 		- Balanced until Tissues XL.<br>
 		- Various extreme mode changes.<br>
 		- Various wording changes and code clean up.<br>
 		- Added a DNA Science upgrade.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.196</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.196</h3><br>
 		- Balanced until Tissues XXXVIII.<br>
 		- Various extreme mode changes.<br>
 		- Added a DNA Science upgrade.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.195</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.195</h3><br>
 		- Balanced until Tissues XXXV.<br>
 		- Various extreme mode changes, and display fixes.<br>
 		- Added a custom save.<br>
 		- Added three DNA Science upgrades.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.194</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.194</h3><br>
 		- Balanced until Tissues XXX.<br>
 		- Various extreme mode changes, bugfixes, code cleanup, and display fixes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.193</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.193</h3><br>
 		- Balanced until 33 total Tissues.<br>
 		- Added a custom save.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.192</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.192</h3><br>
 		- Balanced extreme mode until Tissue unlock.<br>
 		- Various code clean up and extreme mode changes.<br>
 		- Added a custom save.<br>`,
@@ -1064,24 +1127,24 @@ var CHANGELOGS = [
 		- Made green letters purple for better visibility.<br>
 		- Various code clean up and display fixes.<br>
 		- Added 1 to point gain if you have Cells unlocked (tell me why for bonus points)!<br>`,
-	`<br><h3 style='color: #CC0000'>v1.187</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.187</h3><br>
 		- Various extreme mode changes.<br>
 		- Added a custom save.<br>
 		- Balanced extreme mode until 1e4927 DNA Science.<br>
 		- Added two DNA Science upgrades.<br>
 		- Initially added Heart.<br>
 		- Added a Stem Cell buyable.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.186</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.186</h3><br>
 		- Added a custom save.<br>
 		- Various extreme mode changes.<br>
 		- Balanced extreme mode until 1e3796 DNA Science.<br>
 		- Added three DNA Science upgrades.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.185</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.185</h3><br>
 		- Various extreme mode changes.<br>
 		- Balanced extreme mode until 1e1084 DNA Science.<br>
 		- Added three DNA Science upgrades.<br>
 		- Various display fixes and improvements.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.184</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.184</h3><br>
 		- Various extreme mode changes.<br>
 		- Balanced extreme mode until 1e852 DNA Science.<br>
 		- Added two DNA Science upgrades.<br>`,
@@ -1093,7 +1156,7 @@ var CHANGELOGS = [
 		- Various extreme mode changes.<br>
 		- Various bugfixes.<br>
 		- Various display fixes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.181</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.181</h3><br>
 		- Balanced until 1e643 DNA Science.<br>
 		- Added six DNA Science upgrades.<br>
 		- Added two DNA Science buyables.<br>
@@ -1104,12 +1167,12 @@ var CHANGELOGS = [
 	`<br><h3 style='color: #CC0000'>v1.180.1</h3><br>
 		- Fixed various bugs.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.180</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.180</h3><br>
 		- Various wording fixes.<br>
 		- Balanced until 1e168 DNA Science.<br>
 		- Added a DNA science buyable.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.179</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.179</h3><br>
 		- Various wording fixes.<br>
 		- Added two DNA science upgrades.<br>
 		- Added a DNA science buyable.<br>
@@ -1121,14 +1184,14 @@ var CHANGELOGS = [
 		- Added a custom save.<br>
 		- Made changing modes ask you if you want to create a new save.<br>
 		- Various wording fixes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.178</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.178</h3><br>
 		- Balanced until the second set of minigames unlocked.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.177</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.177</h3><br>
 		- Balanced until 5 cell resets.<br>
 		- Various extreme mode changes.<br>
 		- Various wording and other small changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.176</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.176</h3><br>
 		- Added 13 gems.<br>
 		- Balanced until Cells unlock.<br>
 		- Various extreme mode changes.<br>
@@ -1137,20 +1200,20 @@ var CHANGELOGS = [
 		- Added two custom saves.<br>
 		- Various wording changes.<br>
 		- Various code cleanup.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.175.2</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.175.2</h3><br>
 		- Balanced until 1e26 DNA Science.<br>
 		- Added a gem.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.175.1</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.175.1</h3><br>
 		- Added a DNA Science upgrade.<br>
 		- Added a DNA Science buyable.<br>
 		- Balanced until 5e23 DNA Science.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.175</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.175</h3><br>
 		- Added a DNA Science upgrade.<br>
 		- Added a DNA Science buyable.<br>
 		- Added two gems.<br>
 		- Balanced until 8 Topoisomerase.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.174.4</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.174.4</h3><br>
 		- Added a DNA Science upgrade.<br>
 		- Added a DNA Science buyable.<br>
 		- Added a gem.<br>
@@ -1158,87 +1221,87 @@ var CHANGELOGS = [
 		- Balanced until C76 Gems.<br>`,
 	`<br><h3 style='color: #CC0000'>v1.174.3</h3><br>
 	 	- Various code cleanup.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.174.2</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.174.2</h3><br>
 		- Added DNA Science.<br>
 		- Added a DNA Science upgrade.<br>
 		- Added a DNA Science buyable.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.174.1</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.174.1</h3><br>
 		- Balanced until C75 Gems.<br>
 		- Added six gems.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.174</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.174</h3><br>
 		- Balanced until C57 Gems.<br>
 		- Added five gems.<br>
 		- Various extreme mode changes.<br>
 		- Various rewording changes.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.173</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.173</h3><br>
 		- Balanced until Anti-Phi.<br>
 		- Various extreme mode changes.<br>
 		- Added six gems.<br>
 		- Added two Protein Science upgrades.<br>
 		- Added a Life challenge info minitab.<br>
 		- Made various autobuyers not trigger if the game is paused.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.172</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.172</h3><br>
 		- Balanced until 1e916 Protein Science.<br>
 		- Added a Protein Science upgrade.<br>
 		- Added a gem.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.171</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.171</h3><br>
 		- Various code clean up.<br>
 		- Various extreme mode changes.<br>
 		- Implemented four gems.<br>
 		- Added two Protein Science upgrades.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.170</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.170</h3><br>
 		- Various bugfixes.<br>
 		- Balanced until 10 DNA resets.<br>`,
 	`<br><h3 style='color: #CC0000'>v1.169</h3><br>
 		- Various code cleanup.<br>
 		- Balanced until 2 DNA resets.<br>
 		- Implemented DNA reset.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.168</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.168</h3><br>
 		- Added eight Protein Science upgrades.<br>
 		- Various extreme mode changes.<br>
 		- Balanced until 8e415 Amino Acid.<br>
 		- Added a custom save.<br>
 		- Various code cleanup.<br>
 		- Various wording changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.167</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.167</h3><br>
 		- Implemented a gem.<br>
 		- Various extreme mode changes.<br>
 		- Balanced until 1e105,000 Protein.<br>
 		- Added a custom save.<br>
 		- Added nine Protein Science upgrades.<br>
 		- Various wording fixes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.166</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.166</h3><br>
 		- Implemented a gem.<br>
 		- Various extreme mode changes.<br>
 		- Balanced until 1e20,000 Protein.<br>
 		- Added two Protein Science upgrades.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.165</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.165</h3><br>
 		- Implemented a gem.<br>
 		- Various extreme mode changes.<br>
 		- Added a custom save.<br>
 		- Balanced until 1e6800 Protein.<br>
 		- Added Protein Science.<br>
 		- Added five Protein Science upgrades.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.164</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.164</h3><br>
 		- Implemented 7 gems.<br>
 		- Various extreme mode changes.<br>
 		- Balanced until Protein unlock.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.163</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.163</h3><br>
 		- Various code cleanup.<br>
 		- Balanced until C14 Gems.<br>
 		- Various small rewordings.<br>
 		- Added an effect to Amino Acid milestone 6.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.162</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.162</h3><br>
 		- Made parts of Life/Amino milestone 1 be given for unlocking the layer (see info).<br>
 		- Various code cleanup.<br>
 		- Cleaned up some display issues.<br>
 		- Various code cleanup.<br>
 		- Added a "MAXED" display for Reduce.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.161</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.161</h3><br>
 		- Balanced until Amino Acid unlock.<br>
 		- Implemented C23, 31, 32, and 33 gems.<br>
 		- Made more than 1 C3 depth harder.<br>
@@ -1247,14 +1310,14 @@ var CHANGELOGS = [
 		- Buffed some of Phosphorus milestone 1 effects to permanent.<br>
 		- Various code cleanup.<br>
 		- Various display cleanup.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.160</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.160</h3><br>
 		- Balanced until C13 gems.<br>
 		- Added two Life upgrades.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.159.1</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.159.1</h3><br>
 		- Finished code cleanup (for now)!<br>
 		- Prepped gems for extreme mode.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.159</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.159</h3><br>
 		- Balanced until 110 Dilation completions.<br>
 		- Various extreme mode changes.<br>
 		- Various code cleanup.<br>`,
@@ -1263,40 +1326,40 @@ var CHANGELOGS = [
 		- Some displays are now hidden eventually.<br>`,
 	`<br><h3 style='color: #CC0000'>v1.158.1</h3><br>
 		- Various code cleanup (and ~1800 lines removed!).<br>`,
-	`<br><h3 style='color: #CC0000'>v1.158</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.158</h3><br>
 		- Balanced until 99 Dilation completions.<br>
 		- Added 5 Life upgrades.<br>
 		- Various extreme mode changes.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.157</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.157</h3><br>
 		- Balanced until 60 Dilation completions.<br>
 		- Added 3 Life upgrades.<br>
 		- Various extreme mode changes.<br>
 		- Added a custom save.<br>
 		- Fixed an issue with Dilation effecting Science gain when not in the challenge.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.156</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.156</h3><br>
 		- Balanced until 43 Dilation completions.<br>
 		- Added a Life upgrade.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.155</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.155</h3><br>
 		- Balanced until 31 Dilation completions.<br>
 		- Added three Life upgrades.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.154</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.154</h3><br>
 		- Balanced until 7 Dilation completions.<br>
 		- Various extreme mode changes.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.153</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.153</h3><br>
 		- Balanced until 20 lives.<br>
 		- Various extreme mode changes.<br>
 		- Nerfed Life to Nitrogen Science boost.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.152</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.152</h3><br>
 		- Various extreme mode changes.<br>
 		- Balanced until 4 Lives.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.151.2</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.151.2</h3><br>
 		- Added a custom save.<br>
 		- Various small changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.151.1</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.151.1</h3><br>
 		- Created Life reset for extreme mode.<br>
 		- Replaced instances of "x = x.times" with "ret = ret.times" (cleaner code).<br>
 		- Buffed Life milestone 1 to make tokens permanently reset nothing.<br>
@@ -1307,34 +1370,34 @@ var CHANGELOGS = [
 		- Fixed Oxygen I cost being less than intended (not a substantive change).<br>`,
 	`<br><h3 style='color: #CC0000'>v1.151</h3><br>
 		- Fixed some stuff surrounding dilation.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.150</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.150</h3><br>
 		- Balanced until Life unlock.<br>
 		- Various extreme mode changes.<br>
 		- Added a custom save.<br>
 		- Added four µ milestones.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.149</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.149</h3><br>
 		- Balanced until µ XIV.<br>
 		- Added three Phosphorus uprgrades.<br>
 		- Added three µ milestones.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.148</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.148</h3><br>
 		- Balanced until 6e638 Phosphorus.<br>
 		- Added four Phosphorus upgrades.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.147</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.147</h3><br>
 		- Balanced until 1e157 Phosphorus.<br>
 		- Added a Phosphorus upgrade.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.146</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.146</h3><br>
 		- Balanced until 1e135 Phosphorus.<br>
 		- Various extreme mode changes.<br>
 		- Added two Phosphorus upgrades.<br>
 		- Added a Phosphorus milestone.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.145</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.145</h3><br>
 		- Balanced until 2 Phosphorus resets.<br>
 		- Implemented Phosphorus reset for extreme mode.<br>`,
 	`<br><h3 style='color: #CC0000'>v1.144.1</h3><br>
 		- Fixed an issue with D Points in the main game.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.144</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.144</h3><br>
 		- Balanced until 1e2348 Nitrogen.<br>
 		- Improved the display of various components.<br>
 		- Added a custom save.<br>
@@ -1342,13 +1405,13 @@ var CHANGELOGS = [
 		- Various extreme mode changes.<br>
 		- Fixed initial phosphorus gain display info.<br>
 		- Added a Nitrogen Science upgrade.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.143</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.143</h3><br>
 		- Balanced until 1e8660 E Points.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.142.1</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.142.1</h3><br>
 		- Balanced until 1e1738 E Points.<br>
 		- Added a Nitrogen Science upgrade.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.142</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.142</h3><br>
 		- Balanced until 1e181 E Points.<br>
 		- Added two Nitrogen Science upgrade.<br>`,
 	`<br><h3 style='color: #CC0000'>v1.141.1</h3><br>
@@ -1361,38 +1424,38 @@ var CHANGELOGS = [
 		- Click outside the popup to close it.<br>
 		- Create new saves (which replicate the current state).<br>
 		- Added an infobox in Hydrogen that introduce people to various important things.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.141</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.141</h3><br>
 		- Added a custom save.<br>
 		- Balanced until 1e52 E Points.<br>
 		- Various extreme mode changes.<br>
 		- Added seven Nitrogen Science upgrades.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.140</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.140</h3><br>
 		- Balanced until E Points unlock.<br>
 		- Added two custom saves.<br>
 		- Various extreme mode changes.<br>
 		- Added five Nitrogen Science upgrades.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.139</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.139</h3><br>
 		- Balanced until 1.3e79 Nitrogen Science.<br>
 		- Added six Nitrogen Science upgrades.<br>
 		- Loads of extreme mode changes (order changes too).<br>
 		- Renamed redudant buyables names (eg. Quadratic Increase 1 -> Quadratic Increase).<br>`,
-	`<br><h3 style='color: #CC0000'>v1.138</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.138</h3><br>
 		- Balanced until 1e4046 D Points.<br>
 		- Various extreme mode changes.<br>
 		- Added three Nitrogen Science upgrades.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.137</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.137</h3><br>
 		- Balanced until 1e21 D Points.<br>
 		- Added three Nitrogen Science upgrades.<br>
 		- Various changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.136</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.136</h3><br>
 		- Balanced until D Point unlocked.<br>
 		- Implemented the removal of Hydrogen Science.<br>
 		- Added a custom save.<br>
 		- Various extreme mode changes.<br>
 		- Various code cleanup.<br>
 		- Added a Nitrogen Science upgrade.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.135</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.135</h3><br>
 		- Balanced until 5e5 Nitrogen Science.<br>
 		- Various code cleanup.<br>
 		- Improved A Point buyables cost formula displays.<br>
@@ -1400,22 +1463,22 @@ var CHANGELOGS = [
 		- Added five Nitrogen Science upgrades.<br>
 		- Hardcapped Nitrogen effect on Carbon Science.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.134</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.134</h3><br>
 		- Balanced until 1e4 total nitrogen.<br>
 		- Various extreme mode changes.<br>
 		- Nitrogen science next patch.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.133</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.133</h3><br>
 		- Balanced until 20 total nitrogen.<br>
 		- Various extreme mode changes.<br>
 		- Various code cleanup.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.132</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.132</h3><br>
 		- Balanced until 3 total nitrogen.<br>
 		- Added a Hydrogen Science upgrade autobuyer.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.131</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.131</h3><br>
 		- Balanced until 2 total nitrogen.<br>
 		- Made token reset do what I want it to do.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.130</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.130</h3><br>
 		- Added five Carbon Science upgrades.<br>
 		- Added two token milestones.<br>
 		- Buffed token milestone 25 in extreme mode.<br>
@@ -1423,102 +1486,101 @@ var CHANGELOGS = [
 		- Balanced until Nitrogen is unlocked.<br>
 		- Added a custom save.<br>
 		- Fixed a bunch of next at displays.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.129</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.129</h3><br>
 		- Balanced until 1e14250 C Points.<br>
 		- Added a Carbon Science upgrade.<br>
 		- Added a custom save.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.128</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.128</h3><br>
 		- Balanced until 1e6280 C Points.<br>
 		- Added a Carbon Science upgrade.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.127</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.127</h3><br>
 		- Balanced until 1e2180 C Points.<br>
 		- Added two Carbon Science upgrades.<br>
 		- Removed the character effect display from the upgrades subtab.<br>
 		- Various extreme mode changes.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.126</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.126</h3><br>
 		- Balanced until 1e1002 C Points.<br>
 		- Added a Carbon Science upgrade.<br>
 		- Various code cleanup.<br>
 		- Improved science tab's tooltip.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.125</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.125</h3><br>
 		- Balanced until 1e814 C Points.<br>
 		- Added a custom save.<br>
 		- Added four Carbon Science upgrades.<br>
 		- Various changes for extreme mode.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.124</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.124</h3><br>
 		- Balanced until 1e200 C Points.<br>
 		- Added seven Carbon Science upgrades.<br>
 		- Various other changes for extreme mode.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.123</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.123</h3><br>
 		- Balanced until 1e48 C Points.<br>
 		- Added two Carbon Science upgrades.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.122</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.122</h3><br>
 		- Balanced until 1e31 C Points.<br>
 		- Added Carbon Science.<br>
 		- Added two Carbon Science upgrades.<br>
 		- C Point displays have been changed around.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.121</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.121</h3><br>
 		- Balanced extreme until 1e9 C Points.<br>
 		- Made C point countdown based on game time, not real time.<br>
 		- Made extreme mode effect C/D/E Point gain (not achieved prior, so this makes no difference to progression).<br>
 		- Added a single token.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.120</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.120</h3><br>
 		- Balanced until 42 tokens.<br>
 		- Added three Oxygen Science upgrades.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.119</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.119</h3><br>
 		- Balanced until 36 tokens.<br>
 		- Various cost changes.<br>
 		- Implemented a Oxygen Science upgrade.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.118</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.118</h3><br>
 		- Extreme mode is balanced until 11 Oxygen Science upgrades.<br>
 		- Various cost and other balance changes.<br>`,
 	`<br><h3 style='color: #CC0000'>v1.117.2</h3><br>
 		- Phosphorus XXI unlock is now 6.8e107 Lives.<br>`,
 	`<br><h3 style='color: #CC0000'>v1.117.1</h3><br>
 		- Hard and extreme is now playable, albeit very slow. Tell me about your progress!<br>`,
-	`<br><h3 style='color: #CC0000'>v1.117</h3><br>
-		- Balanced until 26 tokens.<br>
-		- Next is AH7 -> D7 -> token 27.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.116</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.117</h3><br>
+		- Balanced until 26 tokens.<br>`,
+	`<br><h3 style='color: #CC6600'>v1.116</h3><br>
 		- Balanced until 24 tokens.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.115</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.115</h3><br>
 		- Added two Oxygen Science upgrades.<br>
 		- Various other changes to make extreme work.<br>
 		- Balanced until 23 tokens.<br>
 		- Various code cleanup.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.114</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.114</h3><br>
 		- Fixed an issue with some tabs not went to when ArrowRight/ArrowLeft.<br>
 		- Added a custom save.<br> 
 		- Balanced until 15 tokens.<br>
 		- Various additional bugfixes and wording amends.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.113</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.113</h3><br>
 		- Balanced until 10 tokens.<br>
 		- Added an Oxygen science upgrade.<br>
 		- Various milestone changes to autobuy science buyables.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.112</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.112</h3><br>
 		- Balanced until 8 tokens.<br>
 		- Various additional autobuyers added.<br>
 		- Made science mini-notify if a buyable is affordable.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.111.1</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.111.1</h3><br>
 		- Various fixes with extreme mode and bulk buying.<br>
 		- Balanced until 4 tokens.<br>
 		- Made extreme mode costs seperate.<br>
 		- Fixed token effect displaying outside of extreme.<br>
 		- Added an autobuyer to token milestone 3.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.111</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.111</h3><br>
 		- Balanced until 3 Tokens.<br>
 		- Added a custom save.<br>
 		- Added a couple autobuyers for science buyables.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.110.1</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.110.1</h3><br>
 		- Balanced until 2 Tokens.<br>
 		- Added a Oxygen Science upgrade.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.110</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.110</h3><br>
 		- Balanced extreme until one token.<br>
 		- Fixed a bug with logistic currencies sometimes being negative.<br>
 		- Added five Oxygen Science upgrades.<br>
@@ -1528,10 +1590,10 @@ var CHANGELOGS = [
 	`<br><h3 style='color: #CC0000'>v1.109.1</h3><br>
 		- Made various text the correct size.<br>
 		- Balanced Oxygen up to maxing B11.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.109</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.109</h3><br>
 		- Balanced extreme until Carbon and Oxygen are unlocked.<br>
 		- Added a custom save.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.108</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.108</h3><br>
 		- Added two custom saves.<br>
 		- Made extreme mode not nerf B buyable costs.<br>
 		- Added 6 Hydrogen Science upgrade.<br>
@@ -1544,7 +1606,7 @@ var CHANGELOGS = [
 		- Fixed a bug with Cell production.<br>
 		- Added a custom save.<br>
 		- Fixed various display issues.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.107</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.107</h3><br>
 		- Added a custom save.<br>
 		- Fixed extreme mode description.<br>
 		- Made milestones that are no unlocked not rewarded.<br>
@@ -1589,7 +1651,7 @@ var CHANGELOGS = [
 		- Added a Organ milestone.<br>
 		- Made Organ milestone 2 autobuy DNA upgrades.<br>
 		- Made Organ upgrade 11 remove coins.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.103</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.103</h3><br>
 		- Implemented extreme mode's nerfs.<br>
 		- Balanced until 3 Organs.<br>
 		- Balanced extreme mode until minigame unlock.<br>
@@ -1600,12 +1662,12 @@ var CHANGELOGS = [
 		- Added Hydrogen Science.<br>
 		- Added a backup font for most things.<br>
 		- Fixed various display issue.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.102</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.102</h3><br>
 		- Disjointed hard and extreme mode.<br>
 		- Removed some displays for hard mode.<br>
 		- Various code cleanup.<br>
 		- Improved mode selector display.<br>`,
-	`<br><h3 style='color: #CC0000'>v1.101.1</h3><br>
+	`<br><h3 style='color: #CC6600'>v1.101.1</h3><br>
 		- Added extreme mode.<br>
 		- Implemented extreme mode nerfs.<br>`,
 	`<br><h3 style='color: #CC0000'>v1.101</h3><br>
@@ -2711,6 +2773,9 @@ function fixOldSave(oldVersion){
 	}
 	if (player.version < "2.030") {
 		if (!player.extremeMode) player.mini.milestones = []
+	}
+	if (player.version < "2.046") {
+		player.e.everMile13 = player.e.milestones.includes(13) || player.pl.unlocked
 	}
 }
 
