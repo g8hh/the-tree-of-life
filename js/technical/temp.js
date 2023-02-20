@@ -95,12 +95,12 @@ function updateTemp(noError = false) {
 	updateTempData(layers, tmp, funcs, undefined, noError, true)
 
 	for (layer in layers){
-		tmp[layer].resetGain = getResetGain(layer)
-		tmp[layer].nextAt = getNextAt(layer)
+		tmp[layer].resetGain = 	tmp[layer].getResetGain ? tmp[layer].getResetGain : getResetGain(layer)
+		tmp[layer].nextAt = 	tmp[layer].getNextAt ? tmp[layer].getNextAt : getNextAt(layer)
 		tmp[layer].nextAtDisp = getNextAt(layer, true)
-		tmp[layer].canReset = canReset(layer)
+		tmp[layer].canReset = 	canReset(layer)
 		tmp[layer].trueGlowColor = tmp[layer].glowColor
-		tmp[layer].notify = shouldNotify(layer)
+		tmp[layer].notify = 	shouldNotify(layer)
 		tmp[layer].prestigeNotify = prestigeNotify(layer)
 		if (tmp[layer].passiveGeneration === true) tmp[layer].passiveGeneration = 1 // new Decimal(true) = decimalZero
 
