@@ -6261,6 +6261,38 @@ addLayer("sci", {
                                 return player.an.grid[707].buyables.gte(30)
                         }, // hasUpgrade("sci", 663)
                 },
+                664: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXIV"
+                        },
+                        description(){
+                                let a = "Organ Sci XXXI multiplies Animal gain per upgrade in this row or below and affects Energy amounts"
+                                return a
+                        },
+                        cost:() => new Decimal("1e87767"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[707].buyables.gte(40)
+                        }, // hasUpgrade("sci", 664)
+                },
+                665: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXV"
+                        },
+                        description(){
+                                let a = "At 8 Primates levels Canis levels add .02 to Filtering<sup>2</sup> base and Carnivora levels add .1 to Purification<sup>2</sup> base"
+                                return a
+                        },
+                        cost:() => new Decimal("1e90988"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[707].buyables.gte(53)
+                        }, // hasUpgrade("sci", 665)
+                },
         },
         buyables: {
                 rows: 5,
@@ -7813,7 +7845,11 @@ addLayer("sci", {
                         base(){
                                 let ret = new Decimal(1.5)
 
-                                if (hasUpgrade("sci", 613)) ret = ret.plus(player.sci.upgrades.filter(x => x > 600).length / 10)
+                                if (hasUpgrade("sci", 613)) ret = ret.plus(player.sci.upgrades.filter(x => x > 600 && x < 700).length / 10)
+                                if (hasUpgrade("sci", 665)) {
+                                        let l = player.an.grid[506].buyables.plus(player.an.grid[507].buyables)
+                                        ret = ret.plus(l / 10)
+                                }
 
                                 return ret
                         },
@@ -7878,7 +7914,7 @@ addLayer("sci", {
                                                 if (player.or.buyables[201].gte(714)) a += .02
                                         }
                                         if (hasUpgrade("or", 212)) a *= player.or.upgrades.filter(x => x > 210 && x < 220).length
-                                        ret = ret.plus(a * player.sci.upgrades.filter(x => x > 600).length)
+                                        ret = ret.plus(a * player.sci.upgrades.filter(x => x > 600 && x < 700).length)
                                 }
 
                                 return ret
@@ -7997,6 +8033,8 @@ addLayer("sci", {
                         },
                         base(){
                                 let ret = new Decimal(1.5)
+
+                                if (hasUpgrade("sci", 665)) ret = ret.plus(player.an.grid[708].buyables.div(50))
 
                                 return ret
                         },
@@ -8169,6 +8207,8 @@ addLayer("sci", {
                         },
                         base(){
                                 let ret = new Decimal(hasUpgrade("sci", 663) ? .5 : 1.5)
+
+                                if (hasUpgrade("an", 14)) ret = ret.plus(player.an.upgrades.length / 100)
 
                                 return ret
                         },
@@ -8708,8 +8748,16 @@ addLayer("sci", {
                 organ_content: {
                         "Upgrades": {
                                 content: [
-                                        ["upgrades", [60,61,62,63,64,65,66]],
+                                        ["upgrades", [60,61,62,63,64]],
                                 ]
+                        },
+                        "Upgrades II": {
+                                content: [
+                                        ["upgrades", [65,66,67,68,69]],
+                                ],
+                                unlocked(){
+                                        return tmp.sci.upgrades[651].unlocked
+                                },
                         },
                         "Buyables": {
                                 content: [
@@ -29719,7 +29767,7 @@ addLayer("or", {
                         description(){
                                 let a = "INtes<u>tine</u>'s log5 becomes log4 and Token II buyables' cost exponent is .49 but Bottom Quark base is (1+C/1000)"
                                 if (player.extremeMode) {
-                                        return "<bdi style='font-size: 80%'>Per Token II gain 10x Organ Science" + a.replace("4", "4,") + "</bdi>"
+                                        return "<bdi style='font-size: 80%'>Per Token II gain 10x Organ Science" + a.replace("4", "4,").replace("5", "6") + "</bdi>"
                                 }
                                 return a
                         },
@@ -31413,7 +31461,7 @@ addLayer("or", {
                                                 if (player.or.buyables[201].gte(714)) a += .01
                                         }
                                         if (hasUpgrade("or", 212)) a *= player.or.upgrades.filter(x => x > 210 && x < 220).length
-                                        add = add.plus(a * player.sci.upgrades.filter(x => x > 600).length)
+                                        add = add.plus(a * player.sci.upgrades.filter(x => x > 600 && x < 700).length)
                                 }
                                 if (hasUpgrade("sci", 633)) {
                                         let l = player.sci.buyables[633].sub(15).max(0).min(30)
@@ -32111,9 +32159,10 @@ addLayer("or", {
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 if (player.extremeMode) {
-                                        ret = ret.pow(.75)
-                                        if (hasUpgrade("or", 34)) ret = ret.pow(1.01)
-                                        if (hasUpgrade("or", 35)) ret = ret.pow(1.02)
+                                                                        ret = ret.pow(.75)
+                                        if (hasUpgrade("or", 34))       ret = ret.pow(1.01)
+                                        if (hasUpgrade("or", 35))       ret = ret.pow(1.02)
+                                        if (hasUpgrade("sci", 664))     ret = ret.pow(tmp.sci.upgrades[661].effect)
                                 }
 
                                 return ret
@@ -32247,9 +32296,10 @@ addLayer("or", {
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 if (player.extremeMode) {
-                                        ret = ret.pow(.75)
-                                        if (hasUpgrade("or", 34)) ret = ret.pow(1.01)
-                                        if (hasUpgrade("or", 35)) ret = ret.pow(1.02)
+                                                                        ret = ret.pow(.75)
+                                        if (hasUpgrade("or", 34))       ret = ret.pow(1.01)
+                                        if (hasUpgrade("or", 35))       ret = ret.pow(1.02)
+                                        if (hasUpgrade("sci", 664))     ret = ret.pow(tmp.sci.upgrades[661].effect)
                                 }
 
                                 return ret
@@ -32378,9 +32428,10 @@ addLayer("or", {
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 if (player.extremeMode) {
-                                        ret = ret.pow(.75)
-                                        if (hasUpgrade("or", 34)) ret = ret.pow(1.01)
-                                        if (hasUpgrade("or", 35)) ret = ret.pow(1.02)
+                                                                        ret = ret.pow(.75)
+                                        if (hasUpgrade("or", 34))       ret = ret.pow(1.01)
+                                        if (hasUpgrade("or", 35))       ret = ret.pow(1.02)
+                                        if (hasUpgrade("sci", 664))     ret = ret.pow(tmp.sci.upgrades[661].effect)
                                 }
 
                                 return ret
@@ -32490,9 +32541,10 @@ addLayer("or", {
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 if (player.extremeMode) {
-                                        ret = ret.pow(.75)
-                                        if (hasUpgrade("or", 34)) ret = ret.pow(1.01)
-                                        if (hasUpgrade("or", 35)) ret = ret.pow(1.02)
+                                                                        ret = ret.pow(.75)
+                                        if (hasUpgrade("or", 34))       ret = ret.pow(1.01)
+                                        if (hasUpgrade("or", 35))       ret = ret.pow(1.02)
+                                        if (hasUpgrade("sci", 664))     ret = ret.pow(tmp.sci.upgrades[661].effect)
                                 }
 
                                 return ret
@@ -32623,9 +32675,10 @@ addLayer("or", {
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 if (player.extremeMode) {
-                                        ret = ret.pow(.75)
-                                        if (hasUpgrade("or", 34)) ret = ret.pow(1.01)
-                                        if (hasUpgrade("or", 35)) ret = ret.pow(1.02)
+                                                                        ret = ret.pow(.75)
+                                        if (hasUpgrade("or", 34))       ret = ret.pow(1.01)
+                                        if (hasUpgrade("or", 35))       ret = ret.pow(1.02)
+                                        if (hasUpgrade("sci", 664))     ret = ret.pow(tmp.sci.upgrades[661].effect)
                                 }
 
                                 return ret
@@ -32757,9 +32810,10 @@ addLayer("or", {
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 if (player.extremeMode) {
-                                        ret = ret.pow(.75)
-                                        if (hasUpgrade("or", 34)) ret = ret.pow(1.01)
-                                        if (hasUpgrade("or", 35)) ret = ret.pow(1.02)
+                                                                        ret = ret.pow(.75)
+                                        if (hasUpgrade("or", 34))       ret = ret.pow(1.01)
+                                        if (hasUpgrade("or", 35))       ret = ret.pow(1.02)
+                                        if (hasUpgrade("sci", 664))     ret = ret.pow(tmp.sci.upgrades[661].effect)
                                 }
 
                                 return ret
@@ -32893,9 +32947,10 @@ addLayer("or", {
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 if (player.extremeMode) {
-                                        ret = ret.pow(.75)
-                                        if (hasUpgrade("or", 34)) ret = ret.pow(1.01)
-                                        if (hasUpgrade("or", 35)) ret = ret.pow(1.02)
+                                                                        ret = ret.pow(.75)
+                                        if (hasUpgrade("or", 34))       ret = ret.pow(1.01)
+                                        if (hasUpgrade("or", 35))       ret = ret.pow(1.02)
+                                        if (hasUpgrade("sci", 664))     ret = ret.pow(tmp.sci.upgrades[661].effect)
                                 }
 
                                 return ret
@@ -33028,9 +33083,10 @@ addLayer("or", {
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 if (player.extremeMode) {
-                                        ret = ret.pow(.75)
-                                        if (hasUpgrade("or", 34)) ret = ret.pow(1.01)
-                                        if (hasUpgrade("or", 35)) ret = ret.pow(1.02)
+                                                                        ret = ret.pow(.75)
+                                        if (hasUpgrade("or", 34))       ret = ret.pow(1.01)
+                                        if (hasUpgrade("or", 35))       ret = ret.pow(1.02)
+                                        if (hasUpgrade("sci", 664))     ret = ret.pow(tmp.sci.upgrades[661].effect)
                                 }
 
                                 return ret
@@ -33141,9 +33197,10 @@ addLayer("or", {
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 if (player.extremeMode) {
-                                        ret = ret.pow(.75)
-                                        if (hasUpgrade("or", 34)) ret = ret.pow(1.01)
-                                        if (hasUpgrade("or", 35)) ret = ret.pow(1.02)
+                                                                        ret = ret.pow(.75)
+                                        if (hasUpgrade("or", 34))       ret = ret.pow(1.01)
+                                        if (hasUpgrade("or", 35))       ret = ret.pow(1.02)
+                                        if (hasUpgrade("sci", 664))     ret = ret.pow(tmp.sci.upgrades[661].effect)
                                 }
 
                                 return ret
@@ -34375,6 +34432,10 @@ addLayer("an", {
                 if (hasUpgrade("nu", 33))       ret = ret.times(tmp.sp.challenges[11].reward.pow(player.nu.upgrades.length ** .5))
                 if (hasUpgrade("sp", 152))      ret = ret.times(player.an.grid[108].extras.plus(1).pow(player.tokens.mastery_tokens.total.div(100)))
                 if (hasUpgrade("sp", 144))      ret = ret.times(player.an.grid[105].extras.plus(1))
+                if (hasUpgrade("sci", 664)) {
+                        let base = tmp.sci.upgrades[661].effect
+                                                ret = ret.times(base.pow(player.sci.upgrades.filter(x => x > 660 && x < 700).length))
+                }
                                                 ret = ret.times(tmp.e.effect)
 
                 return ret.max(1)
@@ -34739,9 +34800,10 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals IV"
                         },
                         description(){
+                                if (player.extremeMode) return "Hominidae amount multiplies Tissue gain per milestone<sup>2</sup> and each upgrade adds .01 to Conditioning<sup>2</sup> base"
                                 return "Hominidae amount multiplies Tissue gain per milestone<sup>2</sup> and INtes<u>tine</u>'s log6 becomes log5"
                         },
-                        cost:() => new Decimal(215e3),
+                        cost:() => new Decimal(player.extremeMode ? 307e3 : 215e3),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 13) || hasMilestone("nu", 2)
@@ -35330,10 +35392,10 @@ addLayer("an", {
                 }, // hasMilestone("an", 18)
                 19: {
                         requirementDescription(){
-                                return "3e82 Genes"
+                                return player.extremeMode ? "3e70 Genes" : "3e82 Genes"
                         },
                         done(){
-                                return player.an.genes.points.gte("3e82")
+                                return player.an.genes.points.gte(player.extremeMode ? 3e70 : 3e82)
                         },
                         unlocked(){
                                 return true

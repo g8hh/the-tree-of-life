@@ -134,7 +134,11 @@ var TAXONOMY_COSTS = {
 
 
 var TAXONOMY_COSTS_EXTREME = {
+        505: [new Decimal(2.5e104), new Decimal(300), new Decimal(1.1)],
+        506: [new Decimal(3e118), new Decimal(5e4), new Decimal(1.1)],
+
         608: [new Decimal(1e56), new Decimal(250), new Decimal(1.1)],
+
         708: [new Decimal(5e7), new Decimal(50), new Decimal(1.1)],
 }
 
