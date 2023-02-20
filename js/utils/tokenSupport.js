@@ -50,6 +50,16 @@ function tokenTetrationBase(){
         return tetBase 
 }
 
+function tetr(base, exp) {
+        base = new Decimal(base)
+        exp = new Decimal(exp).min(10)
+        let a = base.pow(exp.sub(exp.floor()))
+        for (i = 0; i < exp.floor().toNumber(); i++) {
+                a = base.pow(a)
+        }
+        return a
+}
+
 function tokenNextAt(){
         let len = (player.extremeMode ? TOKEN_COSTS_EXTREME : TOKEN_COSTS).length
         let amt = player.tokens.total
@@ -61,7 +71,10 @@ function tokenNextAt(){
         if (amt.gte(len)) {
                 let tetBase = tmp.tokens.getTetrationBase
                 let add = hasUpgrade("hu", 101) ? 0 : hasChallenge("hu", 11) ? 1 : 4
-                return Decimal.tetrate(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(add))
+                if (player.e.everMile13) {
+                        return Decimal.tetrate(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(add))
+                }
+                return tetr(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(add))
         }
         amt = Math.round(amt.toNumber())
         let additional = player.hardMode ? 1e4 : 1
@@ -93,7 +106,7 @@ function minusEffectiveTokens(){
         }
         if (hasMilestone("t", 2))       a = a.plus(player.t.milestones.length)
         if (hasMilestone("t", 3))       a = a.plus(player.t.milestones.length)
-        if (hasUpgrade("cells", 45))    a = a.plus(player.cells.upgrades.length)
+        if (hasUpgrade("cells", 45))    a = a.plus(player.cells.upgrades.length * (1 + player.extremeMode))
                                         a = a.plus(tmp.tokens.buyables[112].effect)
         if (hasUpgrade("t", 141))       a = a.plus(player.t.upgrades.length)
         if (hasUpgrade("sci", 244))     a = a.plus(Math.floor(tmp.sci.upgrades.carbonUpgradesLength / 5))
@@ -106,6 +119,8 @@ function minusEffectiveTokens(){
         if (hasUpgrade("p", 113))       a = a.plus(1)
         if (hasUpgrade("sci", 415))     a = a.plus(tmp.sci.upgrades.proteinUpgradesLength)
         if (hasUpgrade("sci", 454))     a = a.plus(tmp.sci.upgrades.proteinUpgradesLength * 3.5)
+        if (hasUpgrade("sci", 603))     a = a.plus(50 * player.sci.upgrades.filter(x => x > 600 && x < 700).length)
+        if (hasUpgrade("sci", 613))     a = a.plus(player.or.buyables[201].min(2000))
         
         return a.ceil()
 }
