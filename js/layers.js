@@ -2382,6 +2382,7 @@ addLayer("sci", {
                         ret = ret.times(tmp.sci.buyables[613].main_effect)
                         ret = ret.times(tmp.sci.buyables[621].main_effect)
                         ret = ret.times(tmp.sci.buyables[622].main_effect)
+                        ret = ret.times(tmp.sci.buyables[623].effect.pow(tmp.sci.buyables[623].effect).max(1))
 
                         ret = ret.times(tmp.sci.buyables[631].effect)
                         ret = ret.times(tmp.sci.buyables[632].effect)
@@ -2396,7 +2397,7 @@ addLayer("sci", {
                         ret = ret.times(tmp.or.buyables[411].effect)
 
                         if (hasUpgrade("sci", 623)) {
-                                exp = player.or.buyables[211].max(100).sqrt().sub(10)
+                                exp = player.or.buyables[211].max(100).sqrt().sub(10).min(1234)
                                 ret = ret.times(player.cells.buyables[22].max(1).pow(exp))
                         }
                         if (hasUpgrade("sci", 635)) {
@@ -2426,6 +2427,7 @@ addLayer("sci", {
                         if (hasUpgrade("or", 342))      ret = ret.div("1e432")
                         if (hasUpgrade("or", 353))      ret = ret.div("1e590")
                         if (hasUpgrade("or", 42))       ret = ret.times(player.tokens.tokens2.total.pow10())
+                        if (hasUpgrade("sci", 674))     ret = ret.div("1e1111")
 
                         return ret
                 },
@@ -5890,6 +5892,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XIII"
                         },
                         description(){
+                                if (player.shiftAlias) return "Maxes at exponent being 1234 for Organ Science"
                                 let a = "Organs multiplies Contaminant gain and Oligopotent levels multiply Organ Science gain per sqrt(him levels)-10 (max 0)"
                                 let b = "<br>Requires: 755 I'm levels</bdi>"
                                 if (!hasUpgrade("sci", 623)) return a + b
@@ -6219,6 +6222,9 @@ addLayer("sci", {
                                 for (i = 0; i < l; i++) {
                                         r *= 1.05 - i/100
                                 }
+                                if (hasUpgrade("sci", 671) && player.an.points.gte(502400)) {
+                                        r *= 1.01 ** player.sci.upgrades.filter(x => x > 670 && x < 680).length
+                                }
                                 return new Decimal(r)
                         },
                         cost:() => new Decimal("1e79612"),
@@ -6292,6 +6298,86 @@ addLayer("sci", {
                         unlocked(){
                                 return player.an.grid[707].buyables.gte(53)
                         }, // hasUpgrade("sci", 665)
+                },
+                671: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXVI"
+                        },
+                        description(){
+                                let a = "At 502,400 Animals, this row upgrades multiply Organ Science XXXI by 1.01"
+                                return a
+                        },
+                        cost:() => new Decimal("1e93182"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[707].buyables.gte(65)
+                        }, // hasUpgrade("sci", 671)
+                },
+                672: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXVII"
+                        },
+                        description(){
+                                let a = "At 22 Primates levels double Animals IV and at 27 levels remove Dermotology and Filtering base cost"
+                                return a
+                        },
+                        cost:() => new Decimal("1e95082"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[707].buyables.gte(70)
+                        }, // hasUpgrade("sci", 672)
+                },
+                673: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXVIII"
+                        },
+                        description(){
+                                let a = "At 37 / 41 / 52 Primates levels, Homo levels add .02 to Purification / Filtering / Filtering<sup>2</sup> base"
+                                return a
+                        },
+                        cost:() => new Decimal("1e98180"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[707].buyables.gte(95)
+                        }, // hasUpgrade("sci", 673)
+                },
+                674: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXIX"
+                        },
+                        description(){
+                                let a = "Gain 1e1111x less Organ Science"
+                                return a
+                        },
+                        cost:() => new Decimal("1e107644"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[707].buyables.gte(135)
+                        }, // hasUpgrade("sci", 674)
+                },
+                675: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XL"
+                        },
+                        description(){
+                                let a = "Unlock a new buyable and at 6e439 Genes, remove Conditioning base cost"
+                                return a
+                        },
+                        cost:() => new Decimal("1e109732"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[707].buyables.gte(155)
+                        }, // hasUpgrade("sci", 675)
                 },
         },
         buyables: {
@@ -7785,6 +7871,9 @@ addLayer("sci", {
 
                                 if (hasUpgrade("sci", 604)) ret = ret.plus(player.or.buyables[203].min(50).div(50))
                                 if (hasUpgrade("sci", 612)) ret = ret.plus(player.or.buyables[211].min(200).div(50))
+                                if (hasUpgrade("sci", 673) && player.an.grid[505].buyables.gte(37)) {
+                                        ret = ret.plus(player.an.grid[707].buyables.div(50))
+                                } 
 
                                 return ret
                         },
@@ -7953,7 +8042,7 @@ addLayer("sci", {
                         cost(){
                                 let amt = getBuyableAmount("sci", 611)
                                 let base = 17
-                                return Decimal.pow(base, amt.pow(2)).times(false ? 1 : "1e1780")
+                                return Decimal.pow(base, amt.pow(2)).times(hasUpgrade("sci", 672) && player.an.grid[505].buyables.gte(27) ? 1 : "1e1780")
                         },
                         unlocked(){
                                 return hasUpgrade("sci", 641) || hasMilestone("an", 10)
@@ -7965,7 +8054,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return
                                 let data = player.sci
                                 if (hasUpgrade("or", 345)) {
-                                        let pts = data.organ_science.points.div(false ? 1 : "1e1780")
+                                        let pts = data.organ_science.points.div(hasUpgrade("sci", 672) && player.an.grid[505].buyables.gte(27) ? 1 : "1e1780")
                                         if (pts.gt(0)) data.buyables[611] = data.buyables[611].max(pts.log(17).sqrt().ceil())
                                 } else data.buyables[611] = data.buyables[611].plus(1)
                                 if (!false) {
@@ -7977,6 +8066,9 @@ addLayer("sci", {
                                 let ret = new Decimal(.5)
 
                                 if (hasUpgrade("sci", 643)) ret = ret.plus(player.sci.buyables[611].sub(14).div(6).floor().min(5).div(10))
+                                if (hasUpgrade("sci", 673) && player.an.grid[505].buyables.gte(41)) {
+                                        ret = ret.plus(player.an.grid[707].buyables.div(50))
+                                } 
 
                                 return ret
                         },
@@ -8000,7 +8092,7 @@ addLayer("sci", {
                                 let eformula = makePurple("M") + "=" + format(tmp.sci.buyables[611].base) + "*x"
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
-                                let costmid = (false ? "" : "1e1780*") + "17^x<sup>2</sup>"
+                                let costmid = (hasUpgrade("sci", 672) && player.an.grid[505].buyables.gte(27) ? "" : "1e1780*") + "17^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -8035,6 +8127,9 @@ addLayer("sci", {
                                 let ret = new Decimal(1.5)
 
                                 if (hasUpgrade("sci", 665)) ret = ret.plus(player.an.grid[708].buyables.div(50))
+                                if (hasUpgrade("sci", 673) && player.an.grid[505].buyables.gte(52)) {
+                                        ret = ret.plus(player.an.grid[707].buyables.div(50))
+                                }
 
                                 return ret
                         },
@@ -8127,7 +8222,7 @@ addLayer("sci", {
                         cost(){
                                 let amt = getBuyableAmount("sci", 621)
                                 let base = 23
-                                return Decimal.pow(base, amt.pow(2)).times(false ? 1 : "1e7300")
+                                return Decimal.pow(base, amt.pow(2)).times(hasUpgrade("sci", 675) && player.an.genes.points.gte("6e439") ? 1 : "1e7300")
                         },
                         unlocked(){
                                 return hasUpgrade("sci", 653) || hasMilestone("an", 10)
@@ -8139,7 +8234,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return
                                 let data = player.sci
                                 if (hasUpgrade("or", 345)) {
-                                        let pts = data.organ_science.points.div(false ? 1 : "1e7300")
+                                        let pts = data.organ_science.points.div(hasUpgrade("sci", 675) && player.an.genes.points.gte("6e439") ? 1 : "1e7300")
                                         if (pts.gt(0)) data.buyables[621] = data.buyables[621].max(pts.log(23).sqrt().ceil())
                                 } else data.buyables[621] = data.buyables[621].plus(1)
                                 if (!false) {
@@ -8174,7 +8269,7 @@ addLayer("sci", {
                                 let eformula = makePurple("P") + "=" + format(tmp.sci.buyables[621].base) + "*x"
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
-                                let costmid = (false ? "" : "1e7300*") + "23^x<sup>2</sup>"
+                                let costmid = (hasUpgrade("sci", 675) && player.an.genes.points.gte("6e439") ? "" : "1e7300*") + "23^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -8208,7 +8303,10 @@ addLayer("sci", {
                         base(){
                                 let ret = new Decimal(hasUpgrade("sci", 663) ? .5 : 1.5)
 
-                                if (hasUpgrade("an", 14)) ret = ret.plus(player.an.upgrades.length / 100)
+                                if (hasUpgrade("an", 14)) {
+                                        let div = hasUpgrade("sci", 672) && player.an.grid[505].buyables.gte(22) ? 50 : 100
+                                        ret = ret.plus(player.an.upgrades.length / 50)
+                                }
 
                                 return ret
                         },
@@ -8238,7 +8336,59 @@ addLayer("sci", {
                                 return br + allEff + allCost + (hasUpgrade("sci", 663) ? "" : br + "Softcapped at 1e10 for Taxonomy")
                         },
                 },
+                623: {
+                        title: "Conditioning<sup>3</sup>",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 623)
+                                let base = 25
+                                return Decimal.pow(base, amt.pow(2)).times(false ? 1 : "1e116560")
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 675)
+                        },
+                        canAfford(){
+                                return player.sci.organ_science.points.gte(tmp.sci.buyables[623].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return
+                                let data = player.sci
+                                if (hasUpgrade("or", 345)) {
+                                        let pts = data.organ_science.points.div(false ? 1 : "1e116560")
+                                        if (pts.gt(0)) data.buyables[623] = data.buyables[623].max(pts.log(25).sqrt().ceil())
+                                } else data.buyables[623] = data.buyables[623].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[623].cost
+                                        data.organ_science.points = data.organ_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                let ret = decimalOne
 
+                                return ret
+                        },
+                        effect(){
+                                return tmp.sci.buyables[623].base.times(player.sci.buyables[623])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[623]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: " + makePurple("R") + "="
+                                        let eff2 = format(tmp.sci.buyables[623].effect) + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 623)) + " Organ Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let ef = "1.01<sup>" + makePurple("R") + "</sup> multiplies Row 4-8 amounts and " + makePurple("R") + "<sup>" + makePurple("R") + "</sup> multiplies Organ Science gain"
+                                let eformula = makePurple("R") + "=" + format(tmp.sci.buyables[623].base) + "*x"
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
+
+                                let costmid = (false ? "" : "1e116,560*") + "25^x<sup>2</sup>"
+                                let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
+
+                                return br + allEff + allCost
+                        },
+                },
                 631: {
                         title: "Neuroscience",
                         cost(){
@@ -8400,7 +8550,7 @@ addLayer("sci", {
                         cost(){
                                 let amt = getBuyableAmount("sci", 641)
                                 let base = 20
-                                return Decimal.pow(base, amt.pow(1.6)).times(false ? 1 : "1e2552")
+                                return Decimal.pow(base, amt.pow(1.6)).times(hasUpgrade("sci", 672) && player.an.grid[505].buyables.gte(27) ? 1 : "1e2552")
                         },
                         unlocked(){
                                 return player.sci.buyables[611].gte(26) || hasMilestone("an", 10)
@@ -8412,7 +8562,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return
                                 let data = player.sci
                                 if (hasUpgrade("or", 345)) {
-                                        let pts = data.organ_science.points.div(false ? 1 : "1e2552")
+                                        let pts = data.organ_science.points.div(hasUpgrade("sci", 672) && player.an.grid[505].buyables.gte(27) ? 1 : "1e2552")
                                         if (pts.gt(0)) data.buyables[641] = data.buyables[641].max(pts.log(20).root(1.6).ceil())
                                 } else data.buyables[641] = data.buyables[641].plus(1)
                                 if (!false) {
@@ -8441,7 +8591,7 @@ addLayer("sci", {
                                 let eformula = format(player.or.air.points.max(10).log10()) + "<sup>x</sup>"
                                 let allEff = "<b><h2>Effect formula</h2>:<br>log10(Air)^x" + br + eformula + br + "</b>"
 
-                                let costmid = (false ? "" : "1e2552*") + "20^x<sup>1.6</sup>"
+                                let costmid = (hasUpgrade("sci", 672) && player.an.grid[505].buyables.gte(27) ? "" : "1e2552*") + "20^x<sup>1.6</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -27510,7 +27660,7 @@ addLayer("t", {
                         },
                         description(){
                                 if (player.shiftAlias) return "Gives you ten tissue resets on purchase"
-                                return "Gain 99% of Tissue gained on reset per second and 1e10 Stem Cells but you can no longer reset for Tissues"
+                                return "Gain 99% of Tissue gained on reset per second and 1e10x Stem Cells but you can no longer reset for Tissues"
                         },
                         onPurchase(){
                                 player.t.times += 10
@@ -29786,7 +29936,7 @@ addLayer("or", {
                         description(){
                                 return "<bdi style='font-size: 90%'>IN<u>tes</u>tine's log5 becomes log4, Token II buyables' cost exponent is .48, and Bottom Quark only affects Energy and Air gain</bdi>"
                         },
-                        cost:() => new Decimal("1e316"),
+                        cost:() => new Decimal(player.extremeMode ? "2.3e289" : "1e316"),
                         unlocked(){
                                 return hasUpgrade("or", 42)
                         }, // hasUpgrade("or", 43)
@@ -34816,7 +34966,7 @@ addLayer("an", {
                         description(){
                                 return "Canidae amount multiplies Energy gain and base DNA gain becomes [Animal upgrades]^[Token II]"
                         },
-                        cost:() => new Decimal(948e3),
+                        cost:() => new Decimal(player.extremeMode ? 574140 : 948e3),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 14) || hasMilestone("nu", 2)
@@ -34829,7 +34979,7 @@ addLayer("an", {
                         description(){
                                 return "Felidae amount multiplies Contaminant gain per Taxonomy level and INtes<u>tine</u>'s log4 becomes log3"
                         },
-                        cost:() => new Decimal(1014e3),
+                        cost:() => new Decimal(player.extremeMode ? 834800 : 1014e3),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 15) || hasMilestone("nu", 2)
@@ -34842,7 +34992,7 @@ addLayer("an", {
                         description(){
                                 return "Primates amount multiplies Air gain per Psittaciformes level and INtes<u>tine</u>'s log3 becomes ln"
                         },
-                        cost:() => new Decimal(1152e3),
+                        cost:() => new Decimal(player.extremeMode ? 1176e3 : 1152e3),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 21) || hasMilestone("nu", 2)
@@ -34855,7 +35005,7 @@ addLayer("an", {
                         description(){
                                 return "Carnivora I amount multiplies Organ gain, square an base, and IN<u>tes</u>tine's log6 becomes log5"
                         },
-                        cost:() => new Decimal(1743770),
+                        cost:() => new Decimal(player.extremeMode ? 1281500 : 1743770),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 22) || hasMilestone("nu", 2)
@@ -34868,7 +35018,7 @@ addLayer("an", {
                         description(){
                                 return "in<u>TES</u>tine's log6 becomes log5, unlock a new layer, and Oligopotent's base is log10(Contaminants)"
                         },
-                        cost:() => new Decimal(2132620),
+                        cost:() => new Decimal(player.extremeMode ? 3046400 : 2132620),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 23) || hasMilestone("nu", 2)
@@ -34881,7 +35031,7 @@ addLayer("an", {
                         description(){
                                 return "<u>IN</u>testine's log6 becomes log5 and per upgrade Air<sup>.01</sup> dilates Life Point gain"
                         },
-                        cost:() => new Decimal(3237330),
+                        cost:() => new Decimal(player.extremeMode ? 4e6 : 3237330),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 24) || hasMilestone("nu", 2)
@@ -35416,10 +35566,10 @@ addLayer("an", {
                 }, // hasMilestone("an", 19)
                 20: {
                         requirementDescription(){
-                                return "1e413 Genes"
+                                return player.extremeMode ? "3e400 Genes" : "1e413 Genes"
                         },
                         done(){
-                                return player.an.genes.points.gte("1e413")
+                                return player.an.genes.points.gte(player.extremeMode ? "3e400" : "1e413")
                         },
                         unlocked(){
                                 return true
@@ -48215,7 +48365,7 @@ addLayer("hu", {
                                         b = "Goal: 295,210,000 Plants"
                                         c = "Reward: <i>Siok</i>'s base cost is 1e200 more but every other <i>Hual</i> level past 1000 makes it cost 10x less"
                                         c += ", at 1e63,855 / 1e64,412 Humans raise Chromosome effect ^(10/7) / ^1.3, and at 1e64,026 / 1e64,160 Humans <i>Tulinwl</i> divider is 2 / 1"
-                                        c = "<bdi style='font-size: 80%'>" + c + "</bdi>"
+                                        c = "<bdi style='font-size: 75%'>" + c + "</bdi>"
                                         c += br2 + "Completions: " + player.hu.challenges[51] + "/2"
                                         if (hasMilestone("r", 5)) {
                                                 c = "Reward: <i>Siok</i>'s base cost is 1e200 more but every other <i>Hual</i> level past 1000 makes it cost 10x less"

@@ -136,6 +136,7 @@ var TAXONOMY_COSTS = {
 var TAXONOMY_COSTS_EXTREME = {
         505: [new Decimal(2.5e104), new Decimal(300), new Decimal(1.1)],
         506: [new Decimal(3e118), new Decimal(5e4), new Decimal(1.1)],
+        508: [new Decimal(5e232), new Decimal(400), new Decimal(1.1)],
 
         608: [new Decimal(1e56), new Decimal(250), new Decimal(1.1)],
 
@@ -226,6 +227,10 @@ function updateTaxonomyAmounts(diff) {
                 if (id > 700) {
                         let ret = tmp.sci.buyables[622].main_effect
                         if (ret.gte(1e10) && !hasUpgrade("sci", 663)) ret = ret.log10().pow(10)
+                        gain = gain.times(ret)
+                }
+                if (id > 400) {
+                        let ret = Decimal.pow(1.01, tmp.sci.buyables[623].effect)
                         gain = gain.times(ret)
                 }
                 gain = gain.times(layerEff[Math.floor(id/100)])
