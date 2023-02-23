@@ -2431,7 +2431,8 @@ addLayer("sci", {
                         if (hasUpgrade("or", 44)) {
                                 let exp = player.an.genes.points.gte("4e691") ? 186 : 194
                                 if (hasMilestone("ch", 3)) exp += 100
-                                ret = ret.div(player.ch.points.pow10().pow(exp))
+                                let levels = hasUpgrade("ch", 11) ? new Decimal(33) : player.ch.points
+                                ret = ret.div(levels.pow10().pow(exp))
                         }
 
                         return ret
@@ -28859,6 +28860,9 @@ addLayer("or", {
                 if (hasUpgrade("tokens", 121))  exp = exp.times(50)
                 if (hasUpgrade("tokens", 142))  exp = exp.times(player.tokens.mastery_tokens.total.max(10).log10())
                 if (hasMilestone("pl", 10))     exp = exp.times(player.tokens.tokens2.total.max(1))
+                if (hasMilestone("an", 24) && player.extremeMode) {
+                                                exp = exp.times(2)
+                }
 
                 let ret = pts.plus(1).pow(exp)
 
@@ -34887,10 +34891,15 @@ addLayer("an", {
                         }
                         
                         if (hasMilestone("ch", 7) && !hasUpgrade("sp", 121)) {
-                                                        ret = ret.times(player.ch.points.div(67).plus(1).pow(player.ch.points))
+                                let per = player.ch.points.div(player.extremeMode ? 54 : 67)
+                                if (player.extremeMode) per = per.times(player.ch.points.sub(28).max(1).pow(1.2))
+                                                        ret = ret.times(per.plus(1).pow(player.ch.points))
                         }
                         if (!hasUpgrade("nu", 23)) {
-                                if (hasMilestone("ch", 8))      ret = ret.times(player.ch.points.pow(player.ch.milestones.length/3).max(1))
+                                if (hasMilestone("ch", 8)) {
+                                        let base = player.extremeMode ? player.ch.points.max(10).log10().times(1.001) : player.ch.points.cbrt()
+                                        ret = ret.times(base.pow(player.ch.milestones.length).max(1))
+                                }
                                 if (hasMilestone("ch", 16))     ret = ret.times(player.ch.points.plus(1))
                                 if (hasMilestone("ch", 17))     ret = ret.times(Decimal.pow(2, player.nu.points))
                         }
@@ -34953,10 +34962,11 @@ addLayer("an", {
                                 if (hasMilestone("ch", 6) && !hasMilestone("an", 24)) {
                                                         ret = ret.times(Decimal.pow(.5, player.ch.points))
                                 }
-                        } else {
+                        } else { // player.extremeMode
                                 if (hasUpgrade("or", 354))      ret = ret.div(1e5)
                                 if (hasUpgrade("an", 25))       ret = ret.div(Decimal.pow(3, player.an.upgrades.length))
                                 if (hasMilestone("ch", 6))      ret = ret.times(player.ch.points.max(1))
+                                if (hasUpgrade("ch", 11))       ret = ret.times(Decimal.pow(.89, player.ch.points.min(200)))
                         }
                         
 
@@ -35145,7 +35155,7 @@ addLayer("an", {
                         description(){
                                 return "<u>in</u>TEStine's log3 becomes log2 and bulk 5x Kidney buyables"
                         },
-                        cost:() => new Decimal(player.extremeMode ? 1e9 : 54208e3),
+                        cost:() => new Decimal(player.extremeMode ? 82587e3 : 54208e3),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 31) || hasMilestone("nu", 2)
@@ -35753,15 +35763,16 @@ addLayer("an", {
                 }, // hasMilestone("an", 23)
                 24: {
                         requirementDescription(){
-                                return "2.4e1507 Genes"
+                                return player.extremeMode ? "1.4e1467 Genes" : "2.4e1507 Genes"
                         },
                         done(){
-                                return player.an.genes.points.gte("2.4e1507")
+                                return player.an.genes.points.gte(player.extremeMode ? "1.4e1467" : "2.4e1507")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: intes<u>TINE</u>'s base becomes sqrt(in<u>TES</u>tine) and double Organ effect exponent."
                                 return "Reward: intes<u>TINE</u>'s base becomes sqrt(in<u>TES</u>tine) and remove Chromosome milestone 6 nerfs."
                         },
                 }, // hasMilestone("an", 24)
@@ -37531,11 +37542,28 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes I"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Per Chromosome up to 200 subtract 1 from Tissue gain exponent divider and Gamma-<br>proteobacteria amount multiplies INtes<u>tine</u> gain</bdi>"
+                                if (player.extremeMode) {
+                                        if (player.shiftAlias) return "Chromosomes nerfs to Organ Science gain is from now on assumes you have exactly 33 Chromosomes"
+                                        return "<bdi style='font-size: 80%'>Per Chromosome up to 200 subtract 1 from Tissue gain exponent divider and reduce Gene gain by 11% and Gammaproteobacteria amount multiplies INtes<u>tine</u> gain</bdi>"
+                                }
+                                return "<bdi style='font-size: 90%'>Per Chromosome up to 200 subtract 1 from Tissue gain exponent divider and Gammaproteobacteria amount multiplies INtes<u>tine</u> gain</bdi>"
                         },
-                        cost:() => new Decimal(34),
+                        cost:() => new Decimal(player.extremeMode ? 33 : 34),
+                        onPurchase(){
+                                if (!player.extremeMode) return 
+                                player.or.extras[401] = decimalOne
+                                player.or.extras[402] = decimalOne
+                                player.or.extras[403] = decimalOne
+                                player.or.extras[411] = decimalOne
+                                player.or.extras[412] = decimalOne
+                                player.or.extras[413] = decimalOne
+                                player.or.extras[421] = decimalOne
+                                player.or.extras[422] = decimalOne
+                                player.or.extras[423] = decimalOne
+                        },
                         unlocked(){
                                 if (player.sp.unlocked) return true
+                                if (player.extremeMode) return hasUpgrade("ch", 11) || player.an.genes.best.gte("3e1695")
                                 return hasMilestone("ch", 8) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 11)
                 },
@@ -37549,6 +37577,7 @@ addLayer("ch", {
                         cost:() => new Decimal(35),
                         unlocked(){
                                 if (player.sp.unlocked) return true
+                                if (player.extremeMode) return hasUpgrade("ch", 12) || player.an.genes.best.gte("2e1781")
                                 return hasUpgrade("ch", 11) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 12)
                 },
@@ -37556,13 +37585,16 @@ addLayer("ch", {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes III"
                         },
+                        canAfford(){
+                                return !player.extremeMode
+                        },
                         description(){
                                 return "<bdi style='font-size: 80%'>Per Chromosome - 37 increase the Taxonomy buyables max by 4, up to a max of 850 and Aves amount<sup>7</sup> multiplies in<u>TES</u>tine gain</bdi>"
                         },
                         cost:() => new Decimal(38),
                         unlocked(){
                                 if (player.sp.unlocked) return true
-                                return player.an.grid[607].buyables.gte(367) || player.nu.best.gte(1)
+                                return player.an.grid[607].buyables.gte(player.extremeMode ? 374 : 367) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 13)
                 },
                 14: {
@@ -37581,7 +37613,7 @@ addLayer("ch", {
                         },
                         unlocked(){
                                 if (player.sp.unlocked) return true
-                                return player.an.grid[507].buyables.gte(139) || player.nu.best.gte(1)
+                                return player.an.grid[507].buyables.gte(player.extremeMode ? 170 : 139) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 14)
                 },
                 15: {
@@ -37895,29 +37927,33 @@ addLayer("ch", {
                 }, // hasMilestone("ch", 6)
                 7: {
                         requirementDescription(){
-                                return "32 Chromosomes"
+                                return player.extremeMode ? "29 Chromosomes" : "32 Chromosomes"
                         },
                         done(){
-                                return player.ch.points.gte(32)
+                                return player.ch.points.gte(player.extremeMode ? 29 : 32)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Per Chromosome Chromosomes multiply Organ gain and 1 + Chromosomes * (Chromosomes - 28)<sup>1.2</sup> / 54 multiplies Gene gain."
                                 return "Reward: Per Chromosome Chromosomes multiply Organ gain and 1+Chromosomes/67 multiplies Gene gain."
                         },
                 }, // hasMilestone("ch", 7)
                 8: {
                         requirementDescription(){
+                                if (player.extremeMode && player.ch.points.gte(31)) return "1e1608 Genes"
+                                if (player.extremeMode) return "31 Chromosomes and ???"
                                 return "33 Chromosomes"
                         },
                         done(){
-                                return player.ch.points.gte(33)
+                                return player.ch.points.gte(player.extremeMode ? 31 : 33) && (!player.extremeMode || player.an.genes.points.gte("1e1608"))
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Per milestone log10(Chromosomes)*1.001 multiplies Gene gain and unlock Chromosome upgrades and a new Taxonomy row."
                                 return "Reward: Per milestone cbrt(Chromosomes) multiplies Gene gain and unlock Chromosome upgrades and a new Taxonomy row."
                         },
                 }, // hasMilestone("ch", 8)
