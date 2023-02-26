@@ -1890,6 +1890,7 @@ addLayer("sci", {
                         if (hasUpgrade("or", 344))      sciBuyIds.push(652)
                         if (hasUpgrade("sci", 662))     sciBuyIds.push(653)
                         if (hasMilestone("an", 25))     sciBuyIds.push(621)
+                        if (hasUpgrade("an", 44))       sciBuyIds.push(622)
 
                         if (hasMilestone("an", 6)) {
                                 let ids = [501, 502, 503, 511, 512, 513, 521, 522, 523]
@@ -6221,10 +6222,11 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXI"
                         },
                         description(){
-                                let a = "Each of the next five upgrades raises Gene gain and Taxonomy amounts ^1.05 / 1.04 / 1.03 / 1.02 / 1.01"
-                                return a
+                                if (player.shiftAlias) return "Currently: " + format(tmp.sci.upgrades[661].effect, 4) 
+                                return "Each of the next five upgrades raises Gene gain and Taxonomy amounts ^1.05 / 1.04 / 1.03 / 1.02 / 1.01"
                         },
                         effect(){
+                                if (player.an.grid[407].buyables.gte(308) && hasUpgrade("sci", 692)) return new Decimal(1.22)
                                 let l = player.sci.upgrades.filter(x => x > 660 && x < 670).length
                                 let r = 1
                                 for (i = 0; i < l; i++) {
@@ -6450,6 +6452,54 @@ addLayer("sci", {
                         unlocked(){
                                 return player.an.grid[404].buyables.gte(507)
                         }, // hasUpgrade("sci", 684)
+                },
+                685: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLV"
+                        },
+                        description(){
+                                let a = "Mammalia III levels add .01 to Conditioning base"
+                                return a
+                        },
+                        cost:() => new Decimal("1e411626"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[507].buyables.gte(719)
+                        }, // hasUpgrade("sci", 685)
+                },
+                691: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLVI"
+                        },
+                        description(){
+                                let a = "Organ Sci XLIII is 1.3 and 1.2 / 1.1 / 1 at 780 / 790 / 799 Carnivora II levels"
+                                return a
+                        },
+                        cost:() => new Decimal("1e441723"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[507].buyables.gte(766)
+                        }, // hasUpgrade("sci", 691)
+                },
+                692: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLVII"
+                        },
+                        description(){
+                                let a = "Aves levels after 300 add .05 to Conditioning<sup>3</sup> base and at 308 levels, Organ Sci XXXII is 1.22"
+                                return a
+                        },
+                        cost:() => new Decimal("1e457931"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[507].buyables.gte(843)
+                        }, // hasUpgrade("sci", 692)
                 },
         },
         buyables: {
@@ -8322,6 +8372,7 @@ addLayer("sci", {
                                         if (hasMilestone("an", 26)) l = l.min(500)
                                         ret = ret.plus(l.div(100))
                                 }
+                                if (hasUpgrade("sci", 685)) ret = ret.plus(player.an.grid[406].buyables.div(100))
 
                                 return ret
                         },
@@ -8389,6 +8440,7 @@ addLayer("sci", {
                                 if (hasUpgrade("sci", 684)) {
                                         ret = ret.plus(player.an.grid[407].buyables.div(100).floor().min(10).div(100))
                                 }
+                                if (hasUpgrade("an", 44)) ret = ret.plus(.01)
 
                                 return ret
                         },
@@ -8456,6 +8508,7 @@ addLayer("sci", {
                                         if (player.an.genes.points.gte("6.6e576")) ret = ret.plus(.15)
                                 }
                                 if (hasMilestone("ch", 5)) ret = ret.plus(player.ch.milestones.length * .01)
+                                if (hasUpgrade("sci", 692)) ret = ret.plus(player.an.grid[407].buyables.sub(300).max(0).times(.05))
 
                                 return ret
                         },
@@ -8907,7 +8960,7 @@ addLayer("sci", {
                         cost(){
                                 let amt = getBuyableAmount("sci", 653)
                                 let base = 28
-                                return Decimal.pow(base, amt.pow(1.1)).times(false ? 1 : "1e80128")
+                                return Decimal.pow(base, amt.pow(1.1)).times(hasUpgrade("ch", 24) ? 1 : "1e80128")
                         },
                         unlocked(){
                                 return hasUpgrade("or", 343)
@@ -8919,7 +8972,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return
                                 let data = player.sci
                                 if (hasUpgrade("or", 345)) {
-                                        let pts = data.organ_science.points.div(false ? 1 : "1e80128")
+                                        let pts = data.organ_science.points.div(hasUpgrade("ch", 24) ? 1 : "1e80128")
                                         if (pts.gt(0)) data.buyables[653] = data.buyables[653].max(pts.log(28).root(1.1).ceil())
                                 } else data.buyables[653] = data.buyables[653].plus(1)
                                 if (!false) {
@@ -8949,7 +9002,7 @@ addLayer("sci", {
                                 let eformula = format(r) + "<sup>x</sup>"
                                 let allEff = "<b><h2>Effect formula</h2>:<br>log10(Previous Row Levels)^x" + br + eformula + br + "</b>"
 
-                                let costmid = (false ? "" : "1e80,128*") + "28^x<sup>1.1</sup>"
+                                let costmid = (hasUpgrade("ch", 24) ? "" : "1e80,128*") + "28^x<sup>1.1</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -25185,6 +25238,7 @@ addLayer("cells", {
                                 if (hasUpgrade("cells", 41))    base = new Decimal(player.extremeMode ? 8.5 : 9.04)
                                 if (hasUpgrade("cells", 42))    base = new Decimal(player.extremeMode ? 8.5 : 9)
                                 if (hasUpgrade("sci", 604))     base = base.sub(player.or.buyables[203].min(50).div(100))
+                                if (hasUpgrade("an", 42) && player.extremeMode) base = new Decimal(7)
                                 if (hasUpgrade("tokens", 132))  base = new Decimal(10)
 
                                 if (hasUpgrade("hu", 22))       base = new Decimal(1000).sub(player.pl.points).max(10)
@@ -26291,7 +26345,7 @@ addLayer("cells", {
                                                 tertReward += "4: Tokens II buyables' cost is ceil(x<sup>.9</sup>)" + br
                                         }
                                         if (player.cells.challenges[21] >= 4) {
-                                                tertReward += "5: Remove Neuroscience base cost and log10(Stem Cells) multiplies Contaminant gain per sqrt(him)" + br
+                                                tertReward += "5: Remove Neuroscience base cost and log10(Stem Cells) multiplies Contaminant gain per sqrt(he)" + br
                                         }
                                         tertReward += br + "Note that Tertiary completions are never reset"
 
@@ -30625,7 +30679,7 @@ addLayer("or", {
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
                                 if (hasMilestone("an", 4)) return true
-                                return hasUpgrade("or", 151) && player.sci.buyables[641].gte(3)
+                                return hasUpgrade("or", 151) && (player.sci.buyables[641].gte(3) || !player.extremeMode)
                         }, // hasUpgrade("or", 152)
                 },
                 153: {
@@ -30834,7 +30888,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney IX"
                         },
                         description(){
-                                return "Autobuy offer and if you are filtering from you right kidney then gain ^1.001 Stem Cells"
+                                return "Autobuy offer and if you are filtering from your right kidney then gain ^1.001 Stem Cells"
                         },
                         cost(){
                                 return new Decimal(player.extremeMode ? "1e123390" : "1e153016")
@@ -31799,6 +31853,7 @@ addLayer("or", {
                                 if (hasUpgrade("sp", 94) && !hasUpgrade("tokens", 125)) {
                                                                 eformula = eformula.replace("/100", "/99")
                                 }
+                                if (player.extremeMode)         eformula = eformula.replace("25 +", "40 +").replace("/100", "/20")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -34721,6 +34776,14 @@ addLayer("an", {
                         let base = tmp.sci.upgrades[661].effect
                                                 ret = ret.times(base.pow(player.sci.upgrades.filter(x => x > 660 && x < 700).length))
                 }
+                if (hasAchievement("an", 11) && player.extremeMode) {
+                        if (!player.an.achActive[11]) {
+                                if (!player.an.achActive[22] && hasAchievement("an", 22)) {
+                                                        ret = ret.times(Decimal.pow(hasMilestone("an", 36) ? 25 : 5, player.an.achievements.length + 4))
+                                } else                  ret = ret.times(player.extremeMode ? 100 : 25)
+                        }
+                                                ret = ret.times(player.sci.organ_science.points.plus(10).log10())
+                }
                                                 ret = ret.times(tmp.e.effect)
 
                 return ret.max(1)
@@ -34964,13 +35027,10 @@ addLayer("an", {
                                                         ret = ret.times(20)
                         }
                         
-                        if (hasUpgrade("an", 43) && player.tokens.tokens2.total.gte(2600) && !hasMilestone("ch", 29)) {
-                                                        ret = ret.div(1e42)
-                        }
                         if (!player.an.achActive[11] && hasAchievement("an", 11)) {
-                                if (!player.an.achActive[22]) {
+                                if (!player.an.achActive[22] && hasAchievement("an", 22)) {
                                                         ret = ret.times(Decimal.pow(hasMilestone("an", 36) ? 25 : 5, player.an.achievements.length + 4))
-                                } else                  ret = ret.times(25)
+                                } else                  ret = ret.times(player.extremeMode ? 100 : 25)
                         }
                         if (hasAchievement("an", 12)) {
                                 if ((player.an.achActive[12] || hasMilestone("ch", 16)) && !hasUpgrade("ch", 34) && player.ch.points.gte(200)) {
@@ -35015,6 +35075,9 @@ addLayer("an", {
                                 }
                                 if (hasMilestone("ch", 6) && !hasMilestone("an", 24)) {
                                                         ret = ret.times(Decimal.pow(.5, player.ch.points))
+                                }
+                                if (hasUpgrade("an", 43) && player.tokens.tokens2.total.gte(2600) && !hasMilestone("ch", 29)) {
+                                                        ret = ret.div(1e42)
                                 }
                         } else { // player.extremeMode
                                 if (hasUpgrade("or", 354))      ret = ret.div(1e5)
@@ -35264,7 +35327,7 @@ addLayer("an", {
                         description(){
                                 return "Mammalia III amount<sup>Carnivora II<sup>3</sup></sup> multiplies Cell gain and Animal Milestone 27 affects DNA"
                         },
-                        cost:() => new Decimal(1.25e20),
+                        cost:() => new Decimal(player.extremeMode ? 1.36e18 : 1.25e20),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 35) || hasMilestone("nu", 2)
@@ -35275,9 +35338,10 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XVII"
                         },
                         description(){
+                                if (player.extremeMode) return "Omnipotent base is 7 and Token II via Stem Cell double exponent is (480+x/10)<sup>.4</sup>"
                                 return "Token II via Stem Cell double exponent is (480+x/10)<sup>.4</sup>"
                         },
-                        cost:() => new Decimal(4.59e23),
+                        cost:() => new Decimal(player.extremeMode ? 8.82e19 : 4.59e23),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 41) || hasMilestone("nu", 2)
@@ -35289,9 +35353,10 @@ addLayer("an", {
                         },
                         description(){
                                 if (player.shiftAlias) return "Requires 2600 Token II to be effective"
+                                if (player.extremeMode) return "Chromosomes V counts every Token II and add 1 to the Tissue effect exponent"
                                 return "Chromosomes V counts every Token II and add 1 to the Tissue effect exponent but divide Gene gain by 1e42"
                         },
-                        cost:() => new Decimal(4.09e24),
+                        cost:() => new Decimal(player.extremeMode ? 1.08e21 : 4.09e24),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 42) || hasMilestone("nu", 2)
@@ -35302,9 +35367,10 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XIX"
                         },
                         description(){
+                                if (player.extremeMode) return "Unlock Animal achievements and a new layer, autobuy Conditioning<sup>2</sup>, and add .01 to its base"
                                 return "Unlock Animal achievements, a new layer, and a clickable"
                         },
-                        cost:() => new Decimal(1.39e26),
+                        cost:() => new Decimal(player.extremeMode ? 1.87e23 : 1.39e26),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 43) || hasMilestone("nu", 2)
@@ -35317,7 +35383,7 @@ addLayer("an", {
                         description(){
                                 return "Disable Mu IV, Lambda IV, Kappa IV, and Iota IV effects on Stem Cells"
                         },
-                        cost:() => new Decimal(6.95e27),
+                        cost:() => new Decimal(player.extremeMode ? 3e29 : 6.95e27),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 44) || hasMilestone("nu", 2)
@@ -35887,10 +35953,10 @@ addLayer("an", {
                 }, // hasMilestone("an", 27)
                 28: {
                         requirementDescription(){
-                                return "6.2e8149 Genes"
+                                return player.extremeMode ? "1e8121 Genes" : "6.2e8149 Genes"
                         },
                         done(){
-                                return player.an.genes.points.gte("6.2e8149")
+                                return player.an.genes.points.gte(player.extremeMode ? "1e8121" : "6.2e8149")
                         },
                         unlocked(){
                                 return true
@@ -35899,6 +35965,7 @@ addLayer("an", {
                                 player.d.upgrades = []
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Chordata IV amount multiplies Gene gain, 1.01<sup>sqrt(" + makePurple("R") + ")</sup> multiplies row 3 amount gain, and Genes multiply Life Point gain but repeal and remove DNA upgrades."
                                 return "Reward: Chordata IV amount multiplies Gene gain and Genes multiply Life Point gain but repeal and remove DNA upgrades."
                         },
                 }, // hasMilestone("an", 28)
@@ -36212,12 +36279,13 @@ addLayer("an", {
                         display(){
                                 if (player.an.achActive[11]) return "Disables gene buyable autobuyers"
                                 if (!player.an.achActive[22] && hasAchievement("an", 22)) return "Bulk buy Gene buyables and gain " + makeOrange("5<sup>Achievements + 4</sup>") + "x Genes"
-                                return "Bulk buy Gene buyables and gain 25x Genes"
+                                return "Bulk buy Gene buyables and gain " + (player.extremeMode ? "25x Genes and Animals" : "100x Genes")
                         },
                         tooltip(){
                                 let a = makeBlue("ON") + ": disable gene buyale autobuyers" + br 
                                 a += makeBlue("OFF") + ": bulk buy Gene buyables and gain 25x Genes"
                                 if (!player.an.achActive[22] && hasAchievement("an", 22))  a = a.replace("25", makeOrange("5<sup>Achievements + 4</sup>"))
+                                if (player.extremeMode) a = a.replace("25", "100")
                                 return a
                         },
                         unlocked(){
@@ -36751,10 +36819,10 @@ addLayer("an", {
                 11: {
                         name: "Progression",
                         done(){
-                                return player.an.genes.points.gte("1e11619")
+                                return player.an.genes.points.gte(player.extremeMode ? "1e10689" : "1e11619")
                         },
                         tooltip(){
-                                return "Get 1e11619 Genes"
+                                return player.extremeMode ? "Get 1e10689 Genes<br>Reward: log10(Organ Science) multiplies Animal gain" : "Get 1e11619 Genes"
                         }, // hasAchievement("an", 11)
                 },
                 12: {
@@ -36857,7 +36925,7 @@ addLayer("an", {
                                         let v = player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber()
                                         if (v == 6) a ++ 
                                         if (v == 4) b ++
-                                        if (player.an.grid[TAXONOMY_KEYS[i]].buyables.gte(7)) return false
+                                        if (v > 6) return false
                                 }
                                 return a >= 14 && b >= 1
                         },
@@ -36971,9 +37039,9 @@ addLayer("an", {
                                 ["display-text", function(){
                                         if (hasAchievement("an", 11) || player.nu.unlocked) {
                                                 let a = "Clickables with " + makeRed("red") + " borders reset Taxonomy amounts and Genes"
-                                                return a + br + "while those with <bdi style='color:#7AEEFC'>sky-blue</bdi> backgrounds' effects are always active."
+                                                return br2 + a + br + "while those with <bdi style='color:#7AEEFC'>sky-blue</bdi> backgrounds' effects are always active."
                                         }
-                                        return ""
+                                        return br2 + br2 + br2 
                                 }],
                                 "blank",
                                 "achievements",
@@ -37451,7 +37519,16 @@ addLayer("ch", {
 
                 if (hasMilestone("ch", 27))     ret = new Decimal(1e10)
 
-                if (hasUpgrade("sci", 683))     ret = ret.times(player.an.grid[407].buyables ? 1.4 : 1.5)
+                if (hasUpgrade("sci", 683)) {
+                        let l = player.an.grid[407].buyables ? 1.4 : 1.5
+                        if (hasUpgrade("sci", 691)) {
+                                l = 1.3
+                                if (player.an.grid[507].buyables.gte(780)) l = 1.2
+                                if (player.an.grid[507].buyables.gte(790)) l = 1.1
+                                if (player.an.grid[507].buyables.gte(799)) l = 1
+                        }
+                        ret = ret.times(l)
+                }
 
                 return ret
         },
@@ -37735,12 +37812,17 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes VIII"
                         },
                         description(){
+                                if (player.extremeMode) {
+                                        if (player.ch.everUpgrade33) return "Per Chromosome increase the Taxonomy buyable max by 3 up to 1100, but disable Chromosomes III"
+                                        return "<bdi style='font-size: 80%'>Token II buyables' cost exponent is .46, and per Chromosome increase the Taxonomy buyable max by 3 up to 1100, but disable Chromosomes III</bdi>"
+                                }
                                 if (player.ch.everUpgrade33) return "<bdi style='font-size: 90%'>Gain 20x Genes, and per Chromosome increase the Taxonomy buyable max by 3 up to 1100, but disable Chromosomes III</bdi>"
                                 return "<bdi style='font-size: 70%'>Token II buyables' cost exponent is .46, gain 20x Genes, and per Chromosome increase the Taxonomy buyable max by 3 up to 1100, but disable Chromosomes III</bdi>"
                         },
                         cost:() => new Decimal(151),
                         unlocked(){
                                 if (player.sp.unlocked) return true
+                                if (player.extremeMode) player.an.grid[407].buyables.gte(265) || player.nu.best.gte(1)
                                 return player.an.grid[506].buyables.gte(528) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 23)
                 },
@@ -37749,12 +37831,13 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes IX"
                         },
                         description(){
+                                if (player.extremeMode) return "<bdi style='font-size: 90%'>Oligopotent cost base is 1e70, remove TO BE NAMED base cost, and per upgrade add .01 to the Animal gain exponent</bdi>"
                                 return "Oligopotent cost base is 1e70 and per upgrade add .01 to the Animal gain exponent"
                         },
-                        cost:() => new Decimal(178),
+                        cost:() => new Decimal(player.extremeMode ? 171 : 178),
                         unlocked(){
                                 if (player.sp.unlocked) return true
-                                return player.an.grid[303].buyables.gte(424) || player.nu.best.gte(1)
+                                return player.an.grid[303].buyables.gte(player.extremeMode ? 87 : 424) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 24)
                 },
                 25: {
