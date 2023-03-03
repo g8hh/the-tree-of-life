@@ -9318,9 +9318,9 @@ addLayer("sci", {
 
                 if (!hasMilestone("tokens", 9)) player.mini.milestones = filterOut(
                                                                         player.mini.milestones, 
-                                                                        ["1", "2", "3", "4", "5", 
-                                                                        "6", "7", "8", "9", "10", 
-                                                                        "11", "12"])
+                                                                        [1, 2, 3, 4, 5, 
+                                                                        6, 7, 8, 9, 10, 
+                                                                        11, 12])
                 
                 let resetNitrogen = true
                 if (layer == "tokens") resetNitrogen = false
