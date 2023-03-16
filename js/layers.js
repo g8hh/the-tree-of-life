@@ -25555,7 +25555,9 @@ addLayer("cells", {
                                         } else if (hasUpgrade("sci", 553)) {
                                                 eff2 = eff2.replace("gain", "and DNA gain")
                                         }
-                                        if (hasUpgrade("t", 85))        eff2 = eff2.replace(" and DNA gain", ", DNA Science, and DNA gain")
+                                        if (hasUpgrade("t", 85) && player.extremeMode) {
+                                                eff2 = eff2.replace(" and DNA gain", ", DNA Science, and DNA gain")
+                                        }
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 13)) + " Stem Cells</b><br>"
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
