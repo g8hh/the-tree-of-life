@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.053",
+	num: "2.059",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -11,13 +11,43 @@ function isEndgame() {
 }
 
 function isEndgameRaw(){
-	if (player.extremeMode) return player.or.contaminants.points.gte("1e226000")
+	if (player.extremeMode) return player.an.genes.points.gte("1e6524")
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.053"
+var CHANELOG_VERSION = "v2.059"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC6600'>v2.059</h3><br>
+		- Balanced Extreme Mode until 1e6524 Genes.<br>
+		- Implemented more upgrades.<br>
+		- Added four Organ Science upgrades.<br>
+		- Added two custom saves.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.058</h3><br>
+		- Balanced Extreme Mode until 1e448 Genes.<br>
+		- Implemented more upgrades.<br>
+		- Added nine Organ Science upgrades.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.057</h3><br>
+		- Balanced Extreme Mode until 1e42 Genes.<br>
+		- Implemented more upgrades.<br>
+		- Added a Organ Science upgrade.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.056</h3><br>
+		- Balanced Extreme Mode until 1e121 Organs.<br>
+		- Implemented more upgrades.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.055</h3><br>
+		- Balanced Extreme Mode until 1e362 Energy.<br>
+		- Added four Organ Science upgrades.<br>
+		- Added four Organ Science buyables.<br>
+		- Implemented more upgrades.<br>
+		- Added a custom save.<br>`,
+	`<br><h3 style='color: #CC6600'>v2.054</h3><br>
+		- Balanced Extreme Mode until 1e646 Air.<br>
+		- Added five Organ Science upgrades.<br>
+		- Implemented more upgrades.<br>
+		- Added a custom save.<br>`,
 	`<br><h3 style='color: #CC6600'>v2.053</h3><br>
 		- Balanced Extreme Mode until 1e226,000 Contaminants.<br>
 		- Added six Organ Science upgrades.<br>

@@ -75,10 +75,10 @@ function pointFormulaDisplay(){
                                         c += "C18 Gems multiply BX by " + format(c18base.pow(getBuyableAmount("l", 33).pow(player.extremeMode ? 1.9394 : 1.8))) + br
         }
         if (hasMilestone("a", 19))      c += "Amino Acid Milestone 19 multiply BX by " + format(tmp.a.milestones[19].effect) + br
-        if (hasUpgrade("a", 11))        c += "Amino Acid I multiplies BX by " + format(Decimal.pow(3, player.a.upgrades.length))
-        if (hasUpgrade("a", 13))        c += "Amino Acid III multiplies BX by " + format(getBuyableAmount("a", 11).max(1))
-        if (hasUpgrade("a", 15))        c += "Amino Acid V multiplies BX by " + format(getBuyableAmount("a", 12).max(1))
-        if (hasUpgrade("a", 33))        c += "Amino Acid XIII multiplies BX by " + format(Decimal.pow(100, getBuyableAmount("a", 13)))
+        if (hasUpgrade("a", 11))        c += "Amino Acid I multiplies BX by " + format(Decimal.pow(3, player.a.upgrades.length)) + br
+        if (hasUpgrade("a", 13))        c += "Amino Acid III multiplies BX by " + format(getBuyableAmount("a", 11).max(1)) + br
+        if (hasUpgrade("a", 15))        c += "Amino Acid V multiplies BX by " + format(getBuyableAmount("a", 12).max(1)) + br
+        if (hasUpgrade("a", 33))        c += "Amino Acid XIII multiplies BX by " + format(Decimal.pow(100, getBuyableAmount("a", 13))) + br
         let logProteinTimes = hasUpgrade("a", 34) + hasUpgrade("a", 35)
         if (logProteinTimes > 0)        c += "Amino Acid XIII and XIV multiplies BX by " + format(player.a.protein.points.max(10).log10().pow(logProteinTimes)) + br
         if (hasMilestone("a", 24))      c += "Amino Milestone 24 multiplies BX by " + format(tmp.a.milestones[24].effect) + br
