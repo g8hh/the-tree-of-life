@@ -132,6 +132,49 @@ var TAXONOMY_COSTS = {
         808: [new Decimal(10), new Decimal(5), new Decimal(1.1)],
 }
 
+
+var TAXONOMY_COSTS_EXTREME = {
+        303: [new Decimal("4e2675"), new Decimal(1e50), new Decimal(1.1)],
+        304: [new Decimal("3e5722"), new Decimal(1e59), new Decimal(1.2)],
+        305: [new Decimal("1.6e5842"), new Decimal(2e179), new Decimal(1.4)],
+        306: [new Decimal("5e2672"), new Decimal(1e106), new Decimal(1.2)],
+
+        308: [new Decimal("3e6275"), new Decimal(6.5e11), new Decimal(1.2)],
+
+        404: [new Decimal("1e641"), new Decimal(3000), new Decimal(1.1)],
+        405: [new Decimal("6.6e1107"), new Decimal(7e34), new Decimal(1.2)],
+        406: [new Decimal("1.7e1344"), new Decimal(3e36), new Decimal(1.3)],
+        407: [new Decimal("1.3e960"), new Decimal(9e8), new Decimal(1.2)],
+        408: [new Decimal("7.6e1034"), new Decimal(2600), new Decimal(1.1)],
+
+        505: [new Decimal(2.5e104), new Decimal(300), new Decimal(1.1)],
+        506: [new Decimal(3e118), new Decimal(5e4), new Decimal(1.1)],
+        507: [new Decimal("1.4e448"), new Decimal(2.5e5), new Decimal(1.1)],
+        508: [new Decimal(5e232), new Decimal(400), new Decimal(1.1)],
+
+        608: [new Decimal(1e56), new Decimal(250), new Decimal(1.1)],
+
+        708: [new Decimal(5e7), new Decimal(50), new Decimal(1.1)],
+}
+
+function getTaxonomyCost(id){
+        let init = getTaxonomyCostInit(id)
+        if (hasMilestone("an", 21) && player.extremeMode && player.an.grid[508].buyables.gte(73)) {
+                if (id == 606) init[0] = decimalOne
+                if (id == 607 && player.an.grid[508].buyables.gte(74)) init[0] = decimalOne
+                if (id == 608 && player.an.grid[508].buyables.gte(76)) init[0] = decimalOne
+        }
+        if (hasUpgrade("sci", 682) && player.an.genes.points.gte("4e548")) {
+                if (id == 505) init[0] = decimalOne
+        }
+        return init
+}
+
+function getTaxonomyCostInit(id) {
+        if (player.extremeMode && TAXONOMY_COSTS_EXTREME[id]) return TAXONOMY_COSTS_EXTREME[id]
+        return TAXONOMY_COSTS[id]
+}
+
 var TAXONOMY_KEYS = [
         101, 102, 103, 104, 105, 106, 107, 108,
         202, 203, 204, 205, 206, 207, 208, 
@@ -151,8 +194,8 @@ function taxonomyLowerText(){
         let pc = "1%"
         if (hasMilestone("an", 19)) pc = "5%"
         if (hasMilestone("an", 20)) pc = "25%"
-        if (hasMilestone("ch", 1))  pc = "33%"
-        if (hasMilestone("ch", 2))  pc = "39%"
+        if (hasMilestone("ch", 1))  pc = player.extremeMode && player.ch.points.gte(2) ? "39%" : "33%"
+        if (hasMilestone("ch", 2))  pc = player.extremeMode ? "42%" : "39%"
         if (hasMilestone("ch", 4))  pc = "75%"
         if (hasMilestone("an", 22)) pc = "100%"
         if (hasMilestone("sp", 1) && player.ch.points.lt(11)) pc = "1%"
@@ -175,8 +218,8 @@ function updateTaxonomyAmounts(diff) {
         let contamRate = .01
         if (hasMilestone("an", 19))                             contamRate = .05
         if (hasMilestone("an", 20))                             contamRate = .25
-        if (hasMilestone("ch", 1))                              contamRate = .33
-        if (hasMilestone("ch", 2))                              contamRate = .39
+        if (hasMilestone("ch", 1))                              contamRate = player.extremeMode && player.ch.points.gte(2) ? .39 : .33
+        if (hasMilestone("ch", 2))                              contamRate = hasMilestone("ch", 2) ? .42 : .39
         if (hasMilestone("ch", 4))                              contamRate = .75
         if (hasMilestone("an", 22))                             contamRate = 1
         if (hasMilestone("sp", 1) && player.ch.points.lt(11))   contamRate = .01
@@ -208,9 +251,21 @@ function updateTaxonomyAmounts(diff) {
                         let exp = (data.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22) ? 1.25 : 1
                         gain = gain.times(getLevels(id).pow(exp).plus(2).log(2))
                 }
+                if (id > 700) {
+                        let ret = tmp.sci.buyables[622].main_effect
+                        if (ret.gte(1e10) && !hasUpgrade("sci", 663)) ret = ret.log10().pow(10)
+                        gain = gain.times(ret)
+                }
+                if (id > 400) {
+                        let ret = Decimal.pow(1.01, tmp.sci.buyables[623].effect)
+                        if (hasUpgrade("or", 45) && id < 500) ret = ret.root(4)
+                        gain = gain.times(ret)
+                }
                 gain = gain.times(layerEff[Math.floor(id/100)])
 
                 if (hasUpgrade("pl", 14))       gain = gain.pow(1.001)
+                if (player.extremeMode)         gain = gain.pow(.75)
+                if (hasUpgrade("sci", 661))     gain = gain.pow(tmp.sci.upgrades[661].effect)
 
                 if (hasAchievement("an", 33)) {
                         data.grid[id].extras = gain
