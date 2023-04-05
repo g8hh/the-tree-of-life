@@ -43145,7 +43145,7 @@ addLayer("pl", {
                         for (i in ids) {
                                 let id = ids[i]
                                 let x = tmp.pl.buyables[id].effect
-                                if (x.lt("1e10000")) {
+                                if (x.lt("1e10000") || player.chem.best_amount.P.gte(10)) {
                                         ret = ret.times(x)
                                         continue
                                 }
@@ -43285,6 +43285,10 @@ addLayer("pl", {
                                 return base
                         },
                         exp(){
+                                if (player.chem.best_amount.P.gte(10)) {
+                                        let l = player.chem.amount.P.div(5).max(1).log(2).floor()
+                                        return 2.4 - l.min(100).div(1e4)
+                                }
                                 if (hasUpgrade("hu", 153)) return player.hu.points.gte("1e114627") ? 1.22 : player.hu.points.gte("1e114592") ? 1.23 : 1.24
                                 if (hasUpgrade("hu", 133)) return 1.25 
                                 return hasUpgrade("hu", 104) ? 1.3 : 1.4
@@ -43378,7 +43382,11 @@ addLayer("pl", {
 
                                 return ret
                         },
-                        exponent(){
+                        exp(){
+                                if (player.chem.best_amount.P.gte(10)) {
+                                        let l = player.chem.amount.P.div(5).max(1).log(2).floor()
+                                        return 2.38 - l.min(100).div(1e4)
+                                }
                                 if (hasUpgrade("hu", 115) && player.hu.points.gte("1e97111")) return 1.2
                                 if (hasUpgrade("hu", 62) && (hasMilestone("r", 6) || player.hu.points.gte("1e5809"))) return 1.3
                                 return 1.4
@@ -43386,14 +43394,14 @@ addLayer("pl", {
                         cost(){
                                 let init = tmp.pl.buyables[12].getInit
                                 let base = tmp.pl.buyables[12].costBase
-                                let exp = tmp.pl.buyables[12].exponent
+                                let exp = tmp.pl.buyables[12].exp
 
                                 return base.pow(player.pl.buyables[12].pow(exp)).times(init)
                         },
                         getMaxAfford(){
                                 let init = tmp.pl.buyables[12].getInit
                                 let base = tmp.pl.buyables[12].costBase
-                                let exp = tmp.pl.buyables[12].exponent
+                                let exp = tmp.pl.buyables[12].exp
 
                                 let pts = player.pl.biomass.points.div(init)
                                 if (pts.lt(1)) return decimalZero
@@ -43450,7 +43458,7 @@ addLayer("pl", {
                                 let cost2 = "INIT*BASE^(x<sup>EXP</sup>)" 
                                 cost2 = cost2.replace("INIT", format(tmp.pl.buyables[12].getInit, 0))
                                 cost2 = cost2.replace("BASE", formatWhole(tmp.pl.buyables[12].costBase))
-                                cost2 = cost2.replace("EXP", format(tmp.pl.buyables[12].exponent, 1))
+                                cost2 = cost2.replace("EXP", format(tmp.pl.buyables[12].exp))
                                 if (tmp.pl.buyables[12].getInit.lte(1)) cost2 = cost2.slice(2,)
                                 let cost3 = "</b><br>"
 
@@ -43490,17 +43498,26 @@ addLayer("pl", {
 
                                 return ret
                         },
+                        exp(){
+                                if (player.chem.best_amount.P.gte(10)) {
+                                        let l = player.chem.amount.P.div(5).max(1).log(2).floor()
+                                        return 2.58 - l.min(100).div(1e4)
+                                }
+                                if (hasUpgrade("r", 12)) return 1.4
+                                if (hasUpgrade("hu", 125)) return 1.5
+                                return hasMilestone("hu", 48) ? 1.6 : 1.7
+                        },
                         cost(){
                                 let init = tmp.pl.buyables[13].getInit
                                 let base = tmp.pl.buyables[13].getCostBase
-                                let exp = new Decimal(hasUpgrade("r", 12) ? 1.4 : hasUpgrade("hu", 125) ? 1.5 : hasMilestone("hu", 48) ? 1.6 : 1.7)
+                                let exp = new Decimal(tmp.pl.buyables[13].exp)
 
                                 return base.pow(player.pl.buyables[13].pow(exp)).times(init)
                         },
                         getMaxAfford(){
                                 let init = tmp.pl.buyables[13].getInit
                                 let base = tmp.pl.buyables[13].getCostBase
-                                let exp = new Decimal(hasUpgrade("r", 12) ? 1.4 : hasUpgrade("hu", 125) ? 1.5 : hasMilestone("hu", 48) ? 1.6 : 1.7)
+                                let exp = new Decimal(tmp.pl.buyables[13].exp)
 
                                 let pts = player.pl.biomass.points.div(init)
                                 if (pts.lt(1)) return decimalZero
@@ -43552,13 +43569,11 @@ addLayer("pl", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "MINIT*BASE^(x<sup>1.7</sup>)" 
+                                let cost2 = "MINIT*BASE^(x<sup>EXP</sup>)" 
                                 cost2 = cost2.replace("INIT", format(tmp.pl.buyables[13].getInit, 0))
                                 cost2 = cost2.replace("BASE", formatWhole(tmp.pl.buyables[13].getCostBase))
                                 cost2 = cost2.replace("M1*", "").replace("M", "")
-                                if (hasMilestone("hu", 48))     cost2 = cost2.replace("1.7", "1.6")
-                                if (hasUpgrade("hu", 125))      cost2 = cost2.replace("1.6", "1.5")
-                                if (hasUpgrade("r", 12))        cost2 = cost2.replace("1.5", "1.4")
+                                cost2 = cost2.replace("EXP", format(tmp.pl.buyables[13].exp))
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -43584,17 +43599,25 @@ addLayer("pl", {
 
                                 return ret 
                         },
+                        exp(){
+                                if (player.chem.best_amount.P.gte(10)) {
+                                        let l = player.chem.amount.P.div(5).max(1).log(2).floor()
+                                        return 2.38 - l.min(100).div(1e4)
+                                }
+                                if (hasUpgrade("hu", 124)) return 1.2
+                                return hasUpgrade("hu", 81) ? 1.4 : 1.5
+                        },
                         cost(){
                                 let init = tmp.pl.buyables[21].getInit
                                 let base = tmp.pl.buyables[21].costBase
-                                let exp = new Decimal(hasUpgrade("hu", 124) ? 1.2 : hasUpgrade("hu", 81) ? 1.4 : 1.5)
+                                let exp = new Decimal(tmp.pl.buyables[21].exp)
 
                                 return base.pow(player.pl.buyables[21].pow(exp)).times(init)
                         },
                         getMaxAfford(){
                                 let init = tmp.pl.buyables[21].getInit
                                 let base = tmp.pl.buyables[21].costBase
-                                let exp = new Decimal(hasUpgrade("hu", 124) ? 1.2 : hasUpgrade("hu", 81) ? 1.4 : 1.5)
+                                let exp = new Decimal(tmp.pl.buyables[21].exp)
 
                                 let pts = player.pl.biomass.points.div(init)
                                 if (pts.lt(1)) return decimalZero
@@ -43649,12 +43672,10 @@ addLayer("pl", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "INIT*BASE^(x<sup>1.5</sup>)" 
-                                cost2 = cost2.replace("INIT", format(tmp.pl.buyables[21].getInit, 0))
+                                let cost2 = "INIT*BASE^(x<sup>EXP</sup>)" 
+                                cost2 = cost2.replace("INIT", format(tmp.pl.buyables[21].getInit, 0)).replace("1*", "")
                                 cost2 = cost2.replace("BASE", formatWhole(tmp.pl.buyables[21].costBase))
-                                if (hasMilestone("hu", 7))      cost2 = cost2.slice(2, )
-                                if (hasUpgrade("hu", 81))       cost2 = cost2.replace(">1.5", ">1.4")
-                                if (hasUpgrade("hu", 124))      cost2 = cost2.replace(">1.4", ">1.2")
+                                cost2 = cost2.replace("EXP", format(tmp.pl.buyables[21].exp))
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -45988,6 +46009,10 @@ addLayer("hu", {
                                         let a = player.hu.buyables[33].sub(3300).max(0).div(2).floor().div(100)
                                         base = base.sub(a).max(10)
                                 }
+                                if (player.chem.amount.Cl.gte(10)) {
+                                        let l = player.chem.amount.Cl.div(5).log(2).floor()
+                                        base = base.sub(l.div(100).min(1))
+                                }
 
                                 return base
                         },
@@ -46129,6 +46154,10 @@ addLayer("hu", {
                                 if (hasMilestone("hu", 86)) {
                                         let exp = player.hu.buyables[33].min(2000).sub(105).max(0)
                                         base = base.div(Decimal.pow(1.001, exp)).max(1e3)
+                                }
+                                if (player.chem.amount.Ar.gte(10)) {
+                                        let l = player.chem.amount.Ar.div(5).log(2).floor()
+                                        base = base.sub(l.times(2).min(200))
                                 }
 
 
@@ -49710,12 +49739,22 @@ addLayer("chem", {
 
                         return ret
                 },
+                getDecay(){
+                        let decay = .01 
+                        if (player.chem.amount.S.gte(10)) {
+                                let l = player.chem.amount.S.div(5).log(2).floor().min(100).toNumber()
+                                decay -= l / 1e4
+                        }
+                        return decay
+                },
                 update(diff){
                         let data = player.chem
                         let ids = [
-                                'H', 'He', 'Li', 'Be', 'B', 
-                                'C', 'N', 'O', 'F', 'Ne',
-                                'Mg', 'Al', 'S'
+                                'H', 'He', 
+
+                                'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
+
+                                'Na', 'Mg', 'Al', 'P', 'S', 'Cl', 'Ar',
                                 ]
 
                         let buildingMult = function(x){return x.times(Decimal.pow(1.1, x))}
@@ -49724,40 +49763,39 @@ addLayer("chem", {
                         let bp = data.buildingProgress
                         let am = data.amount
                         let ba = data.best_amount
+                        let wMult = tmp.chem.buildings.getWorkerMultiplier.times(diff)
+                        let sMult = tmp.chem.buildings.getScientistMultiplier
 
-                        if (data.points.gte(0)) {
-                                let wMult = tmp.chem.buildings.getWorkerMultiplier.times(diff)
-                                let sMult = tmp.chem.buildings.getScientistMultiplier
+                        /*
+                        WORK IS DONE BELOW
+                        */
 
-                                let decay = .01 
-                                if (player.chem.amount.S.gte(10)) {
-                                        let l = player.chem.amount.S.div(5).log(2).floor().min(100).toNumber()
-                                        decay -= l/1e4
-                                }
+                        let zeroPlantBuys = ba.P.lte(10)
+                        
+                        for (i in ids) {
+                                let id = ids[i]
 
-                                for (i in ids) {
-                                        let id = ids[i]
-
-                                        bp[id] = bp[id].plus(data.workers[id].times(wMult))
-                                        am[id] = getLogisticAmount(am[id], 
-                                                                data.scientists[id].times(sMult).times(buildingMult(bu[id])),
-                                                                decay,
-                                                                diff)
-                                        ba[id] = ba[id].max(am[id])
-                                        
-                                        if (bp[id].lt(10)) continue
-                                        bu[id] = bu[id].max(bp[id].div(10).log(3).floor().plus(1))
-                                }
-                                let base = hasMilestone("r", 14) ? 2 : 4
-                                if (ba["N"].gte(Decimal.pow(base, player.chem.total).times(5))) {
-                                        let x = ba["N"].div(5).div(Decimal.pow(base, player.chem.total)).log(base).plus(1).floor()
-                                        player.chem.points = player.chem.points.plus(x)
-                                        player.chem.total  = player.chem.total.plus(x)
-                                }
-                        } else {
-                                for (i in ids) {
-                                        am[id] = getLogisticAmount(am[id], new Decimal(0), .01, diff)
-                                }
+                                bp[id] = bp[id].plus(data.workers[id].times(wMult))
+                                am[id] = getLogisticAmount(am[id], 
+                                                        data.scientists[id].times(sMult).times(buildingMult(bu[id])),
+                                                        tmp.chem.buildings.getDecay,
+                                                        diff)
+                                ba[id] = ba[id].max(am[id])
+                                
+                                if (bp[id].lt(10)) continue
+                                bu[id] = bu[id].max(bp[id].div(10).log(3).floor().plus(1))
+                        }
+                        let base = hasMilestone("r", 14) ? 2 : 4
+                        if (ba["N"].gte(Decimal.pow(base, player.chem.total).times(5))) {
+                                let x = ba["N"].div(5).div(Decimal.pow(base, player.chem.total)).log(base).plus(1).floor()
+                                player.chem.points = player.chem.points.plus(x)
+                                player.chem.total  = player.chem.total.plus(x)
+                        }
+                        if (zeroPlantBuys && am.P.gte(10)) { // reset plant buys
+                                player.pl.buyables[11] = decimalZero
+                                player.pl.buyables[12] = decimalZero
+                                player.pl.buyables[13] = decimalZero
+                                player.pl.buyables[21] = decimalZero
                         }
                 },
         },
@@ -49953,7 +49991,7 @@ addLayer("chem", {
                                                 c3 += displayChemInitialEffect("S") + br
                                                 c3 += displayChemInitialEffect("Cl") + br
                                                 c3 += displayChemInitialEffect("Ar") + br
-                                                c3 += makeRed("Of group 3, only Mg and Al are implemented")
+                                                c3 += makeRed("Si is not implemented")
                                         }
 
                                         let c = c1 + br + c2 + br + c3 + br
@@ -60896,10 +60934,15 @@ addLayer("tokens", {
                                 let exp = decimalThird
 
                                 if (hasUpgrade("hu", 143)) exp = new Decimal(.2)
+                                if (player.chem.amount.Na.gte(10)) exp = new Decimal(.11)
 
                                 return exp
                         },
                         base(){
+                                if (player.chem.amount.Mg.gte(10)) {
+                                        let l = player.chem.amount.Mg.div(5).log(2).floor()
+                                        return new Decimal(1.7).sub(l.div(400)).max(1.2)
+                                }
                                 if (hasUpgrade("hu", 143)) {
                                         if (hasMilestone("r", 14))              return 1.015
                                         if (hasMilestone("r", 11))              return 1.030 - Math.min(Math.max(0, player.r.times - 20), 10) / 1000
