@@ -31102,7 +31102,8 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney XIX"
                         },
                         description(){
-                                return "INtes<u>tine</u>'s log9 becomes log8, autobuy Dermotology, and Oligopotent base is 3^[Tertiary completions]"
+                                if (player.extremeMode) return "INtes<u>tine</u>'s log9 becomes log8, autobuy Dermotology, and Oligopotent base is 3^[Tertiary completions]"
+                                return "INtes<u>tine</u>'s log9 becomes log8 and Oligopotent base is 3^[Tertiary completions]"
                         },
                         cost(){
                                 return new Decimal(player.extremeMode ? "1e6511e3" : "1e2068e4")
