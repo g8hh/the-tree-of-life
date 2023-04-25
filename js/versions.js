@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.059",
+	num: "2.060",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -18,6 +18,10 @@ function isEndgameRaw(){
 var CHANELOG_VERSION = "v2.059"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.060</h3><br>
+		- Added three Organ Science upgrades.<br>
+		- Implemented more elements.<br>
+		- Fixed various progression bugs.<br>`,
 	`<br><h3 style='color: #CC6600'>v2.059</h3><br>
 		- Balanced Extreme Mode until 1e6524 Genes.<br>
 		- Implemented more upgrades.<br>

@@ -116,7 +116,7 @@ const chemInitialEffects = {
         "Mg":   "Multiply <i>Hual</i> base by log2(2 + levels)<sup>sqrt(levels)</sup>",
         "Al":   "Per level subtract .0001 from Chromosome cost exponent (max 100)",
         "Si":   "Simplify Species gain and multiply its gain exponent by 1 + levels / 1000",
-        "P":    "Add 1 - levels / 1e4 to Plant buyables exponent (max 100)",
+        "P":    "Add 1.2 - levels/1e4 to Plant buyables exponent and remove their softcap (max 100)",
         "S":    "Per level reduce decay by .01%/s (max 100)",
         "Cl":   "Per level subtract .01 from the <i>Tulinwl</i> base (max 100)",
         "Ar":   "Per level subtract 2 from the <i>GmaptsaIwmte</i> base (max 100)",
