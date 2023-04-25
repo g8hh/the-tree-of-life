@@ -138,7 +138,7 @@ var TAXONOMY_COSTS_EXTREME = {
         304: [new Decimal("3e5722"), new Decimal(1e59), new Decimal(1.2)],
         305: [new Decimal("1.6e5842"), new Decimal(2e179), new Decimal(1.4)],
         306: [new Decimal("5e2672"), new Decimal(1e106), new Decimal(1.2)],
-
+        307: [new Decimal("3.7e6524"), new Decimal(1e126), new Decimal(1.4)],
         308: [new Decimal("3e6275"), new Decimal(6.5e11), new Decimal(1.2)],
 
         404: [new Decimal("1e641"), new Decimal(3000), new Decimal(1.1)],
@@ -259,6 +259,9 @@ function updateTaxonomyAmounts(diff) {
                 if (id > 400) {
                         let ret = Decimal.pow(1.01, tmp.sci.buyables[623].effect)
                         if (hasUpgrade("or", 45) && id < 500) ret = ret.root(4)
+                        gain = gain.times(ret)
+                } else if (id > 300 && hasMilestone("an", 28)) {
+                        let ret = Decimal.pow(1.01, tmp.sci.buyables[623].effect.sqrt())
                         gain = gain.times(ret)
                 }
                 gain = gain.times(layerEff[Math.floor(id/100)])
