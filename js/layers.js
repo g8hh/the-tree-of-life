@@ -35090,7 +35090,7 @@ addLayer("an", {
 
                         // CORRECTIONS
                         if (player.extremeMode) {
-
+                                if (player.ch.points.eq(80))    ret = ret.times(14100)
                         } else {
                                 if (player.ch.points.eq(410))   ret = ret.times(200)
                                 if (player.ch.points.eq(425))   ret = ret.times(200)
@@ -39794,6 +39794,10 @@ addLayer("sp", {
                 if (hasMilestone("hu", 88) && player.hu.points.gte("1e36188")) {
                         ret = ret.times(player.hu.buyables[33].max(10).log10())
                 }
+                if (player.chem.amount.Si.gte(10)) {
+                        let l = player.chem.amount.Si.div(5).log(2).floor()
+                        ret = ret.times(l.plus(1000).div(1000))
+                }
 
                 return ret
         },
@@ -39822,6 +39826,8 @@ addLayer("sp", {
                 return ret.floor()
         },
         getGainMult(){//sp gain spgain speciesgain species gain sgain s gain 
+                if (player.chem.amount.Si.gte(10)) return decimalOne
+                
                 let ret = decimalOne
 
                 if (player.easyMode)            ret = ret.times(4)
@@ -45131,7 +45137,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XLI"
                         },
                         description(){
-                                if (player.shiftAlias) return "(max 2650 times)"
+                                if (player.shiftAlias) return "(Capped at 2650 levels)"
                                 if (player.r.unlocked) return "Mastery VII base is 3.7 - <i>Hual</i> levels / 1000"
                                 return "Mastery VII base is 3.7 - <i>Hual</i> levels / 1000 and costs Thoughts, autobuy <i>IttIa</i>, and bulk 10x Token II buyables"
                         },
@@ -45221,7 +45227,7 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XLVIII"
                         },
                         description(){
-                                return "No longer multiply the Token II via Animal divider by 3.2 but its exponent is .16 and at 1e92,297 Humans the Mastery III base is 1.383"
+                                return "Divide the Token II via Animal divider by 3.2 but its exponent is .16 and at 1e92,297 Humans the Mastery III base is 1.383"
                         },
                         cost:() => new Decimal("1e90830"),
                         unlocked(){
@@ -49752,7 +49758,7 @@ addLayer("chem", {
 
                                 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
 
-                                'Na', 'Mg', 'Al', 'P', 'S', 'Cl', 'Ar',
+                                'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar',
                                 ]
 
                         let buildingMult = function(x){return x.times(Decimal.pow(1.1, x))}
@@ -49989,7 +49995,6 @@ addLayer("chem", {
                                                 c3 += displayChemInitialEffect("S") + br
                                                 c3 += displayChemInitialEffect("Cl") + br
                                                 c3 += displayChemInitialEffect("Ar") + br
-                                                c3 += makeRed("Si is not implemented")
                                         }
 
                                         let c = c1 + br + c2 + br + c3 + br
@@ -63277,6 +63282,7 @@ addLayer("tokens", {
                         "Species": {
                                 content: [["d-t", speciesFormulaDisplay]],
                                 unlocked(){
+                                        if (player.chem.amount.Si.gte(10)) return false
                                         return player.sp.best.gte(1e10) || player.e.unlocked
                                 },
                         },
