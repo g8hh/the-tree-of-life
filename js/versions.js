@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.060",
+	num: "2.060.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -15,9 +15,12 @@ function isEndgameRaw(){
 	return player.r.points.gte(1e7)
 }
 
-var CHANELOG_VERSION = "v2.059"
+var CHANELOG_VERSION = "v2.060.1"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.060.1</h3><br>
+		- Various wording and display fixes.<br>
+		- Made hovering over upgrades enlarge them by 1.3x.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.060</h3><br>
 		- Added three Organ Science upgrades.<br>
 		- Implemented more elements.<br>

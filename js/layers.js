@@ -11242,7 +11242,7 @@ addLayer("n", {
                                 return hasMilestone("n", 17) || player.p.unlocked
                         },
                         effectDescription(){
-                                return "Reward: Add .01 to to left distributivity."
+                                return "Reward: Add .01 to left distributivity."
                         },
                 }, // hasMilestone("n", 18)
         },
@@ -13645,7 +13645,7 @@ addLayer("mu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Oxygen Carbon synergy gets effected by tokens"
+                                return "Oxygen Carbon synergy gets affected by tokens"
                         },
                 }, // hasMilestone("mu", 8)
                 9: {
@@ -15490,7 +15490,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let b = "Note: Requires having being in Dilation with 39 completions." + br
+                                let b = "Note: Requires being in Dilation with 39 completions." + br
                                 if (player.extremeMode) b = ""
                                 let a = "Reward: If not in a challenge, you get ee40 Phosphorus after one second."
                                 return b + a
@@ -25550,13 +25550,10 @@ addLayer("cells", {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[13].effect) + " to Stem Cell gain</b><br>"
-                                        if (hasUpgrade("t", 125)) {
-                                                eff2 = eff2.replace("gain", "and DNA Science gain")
-                                        } else if (hasUpgrade("sci", 553)) {
-                                                eff2 = eff2.replace("gain", "and DNA gain")
-                                        }
-                                        if (hasUpgrade("t", 85) && player.extremeMode) {
-                                                eff2 = eff2.replace(" and DNA gain", ", DNA Science, and DNA gain")
+                                        if (player.extremeMode) {
+                                                if (hasUpgrade("t", 125))       eff2 = eff2.replace("gain", "and DNA Science gain")
+                                                else if (hasUpgrade("sci", 553))eff2 = eff2.replace("gain", "and DNA gain")
+                                                if (hasUpgrade("t", 85))        eff2 = eff2.replace(" and DNA gain", ", DNA Science, and DNA gain")
                                         }
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 13)) + " Stem Cells</b><br>"
 
@@ -46069,7 +46066,7 @@ addLayer("hu", {
                                 if (player.hu.challenges[51] > 1 && player.hu.points.gte("1e64026")) {
                                         return player.hu.buyables[21].sqrt().div(2)
                                 }
-                                if (hasMilestone("hu", 100) && player.hu.points.gte("1e53170")) {
+                                if (hasMilestone("hu", 100) && player.hu.points.gte("1e54170")) {
                                         return player.hu.buyables[21].sqrt().div(5)
                                 }
                                 return tmp.hu.buyables[21].base.times(player.hu.buyables[21]).plus(1).ln()
@@ -48485,7 +48482,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Increase <i>Siok</i>'s base cost by 1e5,555 but halve its cost base and at 1e53,170 Humans <i>Tulinwl</i> effect is sqrt(x) / 5."
+                                return "Reward: Increase <i>Siok</i>'s base cost by 1e5,555 but halve its cost base and at 1e54,170 Humans <i>Tulinwl</i> effect is sqrt(x) / 5."
                         },
                 }, // hasMilestone("hu", 100)
         },
@@ -48699,7 +48696,7 @@ addLayer("hu", {
                                         b = "Goal: 295,210,000 Plants"
                                         c = "Reward: <i>Siok</i>'s base cost is 1e200 more but every other <i>Hual</i> level past 1000 makes it cost 10x less"
                                         c += ", at 1e63,855 / 1e64,412 Humans raise Chromosome effect ^(10/7) / ^1.3, and at 1e64,026 / 1e64,160 Humans <i>Tulinwl</i> divider is 2 / 1"
-                                        c = "<bdi style='font-size: 75%'>" + c + "</bdi>"
+                                        c = "<bdi style='font-size: 70%'>" + c + "</bdi>"
                                         c += br2 + "Completions: " + player.hu.challenges[51] + "/2"
                                         if (hasMilestone("r", 5)) {
                                                 c = "Reward: <i>Siok</i>'s base cost is 1e200 more but every other <i>Hual</i> level past 1000 makes it cost 10x less"
