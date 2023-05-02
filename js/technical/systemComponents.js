@@ -221,8 +221,8 @@ var systemComponents = {
 		Thank you to <b>Virgil</b> for suggesting Taxonomy ranks and the general idea.<br>
 
 		<br><br><span v-if="player.showBuiltInSaves">
-			<h2 style='color: #00FF99'>Built in saves</h2><br>
-			<bdi style='color: #F16105'>Warning: Scrolling past here may contains spoilers.</bdi><br><br>
+			<h2 style='color: #00FF99'>Built-in saves</h2><br>
+			<bdi style='color: #F16105'>Warning: Scrolling past here may contain spoilers.</bdi><br><br>
 
 			<button class="opt" onclick="player.CUSTOM_SAVES_PAGE = Math.max(0, player.CUSTOM_SAVES_PAGE - (player.shiftAlias ? 5 : 1))">Previous<br>page<br>(Shift 5x)</button>
 			<button class="opt" onclick="player.CUSTOM_SAVES_PAGE = Math.min(Math.floor(CUSTOM_SAVE_IDS.length / 20), player.CUSTOM_SAVES_PAGE + (player.shiftAlias ? 5 : 1))">Next<br>page<br>(Shift 5x)</button>
