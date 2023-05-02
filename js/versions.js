@@ -12,12 +12,15 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.an.genes.points.gte("1e6524")
-	return player.r.points.gte(1e7)
+	return player.r.points.gte(1e14)
 }
 
-var CHANELOG_VERSION = "v2.060.1"
+var CHANELOG_VERSION = "v2.061"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC0000'>v2.061</h3><br>
+		- Balanced until 1e14 Researchers.<br>
+		- Added factories.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.060.1</h3><br>
 		- Various wording and display fixes.<br>
 		- Made hovering over upgrades enlarge them by 1.3x.<br>`,
