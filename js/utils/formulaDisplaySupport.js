@@ -1089,7 +1089,7 @@ function biomassFormulaDisplay(){
                 c += "Plants II multiplies AX by " + format(ret) + br
 
                 let f = function(x){
-                        if (x.lt("1e10000")) return x 
+                        if (x.lt("1e10000") ||  player.chem.best_amount.P.gte(10)) return x 
                         return x.log10().sqrt().sub(50).pow10().pow(200)
                 }
                 c += "Sprout multiplies AX by " + format(f(tmp.pl.buyables[11].effect)) + br
