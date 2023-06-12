@@ -38682,6 +38682,7 @@ addLayer("nu", {
                         let x = player.chem.amount.Li.div(5).log(2).floor()
                         ret = ret.sub(x.div(1e4).min(.02))
                 }
+                if (hasUpgrade("r", 15))        ret = ret.sub(.01)
 
                 if (inChallenge("e", 12))       ret = ret.plus(.1)
                 if (inChallenge("hu", 42))      ret = ret.plus(1)
@@ -49115,7 +49116,11 @@ addLayer("r", {
 
                         ret = ret.times(player.r.amounts[11].plus(1))
                         ret = ret.times(tmp.r.buyables[11].effect)
-                        if (hasUpgrade("r", 14)) ret = ret.times(Decimal.pow(2, player.r.upgrades.length))
+                        if (hasUpgrade("r", 14))        ret = ret.times(Decimal.pow(2, player.r.upgrades.length))
+                        if (hasMilestone("r", 17)) {
+                                let exp = player.hu.buyables[13].sub(14000).max(0)
+                                                        ret = ret.times(Decimal.pow(1.001, exp))
+                        }
 
                         return ret
                 },
@@ -49183,6 +49188,18 @@ addLayer("r", {
                         unlocked(){
                                 return hasMilestone("r", 15)
                         }, // hasUpgrade("r", 14)
+                },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Research V"
+                        },
+                        description(){
+                                return "Subtract .01 from the Nucleus cost exponent"
+                        },
+                        cost:() => new Decimal(1e17),
+                        unlocked(){
+                                return player.r.buyables[11].gte(44)
+                        }, // hasUpgrade("r", 15)
                 },
         },
         milestones: {
@@ -49420,6 +49437,34 @@ addLayer("r", {
                                 return "Reward: Per milestone add .01 to the multiplier per factory and Factory<sup>1</sup> levels multiplies Chemistry amounts gain." 
                         },
                 }, // hasMilestone("r", 16)
+                17: {
+                        requirementDescription(){
+                                return "19 Factory<sup>1</sup> levels"
+                        },
+                        done(){
+                                return player.r.buyables[11].gte(19)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: <i>Hiawd</i> levels past 14,000 multiply Widget gain by 1.001, Mastery VI double exponent is .1, and at 20 / 22 / 24 / 26 / 28 / 30 Factory<sup>1</sup> levels, add .1 to the multiplier per factory." 
+                        },
+                }, // hasMilestone("r", 17)
+                18: {
+                        requirementDescription(){
+                                return "2 Factory<sup>6</sup> levels"
+                        },
+                        done(){
+                                return player.r.buyables[23].gte(2)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Subtract .05 from the Mastery III base and the first 10 Factory<sup>6</sup> increase the multiplier per factory by .04 ." 
+                        },
+                }, // hasMilestone("r", 18)
         },
         buyables: {
                 rows: 3, 
@@ -49428,6 +49473,16 @@ addLayer("r", {
                         let ret = new Decimal(2)
 
                         if (hasMilestone("r", 16)) ret = ret.plus(player.r.milestones.length / 100)
+                        if (hasMilestone("r", 17)) {
+                                let l = player.r.buyables[11]
+                                if (l.gte(20)) ret = ret.plus(.1)
+                                if (l.gte(22)) ret = ret.plus(.1)
+                                if (l.gte(24)) ret = ret.plus(.1)
+                                if (l.gte(26)) ret = ret.plus(.1)
+                                if (l.gte(28)) ret = ret.plus(.1)
+                                if (l.gte(30)) ret = ret.plus(.1)
+                        }
+                        if (hasMilestone("r", 18)) ret = ret.plus(player.r.buyables[23].min(10).times(.04))
 
                         return ret
                 },
@@ -49705,36 +49760,39 @@ addLayer("r", {
                 },
                 22: {
                         title() {
-                                return "Factory<sup>1</sup>"
+                                return "Factory<sup>5</sup>"
                         },
                         getInit(){
-                                let ret = new Decimal(10)
+                                let ret = new Decimal(1e41)
                                 return ret
                         },
                         cost(){
-                                let init = tmp.r.buyables[11].getInit
-                                let lvls = player.r.buyables[11]
+                                let init = tmp.r.buyables[22].getInit
+                                let lvls = player.r.buyables[22]
 
-                                return Decimal.pow(1.01, lvls).times(10).pow(lvls).times(init)
+                                return Decimal.pow(1.01, lvls).times(1e5).pow(lvls).times(init)
                         },
                         getMaxAfford(){
-                                let init = tmp.hu.buyables[11].getInit
-                                let base = tmp.hu.buyables[11].getCostBase
-                                let exp = new Decimal(1.2)
-
-                                let pts = player.hu.thoughts.points.div(init)
-                                if (pts.lt(1)) return decimalZero
-
-                                return pts.log(base).root(exp).floor().plus(1)
+                                let pts = player.r.widgets.points
+                                let base = tmp.r.buyables[22].getInit
+                                // take everything to log base 1.01
+                                if (pts.lt(base)) return decimalZero
+                                let lb0 = base.div(pts).log(1.01)
+                                let lb1 = new Decimal(1e5).log(1.01)
+                                // we want to solve x^2 + lb1 x + lb0 = 0
+                                // for the larger solution, so take the positive square root
+                                // note that lb0 <= 0, so discrim >= 0
+                                let discrim = lb1.pow(2).sub(lb0.times(4))
+                                return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         unlocked(){
-                                return false
+                                return player.r.buyables[11].gte(35)
                         },
-                        canAfford:() => player.r.widgets.points.gte(tmp.r.buyables[11].cost),
+                        canAfford:() => player.r.widgets.points.gte(tmp.r.buyables[22].cost),
                         buy(){
                                 if (!this.canAfford()) return
                                 let data = player.r
-                                let id = 11
+                                let id = 22
                                 let ma = 1 //tmp.r.buyables[id].getMaxAfford
                                 let up 
                                 if (false) up = ma.sub(data.buyables[id]).max(0)
@@ -49746,23 +49804,23 @@ addLayer("r", {
                                 }
                         },
                         effect(){
-                                return tmp.r.buyables.getBaseMult.pow(player.r.buyables[11])
+                                return tmp.r.buyables.getBaseMult.pow(player.r.buyables[22])
                         },
                         display(){
                                 if (!player.shiftAlias) {
-                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.r.buyables[11]) + "</b><br>"
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.r.buyables[22]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
-                                        let eff2 = format(tmp.r.buyables[11].effect) + " to Widget gain</b><br>"
-                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("r", 11)) + " Widgets</b><br>"
+                                        let eff2 = format(tmp.r.buyables[22].effect) + " to Factory<sup>4</sup> gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("r", 22)) + " Widgets</b><br>"
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let amt = "<h2>Amount</h2>:<br>" + format(player.r.amounts[11])
+                                let amt = "<h2>Amount</h2>:<br>" + format(player.r.amounts[22])
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "INIT*10<sup>x</sup>*1.01<sup>x<sup>2</sup></sup>" 
-                                cost2 = cost2.replace("INIT", format(tmp.r.buyables[11].getInit, 0))
+                                let cost2 = "INIT*1e5<sup>x</sup>*1.01<sup>x<sup>2</sup></sup>" 
+                                cost2 = cost2.replace("INIT", format(tmp.r.buyables[22].getInit, 0))
                                 let cost3 = "</b><br>"
 
                                 return br + amt + br2 + cost1 + cost2 + cost3
@@ -49770,36 +49828,39 @@ addLayer("r", {
                 },
                 23: {
                         title() {
-                                return "Factory<sup>1</sup>"
+                                return "Factory<sup>6</sup>"
                         },
                         getInit(){
-                                let ret = new Decimal(10)
+                                let ret = new Decimal(1e63)
                                 return ret
                         },
                         cost(){
-                                let init = tmp.r.buyables[11].getInit
-                                let lvls = player.r.buyables[11]
+                                let init = tmp.r.buyables[23].getInit
+                                let lvls = player.r.buyables[23]
 
-                                return Decimal.pow(1.01, lvls).times(10).pow(lvls).times(init)
+                                return Decimal.pow(1.01, lvls).times(1e6).pow(lvls).times(init)
                         },
                         getMaxAfford(){
-                                let init = tmp.hu.buyables[11].getInit
-                                let base = tmp.hu.buyables[11].getCostBase
-                                let exp = new Decimal(1.2)
-
-                                let pts = player.hu.thoughts.points.div(init)
-                                if (pts.lt(1)) return decimalZero
-
-                                return pts.log(base).root(exp).floor().plus(1)
+                                let pts = player.r.widgets.points
+                                let base = tmp.r.buyables[23].getInit
+                                // take everything to log base 1.01
+                                if (pts.lt(base)) return decimalZero
+                                let lb0 = base.div(pts).log(1.01)
+                                let lb1 = new Decimal(1e6).log(1.01)
+                                // we want to solve x^2 + lb1 x + lb0 = 0
+                                // for the larger solution, so take the positive square root
+                                // note that lb0 <= 0, so discrim >= 0
+                                let discrim = lb1.pow(2).sub(lb0.times(4))
+                                return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         unlocked(){
-                                return false
+                                return player.r.buyables[11].gte(51)
                         },
-                        canAfford:() => player.r.widgets.points.gte(tmp.r.buyables[11].cost),
+                        canAfford:() => player.r.widgets.points.gte(tmp.r.buyables[23].cost),
                         buy(){
                                 if (!this.canAfford()) return
                                 let data = player.r
-                                let id = 11
+                                let id = 23
                                 let ma = 1 //tmp.r.buyables[id].getMaxAfford
                                 let up 
                                 if (false) up = ma.sub(data.buyables[id]).max(0)
@@ -49811,23 +49872,23 @@ addLayer("r", {
                                 }
                         },
                         effect(){
-                                return tmp.r.buyables.getBaseMult.pow(player.r.buyables[11])
+                                return tmp.r.buyables.getBaseMult.pow(player.r.buyables[23])
                         },
                         display(){
                                 if (!player.shiftAlias) {
-                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.r.buyables[11]) + "</b><br>"
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.r.buyables[23]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
-                                        let eff2 = format(tmp.r.buyables[11].effect) + " to Widget gain</b><br>"
-                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("r", 11)) + " Widgets</b><br>"
+                                        let eff2 = format(tmp.r.buyables[23].effect) + " to Factory<sup>5</sup> gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("r", 23)) + " Widgets</b><br>"
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let amt = "<h2>Amount</h2>:<br>" + format(player.r.amounts[11])
+                                let amt = "<h2>Amount</h2>:<br>" + format(player.r.amounts[23])
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "INIT*10<sup>x</sup>*1.01<sup>x<sup>2</sup></sup>" 
-                                cost2 = cost2.replace("INIT", format(tmp.r.buyables[11].getInit, 0))
+                                let cost2 = "INIT*1e6<sup>x</sup>*1.01<sup>x<sup>2</sup></sup>" 
+                                cost2 = cost2.replace("INIT", format(tmp.r.buyables[23].getInit, 0))
                                 let cost3 = "</b><br>"
 
                                 return br + amt + br2 + cost1 + cost2 + cost3
@@ -61397,6 +61458,8 @@ addLayer("tokens", {
                                                 let x = player.chem.amount.B.div(5).log(2).floor().min(100)
                                                                         ret -= .0007 * x
                                         }
+                                        if (hasMilestone("r", 18))      ret -= .05
+                                        
                                         return ret 
                                 }
                                 if (hasUpgrade("tokens", 291)) {
@@ -61653,6 +61716,7 @@ addLayer("tokens", {
 
                                 if (hasUpgrade("hu", 143)) exp = new Decimal(.2)
                                 if (player.chem.amount.Na.gte(10)) exp = new Decimal(.11)
+                                if (hasMilestone("r", 17))      exp = decimalTenth
 
                                 return exp
                         },
