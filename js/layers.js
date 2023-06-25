@@ -8440,7 +8440,8 @@ addLayer("sci", {
                                 if (hasUpgrade("sci", 684)) {
                                         ret = ret.plus(player.an.grid[407].buyables.div(100).floor().min(10).div(100))
                                 }
-                                if (hasUpgrade("an", 44)) ret = ret.plus(.01)
+                                if (hasUpgrade("an", 44))       ret = ret.plus(.01)
+                                if (hasAchievement("an", 12))   ret = ret.plus(.01)
 
                                 return ret
                         },
@@ -8928,7 +8929,8 @@ addLayer("sci", {
                         base(){
                                 let ret = new Decimal(player.or.upgrades.length).max(1)
 
-                                if (hasMilestone("ch", 4)) ret = player.ch.points.plus(161).div(5)
+                                if (hasMilestone("ch", 4))      ret = player.ch.points.plus(161).div(5)
+                                if (hasUpgrade("an", 45))       ret = ret.max(player.ch.points.times(.4))
 
                                 return ret
                         },
@@ -8947,7 +8949,8 @@ addLayer("sci", {
 
                                 let eformula = format(tmp.sci.buyables[652].base) + "<sup>x</sup>"
                                 let allEff = "<b><h2>Effect formula</h2>:<br>Organ Upgrades^x" + br + eformula + br + "</b>"
-                                if (hasMilestone("ch", 4)) allEff = allEff.replace("Organ Upgrades", "(161 + Chromosomes)/5")
+                                if (hasMilestone("ch", 4))      allEff = allEff.replace("Organ Upgrades", "(161 + Chromosomes)/5")
+                                if (hasUpgrade("an", 45))       allEff = allEff.replace("(161 + Chromosomes)/5", "(Chromosomes * 0.4)")
 
                                 let costmid = (hasMilestone("ch", 4) ? "" : "1e41,143*") + "27^x<sup>1.2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
@@ -35033,8 +35036,8 @@ addLayer("an", {
                                 } else                  ret = ret.times(player.extremeMode ? 100 : 25)
                         }
                         if (hasAchievement("an", 12)) {
-                                if ((player.an.achActive[12] || hasMilestone("ch", 16)) && !hasUpgrade("ch", 34) && player.ch.points.gte(200)) {
-                                                        ret = ret.div(4e49)
+                                if ((player.an.achActive[12] || hasMilestone("ch", 16)) && !hasUpgrade("ch", 34) && player.ch.points.gte(180)) {
+                                                        ret = ret.div(player.extremeMode ? 3e24 : 4e49)
                                 } 
                                 if (!player.an.achActive[12] || hasAchievement("an", 22)) {
                                                         ret = ret.times(Decimal.pow(hasMilestone("an", 31) ? 2 : 4, player.ch.points.sub(hasUpgrade("nu", 12) ? 0 : 200).max(0)))
@@ -35381,9 +35384,10 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XX"
                         },
                         description(){
+                                if (player.extremeMode) return "Disable Mu IV, Lambda IV, Kappa IV, and Iota IV effects on Stem Cells and Thanatology base is Chromosomes * .4"
                                 return "Disable Mu IV, Lambda IV, Kappa IV, and Iota IV effects on Stem Cells"
                         },
-                        cost:() => new Decimal(player.extremeMode ? 3e29 : 6.95e27),
+                        cost:() => new Decimal(player.extremeMode ? 3.33e29 : 6.95e27),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 44) || hasMilestone("nu", 2)
@@ -36304,6 +36308,7 @@ addLayer("an", {
                         },
                         display(){
                                 let end = hasUpgrade("ch", 34) ? "" : " but you gain 4e49x less Genes"
+                                if (player.extremeMode) end = end.replace("4e49", "3e24")
                                 let lvls = "levels"
                                 if ((player.an.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22)) lvls = "levels<sup>" + makeOrange("1.25") + "</sup>"
                                 if (player.an.achActive[12]) return "log2(" + lvls + "+2) multiplies amount gain" + end
@@ -36320,6 +36325,7 @@ addLayer("an", {
                                 if ((player.an.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22)) {
                                         a = a.replace("levels", "levels<sup>" + makeOrange("1.25") + "</sup>")
                                 }
+                                if (player.extremeMode) a = a.replace("4e49", "3e24")
                                 return a
                         },
                         unlocked(){
@@ -36822,23 +36828,28 @@ addLayer("an", {
                                 return player.an.genes.points.gte(player.extremeMode ? "1e10689" : "1e11619")
                         },
                         tooltip(){
-                                return player.extremeMode ? "Get 1e10689 Genes<br>Reward: log10(Organ Science) multiplies Animal gain" : "Get 1e11619 Genes"
+                                if (player.extremeMode) {
+                                        if (!hasAchievement("an", 11)) return "Get 1e10689 Genes"
+                                        return "Reward: log10(Organ Science) multiplies Animal gain"
+                                }
+                                return "Get 1e11619 Genes"
                         }, // hasAchievement("an", 11)
                 },
                 12: {
                         name: "Prime",
                         done(){
-                                let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139]
+                                let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 141, 149, 151]
                                 let a = 0
                                 for (i in TAXONOMY_KEYS) {
                                         if (primes.includes(player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber())) a ++
-                                        if (player.an.grid[TAXONOMY_KEYS[i]].buyables.gte(140)) return false
+                                        if (player.an.grid[TAXONOMY_KEYS[i]].buyables.gte(player.extremeMode ? 155 : 140)) return false
                                 }
                                 return a >= 17
                         },
                         tooltip(){
-                                if (player.shiftAlias) return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139"
-                                return "Have 17 Taxonomy buyables on prime levels. All Taxonomy buyables have to be less than 140 [shift for valid values]"
+                                if (hasAchievement("an", 12) && player.extremeMode) return "Reward: Add .01 to Conditioning<sup>2</sup> base"
+                                if (player.extremeMode) return "Have 17 Taxonomy buyables on prime levels. All Taxonomy buyables have to be less than 155 [shift for primes]"
+                                return "Have 17 Taxonomy buyables on prime levels. All Taxonomy buyables have to be less than 140 [shift for primes]"
                         }, // hasAchievement("an", 12)
                 },
                 13: {
@@ -36895,8 +36906,7 @@ addLayer("an", {
                                 return a >= 17
                         },
                         tooltip(){
-                                if (player.shiftAlias) return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103"
-                                return "Have 17 Taxonomy buyables on prime levels. All Taxonomy buyables have to have less than 105 [shift for valid values]<br>Reward: PRI I's OFF effect is always active"
+                                return "Have 17 Taxonomy buyables on prime levels. All Taxonomy buyables have to have less than 105 [shift for primes]<br>Reward: PRI I's OFF effect is always active"
                         }, // hasAchievement("an", 22)
                 },
                 23: {
@@ -37037,6 +37047,7 @@ addLayer("an", {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
+                                        if (player.shiftAlias) return "Primes: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 141, 149, 151"
                                         if (hasAchievement("an", 11) || player.nu.unlocked) {
                                                 let a = "Clickables with " + makeRed("red") + " borders reset Taxonomy amounts and Genes"
                                                 return br2 + a + br + "while those with <bdi style='color:#7AEEFC'>sky-blue</bdi> backgrounds' effects are always active."
