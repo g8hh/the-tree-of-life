@@ -6226,7 +6226,10 @@ addLayer("sci", {
                                 return "Each of the next five upgrades raises Gene gain and Taxonomy amounts ^1.05 / 1.04 / 1.03 / 1.02 / 1.01"
                         },
                         effect(){
-                                if (player.an.grid[407].buyables.gte(308) && hasUpgrade("sci", 692)) return new Decimal(1.22)
+                                if (player.an.grid[407].buyables.gte(308) && hasUpgrade("sci", 692)) {
+                                        if (hasUpgrade("sci", 693)) return new Decimal(player.an.genes.best.gte("1e11111") ? 1.24 : 1.23)
+                                        return new Decimal(1.22)
+                                }
                                 let l = player.sci.upgrades.filter(x => x > 660 && x < 670).length
                                 let r = 1
                                 for (i = 0; i < l; i++) {
@@ -6500,6 +6503,22 @@ addLayer("sci", {
                         unlocked(){
                                 return player.an.grid[507].buyables.gte(843)
                         }, // hasUpgrade("sci", 692)
+                },
+                693: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLVIII"
+                        },
+                        description(){
+                                let a = "Organ Sci XXXII is .01 more but if you have over 1e10,000 Genes, divide gene gain by 1e420. Reapply this at 1e11111 best genes"
+                                return a
+                        },
+                        cost:() => new Decimal("1e518950"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[507].buyables.gte(979)
+                        }, // hasUpgrade("sci", 693)
                 },
         },
         buyables: {
@@ -35088,6 +35107,9 @@ addLayer("an", {
                                 if (hasMilestone("ch", 6))      ret = ret.times(player.ch.points.max(1))
                                 if (hasUpgrade("ch", 11))       ret = ret.times(Decimal.pow(.89, player.ch.points.min(200)))
                                 if (hasUpgrade("an", 35))       ret = ret.times(Decimal.pow(1.03, player.ch.points))
+                                if (hasUpgrade("sci", 693) && ret.gte("1e10900")) {
+                                        ret = ret.div(player.an.genes.best.gte("1e11111") ? "1e840" : "1e420").max("1e10900")
+                                }
                         }
                         
 
@@ -35106,6 +35128,8 @@ addLayer("an", {
                         if (player.extremeMode)         ret = ret.pow(.75)
                         if (hasUpgrade("sci", 661))     ret = ret.pow(tmp.sci.upgrades[661].effect)
                         if (inChallenge("e", 22))       ret = ret.sqrt()
+
+                        
 
                         return ret
                 },
@@ -35400,7 +35424,7 @@ addLayer("an", {
                         description(){
                                 return "Token II buyables' cost exponent is .45 and double Gene gain but disable Primary and Secondary reward"
                         },
-                        cost:() => new Decimal(1.8e30),
+                        cost:() => new Decimal(player.extremeMode ? 3.33e129 : 1.8e30),
                         unlocked(){
                                 if (player.sp.unlocked) return true
                                 return hasUpgrade("an", 45) || hasMilestone("nu", 2)
@@ -37047,7 +37071,7 @@ addLayer("an", {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
-                                        if (player.shiftAlias) return "Primes: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 141, 149, 151"
+                                        if (player.shiftAlias) return br2 + "Primes: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 141, 149, 151"
                                         if (hasAchievement("an", 11) || player.nu.unlocked) {
                                                 let a = "Clickables with " + makeRed("red") + " borders reset Taxonomy amounts and Genes"
                                                 return br2 + a + br + "while those with <bdi style='color:#7AEEFC'>sky-blue</bdi> backgrounds' effects are always active."
