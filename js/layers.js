@@ -8464,6 +8464,7 @@ addLayer("sci", {
                                 }
                                 if (hasUpgrade("an", 44))       ret = ret.plus(.01)
                                 if (hasAchievement("an", 12))   ret = ret.plus(.01)
+                                if (hasUpgrade("an", 53))       ret = ret.plus(.02)
 
                                 return ret
                         },
@@ -25388,6 +25389,7 @@ addLayer("cells", {
 
                                 if (player.extremeMode) {
                                         if (hasMilestone("ch", 14))     base = new Decimal(1e11)
+                                        if (hasMilestone("an", 32))     base = new Decimal(1e10)
                                 } else {
                                         if (hasMilestone("ch", 14))     base = new Decimal(1e9)
                                         if (hasMilestone("nu", 10))     base = new Decimal(1e23)
@@ -35467,11 +35469,13 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XXIII"
                         },
                         description(){
+                                if (player.extremeMode) return "Add .02 to Conditioning<sup>2</sup> base and per Token II - 7200 gain 1.01x more Animals and 1.05x Genes"
                                 return "Per Token II - 7200 gain 1.01x more Animals and 1.05x Genes"
                         },
-                        cost:() => new Decimal(player.extremeMode ? 8.65e133 : 8.25e32),
+                        cost:() => new Decimal(player.extremeMode ? 1 : 8.25e32),
                         unlocked(){
                                 if (player.sp.unlocked) return true
+                                if (player.extremeMode) return player.ch.best.gte(242) || player.an.genes.points.gte("1e14487")
                                 return hasUpgrade("an", 52) || hasMilestone("nu", 2)
                         }, // hasUpgrade("an", 53)
                 },
@@ -36060,16 +36064,17 @@ addLayer("an", {
                 }, // hasMilestone("an", 31)
                 32: {
                         requirementDescription(){
-                                return "2.9e14654 Genes"
+                                return player.extremeMode ? "1e14348 Genes" : "2.9e14654 Genes"
                         },
                         done(){
-                                return player.an.genes.points.gte("2.9e14654")
+                                return player.an.genes.points.gte(player.extremeMode ? "1e14348" : "2.9e14654")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Remove the Chromosome effect exponent softcap and its effect formula is 1.002<sup>x</sup>*2.66."
+                                if (player.extremeMode) return "Reward: Totipotent base cost is 1e10, remove the Chromosome effect exponent softcap and its effect formula is 1.002<sup>x</sup>*3.43 ."
+                                return "Reward: Remove the Chromosome effect exponent softcap and its effect formula is 1.002<sup>x</sup>*2.66 ."
                         },
                 }, // hasMilestone("an", 32)
                 33: {
@@ -37712,7 +37717,10 @@ addLayer("ch", {
 
                 let ret = pts.div(player.extremeMode ? 60 : 100).plus(2)
                 if (hasMilestone("ch", 10))     ret = Decimal.pow(player.extremeMode ? 1.006 : 1.004, pts).times(2)
-                if (hasMilestone("an", 32))     ret = Decimal.pow(1.002, pts).times(hasMilestone("ch", 20) ? 2.605 : 2.66)
+                if (hasMilestone("an", 32)) {
+                        if (player.extremeMode) ret = Decimal.pow(1.002, pts).times(3.43)
+                        else ret = Decimal.pow(1.002, pts).times(hasMilestone("ch", 20) ? 2.605 : 2.66)
+                }
 
                 if (pts.gte(910))               ret = pts.times(.03).sub(11.23)
                 if (hasMilestone("ch", 32))     ret = pts.times(.03).plus(7.78)
@@ -38668,6 +38676,7 @@ addLayer("ch", {
                                         if (player.extremeMode) if (player.ch.points.gte(95) && !hasMilestone("an", 32)) b += br + "Effect after 80 is softcapped, x ⭢ (141*x-4860)<sup>.5</sup>"
                                         else if (player.ch.points.gte(95) && !hasMilestone("an", 32)) b += br + "Effect after 95 is softcapped, x ⭢ (190*x-9025)<sup>.5</sup>"
                                         if (hasMilestone("an", 32))             b = b.replace("1.004<sup>x</sup>*2", "1.002<sup>x</sup>*2.66")
+                                        if (player.extremeMode)                 b = b.replace("2.66", "3.43")
                                         if (hasMilestone("ch", 20))             b = b.replace(".66", ".605")
                                         if (tmp.ch.effectPoints.gte(910))       b = "When you have over 910 effective Chromosomes, the effect is .03*x-11.23"
                                         if (hasMilestone("ch", 32))             b = b.replace("-11.23", "+7.78")
