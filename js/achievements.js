@@ -8,6 +8,7 @@ function getNumberNameLT1000(n){ //currently only works up to 1000
         if (n < 100) return getNumberNameLT100(n)
         if (n % 100 == 0) return getNumberNameLT100(n / 100) + " Hundred"
         let hun = getNumberNameLT100(Math.floor(n / 100)) + " Hundred and "
+
         return hun + getNumberNameLT100(n % 100)
 }
 
@@ -16,6 +17,7 @@ function getNumberName(n){ //currently only works up to 1e6
         if (n < 1e6) {
                 if (n % 1000 == 0) return getNumberNameLT1000(n / 1000) + " Thousand"
                 let thou = getNumberNameLT1000(Math.floor(n / 1000)) + " Thousand "
+                if (n % 1000 < 100) return thou + "and " + getNumberNameLT1000(n % 1000)
                 return thou + getNumberNameLT1000(n % 1000)
         }
 }

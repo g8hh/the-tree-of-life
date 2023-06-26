@@ -36329,7 +36329,7 @@ addLayer("an", {
                                 return "Bulk buy Gene buyables and gain " + (player.extremeMode ? "25x Genes and Animals" : "100x Genes")
                         },
                         tooltip(){
-                                let a = makeBlue("ON") + ": disable gene buyale autobuyers" + br 
+                                let a = makeBlue("ON") + ": disable gene buyable autobuyers" + br 
                                 a += makeBlue("OFF") + ": bulk buy Gene buyables and gain 25x Genes"
                                 if (!player.an.achActive[22] && hasAchievement("an", 22))  a = a.replace("25", makeOrange("5<sup>Achievements + 4</sup>"))
                                 if (player.extremeMode) a = a.replace("25", "100")
@@ -37111,7 +37111,7 @@ addLayer("an", {
                                 ["display-text", function(){
                                         if (player.shiftAlias) return br2 + "Primes: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 141, 149, 151"
                                         if (hasAchievement("an", 11) || player.nu.unlocked) {
-                                                let a = "Clickables with " + makeRed("red") + " borders reset Taxonomy amounts and Genes"
+                                                let a = "Clickables with " + makeRed("red") + " borders reset Taxonomy amounts and Genes on toggle"
                                                 return br2 + a + br + "while those with <bdi style='color:#7AEEFC'>sky-blue</bdi> backgrounds' effects are always active."
                                         }
                                         return br2 + br2 + br2 
@@ -37143,7 +37143,7 @@ addLayer("an", {
                                 "blank"
                         ],
                         unlocked(){
-                                return hasUpgrade("or", 352)
+                                return hasUpgrade("or", 352) && !tmp.mt.layerShown
                         },
                 },
                 "Info": {
@@ -64162,6 +64162,9 @@ addLayer("tokens", {
                                         ["clickables", [1]],
                                         ["display-text", "<br>Buying a Token II buyable buffs all the other buyables in its column (denoted by C),<br> and nerfs the buyables in its row (denoted by R).<br><br>"],
                                         ["display-text", function(){
+                                                if (hasUpgrade("or", 113) && hasUpgrade("or", 112) && hasUpgrade("or", 111)) {
+                                                        return "Column total amount: " + formatWhole(player.tokens.best_buyables[102].times(3)) + br2
+                                                }
                                                 let d1 = player.tokens.best_buyables
                                                 let d2 = player.tokens.buyables
                                                 if (d1[101].gt(1000)) return ""
