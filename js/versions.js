@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "2.064",
+	num: "2.065",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -11,13 +11,18 @@ function isEndgame() {
 }
 
 function isEndgameRaw(){
-	if (player.extremeMode) return player.ch.points.gte(198)
+	if (player.extremeMode) return player.ch.points.gte(239)
 	return player.r.points.gte(1e20)
 }
 
-var CHANELOG_VERSION = "v2.064"
+var CHANELOG_VERSION = "v2.065"
 
 var CHANGELOGS = [
+	`<br><h3 style='color: #CC6600'>v2.065</h3><br>
+		- Balanced Extreme Mode until 239 Chromosomes.<br>
+		- Fixed achievement hovering making it grow.<br>
+		- Fixed a bunch of small wording issues.<br>
+		- Added two custom saves.<br>`,
 	`<br><h3 style='color: #CC6600'>v2.064</h3><br>
 		- Balanced Extreme Mode until 198 Chromosomes.<br>
 		- Added a Organ Science upgrade.<br>`,
@@ -99,7 +104,7 @@ var CHANGELOGS = [
 		- Added a DNA-Science upgrade.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.046</h3><br>
 		- Buffed Ecosystem milestone 13.<br>
-		- Added a cusotm save.<br>`,
+		- Added a custom save.<br>`,
 	`<br><h3 style='color: #CC0000'>v2.045.1</h3><br>
 		- Fixed a bug with getNextAt running twice.<br>`,
 	`<br><h3 style='color: #CC6600'>v2.045</h3><br>
