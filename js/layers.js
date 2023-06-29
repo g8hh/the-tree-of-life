@@ -6523,6 +6523,38 @@ addLayer("sci", {
                                 return player.an.grid[507].buyables.gte(979)
                         }, // hasUpgrade("sci", 693)
                 },
+                694: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLIX"
+                        },
+                        description(){
+                                let a = "Totipotent cost base is 1e9 and at per chromosome from 246 to 256 add 1 to Conditioning base"
+                                return a
+                        },
+                        cost:() => new Decimal("1e629755"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[507].buyables.gte(1118)
+                        }, // hasUpgrade("sci", 694)
+                },
+                695: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci L"
+                        },
+                        description(){
+                                let a = "Add 3 to Filtering<sup>3</sup> base"
+                                return a
+                        },
+                        cost:() => new Decimal("1e714975"),
+                        currencyLocation:() => player.sci.organ_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Organ Science",
+                        unlocked(){
+                                return player.an.grid[507].buyables.gte(1142)
+                        }, // hasUpgrade("sci", 695)
+                },
         },
         buyables: {
                 rows: 5,
@@ -8331,7 +8363,8 @@ addLayer("sci", {
                         base(){
                                 let ret = new Decimal(1)
 
-                                if (hasUpgrade("or", 312)) ret = ret.plus(player.sci.buyables[601].sub(59).max(0).cbrt().div(2))
+                                if (hasUpgrade("or", 312))      ret = ret.plus(player.sci.buyables[601].sub(59).max(0).cbrt().div(2))
+                                if (hasUpgrade("sci", 695))     ret = ret.plus(2.9)
 
                                 return ret
                         },
@@ -8395,6 +8428,9 @@ addLayer("sci", {
                                         ret = ret.plus(l.div(100))
                                 }
                                 if (hasUpgrade("sci", 685)) ret = ret.plus(player.an.grid[406].buyables.div(100))
+                                if (hasUpgrade("sci", 694)) {
+                                        ret = ret.plus(player.ch.points.sub(245).max(0).min(11))
+                                }
 
                                 return ret
                         },
@@ -25390,6 +25426,7 @@ addLayer("cells", {
                                 if (player.extremeMode) {
                                         if (hasMilestone("ch", 14))     base = new Decimal(1e11)
                                         if (hasMilestone("an", 32))     base = new Decimal(1e10)
+                                        if (hasUpgrade("sci", 694))     base = new Decimal(1e9)
                                 } else {
                                         if (hasMilestone("ch", 14))     base = new Decimal(1e9)
                                         if (hasMilestone("nu", 10))     base = new Decimal(1e23)
@@ -25643,6 +25680,8 @@ addLayer("cells", {
                                         if (!hasUpgrade("sci", 583) || !hasUpgrade("sci", 584) || !hasUpgrade("sci", 585)) {
                                                 return new Decimal(ret)
                                         }
+                                        if (hasUpgrade("ch", 31))       ret = ret / 1e10
+                                        if (hasAchievement("an", 24))   ret = 1e38
                                 } else {
                                         ret = 1e40
                                         if (hasUpgrade("t", 152))       ret = 1e60
@@ -35129,6 +35168,9 @@ addLayer("an", {
                                 if (hasAchievement("an", 21) && ret.lte("1e4000")) {
                                         ret = ret.times(2.5e12)
                                 }
+                                if (hasMilestone("ch", 15) && ret.lte("1e4000")) {
+                                        ret = ret.times(20)
+                                }
                         }
                         
 
@@ -36079,10 +36121,10 @@ addLayer("an", {
                 }, // hasMilestone("an", 32)
                 33: {
                         requirementDescription(){
-                                return "3e15111 Genes"
+                                return player.extremeMode ? "1e14805 Genes" : "3e15111 Genes"
                         },
                         done(){
-                                return player.an.genes.points.gte("3e15111")
+                                return player.an.genes.points.gte(player.extremeMode ? "1e14805" : "3e15111")
                         },
                         unlocked(){
                                 return true
@@ -36977,7 +37019,6 @@ addLayer("an", {
                 23: {
                         name: "Composite<br>II",
                         done(){
-                                if (player.extremeMode) return false
                                 let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139]
                                 let a = 0
                                 for (i in TAXONOMY_KEYS) {
@@ -36995,7 +37036,17 @@ addLayer("an", {
                 24: {
                         name: "Six",
                         done(){
-                                if (player.extremeMode) return false
+                                if (player.extremeMode) {
+                                        let a = 0
+                                        let b = 0
+                                        for (i in TAXONOMY_KEYS) {
+                                                let v = player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber()
+                                                if (v == 19) a ++ 
+                                                if (v == 14) b ++
+                                                if (v > 19) return false
+                                        }
+                                        return a >= 14 && b >= 1
+                                }
                                 let a = 0
                                 let b = 0
                                 for (i in TAXONOMY_KEYS) {
@@ -37007,6 +37058,7 @@ addLayer("an", {
                                 return a >= 14 && b >= 1
                         },
                         tooltip(){
+                                if (player.extremeMode) return "Have 14 Taxonomy buyables on 19 levels and 1 on 14 levels and every buyables is less than 20<br>Reward: Multipotent cost base is 1e38"
                                 return "Have 14 Taxonomy buyables on 6 levels and 1 on 4 levels and every buyables is less than 7<br>Reward: Multipotent cost base is 1e38"
                         }, // hasAchievement("an", 24)
                 },
@@ -37942,11 +37994,13 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XI"
                         },
                         description(){
+                                if (player.extremeMode) return "Token II via Cell double exponent is 12+x/2000 and divide Multipotent base cost by 1e10"
                                 return "Token II via Cell double exponent is 12+x/2000"
                         },
-                        cost:() => new Decimal(247),
+                        cost:() => new Decimal(player.extremeMode ? 250 : 247),
                         unlocked(){
                                 if (player.sp.unlocked) return true
+                                if (player.extremeMode) return player.ch.best.gte(251) || player.tokens.tokens2.total.gte(7986) || player.nu.best.gte(1)
                                 return player.ch.best.gte(247) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 31)
                 },
@@ -38304,8 +38358,9 @@ addLayer("ch", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: IN<u>tes</u>tine's base is Chromosomes but disable Cells "
-                                return a + "I, V, VI, VIII, IX, XVIII, XIX, XXII, and XXVI."
+                                let a = "Reward: IN<u>tes</u>tine's base is Chromosomes"
+                                if (player.extremeMode) a += ", gain 20x Genes below 1e10000,"
+                                return a + " but disable Cells I, V, VI, VIII, IX, XVIII, XIX, XXII, and XXVI."
                         },
                 }, // hasMilestone("ch", 15)
                 16: {
