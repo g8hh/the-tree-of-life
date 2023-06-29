@@ -5698,6 +5698,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 601)
                         }, // hasUpgrade("sci", 602)
                 },
@@ -5722,6 +5723,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 602)
                         }, // hasUpgrade("sci", 603)
                 },
@@ -5743,6 +5745,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 603)
                         }, // hasUpgrade("sci", 604)
                 },
@@ -5764,6 +5767,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 604)
                         }, // hasUpgrade("sci", 605)
                 },
@@ -5785,6 +5789,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 605)
                         }, // hasUpgrade("sci", 611)
                 },
@@ -5802,6 +5807,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 611)
                         }, // hasUpgrade("sci", 612)
                 },
@@ -5818,6 +5824,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 612)
                         }, // hasUpgrade("sci", 613)
                 },
@@ -5835,6 +5842,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 613)
                         }, // hasUpgrade("sci", 614)
                 },
@@ -5851,6 +5859,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 614) && player.or.contaminants.best.gte("1e720")
                         }, // hasUpgrade("sci", 615)
                 },
@@ -5872,6 +5881,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 615)
                         }, // hasUpgrade("sci", 621)
                 },
@@ -5893,6 +5903,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 621)
                         }, // hasUpgrade("sci", 622)
                 },
@@ -5915,6 +5926,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 622)
                         }, // hasUpgrade("sci", 623)
                 },
@@ -5931,6 +5943,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 623)
                         }, // hasUpgrade("sci", 624)
                 },
@@ -5947,6 +5960,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 624)
                         }, // hasUpgrade("sci", 625)
                 },
@@ -5966,6 +5980,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 625)
                         }, // hasUpgrade("sci", 631)
                 },
@@ -5987,6 +6002,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 631)
                         }, // hasUpgrade("sci", 632)
                 },
@@ -6003,6 +6019,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 632)
                         }, // hasUpgrade("sci", 633)
                 },
@@ -6019,6 +6036,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 633)
                         }, // hasUpgrade("sci", 634)
                 },
@@ -6039,6 +6057,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.or.buyables[222].gt(0)
                         }, // hasUpgrade("sci", 635)
                 },
@@ -6055,6 +6074,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.or.buyables[223].gt(180)
                         }, // hasUpgrade("sci", 641)
                 },
@@ -6071,6 +6091,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 641)
                         }, // hasUpgrade("sci", 642)
                 },
@@ -6087,6 +6108,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 642)
                         }, // hasUpgrade("sci", 643)
                 },
@@ -6103,6 +6125,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 643)
                         }, // hasUpgrade("sci", 644)
                 },
@@ -6128,6 +6151,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 644)
                         }, // hasUpgrade("sci", 645)
                 },
@@ -6144,6 +6168,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 645)
                         }, // hasUpgrade("sci", 651)
                 },
@@ -6166,6 +6191,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.unlocked ? hasUpgrade("sci", 651) : player.or.buyables[401].gte(3)
                         }, // hasUpgrade("sci", 652)
                 },
@@ -6182,6 +6208,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 652)
                         }, // hasUpgrade("sci", 653)
                 },
@@ -6198,6 +6225,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 653)
                         }, // hasUpgrade("sci", 654)
                 },
@@ -6214,6 +6242,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return hasUpgrade("sci", 654)
                         }, // hasUpgrade("sci", 655)
                 },
@@ -6248,6 +6277,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(1)
                         }, // hasUpgrade("sci", 661)
                 },
@@ -6264,6 +6294,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(23)
                         }, // hasUpgrade("sci", 662)
                 },
@@ -6280,6 +6311,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(30)
                         }, // hasUpgrade("sci", 663)
                 },
@@ -6296,6 +6328,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(40)
                         }, // hasUpgrade("sci", 664)
                 },
@@ -6312,6 +6345,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(53)
                         }, // hasUpgrade("sci", 665)
                 },
@@ -6328,6 +6362,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(65)
                         }, // hasUpgrade("sci", 671)
                 },
@@ -6344,6 +6379,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(70)
                         }, // hasUpgrade("sci", 672)
                 },
@@ -6360,6 +6396,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(95)
                         }, // hasUpgrade("sci", 673)
                 },
@@ -6376,6 +6413,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(135)
                         }, // hasUpgrade("sci", 674)
                 },
@@ -6392,6 +6430,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(155)
                         }, // hasUpgrade("sci", 675)
                 },
@@ -6408,6 +6447,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(200)
                         }, // hasUpgrade("sci", 681)
                 },
@@ -6424,6 +6464,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(200)
                         }, // hasUpgrade("sci", 682)
                 },
@@ -6440,6 +6481,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[707].buyables.gte(512)
                         }, // hasUpgrade("sci", 683)
                 },
@@ -6456,6 +6498,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[404].buyables.gte(507)
                         }, // hasUpgrade("sci", 684)
                 },
@@ -6472,6 +6515,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[507].buyables.gte(719)
                         }, // hasUpgrade("sci", 685)
                 },
@@ -6488,6 +6532,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[507].buyables.gte(766)
                         }, // hasUpgrade("sci", 691)
                 },
@@ -6504,6 +6549,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[507].buyables.gte(843)
                         }, // hasUpgrade("sci", 692)
                 },
@@ -6520,6 +6566,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[507].buyables.gte(979)
                         }, // hasUpgrade("sci", 693)
                 },
@@ -6536,6 +6583,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[507].buyables.gte(1118)
                         }, // hasUpgrade("sci", 694)
                 },
@@ -6552,6 +6600,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Organ Science",
                         unlocked(){
+                                if (player.nu.unlocked) return true
                                 return player.an.grid[507].buyables.gte(1142)
                         }, // hasUpgrade("sci", 695)
                 },
@@ -9433,8 +9482,9 @@ addLayer("sci", {
                 }
 
                 let resetDNA = true 
-                if (["tokens", "p", "l", "a", "d"].includes(layer)) resetDNA = false
-                if (resetDNA && !hasMilestone("cells", 48) && !hasMilestone("ch", 1)) {
+                if (["tokens", "p", "l", "a", "d"].includes(layer))     resetDNA = false
+                if (layer == "cells" && hasMilestone("cells", 48))      resetDNA = false
+                if (resetDNA && !hasMilestone("ch", 1)) {
                         let subdata = data.dna_science
                         subdata.total = decimalZero
                         subdata.best = decimalZero
@@ -9482,21 +9532,24 @@ addLayer("sci", {
                                    631, 632, 633, 634, 635,
                                    641, 642, 643, 644, 645,
                                    651, 652, 653, 654, 655, 
-                                   /*661, 662, 663, 664, 665, 
+                                   661, 662, 663, 664, 665, 
                                    671, 672, 673, 674, 675,
                                    681, 682, 683, 684, 685,
-                                   691, 692, 693, 694, 695*/
+                                   691, 692, 693, 694, 695
                                    ]
+                        
+                        if (player.nu.unlocked) ids = filterOut(ids, [603])
 
                         let resetContent = !hasMilestone("ch", 4)
                         if (resetContent) data.upgrades = filterOut(data.upgrades, ids)
 
                         let buyIds = [601, 602, 603,
                                       611, 612, 613,
-                                      621,/*622, 623,*/
+                                      621,/* 622, 623, */
                                       631, 632, 633,
                                       641, 642, 643,
                                       651,/* 652, 653,*/]
+                        if (!["t", "or", "cells", "an", "ch"].includes(layer)) buyIds = buyIds.concat([622, 623, 652, 653])
                         for (i in buyIds) {
                                 if (!resetContent) break
                                 if (hasMilestone("an", 10)) break
@@ -35697,6 +35750,7 @@ addLayer("an", {
                         },
                         effectDescription(){
                                 if (player.extremeMode) {
+                                        if (player.nu.unlocked) return "Reward: Autobuy intes<u>TINE</u> and Organ Science upgrades (only first 6 rows), bulk 4x Kidney buyables, " + makeRed("autobuy Up Quark,") + " and in<u>tes</u>TINE's inner log7 becomes log6."
                                         return "Reward: Autobuy intes<u>TINE</u> and Organ Science upgrades (only first 6 rows), bulk 4x Kidney buyables, and in<u>tes</u>TINE's inner log7 becomes log6."
                                 }
                                 return "Reward: Autobuy intes<u>TINE</u>, bulk 4x Kidney buyables, and in<u>tes</u>TINE's inner log7 becomes log6."
@@ -39879,6 +39933,7 @@ addLayer("nu", {
 
                         data4.lastRespecDisplayFormula2ID = layers.tokens.buyables.costFormulaText2ID()
                 }
+                if (player.extremeMode) layers.sci.doReset("nu")
                 resetPreOrganCurrencies()
         },
 })
@@ -59290,10 +59345,12 @@ addLayer("tokens", {
                 layers.tokens.autobuyRadioWaves()
 
                 let ids = []
+                let extremeAutobuyUp = hasMilestone("an", 9) && player.nu.unlocked && player.or.autobuyupquark
                 if (hasMilestone("or", 6) || hasMilestone("hu", 41))    ids.push(191)
                 if (hasMilestone("or", 7) || hasMilestone("hu", 41))    ids.push(192)
                 if (hasMilestone("or", 8))                              ids.push(193)
                 if (hasMilestone("or", 22) && player.or.autobuyupquark) ids.push(101)
+                if (extremeAutobuyUp && player.extremeMode)             ids.push(101)
                 if (hasMilestone("hu", 41))                             ids.push(101)
 
                 for (i in ids) {
