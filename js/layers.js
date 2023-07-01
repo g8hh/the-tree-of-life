@@ -6575,7 +6575,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLIX"
                         },
                         description(){
-                                let a = "Totipotent cost base is 1e9 and at per chromosome from 246 to 256 add 1 to Conditioning base"
+                                let a = "Totipotent cost base is 1e9 and at per chromosome from 246 to 268 add 1 to Conditioning base"
                                 return a
                         },
                         cost:() => new Decimal("1e629755"),
@@ -8478,7 +8478,7 @@ addLayer("sci", {
                                 }
                                 if (hasUpgrade("sci", 685)) ret = ret.plus(player.an.grid[406].buyables.div(100))
                                 if (hasUpgrade("sci", 694)) {
-                                        ret = ret.plus(player.ch.points.sub(245).max(0).min(11))
+                                        ret = ret.plus(player.ch.points.sub(245).max(0).min(player.nu.unlocked ? 23 : 11))
                                 }
 
                                 return ret
@@ -31671,7 +31671,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                if (player.extremeMode && player.sci.buyables[652].eq(0)) return false
+                                if (player.extremeMode && player.sci.buyables[652].eq(0) && !player.nu.unlocked) return false
                                 return hasMilestone("an", 12) || player.nu.best.gt(0)
                         }, // hasUpgrade("or", 342)
                 },
@@ -35106,7 +35106,10 @@ addLayer("an", {
                                         let exp = player.nu.points.plus(player.an.upgrades.length)
                                                                 ret = ret.times(base.pow(exp))
                                 }
-                                if (hasMilestone("an", 18))     ret = ret.times(player.an.points.max(10).log10().pow(1 + player.extremeMode))
+                                if (hasMilestone("an", 18)) {
+                                        let exp = 1 + player.extremeMode + (player.extremeMode && (player.nu.best.gt(0) || player.sp.unlocked))
+                                        ret = ret.times(player.an.points.max(10).log10().pow(exp))
+                                }
                                 if (hasMilestone("an", 19))     ret = ret.times(player.or.contaminants.points.max(10).log10())
                                 if (hasMilestone("an", 20))     ret = ret.times(player.cells.points.max(10).log10())
                         }
@@ -35179,7 +35182,7 @@ addLayer("an", {
                         }
                         
                         if (hasUpgrade("ch", 32) && !hasUpgrade("nu", 14)) {
-                                                        ret = ret.times(20)
+                                                        ret = ret.times(player.extremeMode ? 1000 : 20)
                         }
                         if (hasMilestone("nu", 2) && !hasMilestone("sp", 25)) {
                                                         ret = ret.times(Decimal.pow(hasMilestone("an", 43) ? 70 : 10, player.nu.points))
@@ -35904,6 +35907,7 @@ addLayer("an", {
                         effectDescription(){
                                 let a = "Reward: Canis amount multiplies " + makePurple("OB") + " gain, log10(Animals)"
                                 if (player.extremeMode) a += "<sup>2</sup>"
+                                if (player.nu.unlocked) a = a.replace(">2", ">" + makeRed("3"))
                                 a += " multiplies Gene gain, and log10(Genes)"
                                 return a + " multiplies Animal gain but disable Lung XXVI's affect on Animal gain and remove the ability to Animal reset"
                         },
@@ -37028,7 +37032,7 @@ addLayer("an", {
                                                 let v = player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber()
                                                 if (v == 10) a ++ 
                                                 else if (v == 9) b ++ 
-                                                else return false
+                                                else if (v > 0) return false
                                         }
                                         return a == 14 && b == 1
                                 }
@@ -38063,14 +38067,16 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XII"
                         },
                         description(){
+                                if (player.extremeMode) return "You can buy max Chromosomes, Chromosomes permanently reset nothing, and gain 1000x genes"
                                 return "You can buy max Chromosomes, Chromosomes permanently reset nothing, and gain 20x genes"
                         },
-                        cost:() => new Decimal(264),
+                        cost:() => new Decimal(player.extremeMode ? 269 : 264),
                         onPurchase(){
                                 player.ch.everUpgrade32 = true
                         },
                         unlocked(){
                                 if (player.sp.unlocked) return true
+                                if (player.extremeMode) return player.an.genes.points.gte("1e16676") || player.nu.best.gte(2)
                                 return player.ch.best.gte(264) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 32)
                 },
