@@ -6691,7 +6691,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>RNA Sci II"
                         },
                         description(){
-                                return "Each upgrade tenths Nucleus Science gain and Chromosomes after 297 add 2.4 to Filtering<sup>3</sup> base"
+                                return "Each upgrade tenths Nucleus Science gain and Chromosomes after 297 add 2.4 to Filtering<sup>3</sup> base (max 50 times)"
                         },
                         onPurchase(){
                                 player.sci.nucleus_science.points = decimalZero
@@ -8559,7 +8559,7 @@ addLayer("sci", {
                                 if (hasUpgrade("sci", 695))     ret = ret.plus(2.9)
                                 if (hasUpgrade("sci", 702)) {
                                         let per = hasMilestone("nu", 5) ? new Decimal(24).sub(player.nu.points).div(10).max(0) : 2.4
-                                        ret = ret.plus(player.ch.points.sub(297).max(0).times(per))
+                                        ret = ret.plus(player.ch.points.min(347).sub(297).max(0).times(per))
                                 }
 
                                 return ret
@@ -32424,6 +32424,7 @@ addLayer("or", {
                                 }
                         },
                         base(){
+                                if (player.extremeMode && !hasMilestone("ch", 17)) return player.or.buyables[203].max(1).sqrt()
                                 if (hasMilestone("nu", 7))  return player.or.buyables[203].max(1)
                                 if (hasMilestone("nu", 6))  return player.or.buyables[203].max(1).pow(.91)
                                 if (hasMilestone("ch", 17)) return player.or.buyables[203].max(1).pow(.8)
