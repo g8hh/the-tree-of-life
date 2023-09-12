@@ -6203,8 +6203,7 @@ addLayer("sci", {
                                 if (player.shiftAlias) {
                                         return "Currently:<br>" + format(tmp.sci.upgrades[645].effect) + br + "x > 100, x -> sqrt(x)*10" + br + "x > 1e10, x -> log10<sup>10</sup>(x)"
                                 }
-                                let a = "cbrt(1 + Organ Science/1e3000) multiplies Air and Organ Science gain (softcaps at 100, 1e10)"
-                                return a
+                                return "cbrt(1 + Organ Science/1e3000) multiplies Air and Organ Science gain (softcaps at 100, 1e10)"
                         },
                         effect(){
                                 let ret = player.sci.organ_science.points.div("1e3000").plus(1).cbrt()
@@ -6226,8 +6225,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXVI"
                         },
                         description(){
-                                let a = "Per this row upgrade, divide Organ Science gain by 1e140 and at 1e3831 Organ Science add 1 to I'm base"
-                                return a
+                                return "Per this row upgrade, divide Organ Science gain by 1e140 and at 1e3831 Organ Science add 1 to I'm base"
                         },
                         cost:() => new Decimal("1e3653"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6244,8 +6242,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (player.shiftAlias) return "Currently:<br>" + format(tmp.sci.upgrades[652].effect)
-                                let a = "Token II via Cell divider is 40 and per Token II - 400 multiply Energy gain by this row upgrades"
-                                return a
+                                return "Token II via Cell divider is 40 and per Token II - 400 multiply Energy gain by this row upgrades"
                         },
                         effect(){
                                 let e = player.tokens.tokens2.total.sub(400)
@@ -6266,8 +6263,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXVIII"
                         },
                         description(){
-                                let a = "Per this row upgrade raise Energy gain ^1.01 and unlock a buyable (double at 3 in<u>TES</u>tine levels)"
-                                return a
+                                return "Per this row upgrade raise Energy gain ^1.01 and unlock a buyable (double at 3 in<u>TES</u>tine levels)"
                         },
                         cost:() => new Decimal("1e7036"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6283,8 +6279,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXIX"
                         },
                         description(){
-                                let a = "Token II via Stem Cell adder is 50 but divide Organ Science gain by 1e555"
-                                return a
+                                return "Token II via Stem Cell adder is 50 but divide Organ Science gain by 1e555"
                         },
                         cost:() => new Decimal("1e9356"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6352,8 +6347,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXII"
                         },
                         description(){
-                                let a = "At 55 Sapien levels, its levels add .01 to Conditioning base and autobuy TO BE NAMED"
-                                return a
+                                return "At 55 Sapien levels, its levels add .01 to Conditioning base and autobuy TO BE NAMED"
                         },
                         cost:() => new Decimal("1e81818"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6369,8 +6363,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXIII"
                         },
                         description(){
-                                let a = "Remove Gastroenterology base cost, Conditioning<sup>2</sup> base is .5, and is no longer softcapped"
-                                return a
+                                return "Remove Gastroenterology base cost, Conditioning<sup>2</sup> base is .5, and is no longer softcapped"
                         },
                         cost:() => new Decimal("1e84032"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6386,8 +6379,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXIV"
                         },
                         description(){
-                                let a = "Organ Sci XXXI multiplies Animal gain per upgrade in this row or below and affects Energy amounts"
-                                return a
+                                return "Organ Sci XXXI multiplies Animal gain per upgrade in this row or below and affects Energy amounts"
                         },
                         cost:() => new Decimal("1e87767"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6403,8 +6395,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXV"
                         },
                         description(){
-                                let a = "At 8 Primates levels Canis levels add .02 to Filtering<sup>2</sup> base and Carnivora levels add .1 (max 80) to Purification<sup>2</sup> base"
-                                return a
+                                return "At 8 Primates levels Canis levels add .02 to Filtering<sup>2</sup> base and Carnivora levels add .1 (max 80) to Purification<sup>2</sup> base"
                         },
                         cost:() => new Decimal("1e90988"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6420,8 +6411,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXVI"
                         },
                         description(){
-                                let a = "At 502,400 Animals, this row upgrades multiply Organ Science XXXI by 1.01"
-                                return a
+                                return "At 502,400 Animals, this row upgrades multiply Organ Science XXXI by 1.01"
                         },
                         cost:() => new Decimal("1e93182"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6437,8 +6427,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXVII"
                         },
                         description(){
-                                let a = "At 22 Primates levels double Animals IV and at 27 levels remove Dermotology and Filtering base cost"
-                                return a
+                                return "At 22 Primates levels double Animals IV and at 27 levels remove Dermotology and Filtering base cost"
                         },
                         cost:() => new Decimal("1e95082"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6454,8 +6443,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXVIII"
                         },
                         description(){
-                                let a = "At 37 / 41 / 52 Primates levels, Homo levels add .02 to Purification / Filtering / Filtering<sup>2</sup> base"
-                                return a
+                                return "At 37 / 41 / 52 Primates levels, Homo levels add .02 to Purification / Filtering / Filtering<sup>2</sup> base"
                         },
                         cost:() => new Decimal("1e98180"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6471,8 +6459,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XXXIX"
                         },
                         description(){
-                                let a = "Gain 1e1111x less Organ Science"
-                                return a
+                                return "Gain 1e1111x less Organ Science"
                         },
                         cost:() => new Decimal("1e107644"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6488,8 +6475,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XL"
                         },
                         description(){
-                                let a = "Unlock a new buyable and at 6e439 / 6e470 Genes, remove Conditioning / Filtering<sup>2</sup> base cost"
-                                return a
+                                return "Unlock a new buyable and at 6e439 / 6e470 Genes, remove Conditioning / Filtering<sup>2</sup> base cost"
                         },
                         cost:() => new Decimal("1e109732"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6505,8 +6491,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLI"
                         },
                         description(){
-                                let a = "At 1e486 Genes, Conditioning<sup>3</sup> base becomes Row 6 taxonomy levels / 200"
-                                return a
+                                return "At 1e486 Genes, Conditioning<sup>3</sup> base becomes Row 6 taxonomy levels / 200"
                         },
                         cost:() => new Decimal("1e119048"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6522,8 +6507,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLII"
                         },
                         description(){
-                                let a = "At 4e548 Genes remove Primates base cost and at 8e564 / 1e571 / 6.6e576, add .5 / .33 / .15 to Conditioning<sup>3</sup> base"
-                                return a
+                                return "At 4e548 Genes remove Primates base cost and at 8e564 / 1e571 / 6.6e576, add .5 / .33 / .15 to Conditioning<sup>3</sup> base"
                         },
                         cost:() => new Decimal("1e124668"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6539,8 +6523,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLIII"
                         },
                         description(){
-                                let a = "The Chromosome cost exponent is 1.33 but its cost base is multiplied by 1.5, reduced to 1.4 at 110 Aves levels"
-                                return a
+                                return "The Chromosome cost exponent is 1.33 but its cost base is multiplied by 1.5, reduced to 1.4 at 110 Aves levels"
                         },
                         cost:() => new Decimal("1e276947"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6556,8 +6539,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLIV"
                         },
                         description(){
-                                let a = "Each 100th Aves level (up to 1000) adds .01 to Conditioning<sup>2</sup> base"
-                                return a
+                                return "Each 100th Aves level (up to 1000) adds .01 to Conditioning<sup>2</sup> base"
                         },
                         cost:() => new Decimal("1e328165"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6573,8 +6555,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLV"
                         },
                         description(){
-                                let a = "Mammalia III levels add .01 to Conditioning base"
-                                return a
+                                return "Mammalia III levels add .01 to Conditioning base"
                         },
                         cost:() => new Decimal("1e411626"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6590,8 +6571,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLVI"
                         },
                         description(){
-                                let a = "Organ Sci XLIII is 1.3 and 1.2 / 1.1 / 1 at 780 / 790 / 799 Carnivora II levels"
-                                return a
+                                return "Organ Sci XLIII is 1.3 and 1.2 / 1.1 / 1 at 780 / 790 / 799 Carnivora II levels"
                         },
                         cost:() => new Decimal("1e441723"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6607,8 +6587,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLVII"
                         },
                         description(){
-                                let a = "Aves levels after 300 add .05 to Conditioning<sup>3</sup> base and at 308 levels, Organ Sci XXXII is 1.22"
-                                return a
+                                return "Aves levels after 300 add .05 to Conditioning<sup>3</sup> base and at 308 levels, Organ Sci XXXII is 1.22"
                         },
                         cost:() => new Decimal("1e457931"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6624,8 +6603,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLVIII"
                         },
                         description(){
-                                let a = "Organ Sci XXXII is .01 more but divide gene gain by 1e420; reapply this at 1e11,111 and 1e11,328 best genes"
-                                return a
+                                return "Organ Sci XXXII is .01 more but divide gene gain by 1e420; reapply this at 1e11,111 and 1e11,328 best genes"
                         },
                         cost:() => new Decimal("1e518950"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6641,8 +6619,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci XLIX"
                         },
                         description(){
-                                let a = "Totipotent cost base is 1e9 and at per chromosome from 246 to 268 add 1 to Conditioning base"
-                                return a
+                                return "Totipotent cost base is 1e9 and at per chromosome from 246 to 268 add 1 to Conditioning base"
                         },
                         cost:() => new Decimal("1e629755"),
                         currencyLocation:() => player.sci.organ_science,
@@ -6658,8 +6635,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organ Sci L"
                         },
                         description(){
-                                let a = "Add 3 to Filtering<sup>3</sup> base"
-                                return a
+                                return "Add 3 to Filtering<sup>3</sup> base"
                         },
                         cost:() => new Decimal("1e714975"),
                         currencyLocation:() => player.sci.organ_science,
@@ -16913,7 +16889,7 @@ addLayer("l", {
                         cost(){
                                 let init = new Decimal(player.extremeMode ? 1.5e145 : 1e166)
                                 let base = new Decimal(player.extremeMode ? 250 : 1600)
-                                if (hasMilestone("l", 39)) init = decimalOne
+                                if (hasMilestone("l", 39) && player.extremeMode) init = decimalOne
                                 if (hasMilestone("cells", 34)) base = decimalTwo
                                 let id = 32
                                 let expDiv = tmp.l.buyables[id].expDiv
@@ -16931,7 +16907,7 @@ addLayer("l", {
                                 let init = player.extremeMode ? 1.5e145 : 1e166
                                 let base = player.extremeMode ? 250 : 1600
                                 if (hasMilestone("cells", 34)) base = 2
-                                if (hasMilestone("l", 39)) init = 1
+                                if (hasMilestone("l", 39) && player.extremeMode) init = 1
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[32].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[32].expDiv).plus(1).floor()
