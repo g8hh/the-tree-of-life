@@ -1365,8 +1365,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!hasUpgrade("tokens", 71) && !player.shiftAlias && !hasUpgrade("h", 71)) return "Requires token Upgrade 71<br>Hold shift for effect"
-                                if (player.shiftAlias ^ hasUpgrade("tokens", 71)) return "Gain 10x coins and max(5, log10(coins)) multiplies Oxygen per upgrade"
-                                a = "min(5, log10(coins))"
+                                if (player.shiftAlias ^ hasUpgrade("tokens", 71)) return "Gain 10x coins and min(5, log10(coins + 10)) multiplies Oxygen per upgrade"
+                                a = "min(5, log10(coins + 10))"
                                 return a
                         },
                         cost(){
@@ -10345,7 +10345,7 @@ addLayer("o", {
                 if (hasUpgrade("h", 63))        ret = ret.times(tmp.h.upgrades[63].effect)
                                                 ret = ret.times(tmp.tokens.buyables[23].effect)
                 if (hasMilestone("tokens", 3))  ret = ret.times(player.ach.achievements.length)
-                if (hasUpgrade("h", 71))        ret = ret.times(Decimal.pow(player.tokens.coins.points.max(10).log10().min(5), player.h.upgrades.length))
+                if (hasUpgrade("h", 71))        ret = ret.times(Decimal.pow(player.tokens.coins.points.plus(10).log10().min(5), player.h.upgrades.length))
                 if (hasUpgrade("tokens", 81))   ret = ret.times(81)
                 if (hasMilestone("tokens", 23)) {
                         let c = tmp.tokens.milestones[23].effect
@@ -53390,7 +53390,7 @@ addLayer("mini", {
                                         let id = autobuyEList[i]
                                         if (id == 201 && !(allABContent || hasMilestone("p", 8))) continue
                                         let canBuyFirst = (allABContent || hasMilestone("p", 8)) && id < 240
-                                        if (hasMilestone("l", 2)) canBuyFirst = true
+                                        if (hasMilestone("l", 2) || hasMilestone("d", 1)) canBuyFirst = true
                                         if (!tmp.mini.buyables[id].unlocked) continue
                                         if (!canBuyFirst && getBuyableAmount("mini", id).eq(0)) continue
                                         if (tmp.mini.buyables[id].canAfford) {
