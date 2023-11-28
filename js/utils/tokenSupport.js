@@ -119,8 +119,14 @@ function minusEffectiveTokens(){
         if (hasUpgrade("p", 113))       a = a.plus(1)
         if (hasUpgrade("sci", 415))     a = a.plus(tmp.sci.upgrades.proteinUpgradesLength)
         if (hasUpgrade("sci", 454))     a = a.plus(tmp.sci.upgrades.proteinUpgradesLength * 3.5)
-        if (hasUpgrade("sci", 603))     a = a.plus(50 * player.sci.upgrades.filter(x => x > 600 && x < 700).length)
-        if (hasUpgrade("sci", 613))     a = a.plus(player.or.buyables[201].min(2000))
+        if (hasUpgrade("sci", 603))     {
+                if (player.nu.everMile3)a = a.plus(2500)
+                else                    a = a.plus(50 * player.sci.upgrades.filter(x => x > 600 && x < 700).length)
+        }
+        if (hasUpgrade("sci", 613)) {
+                if (player.nu.everMile3)a = a.plus(2000)
+                else                    a = a.plus(player.or.buyables[201].min(2000))
+        }
         
         return a.ceil()
 }
