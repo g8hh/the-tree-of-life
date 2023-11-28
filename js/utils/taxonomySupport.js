@@ -219,7 +219,7 @@ function updateTaxonomyAmounts(diff) {
         if (hasMilestone("an", 19))                             contamRate = .05
         if (hasMilestone("an", 20))                             contamRate = .25
         if (hasMilestone("ch", 1))                              contamRate = player.extremeMode && player.ch.points.gte(2) ? .39 : .33
-        if (hasMilestone("ch", 2))                              contamRate = hasMilestone("ch", 2) ? .42 : .39
+        if (hasMilestone("ch", 2))                              contamRate = player.extremeMode ? .42 : .39
         if (hasMilestone("ch", 4))                              contamRate = .75
         if (hasMilestone("an", 22))                             contamRate = 1
         if (hasMilestone("sp", 1) && player.ch.points.lt(11))   contamRate = .01
