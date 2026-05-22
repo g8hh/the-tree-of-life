@@ -45448,9 +45448,9 @@ addLayer("hu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Humans XXXIII"
                         },
                         description(){
-                                if (hasMilestone("r", 6) && !player.shiftAlias) return "The Flower base is 2"
-                                if (player.r.unlocked) return "At 3e12,683 / 3e12,704 Humans the Flower base is 8 / 2"
-                                return "Bulk 100x Plant buyables and at 3e12,683 / 3e12,704 Humans the Flower base is 8 / 2"
+                                if (hasMilestone("r", 6) && !player.shiftAlias) return "The Flower cost base is 2"
+                                if (player.r.unlocked) return "At 3e12,683 / 3e12,704 Humans the Flower cost base is 8 / 2"
+                                return "Bulk 100x Plant buyables and at 3e12,683 / 3e12,704 Humans the Flower cost base is 8 / 2"
                         },
                         cost:() => new Decimal("1e12478"),
                         unlocked(){
@@ -47079,6 +47079,7 @@ addLayer("hu", {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.hu.buyables[32]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: -"
                                         let eff2 = format(tmp.hu.buyables[32].effect, 3) + " from <i>IttIa</i> cost base (softcap at 10<sup>**</sup>)</b><br>"
+                                        if (hasMilestone("hu", 64)) eff2 = eff2.replace("</i>", "</i> and <i>Hiawd</i>")
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("hu", 32)) + " Thoughts</b><br>"
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
@@ -47477,11 +47478,11 @@ addLayer("hu", {
                 }, // hasMilestone("hu", 5)
                 6: {
                         requirementDescription(){
-                                if (player.hu.times <= 20) return "Reach 20 Human resets to view!"
+                                if (player.hu.times < 20) return "Unknown for now. Reach 20 Human resets to view!"
                                 return "255 Plants"
                         },
                         done(){
-                                if (player.hu.times <= 20) return false
+                                if (player.hu.times < 20) return false
                                 return player.pl.points.gte(255)
                         },
                         unlocked(){
@@ -48344,7 +48345,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: Per <i>Tinhiragt</i> past 200 (max 100) subtract .0001 from the Mastery III base and at 3e9346 Humans add .001 to the <i>GmaptsaIwmte</i> base."
+                                return "Reward: Per <i>Tinhiragt</i> past 200 (max 100) subtract .0001 from the Mastery III base and at 3e9346 Humans add .0001 to the <i>GmaptsaIwmte</i> base."
                         },
                 }, // hasMilestone("hu", 61)
                 62: {
@@ -48458,7 +48459,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                let r = "Reward: <i>GmaptsaIwmte</i> base is 20,960 - levels and at 3e16,881 Humans <i>Tinhragt</i> levels subtract from its base, multiplied by 1.3 / 1.6 / 2 at 1e17,975 / 3e18,160 / 3e18,221 Humans."
+                                let r = "Reward: <i>GmaptsaIwmte</i> base is 20,960 - levels and at 3e16,881 Humans <i>Tinhragt</i> levels subtract from its cost base, multiplied by 1.3 / 1.6 / 2 at 1e17,975 / 3e18,160 / 3e18,221 Humans."
                                 if (player.r.unlocked) return r.replace("20,960", makeRed("20,900"))
                                 return r
                         },
@@ -48530,7 +48531,7 @@ addLayer("hu", {
                                 return hasMilestone("hu", 6)
                         },
                         effectDescription(){
-                                return "Reward: The <i>Tinhiragt</i> base is <i>Hual</i> levels, each second since the previous purchase of a Human buyable increases the thought gain by 2% (max 3 minutes), and at 1e25,589, 3e25,624, 1e25,652, 1e25,700, and 1e25,774 Humans the Nucleus cost exponent is decreased by 0.002 ."
+                                return "Reward: The <i>Tinhiragt</i> base is <i>Hual</i> levels, each second since the previous purchase of a Human buyable increases the thought gain by 2% (max 3 minutes, exponential), and at 1e25,589, 3e25,624, 1e25,652, 1e25,700, and 1e25,774 Humans the Nucleus cost exponent is decreased by 0.002 ."
                         },
                 }, // hasMilestone("hu", 74)
                 75: {
